@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>3E360B24-FF22-4C10-ABC1-BE1007AC9CBF</string>
+	<key>IDESourceControlProjectName</key>
+	<string>eAttending</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>F9360233-130A-49DF-8F2B-6C692D2771ED</key>
+		<string>https://bitbucket.org/hughlang/appmob-e-attending.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>xcode/eAttending.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>F9360233-130A-49DF-8F2B-6C692D2771ED</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://bitbucket.org/hughlang/appmob-e-attending.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>F9360233-130A-49DF-8F2B-6C692D2771ED</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>F9360233-130A-49DF-8F2B-6C692D2771ED</string>
+			<key>IDESourceControlWCCName</key>
+			<string>appmob-e-attending</string>
+		</dict>
+	</array>
+</dict>
+</plist>

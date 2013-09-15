@@ -1,0 +1,32 @@
+//
+// Prefix header for all source files of the project
+//
+
+#import <Availability.h>
+#import "DataModel.h"
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+    #import "Constants.h"
+#endif
+
+//typedef signed char     BOOL;
+
+// used to recognize the device either it is iPhone 5 or others
+#define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
+
+#define SCROLLVIEW_CONTENT_HEIGHT 540
+#define SCROLLVIEW_CONTENT_WIDTH  320
+
+#define DEBUGX  "true"
+
+#if TARGET_IPHONE_SIMULATOR
+#define NSLog(fmt,...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#define NSLog(...)
+#endif
