@@ -26,6 +26,18 @@
 		1E0CAA43178253F100A294C0 /* BrandUITextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E0CAA41178253DF00A294C0 /* BrandUITextField.m */; };
 		1E0CAA461782586400A294C0 /* pattern_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA441782586400A294C0 /* pattern_background@2x.png */; };
 		1E0CAA471782586400A294C0 /* pattern_background-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA451782586400A294C0 /* pattern_background-568h@2x.png */; };
+		1E213BF417E542BE00E17DBF /* topnav_aqua_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E213BF217E542BE00E17DBF /* topnav_aqua_bg@2x.png */; };
+		1E213BF517E542BE00E17DBF /* btn_aqua_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E213BF317E542BE00E17DBF /* btn_aqua_add@2x.png */; };
+		1E213BF917E545A100E17DBF /* GroupsHomeVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E213BF617E545A100E17DBF /* GroupsHomeVC.xib */; };
+		1E213BFA17E545A100E17DBF /* GroupsHomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E213BF817E545A100E17DBF /* GroupsHomeVC.m */; };
+		1E213C0717E5466B00E17DBF /* SettingsHomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E213BFC17E5466B00E17DBF /* SettingsHomeVC.m */; };
+		1E213C0817E5466B00E17DBF /* SettingsHomeVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E213BFD17E5466B00E17DBF /* SettingsHomeVC.xib */; };
+		1E213C0917E5466B00E17DBF /* FormsHomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E213BFF17E5466B00E17DBF /* FormsHomeVC.m */; };
+		1E213C0A17E5466B00E17DBF /* FormsHomeVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E213C0017E5466B00E17DBF /* FormsHomeVC.xib */; };
+		1E213C0B17E5466B00E17DBF /* ContactsHomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E213C0217E5466B00E17DBF /* ContactsHomeVC.m */; };
+		1E213C0C17E5466B00E17DBF /* ContactsHomeVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E213C0317E5466B00E17DBF /* ContactsHomeVC.xib */; };
+		1E213C0D17E5466B00E17DBF /* ChatsHomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E213C0517E5466B00E17DBF /* ChatsHomeVC.m */; };
+		1E213C0E17E5466B00E17DBF /* ChatsHomeVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E213C0617E5466B00E17DBF /* ChatsHomeVC.xib */; };
 		1E2C7E4D17E4F28F0043E28D /* Regroupd-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1E2C7E4B17E4F28F0043E28D /* Regroupd-Info.plist */; };
 		1E2C7E5017E4F6660043E28D /* regroupd.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 1E2C7E4E17E4F6660043E28D /* regroupd.sqlite */; };
 		1E2C7E5117E4F6660043E28D /* AppUI.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1E2C7E4F17E4F6660043E28D /* AppUI.plist */; };
@@ -393,6 +405,23 @@
 		1E0CAA441782586400A294C0 /* pattern_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pattern_background@2x.png"; sourceTree = "<group>"; };
 		1E0CAA451782586400A294C0 /* pattern_background-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pattern_background-568h@2x.png"; sourceTree = "<group>"; };
 		1E0CAA4B1782638200A294C0 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		1E213BF217E542BE00E17DBF /* topnav_aqua_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "topnav_aqua_bg@2x.png"; sourceTree = "<group>"; };
+		1E213BF317E542BE00E17DBF /* btn_aqua_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_aqua_add@2x.png"; sourceTree = "<group>"; };
+		1E213BF617E545A100E17DBF /* GroupsHomeVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = GroupsHomeVC.xib; path = Application/Class/ViewController/iPhone/GroupsHomeVC.xib; sourceTree = SOURCE_ROOT; };
+		1E213BF717E545A100E17DBF /* GroupsHomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupsHomeVC.h; path = Application/Class/ViewController/iPhone/GroupsHomeVC.h; sourceTree = SOURCE_ROOT; };
+		1E213BF817E545A100E17DBF /* GroupsHomeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupsHomeVC.m; path = Application/Class/ViewController/iPhone/GroupsHomeVC.m; sourceTree = SOURCE_ROOT; };
+		1E213BFB17E5466B00E17DBF /* SettingsHomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsHomeVC.h; path = Application/Class/ViewController/iPhone/SettingsHomeVC.h; sourceTree = SOURCE_ROOT; };
+		1E213BFC17E5466B00E17DBF /* SettingsHomeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsHomeVC.m; path = Application/Class/ViewController/iPhone/SettingsHomeVC.m; sourceTree = SOURCE_ROOT; };
+		1E213BFD17E5466B00E17DBF /* SettingsHomeVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SettingsHomeVC.xib; path = Application/Class/ViewController/iPhone/SettingsHomeVC.xib; sourceTree = SOURCE_ROOT; };
+		1E213BFE17E5466B00E17DBF /* FormsHomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FormsHomeVC.h; path = Application/Class/ViewController/iPhone/FormsHomeVC.h; sourceTree = SOURCE_ROOT; };
+		1E213BFF17E5466B00E17DBF /* FormsHomeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FormsHomeVC.m; path = Application/Class/ViewController/iPhone/FormsHomeVC.m; sourceTree = SOURCE_ROOT; };
+		1E213C0017E5466B00E17DBF /* FormsHomeVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FormsHomeVC.xib; path = Application/Class/ViewController/iPhone/FormsHomeVC.xib; sourceTree = SOURCE_ROOT; };
+		1E213C0117E5466B00E17DBF /* ContactsHomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ContactsHomeVC.h; path = Application/Class/ViewController/iPhone/ContactsHomeVC.h; sourceTree = SOURCE_ROOT; };
+		1E213C0217E5466B00E17DBF /* ContactsHomeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ContactsHomeVC.m; path = Application/Class/ViewController/iPhone/ContactsHomeVC.m; sourceTree = SOURCE_ROOT; };
+		1E213C0317E5466B00E17DBF /* ContactsHomeVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactsHomeVC.xib; path = Application/Class/ViewController/iPhone/ContactsHomeVC.xib; sourceTree = SOURCE_ROOT; };
+		1E213C0417E5466B00E17DBF /* ChatsHomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatsHomeVC.h; path = Application/Class/ViewController/iPhone/ChatsHomeVC.h; sourceTree = SOURCE_ROOT; };
+		1E213C0517E5466B00E17DBF /* ChatsHomeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatsHomeVC.m; path = Application/Class/ViewController/iPhone/ChatsHomeVC.m; sourceTree = SOURCE_ROOT; };
+		1E213C0617E5466B00E17DBF /* ChatsHomeVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ChatsHomeVC.xib; path = Application/Class/ViewController/iPhone/ChatsHomeVC.xib; sourceTree = SOURCE_ROOT; };
 		1E2C7E4B17E4F28F0043E28D /* Regroupd-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Regroupd-Info.plist"; path = "Application/Regroupd-Info.plist"; sourceTree = SOURCE_ROOT; };
 		1E2C7E4C17E4F28F0043E28D /* Regroupd-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Regroupd-Prefix.pch"; path = "Application/Regroupd-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		1E2C7E4E17E4F6660043E28D /* regroupd.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = regroupd.sqlite; sourceTree = "<group>"; };
@@ -966,6 +995,56 @@
 			name = UI;
 			sourceTree = "<group>";
 		};
+		1E213BE717E540D100E17DBF /* Groups */ = {
+			isa = PBXGroup;
+			children = (
+				1E213BFB17E5466B00E17DBF /* SettingsHomeVC.h */,
+				1E213BFC17E5466B00E17DBF /* SettingsHomeVC.m */,
+				1E213BFD17E5466B00E17DBF /* SettingsHomeVC.xib */,
+				1E213BFE17E5466B00E17DBF /* FormsHomeVC.h */,
+				1E213BFF17E5466B00E17DBF /* FormsHomeVC.m */,
+				1E213C0017E5466B00E17DBF /* FormsHomeVC.xib */,
+				1E213C0117E5466B00E17DBF /* ContactsHomeVC.h */,
+				1E213C0217E5466B00E17DBF /* ContactsHomeVC.m */,
+				1E213C0317E5466B00E17DBF /* ContactsHomeVC.xib */,
+				1E213C0417E5466B00E17DBF /* ChatsHomeVC.h */,
+				1E213C0517E5466B00E17DBF /* ChatsHomeVC.m */,
+				1E213C0617E5466B00E17DBF /* ChatsHomeVC.xib */,
+				1E213BF717E545A100E17DBF /* GroupsHomeVC.h */,
+				1E213BF817E545A100E17DBF /* GroupsHomeVC.m */,
+				1E213BF617E545A100E17DBF /* GroupsHomeVC.xib */,
+			);
+			name = Groups;
+			sourceTree = "<group>";
+		};
+		1E213BE817E540E200E17DBF /* Chats */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Chats;
+			sourceTree = "<group>";
+		};
+		1E213BE917E5411700E17DBF /* Forms */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Forms;
+			sourceTree = "<group>";
+		};
+		1E213BEA17E5412800E17DBF /* Contacts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Contacts;
+			sourceTree = "<group>";
+		};
+		1E213BEB17E5412D00E17DBF /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
 		1E76F4981795F1C0007EF5B0 /* Contacts */ = {
 			isa = PBXGroup;
 			children = (
@@ -1169,6 +1248,8 @@
 		1E9280E9177FB68F008A583C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1E213BF217E542BE00E17DBF /* topnav_aqua_bg@2x.png */,
+				1E213BF317E542BE00E17DBF /* btn_aqua_add@2x.png */,
 				1E2C7E6817E4FFCB0043E28D /* tabnav_contacts_icon@2x.png */,
 				1E2C7E6917E4FFCB0043E28D /* tabnav_contacts_icon+title@2x.png */,
 				1E2C7E6A17E4FFCB0043E28D /* tabnav_groups_icon+title@2x.png */,
@@ -1450,17 +1531,23 @@
 				1E92819F177FB690008A583C /* ViewController.h */,
 				1E9281A0177FB690008A583C /* ViewController.m */,
 				1E92817D177FB68F008A583C /* ViewController.xib */,
-				1E92817F177FB68F008A583C /* Slides */,
+				1E92817F177FB68F008A583C /* iPhone */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
 		};
-		1E92817F177FB68F008A583C /* Slides */ = {
+		1E92817F177FB68F008A583C /* iPhone */ = {
 			isa = PBXGroup;
 			children = (
+				1E213BEB17E5412D00E17DBF /* Settings */,
+				1E213BEA17E5412800E17DBF /* Contacts */,
+				1E213BE917E5411700E17DBF /* Forms */,
+				1E213BE817E540E200E17DBF /* Chats */,
+				1E213BE717E540D100E17DBF /* Groups */,
 				1EB6FC571794F84B00CBF48D /* ProfileStart */,
 				1E9282BA177FB7C4008A583C /* DocAlert */,
 			);
+			name = iPhone;
 			path = Slides;
 			sourceTree = "<group>";
 		};
@@ -1972,6 +2059,13 @@
 				1E2C7EA817E4FFCB0043E28D /* S1.1_button_enter@2x.png in Resources */,
 				1E2C7EA917E4FFCB0043E28D /* full_bg_aqua@2x.png in Resources */,
 				1E2C7EB117E50F690043E28D /* ProfileStart2VC.xib in Resources */,
+				1E213BF417E542BE00E17DBF /* topnav_aqua_bg@2x.png in Resources */,
+				1E213BF517E542BE00E17DBF /* btn_aqua_add@2x.png in Resources */,
+				1E213BF917E545A100E17DBF /* GroupsHomeVC.xib in Resources */,
+				1E213C0817E5466B00E17DBF /* SettingsHomeVC.xib in Resources */,
+				1E213C0A17E5466B00E17DBF /* FormsHomeVC.xib in Resources */,
+				1E213C0C17E5466B00E17DBF /* ContactsHomeVC.xib in Resources */,
+				1E213C0E17E5466B00E17DBF /* ChatsHomeVC.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2158,6 +2252,11 @@
 				1E66564417C10BE300852083 /* FaxAgainVC.m in Sources */,
 				1E2C7EAC17E501940043E28D /* BrandUILabel.m in Sources */,
 				1E2C7EB017E50F690043E28D /* ProfileStart2VC.m in Sources */,
+				1E213BFA17E545A100E17DBF /* GroupsHomeVC.m in Sources */,
+				1E213C0717E5466B00E17DBF /* SettingsHomeVC.m in Sources */,
+				1E213C0917E5466B00E17DBF /* FormsHomeVC.m in Sources */,
+				1E213C0B17E5466B00E17DBF /* ContactsHomeVC.m in Sources */,
+				1E213C0D17E5466B00E17DBF /* ChatsHomeVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

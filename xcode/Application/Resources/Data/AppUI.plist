@@ -119,6 +119,7 @@
 			<string>ProfileHome</string>
 		</dict>
 		<!-- BEGIN PRIMARY NAV SCREENS -->
+		<!-- ########## Groups ########### -->
 		<dict>
 			<key>slideData</key>
 			<dict/>
@@ -127,110 +128,49 @@
 			<key>allowRightSlide</key>
 			<false/>
 			<key>category</key>
-			<string>Home</string>
-			<key>controllerName</key>
-			<string>RecentHomeVC</string>
+			<string>Groups</string>
 			<key>name</key>
-			<string>RecentHome</string>
-			<key>nextSlideName</key>
-			<string>FaxRecordView</string>
-		</dict>
-		<dict>
-			<key>slideData</key>
-			<dict/>
-			<key>allowLeftSlide</key>
-			<false/>
-			<key>allowRightSlide</key>
-			<false/>
-			<key>category</key>
-			<string>Home</string>
+			<string>GroupsHome</string>
 			<key>controllerName</key>
-			<string>FaxRecordViewVC</string>
-			<key>name</key>
-			<string>FaxRecordView</string>
-			<key>nextSlideName</key>
-			<string>FaxAgain</string>
-		</dict>
-		<dict>
-			<key>slideData</key>
-			<dict/>
-			<key>allowLeftSlide</key>
-			<false/>
-			<key>allowRightSlide</key>
-			<false/>
-			<key>category</key>
-			<string>Home</string>
-			<key>controllerName</key>
-			<string>FaxAgainVC</string>
-			<key>name</key>
-			<string>FaxAgain</string>
-			<key>nextSlideName</key>
-			<string>RecentHome</string>
-		</dict>
-		<dict>
-			<key>slideData</key>
-			<dict/>
-			<key>allowLeftSlide</key>
-			<false/>
-			<key>allowRightSlide</key>
-			<false/>
-			<key>category</key>
-			<string>Home</string>
-			<key>controllerName</key>
-			<string>ContactHomeVC</string>
-			<key>name</key>
-			<string>ContactHome</string>
-			<key>nextSlideName</key>
-			<string>EditContact</string>
-		</dict>
-		<dict>
-			<key>slideData</key>
-			<dict/>
-			<key>allowLeftSlide</key>
-			<false/>
-			<key>allowRightSlide</key>
-			<false/>
-			<key>category</key>
-			<string>Contact</string>
-			<key>controllerName</key>
-			<string>EditContactVC</string>
-			<key>name</key>
-			<string>EditContact</string>
+			<string>GroupsHomeVC</string>
 			<key>nextSlideName</key>
 			<string></string>
 		</dict>
+		<!-- ########## Chats ########### -->
 		<dict>
 			<key>slideData</key>
 			<dict/>
 			<key>allowLeftSlide</key>
 			<false/>
 			<key>allowRightSlide</key>
-			<true/>
+			<false/>
 			<key>category</key>
-			<string>Home</string>
-			<key>controllerName</key>
-			<string>NewFaxHomeVC</string>
+			<string>Chats</string>
 			<key>name</key>
-			<string>NewFaxHome</string>
+			<string>ChatsHome</string>
+			<key>controllerName</key>
+			<string>ChatsHomeVC</string>
 			<key>nextSlideName</key>
-			<string>NewFaxEdit1</string>
+			<string></string>
 		</dict>
+		<!-- ########## Forms ########### -->
 		<dict>
 			<key>slideData</key>
 			<dict/>
 			<key>allowLeftSlide</key>
-			<true/>
+			<false/>
 			<key>allowRightSlide</key>
 			<false/>
 			<key>category</key>
-			<string>Home</string>
-			<key>controllerName</key>
-			<string>NewFaxEdit1VC</string>
+			<string>Forms</string>
 			<key>name</key>
-			<string>NewFaxEdit1</string>
+			<string>FormsHome</string>
+			<key>controllerName</key>
+			<string>FormsHomeVC</string>
 			<key>nextSlideName</key>
-			<string>NewFaxEdit2</string>
+			<string></string>
 		</dict>
+		<!-- ########## Contacts ########### -->
 		<dict>
 			<key>slideData</key>
 			<dict/>
@@ -239,14 +179,15 @@
 			<key>allowRightSlide</key>
 			<false/>
 			<key>category</key>
-			<string>Home</string>
-			<key>controllerName</key>
-			<string>BuyFaxHomeVC</string>
+			<string>Contacts</string>
 			<key>name</key>
-			<string>BuyFaxHome</string>
+			<string>ContactsHome</string>
+			<key>controllerName</key>
+			<string>ContactsHomeVC</string>
 			<key>nextSlideName</key>
-			<string>ProfileHome</string>
+			<string></string>
 		</dict>
+		<!-- ########## Settings ########### -->
 		<dict>
 			<key>slideData</key>
 			<dict/>
@@ -255,93 +196,16 @@
 			<key>allowRightSlide</key>
 			<false/>
 			<key>category</key>
-			<string>Home</string>
-			<key>controllerName</key>
-			<string>ProfileHomeVC</string>
+			<string>Settings</string>
 			<key>name</key>
-			<string>ProfileHome</string>
+			<string>SettingsHome</string>
+			<key>controllerName</key>
+			<string>SettingsHomeVC</string>
 			<key>nextSlideName</key>
-			<string>ProfileEdit1</string>
+			<string></string>
 		</dict>
-		<dict>
-			<key>slideData</key>
-			<dict/>
-			<key>allowLeftSlide</key>
-			<false/>
-			<key>allowRightSlide</key>
-			<false/>
-			<key>category</key>
-			<string>Profile</string>
-			<key>controllerName</key>
-			<string>ProfileEdit1VC</string>
-			<key>name</key>
-			<string>ProfileEdit1</string>
-			<key>nextSlideName</key>
-			<string>ProfileEdit2</string>
-		</dict>
-		<dict>
-			<key>slideData</key>
-			<dict/>
-			<key>allowLeftSlide</key>
-			<false/>
-			<key>allowRightSlide</key>
-			<false/>
-			<key>category</key>
-			<string>Profile</string>
-			<key>controllerName</key>
-			<string>ProfileEdit2VC</string>
-			<key>name</key>
-			<string>ProfileEdit2</string>
-			<key>nextSlideName</key>
-			<string>ProfileEdit3</string>
-		</dict>
-		<dict>
-			<key>slideData</key>
-			<dict/>
-			<key>allowLeftSlide</key>
-			<false/>
-			<key>allowRightSlide</key>
-			<false/>
-			<key>category</key>
-			<string>Profile</string>
-			<key>controllerName</key>
-			<string>ProfileEdit3VC</string>
-			<key>name</key>
-			<string>ProfileEdit3</string>
-			<key>nextSlideName</key>
-			<string>ProfileEdit4</string>
-		</dict>
-		<dict>
-			<key>slideData</key>
-			<dict/>
-			<key>allowLeftSlide</key>
-			<false/>
-			<key>allowRightSlide</key>
-			<false/>
-			<key>category</key>
-			<string>Profile</string>
-			<key>controllerName</key>
-			<string>ProfileEdit4VC</string>
-			<key>name</key>
-			<string>ProfileEdit4</string>
-			<key>nextSlideName</key>
-			<string>ProfileEdit5</string>
-		</dict>
-		<dict>
-			<key>slideData</key>
-			<dict/>
-			<key>allowLeftSlide</key>
-			<false/>
-			<key>allowRightSlide</key>
-			<false/>
-			<key>category</key>
-			<string>Profile</string>
-			<key>controllerName</key>
-			<string>ProfileEdit5VC</string>
-			<key>name</key>
-			<string>ProfileEdit5</string>
-			<key>nextSlideName</key>
-			<string>ProfileHome</string>
-		</dict>	</array>
+
+
+	</array>
 </dict>
 </plist>

@@ -61,19 +61,19 @@
     NSNumber *numIndex;
     navMap = [[NSMutableDictionary alloc] init];
     numIndex = [NSNumber numberWithInt:1];
-    [navMap setObject:@"RecentHome" forKey:numIndex];
+    [navMap setObject:@"GroupsHome" forKey:numIndex];
 
     numIndex = [NSNumber numberWithInt:2];
-    [navMap setObject:@"ContactHome" forKey:numIndex];
+    [navMap setObject:@"ChatsHome" forKey:numIndex];
 
     numIndex = [NSNumber numberWithInt:3];
-    [navMap setObject:@"NewFaxHome" forKey:numIndex];
+    [navMap setObject:@"FormsHome" forKey:numIndex];
 
     numIndex = [NSNumber numberWithInt:4];
-    [navMap setObject:@"BuyFaxHome" forKey:numIndex];
+    [navMap setObject:@"ContactsHome" forKey:numIndex];
 
     numIndex = [NSNumber numberWithInt:5];
-    [navMap setObject:@"ProfileHome" forKey:numIndex];
+    [navMap setObject:@"SettingsHome" forKey:numIndex];
 
     brandNav = [[TabBarView alloc] init];
 

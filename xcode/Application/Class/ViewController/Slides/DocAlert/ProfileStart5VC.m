@@ -47,12 +47,14 @@
 
 - (IBAction)tapNoButton
 {
-    [_delegate gotoNextSlide];
+    [DataModel shared].navIndex = 4;
+    [_delegate gotoSlideWithName:@"ContactsHome" andOverrideTransition:kPresentationTransitionDown];
 }
 
 - (IBAction)tapYesButton
 {
-    [_delegate gotoNextSlide];
+    [DataModel shared].navIndex = 4;
+    [_delegate gotoSlideWithName:@"ContactsHome" andOverrideTransition:kPresentationTransitionDown];
 }
 
 @end

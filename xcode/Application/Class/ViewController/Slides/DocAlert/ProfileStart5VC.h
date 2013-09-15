@@ -15,7 +15,6 @@
 }
 
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
-@property (nonatomic, strong) IBOutlet BrandUILabel *title;
 
 @property (nonatomic, strong) IBOutlet UIButton *yesButton;
 @property (nonatomic, strong) IBOutlet UIButton *noButton;
