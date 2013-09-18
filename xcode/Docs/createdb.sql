@@ -1,19 +1,9 @@
 
 DROP TABLE contact;
 
-CREATE TABLE IF NOT EXISTS contact ( 
-    id INTEGER PRIMARY KEY,  
-    name TEXT, 
-    phone TEXT,
-    fax TEXT,
-    type int DEFAULT 1, 
-    status INT DEFAULT 0,
-	updated TEXT
-);
-
-
 CREATE TABLE IF NOT EXISTS user ( 
     user_id INTEGER PRIMARY KEY,  
+    system_id TEXT,
     firstname TEXT, 
     middlename TEXT,
     lastname TEXT,
@@ -33,15 +23,63 @@ CREATE TABLE IF NOT EXISTS user (
     updated TEXT
 );
 
-CREATE TABLE IF NOT EXISTS fax_log ( 
-    log_id INTEGER PRIMARY KEY,  
-    contact_id INTEGER,
-    bundle TEXT,
+CREATE TABLE IF NOT EXISTS contact ( 
+    contact_id INTEGER PRIMARY KEY,  
+    system_id TEXT,
+    name TEXT, 
+    phone TEXT,
     fax TEXT,
-    efax_id TEXT, 
     type int DEFAULT 1, 
     status INT DEFAULT 0,
-	created TEXT
+	updated TEXT
+);
+
+CREATE TABLE IF NOT EXISTS group ( 
+    group_id INTEGER PRIMARY KEY,  
+    system_id TEXT,
+    name TEXT, 
+    type int DEFAULT 1, 
+    status INT DEFAULT 0,
+	updated TEXT
+);
+
+CREATE TABLE IF NOT EXISTS group_contact ( 
+    group_id INTEGER,  
+    contact_id INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS chat ( 
+    chat_id INTEGER PRIMARY KEY,  
+    system_id TEXT,
+    name TEXT, 	
+    type int DEFAULT 1, 
+    status INT DEFAULT 0,
+	updated TEXT
+);
+
+CREATE TABLE IF NOT EXISTS form ( 
+    form_id INTEGER PRIMARY KEY,  
+    system_id TEXT,
+    name TEXT,
+    type int DEFAULT 1, 
+    status INT DEFAULT 0,
+    event_date TEXT,
+    created TEXT,
+    updated TEXT
+);
+
+CREATE TABLE IF NOT EXISTS form_option ( 
+    option_id INTEGER PRIMARY KEY,
+    form_id INTEGER,  
+    system_id TEXT,
+    name TEXT,
+    stats TEXT,
+    datafile TEXT,
+    imagefile TEXT,
+    type int DEFAULT 1, 
+    status INT DEFAULT 0,
+    created TEXT,
+    updated TEXT
 );
 
 insert into contact (name, phone, fax) values ('Hugh Lang', '1-646-498-6305', '1-855-546-5470');

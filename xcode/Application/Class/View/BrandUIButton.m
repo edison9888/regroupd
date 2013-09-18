@@ -1,16 +1,14 @@
 //
-//  BrandUILabel.m
+//  BrandUIButton.m
 //  Regroupd
 //
-//  Created by Hugh Lang on 9/14/13.
+//  Created by Hugh Lang on 9/16/13.
 //
 //
 
-#import "BrandUILabel.h"
-#import <QuartzCore/QuartzCore.h>
-#import "UIColor+ColorWithHex.h"
+#import "BrandUIButton.h"
 
-@implementation BrandUILabel
+@implementation BrandUIButton
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -23,10 +21,10 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     
-    
-    [self setFont:[UIFont fontWithName:@"Raleway-Bold" size:self.font.pointSize]];
-//    self.textColor = [UIColor whiteColor];
-    self.textAlignment = UITextAlignmentCenter;
+    [self.titleLabel setFont:[UIFont fontWithName:@"Raleway-Bold" size:self.titleLabel.font.pointSize]];
+
+    self.titleLabel.textColor = [UIColor whiteColor];
+    self.titleLabel.textAlignment = UITextAlignmentCenter;
     
     return self;
 }
