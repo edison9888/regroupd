@@ -8,8 +8,6 @@
 
 #import "AppStartVC.h"
 #import "UserManager.h"
-#import "FaxManager.h"
-#import "FaxAccountVO.h"
 
 @interface AppStartVC ()
 
@@ -67,16 +65,8 @@
         
     } else {
         
-        FaxManager *faxSvc = [[FaxManager alloc] init];
-        FaxAccountVO *account = [faxSvc loadCurrentAccount:user.userId];
-        
-        if (account != nil) {
-            [DataModel shared].faxBalance = account.qty_left;
-        } else {
-            [DataModel shared].faxBalance = 0;
-        }
         [DataModel shared].navIndex = 3;
-        [_delegate gotoSlideWithName:@"NewFaxHome"];
+        [_delegate gotoSlideWithName:@"FormsHome"];
     }
     
 }

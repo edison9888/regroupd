@@ -174,7 +174,6 @@
 						<string key="NSFrame">{{0, 90}, {320, 500}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="974881452"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -303,7 +302,7 @@
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>
 					<bytes key="NSWhite">MQA</bytes>
-					<object class="NSColorSpace" key="NSCustomColorSpace" id="723829021">
+					<object class="NSColorSpace" key="NSCustomColorSpace" id="1041286942">
 						<int key="NSID">2</int>
 					</object>
 				</object>
@@ -327,30 +326,34 @@
 				</object>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
-			<object class="IBUIView" id="306958164">
+			<object class="IBUIView" id="872358372">
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
-					<object class="IBUIImageView" id="944864936">
-						<reference key="NSNextResponder" ref="306958164"/>
+					<object class="IBUIImageView" id="665119491">
+						<reference key="NSNextResponder" ref="872358372"/>
 						<int key="NSvFlags">274</int>
 						<string key="NSFrameSize">{302, 215}</string>
-						<reference key="NSSuperview" ref="306958164"/>
+						<reference key="NSSuperview" ref="872358372"/>
 						<reference key="NSWindow"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+						<object class="NSCustomResource" key="IBUIImage">
+							<string key="NSClassName">NSImage</string>
+							<string key="NSResourceName">modal_new_survey@2x.png</string>
+						</object>
 					</object>
 				</array>
 				<string key="NSFrameSize">{302, 215}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
-				<reference key="NSNextKeyView"/>
+				<reference key="NSNextKeyView" ref="665119491"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>
 					<bytes key="NSWhite">MQA</bytes>
-					<reference key="NSCustomColorSpace" ref="723829021"/>
+					<reference key="NSCustomColorSpace" ref="1041286942"/>
 				</object>
 				<object class="IBUISimulatedSizeMetrics" key="IBUISimulatedDestinationMetrics">
 					<string key="IBUISimulatedSizeMetricsClass">IBUISimulatedFreeformSizeMetricsSentinel</string>
@@ -495,16 +498,16 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">37</int>
-						<reference key="object" ref="306958164"/>
+						<reference key="object" ref="872358372"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="944864936"/>
+							<reference ref="665119491"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">38</int>
-						<reference key="object" ref="944864936"/>
-						<reference key="parent" ref="306958164"/>
+						<reference key="object" ref="665119491"/>
+						<reference key="parent" ref="872358372"/>
 					</object>
 				</array>
 			</object>
@@ -643,6 +646,7 @@
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
 			<string key="btn_aqua_add@2x.png">{70, 70}</string>
 			<string key="btn_aqua_bg_small@2x.png">{110, 56}</string>
+			<string key="modal_new_survey@2x.png">{604, 430}</string>
 			<string key="topnav_aqua_bg@2x.png">{640, 100}</string>
 		</dictionary>
 		<string key="IBCocoaTouchPluginVersion">2083</string>

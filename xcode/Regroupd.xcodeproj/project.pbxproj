@@ -94,49 +94,10 @@
 		1E513A6C17CBAFAF00DC2566 /* checkbox_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6B17CBAFAF00DC2566 /* checkbox_off@2x.png */; };
 		1E5CABD817BA8DF0000D8759 /* RecentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5CABD617BA8DF0000D8759 /* RecentTableViewCell.m */; };
 		1E5CABD917BA8DF0000D8759 /* RecentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E5CABD717BA8DF0000D8759 /* RecentTableViewCell.xib */; };
-		1E5CABDC17BAAABE000D8759 /* FaxAccountVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5CABDB17BAAABE000D8759 /* FaxAccountVO.m */; };
-		1E5CABE017BAFC2C000D8759 /* BuyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5CABDE17BAFC2B000D8759 /* BuyTableViewCell.m */; };
-		1E5CABE117BAFC2C000D8759 /* BuyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E5CABDF17BAFC2C000D8759 /* BuyTableViewCell.xib */; };
 		1E751B2C179C4B11003AB13D /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E751B2B179C4B11003AB13D /* UserManager.m */; };
 		1E76F4A417960BE1007EF5B0 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA4B1782638200A294C0 /* Default-568h@2x.png */; };
 		1E76F4A617961169007EF5B0 /* CCTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E76F4A517961169007EF5B0 /* CCTableViewCell.xib */; };
 		1E76F4A917961283007EF5B0 /* ContactVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E76F4A817961283007EF5B0 /* ContactVO.m */; };
-		1E8333501797745200B60612 /* OutboundRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E83334F1797745200B60612 /* OutboundRequest.m */; };
-		1E8333531797746900B60612 /* TransmissionNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333521797746900B60612 /* TransmissionNode.m */; };
-		1E8333561797747500B60612 /* TransmissionControlNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333551797747500B60612 /* TransmissionControlNode.m */; };
-		1E833359179774B100B60612 /* DispositionControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E833358179774B100B60612 /* DispositionControl.m */; };
-		1E83335C1797752300B60612 /* Recipients.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E83335B1797752300B60612 /* Recipients.m */; };
-		1E83335F1797752C00B60612 /* Recipient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E83335E1797752C00B60612 /* Recipient.m */; };
-		1E8333621797754A00B60612 /* Files.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333611797754A00B60612 /* Files.m */; };
-		1E8333651797755200B60612 /* File.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333641797755200B60612 /* File.m */; };
-		1E833369179775CF00B60612 /* OutboundStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E833368179775CF00B60612 /* OutboundStatus.m */; };
-		1E83336C179775F800B60612 /* OutboundResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E83336B179775F800B60612 /* OutboundResponse.m */; };
-		1E83336F1797761900B60612 /* Response.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E83336E1797761800B60612 /* Response.m */; };
-		1E8333721797763800B60612 /* OutboundStatusResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333711797763800B60612 /* OutboundStatusResponse.m */; };
-		1E8333751797765700B60612 /* Status.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333741797765700B60612 /* Status.m */; };
-		1E8333781797768D00B60612 /* LastAttempt.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333771797768C00B60612 /* LastAttempt.m */; };
-		1E83337B1797769600B60612 /* NextAttempt.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E83337A1797769600B60612 /* NextAttempt.m */; };
-		1E83337E179776AF00B60612 /* Pages.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E83337D179776AF00B60612 /* Pages.m */; };
-		1E833381179776C700B60612 /* OutboundDisposition.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E833380179776C700B60612 /* OutboundDisposition.m */; };
-		1E833384179777D600B60612 /* AccessControlNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E833383179777D600B60612 /* AccessControlNode.m */; };
-		1E83339A17977ABA00B60612 /* OutboundStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E833368179775CF00B60612 /* OutboundStatus.m */; };
-		1E83339B17977ABA00B60612 /* OutboundRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E83334F1797745200B60612 /* OutboundRequest.m */; };
-		1E83339C17977ABA00B60612 /* AccessControlNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E833383179777D600B60612 /* AccessControlNode.m */; };
-		1E83339D17977ABA00B60612 /* TransmissionNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333521797746900B60612 /* TransmissionNode.m */; };
-		1E83339E17977ABA00B60612 /* TransmissionControlNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333551797747500B60612 /* TransmissionControlNode.m */; };
-		1E83339F17977ABA00B60612 /* DispositionControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E833358179774B100B60612 /* DispositionControl.m */; };
-		1E8333A017977ABA00B60612 /* Recipients.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E83335B1797752300B60612 /* Recipients.m */; };
-		1E8333A117977ABA00B60612 /* Recipient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E83335E1797752C00B60612 /* Recipient.m */; };
-		1E8333A217977ABA00B60612 /* File.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333641797755200B60612 /* File.m */; };
-		1E8333A317977ABA00B60612 /* Files.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333611797754A00B60612 /* Files.m */; };
-		1E8333A417977ABA00B60612 /* OutboundResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E83336B179775F800B60612 /* OutboundResponse.m */; };
-		1E8333A517977ABA00B60612 /* Response.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E83336E1797761800B60612 /* Response.m */; };
-		1E8333A617977ABA00B60612 /* OutboundStatusResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333711797763800B60612 /* OutboundStatusResponse.m */; };
-		1E8333A717977ABA00B60612 /* Status.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333741797765700B60612 /* Status.m */; };
-		1E8333A817977ABA00B60612 /* LastAttempt.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333771797768C00B60612 /* LastAttempt.m */; };
-		1E8333A917977ABA00B60612 /* NextAttempt.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E83337A1797769600B60612 /* NextAttempt.m */; };
-		1E8333AA17977ABA00B60612 /* Pages.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E83337D179776AF00B60612 /* Pages.m */; };
-		1E8333AB17977ABA00B60612 /* OutboundDisposition.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E833380179776C700B60612 /* OutboundDisposition.m */; };
 		1E8333AD17977B9500B60612 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E8333AC17977B9400B60612 /* libxml2.2.dylib */; };
 		1E8333B917978C2A00B60612 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333B017978C2A00B60612 /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		1E8333BA17978C2A00B60612 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333B017978C2A00B60612 /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -152,7 +113,6 @@
 		1E8333DD179792F600B60612 /* QSStrings.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333CF179792F600B60612 /* QSStrings.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		1E8333DE179792F600B60612 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1E8333D1179792F600B60612 /* README.txt */; };
 		1E8333DF179792F600B60612 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1E8333D1179792F600B60612 /* README.txt */; };
-		1E8EECDB17B84D92001D012F /* FaxManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8EECDA17B84D92001D012F /* FaxManager.m */; };
 		1E8FBA7C17E7F7B2003758EB /* BrandUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8FBA7B17E7F7B2003758EB /* BrandUIButton.m */; };
 		1E928213177FB690008A583C /* hbar_96x2.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9280EB177FB68F008A583C /* hbar_96x2.png */; };
 		1E928214177FB690008A583C /* help_icon_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9280EC177FB68F008A583C /* help_icon_off.png */; };
@@ -319,8 +279,6 @@
 		1E92830F177FDCEB008A583C /* icon_recents@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9282E8177FDCEB008A583C /* icon_recents@2x.png */; };
 		1E928311177FDCEB008A583C /* splash-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9282EA177FDCEB008A583C /* splash-568h@2x.png */; };
 		1E928312177FDCEB008A583C /* fpo_fax.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9282EB177FDCEB008A583C /* fpo_fax.png */; };
-		1EADC09A17ADB4CA00DA6414 /* BuyFaxModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EADC09917ADB4C900DA6414 /* BuyFaxModel.m */; };
-		1EADC09D17ADB53400DA6414 /* BuyFaxData.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EADC09C17ADB53400DA6414 /* BuyFaxData.m */; };
 		1EAFEC3117999C8A00CCBDA1 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAFEC3017999C8A00CCBDA1 /* MBProgressHUD.m */; };
 		1EAFEC321799BFAF00CCBDA1 /* pattern_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA441782586400A294C0 /* pattern_background@2x.png */; };
 		1EAFEC331799BFAF00CCBDA1 /* pattern_background-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA451782586400A294C0 /* pattern_background-568h@2x.png */; };
@@ -334,8 +292,6 @@
 		1EB6FC211794DCAF00CBF48D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02B80AA11518FA8600DE3F39 /* Foundation.framework */; };
 		1EB6FC271794DCAF00CBF48D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1EB6FC251794DCAF00CBF48D /* InfoPlist.strings */; };
 		1EB6FC2A1794DCAF00CBF48D /* APITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB6FC291794DCAF00CBF48D /* APITests.m */; };
-		1EB6FC321794DD6B00CBF48D /* EFaxService.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB6FC311794DD6B00CBF48D /* EFaxService.m */; };
-		1EB6FC331794DD6B00CBF48D /* EFaxService.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB6FC311794DD6B00CBF48D /* EFaxService.m */; };
 		1EB6FC431794F81900CBF48D /* ProfileStart1VC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB6FC351794F80000CBF48D /* ProfileStart1VC.m */; };
 		1EB6FC451794F81900CBF48D /* ProfileStart1VC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EB6FC361794F80200CBF48D /* ProfileStart1VC.xib */; };
 		1EB6FC4B1794F81900CBF48D /* ProfileStart3VC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB6FC3B1794F80B00CBF48D /* ProfileStart3VC.m */; };
@@ -344,7 +300,19 @@
 		1EB6FC511794F81900CBF48D /* ProfileStart4VC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EB6FC3F1794F81500CBF48D /* ProfileStart4VC.xib */; };
 		1EB6FC531794F81900CBF48D /* ProfileStart5VC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB6FC411794F81700CBF48D /* ProfileStart5VC.m */; };
 		1EB6FC551794F81900CBF48D /* ProfileStart5VC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EB6FC421794F81800CBF48D /* ProfileStart5VC.xib */; };
-		1EE7EAA417B084C8001D354D /* FaxLogVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EE7EAA317B084C8001D354D /* FaxLogVO.m */; };
+		1EBA5DCC17E9425800E46FFF /* modal_add_photo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DBF17E9425800E46FFF /* modal_add_photo@2x.png */; };
+		1EBA5DCD17E9425800E46FFF /* modal_new_survey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DC017E9425800E46FFF /* modal_new_survey@2x.png */; };
+		1EBA5DCE17E9425800E46FFF /* chat_callout_row_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DC117E9425800E46FFF /* chat_callout_row_white@2x.png */; };
+		1EBA5DCF17E9425800E46FFF /* chat_callout_row@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DC217E9425800E46FFF /* chat_callout_row@2x.png */; };
+		1EBA5DD017E9425800E46FFF /* blank_btn_aqua_grad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DC317E9425800E46FFF /* blank_btn_aqua_grad@2x.png */; };
+		1EBA5DD117E9425800E46FFF /* poll_separator_bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DC417E9425800E46FFF /* poll_separator_bar@2x.png */; };
+		1EBA5DD217E9425800E46FFF /* poll_checkbox_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DC517E9425800E46FFF /* poll_checkbox_on@2x.png */; };
+		1EBA5DD317E9425800E46FFF /* poll_checkbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DC617E9425800E46FFF /* poll_checkbox@2x.png */; };
+		1EBA5DD417E9425800E46FFF /* chat_survey_header_right@2px.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DC717E9425800E46FFF /* chat_survey_header_right@2px.png */; };
+		1EBA5DD517E9425800E46FFF /* icon_refresh_purple@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DC817E9425800E46FFF /* icon_refresh_purple@2x.png */; };
+		1EBA5DD617E9425800E46FFF /* icon_rating_purple@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DC917E9425800E46FFF /* icon_rating_purple@2x.png */; };
+		1EBA5DD717E9425800E46FFF /* icon_poll_purple@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DCA17E9425800E46FFF /* icon_poll_purple@2x.png */; };
+		1EBA5DD817E9425800E46FFF /* icon_event_purple@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DCB17E9425800E46FFF /* icon_event_purple@2x.png */; };
 		1EF463341783AE1C00D38DBB /* UserVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF463331783AE1C00D38DBB /* UserVO.m */; };
 		800F4C92170264A6001D2C50 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 800F4C91170264A6001D2C50 /* SenTestingKit.framework */; };
 		800F4C93170264A6001D2C50 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02B80A9F1518FA8600DE3F39 /* UIKit.framework */; };
@@ -454,11 +422,6 @@
 		1E5CABD517BA8DF0000D8759 /* RecentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecentTableViewCell.h; sourceTree = "<group>"; };
 		1E5CABD617BA8DF0000D8759 /* RecentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecentTableViewCell.m; sourceTree = "<group>"; };
 		1E5CABD717BA8DF0000D8759 /* RecentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecentTableViewCell.xib; sourceTree = "<group>"; };
-		1E5CABDA17BAAABE000D8759 /* FaxAccountVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaxAccountVO.h; sourceTree = "<group>"; };
-		1E5CABDB17BAAABE000D8759 /* FaxAccountVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FaxAccountVO.m; sourceTree = "<group>"; };
-		1E5CABDD17BAFC2A000D8759 /* BuyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyTableViewCell.h; sourceTree = "<group>"; };
-		1E5CABDE17BAFC2B000D8759 /* BuyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyTableViewCell.m; sourceTree = "<group>"; };
-		1E5CABDF17BAFC2C000D8759 /* BuyTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BuyTableViewCell.xib; sourceTree = "<group>"; };
 		1E751B2A179C4B11003AB13D /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserManager.h; sourceTree = "<group>"; };
 		1E751B2B179C4B11003AB13D /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserManager.m; sourceTree = "<group>"; };
 		1E76F4941795EE3E007EF5B0 /* AppIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon@2x.png"; sourceTree = "<group>"; };
@@ -466,42 +429,6 @@
 		1E76F4A517961169007EF5B0 /* CCTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CCTableViewCell.xib; sourceTree = "<group>"; };
 		1E76F4A717961283007EF5B0 /* ContactVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactVO.h; sourceTree = "<group>"; };
 		1E76F4A817961283007EF5B0 /* ContactVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactVO.m; sourceTree = "<group>"; };
-		1E83334E1797745200B60612 /* OutboundRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OutboundRequest.h; path = eFax/OutboundRequest.h; sourceTree = "<group>"; };
-		1E83334F1797745200B60612 /* OutboundRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OutboundRequest.m; path = eFax/OutboundRequest.m; sourceTree = "<group>"; };
-		1E8333511797746900B60612 /* TransmissionNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TransmissionNode.h; path = eFax/TransmissionNode.h; sourceTree = "<group>"; };
-		1E8333521797746900B60612 /* TransmissionNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TransmissionNode.m; path = eFax/TransmissionNode.m; sourceTree = "<group>"; };
-		1E8333541797747500B60612 /* TransmissionControlNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TransmissionControlNode.h; path = eFax/TransmissionControlNode.h; sourceTree = "<group>"; };
-		1E8333551797747500B60612 /* TransmissionControlNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TransmissionControlNode.m; path = eFax/TransmissionControlNode.m; sourceTree = "<group>"; };
-		1E833357179774B100B60612 /* DispositionControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DispositionControl.h; path = eFax/DispositionControl.h; sourceTree = "<group>"; };
-		1E833358179774B100B60612 /* DispositionControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DispositionControl.m; path = eFax/DispositionControl.m; sourceTree = "<group>"; };
-		1E83335A1797752300B60612 /* Recipients.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Recipients.h; path = eFax/Recipients.h; sourceTree = "<group>"; };
-		1E83335B1797752300B60612 /* Recipients.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Recipients.m; path = eFax/Recipients.m; sourceTree = "<group>"; };
-		1E83335D1797752B00B60612 /* Recipient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Recipient.h; path = eFax/Recipient.h; sourceTree = "<group>"; };
-		1E83335E1797752C00B60612 /* Recipient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Recipient.m; path = eFax/Recipient.m; sourceTree = "<group>"; };
-		1E8333601797754A00B60612 /* Files.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Files.h; path = eFax/Files.h; sourceTree = "<group>"; };
-		1E8333611797754A00B60612 /* Files.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Files.m; path = eFax/Files.m; sourceTree = "<group>"; };
-		1E8333631797755200B60612 /* File.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = File.h; path = eFax/File.h; sourceTree = "<group>"; };
-		1E8333641797755200B60612 /* File.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = File.m; path = eFax/File.m; sourceTree = "<group>"; };
-		1E833367179775CF00B60612 /* OutboundStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OutboundStatus.h; path = eFax/OutboundStatus.h; sourceTree = "<group>"; };
-		1E833368179775CF00B60612 /* OutboundStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OutboundStatus.m; path = eFax/OutboundStatus.m; sourceTree = "<group>"; };
-		1E83336A179775F800B60612 /* OutboundResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OutboundResponse.h; path = eFax/OutboundResponse.h; sourceTree = "<group>"; };
-		1E83336B179775F800B60612 /* OutboundResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OutboundResponse.m; path = eFax/OutboundResponse.m; sourceTree = "<group>"; };
-		1E83336D1797761800B60612 /* Response.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Response.h; path = eFax/Response.h; sourceTree = "<group>"; };
-		1E83336E1797761800B60612 /* Response.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Response.m; path = eFax/Response.m; sourceTree = "<group>"; };
-		1E8333701797763700B60612 /* OutboundStatusResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OutboundStatusResponse.h; path = eFax/OutboundStatusResponse.h; sourceTree = "<group>"; };
-		1E8333711797763800B60612 /* OutboundStatusResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OutboundStatusResponse.m; path = eFax/OutboundStatusResponse.m; sourceTree = "<group>"; };
-		1E8333731797765600B60612 /* Status.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Status.h; path = eFax/Status.h; sourceTree = "<group>"; };
-		1E8333741797765700B60612 /* Status.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Status.m; path = eFax/Status.m; sourceTree = "<group>"; };
-		1E8333761797768C00B60612 /* LastAttempt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LastAttempt.h; path = eFax/LastAttempt.h; sourceTree = "<group>"; };
-		1E8333771797768C00B60612 /* LastAttempt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LastAttempt.m; path = eFax/LastAttempt.m; sourceTree = "<group>"; };
-		1E8333791797769600B60612 /* NextAttempt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NextAttempt.h; path = eFax/NextAttempt.h; sourceTree = "<group>"; };
-		1E83337A1797769600B60612 /* NextAttempt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NextAttempt.m; path = eFax/NextAttempt.m; sourceTree = "<group>"; };
-		1E83337C179776AE00B60612 /* Pages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Pages.h; path = eFax/Pages.h; sourceTree = "<group>"; };
-		1E83337D179776AF00B60612 /* Pages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Pages.m; path = eFax/Pages.m; sourceTree = "<group>"; };
-		1E83337F179776C600B60612 /* OutboundDisposition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OutboundDisposition.h; path = eFax/OutboundDisposition.h; sourceTree = "<group>"; };
-		1E833380179776C700B60612 /* OutboundDisposition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OutboundDisposition.m; path = eFax/OutboundDisposition.m; sourceTree = "<group>"; };
-		1E833382179777D500B60612 /* AccessControlNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AccessControlNode.h; path = eFax/AccessControlNode.h; sourceTree = "<group>"; };
-		1E833383179777D600B60612 /* AccessControlNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AccessControlNode.m; path = eFax/AccessControlNode.m; sourceTree = "<group>"; };
 		1E8333AC17977B9400B60612 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = usr/lib/libxml2.2.dylib; sourceTree = SDKROOT; };
 		1E8333AF17978C2A00B60612 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
 		1E8333B017978C2A00B60612 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
@@ -525,8 +452,6 @@
 		1E8333CF179792F600B60612 /* QSStrings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSStrings.m; sourceTree = "<group>"; };
 		1E8333D0179792F600B60612 /* QSUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSUtilities.h; sourceTree = "<group>"; };
 		1E8333D1179792F600B60612 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
-		1E8EECD917B84D91001D012F /* FaxManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaxManager.h; sourceTree = "<group>"; };
-		1E8EECDA17B84D92001D012F /* FaxManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FaxManager.m; sourceTree = "<group>"; };
 		1E8FBA7A17E7F7B2003758EB /* BrandUIButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrandUIButton.h; sourceTree = "<group>"; };
 		1E8FBA7B17E7F7B2003758EB /* BrandUIButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrandUIButton.m; sourceTree = "<group>"; };
 		1E9280EB177FB68F008A583C /* hbar_96x2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hbar_96x2.png; sourceTree = "<group>"; };
@@ -764,10 +689,6 @@
 		1E9282E8177FDCEB008A583C /* icon_recents@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_recents@2x.png"; sourceTree = "<group>"; };
 		1E9282EA177FDCEB008A583C /* splash-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "splash-568h@2x.png"; sourceTree = "<group>"; };
 		1E9282EB177FDCEB008A583C /* fpo_fax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fpo_fax.png; sourceTree = "<group>"; };
-		1EADC09817ADB4C900DA6414 /* BuyFaxModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyFaxModel.h; sourceTree = "<group>"; };
-		1EADC09917ADB4C900DA6414 /* BuyFaxModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyFaxModel.m; sourceTree = "<group>"; };
-		1EADC09B17ADB53400DA6414 /* BuyFaxData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyFaxData.h; sourceTree = "<group>"; };
-		1EADC09C17ADB53400DA6414 /* BuyFaxData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyFaxData.m; sourceTree = "<group>"; };
 		1EAFEC2F17999C8A00CCBDA1 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		1EAFEC3017999C8A00CCBDA1 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		1EAFEC341799BFC400CCBDA1 /* fax_template_hires.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fax_template_hires.png; sourceTree = "<group>"; };
@@ -783,8 +704,6 @@
 		1EB6FC281794DCAF00CBF48D /* APITests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APITests.h; sourceTree = "<group>"; };
 		1EB6FC291794DCAF00CBF48D /* APITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = APITests.m; sourceTree = "<group>"; };
 		1EB6FC2B1794DCAF00CBF48D /* APITests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "APITests-Prefix.pch"; sourceTree = "<group>"; };
-		1EB6FC301794DD6B00CBF48D /* EFaxService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EFaxService.h; sourceTree = "<group>"; };
-		1EB6FC311794DD6B00CBF48D /* EFaxService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EFaxService.m; sourceTree = "<group>"; };
 		1EB6FC341794F7FF00CBF48D /* ProfileStart1VC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProfileStart1VC.h; path = DocAlert/ProfileStart1VC.h; sourceTree = "<group>"; };
 		1EB6FC351794F80000CBF48D /* ProfileStart1VC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProfileStart1VC.m; path = DocAlert/ProfileStart1VC.m; sourceTree = "<group>"; };
 		1EB6FC361794F80200CBF48D /* ProfileStart1VC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ProfileStart1VC.xib; path = DocAlert/ProfileStart1VC.xib; sourceTree = "<group>"; };
@@ -797,8 +716,19 @@
 		1EB6FC401794F81600CBF48D /* ProfileStart5VC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProfileStart5VC.h; path = DocAlert/ProfileStart5VC.h; sourceTree = "<group>"; };
 		1EB6FC411794F81700CBF48D /* ProfileStart5VC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProfileStart5VC.m; path = DocAlert/ProfileStart5VC.m; sourceTree = "<group>"; };
 		1EB6FC421794F81800CBF48D /* ProfileStart5VC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ProfileStart5VC.xib; path = DocAlert/ProfileStart5VC.xib; sourceTree = "<group>"; };
-		1EE7EAA217B084C8001D354D /* FaxLogVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaxLogVO.h; sourceTree = "<group>"; };
-		1EE7EAA317B084C8001D354D /* FaxLogVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FaxLogVO.m; sourceTree = "<group>"; };
+		1EBA5DBF17E9425800E46FFF /* modal_add_photo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "modal_add_photo@2x.png"; sourceTree = "<group>"; };
+		1EBA5DC017E9425800E46FFF /* modal_new_survey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "modal_new_survey@2x.png"; sourceTree = "<group>"; };
+		1EBA5DC117E9425800E46FFF /* chat_callout_row_white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_callout_row_white@2x.png"; sourceTree = "<group>"; };
+		1EBA5DC217E9425800E46FFF /* chat_callout_row@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_callout_row@2x.png"; sourceTree = "<group>"; };
+		1EBA5DC317E9425800E46FFF /* blank_btn_aqua_grad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blank_btn_aqua_grad@2x.png"; sourceTree = "<group>"; };
+		1EBA5DC417E9425800E46FFF /* poll_separator_bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "poll_separator_bar@2x.png"; sourceTree = "<group>"; };
+		1EBA5DC517E9425800E46FFF /* poll_checkbox_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "poll_checkbox_on@2x.png"; sourceTree = "<group>"; };
+		1EBA5DC617E9425800E46FFF /* poll_checkbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "poll_checkbox@2x.png"; sourceTree = "<group>"; };
+		1EBA5DC717E9425800E46FFF /* chat_survey_header_right@2px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_survey_header_right@2px.png"; sourceTree = "<group>"; };
+		1EBA5DC817E9425800E46FFF /* icon_refresh_purple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_refresh_purple@2x.png"; sourceTree = "<group>"; };
+		1EBA5DC917E9425800E46FFF /* icon_rating_purple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_rating_purple@2x.png"; sourceTree = "<group>"; };
+		1EBA5DCA17E9425800E46FFF /* icon_poll_purple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_poll_purple@2x.png"; sourceTree = "<group>"; };
+		1EBA5DCB17E9425800E46FFF /* icon_event_purple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_event_purple@2x.png"; sourceTree = "<group>"; };
 		1EF463321783AE1C00D38DBB /* UserVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserVO.h; sourceTree = "<group>"; };
 		1EF463331783AE1C00D38DBB /* UserVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserVO.m; sourceTree = "<group>"; };
 		800F4C90170264A6001D2C50 /* Regroupd Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Regroupd Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -980,49 +910,6 @@
 			name = Settings;
 			sourceTree = "<group>";
 		};
-		1E83334D1797741C00B60612 /* eFax */ = {
-			isa = PBXGroup;
-			children = (
-				1E833367179775CF00B60612 /* OutboundStatus.h */,
-				1E833368179775CF00B60612 /* OutboundStatus.m */,
-				1E83334E1797745200B60612 /* OutboundRequest.h */,
-				1E83334F1797745200B60612 /* OutboundRequest.m */,
-				1E833382179777D500B60612 /* AccessControlNode.h */,
-				1E833383179777D600B60612 /* AccessControlNode.m */,
-				1E8333511797746900B60612 /* TransmissionNode.h */,
-				1E8333521797746900B60612 /* TransmissionNode.m */,
-				1E8333541797747500B60612 /* TransmissionControlNode.h */,
-				1E8333551797747500B60612 /* TransmissionControlNode.m */,
-				1E833357179774B100B60612 /* DispositionControl.h */,
-				1E833358179774B100B60612 /* DispositionControl.m */,
-				1E83335A1797752300B60612 /* Recipients.h */,
-				1E83335B1797752300B60612 /* Recipients.m */,
-				1E83335D1797752B00B60612 /* Recipient.h */,
-				1E83335E1797752C00B60612 /* Recipient.m */,
-				1E8333631797755200B60612 /* File.h */,
-				1E8333641797755200B60612 /* File.m */,
-				1E8333601797754A00B60612 /* Files.h */,
-				1E8333611797754A00B60612 /* Files.m */,
-				1E83336A179775F800B60612 /* OutboundResponse.h */,
-				1E83336B179775F800B60612 /* OutboundResponse.m */,
-				1E83336D1797761800B60612 /* Response.h */,
-				1E83336E1797761800B60612 /* Response.m */,
-				1E8333701797763700B60612 /* OutboundStatusResponse.h */,
-				1E8333711797763800B60612 /* OutboundStatusResponse.m */,
-				1E8333731797765600B60612 /* Status.h */,
-				1E8333741797765700B60612 /* Status.m */,
-				1E8333761797768C00B60612 /* LastAttempt.h */,
-				1E8333771797768C00B60612 /* LastAttempt.m */,
-				1E8333791797769600B60612 /* NextAttempt.h */,
-				1E83337A1797769600B60612 /* NextAttempt.m */,
-				1E83337C179776AE00B60612 /* Pages.h */,
-				1E83337D179776AF00B60612 /* Pages.m */,
-				1E83337F179776C600B60612 /* OutboundDisposition.h */,
-				1E833380179776C700B60612 /* OutboundDisposition.m */,
-			);
-			name = eFax;
-			sourceTree = "<group>";
-		};
 		1E8333AE17978C2A00B60612 /* XML */ = {
 			isa = PBXGroup;
 			children = (
@@ -1106,6 +993,19 @@
 		1E9280E9177FB68F008A583C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1EBA5DBF17E9425800E46FFF /* modal_add_photo@2x.png */,
+				1EBA5DC017E9425800E46FFF /* modal_new_survey@2x.png */,
+				1EBA5DC117E9425800E46FFF /* chat_callout_row_white@2x.png */,
+				1EBA5DC217E9425800E46FFF /* chat_callout_row@2x.png */,
+				1EBA5DC317E9425800E46FFF /* blank_btn_aqua_grad@2x.png */,
+				1EBA5DC417E9425800E46FFF /* poll_separator_bar@2x.png */,
+				1EBA5DC517E9425800E46FFF /* poll_checkbox_on@2x.png */,
+				1EBA5DC617E9425800E46FFF /* poll_checkbox@2x.png */,
+				1EBA5DC717E9425800E46FFF /* chat_survey_header_right@2px.png */,
+				1EBA5DC817E9425800E46FFF /* icon_refresh_purple@2x.png */,
+				1EBA5DC917E9425800E46FFF /* icon_rating_purple@2x.png */,
+				1EBA5DCA17E9425800E46FFF /* icon_poll_purple@2x.png */,
+				1EBA5DCB17E9425800E46FFF /* icon_event_purple@2x.png */,
 				1E213BF217E542BE00E17DBF /* topnav_aqua_bg@2x.png */,
 				1E213BF317E542BE00E17DBF /* btn_aqua_add@2x.png */,
 				1E2C7E6817E4FFCB0043E28D /* tabnav_contacts_icon@2x.png */,
@@ -1293,13 +1193,8 @@
 		1E92813B177FB68F008A583C /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				1E83334D1797741C00B60612 /* eFax */,
 				1E92813E177FB68F008A583C /* DataModel.h */,
 				1E92813F177FB68F008A583C /* DataModel.m */,
-				1EADC09B17ADB53400DA6414 /* BuyFaxData.h */,
-				1EADC09C17ADB53400DA6414 /* BuyFaxData.m */,
-				1EADC09817ADB4C900DA6414 /* BuyFaxModel.h */,
-				1EADC09917ADB4C900DA6414 /* BuyFaxModel.m */,
 				1E928144177FB68F008A583C /* HelpCopy.h */,
 				1E928145177FB68F008A583C /* HelpCopy.m */,
 				1E928146177FB68F008A583C /* HelpModel.h */,
@@ -1308,10 +1203,6 @@
 				1EF463331783AE1C00D38DBB /* UserVO.m */,
 				1E76F4A717961283007EF5B0 /* ContactVO.h */,
 				1E76F4A817961283007EF5B0 /* ContactVO.m */,
-				1EE7EAA217B084C8001D354D /* FaxLogVO.h */,
-				1EE7EAA317B084C8001D354D /* FaxLogVO.m */,
-				1E5CABDA17BAAABE000D8759 /* FaxAccountVO.h */,
-				1E5CABDB17BAAABE000D8759 /* FaxAccountVO.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1319,12 +1210,8 @@
 		1E92815A177FB68F008A583C /* Service */ = {
 			isa = PBXGroup;
 			children = (
-				1EB6FC301794DD6B00CBF48D /* EFaxService.h */,
-				1EB6FC311794DD6B00CBF48D /* EFaxService.m */,
 				1E751B2A179C4B11003AB13D /* UserManager.h */,
 				1E751B2B179C4B11003AB13D /* UserManager.m */,
-				1E8EECD917B84D91001D012F /* FaxManager.h */,
-				1E8EECDA17B84D92001D012F /* FaxManager.m */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -1348,9 +1235,6 @@
 				1E5CABD517BA8DF0000D8759 /* RecentTableViewCell.h */,
 				1E5CABD617BA8DF0000D8759 /* RecentTableViewCell.m */,
 				1E5CABD717BA8DF0000D8759 /* RecentTableViewCell.xib */,
-				1E5CABDD17BAFC2A000D8759 /* BuyTableViewCell.h */,
-				1E5CABDE17BAFC2B000D8759 /* BuyTableViewCell.m */,
-				1E5CABDF17BAFC2C000D8759 /* BuyTableViewCell.xib */,
 				1E0AEC631793860D00710FDE /* TabBarView.h */,
 				1E0AEC641793860D00710FDE /* TabBarView.m */,
 				1E928169177FB68F008A583C /* TabBarView.xib */,
@@ -1835,7 +1719,6 @@
 				1EAFEC351799BFC400CCBDA1 /* fax_template_hires.png in Resources */,
 				1EB652A4179F6F9900BEC96C /* SignatureView.xib in Resources */,
 				1E5CABD917BA8DF0000D8759 /* RecentTableViewCell.xib in Resources */,
-				1E5CABE117BAFC2C000D8759 /* BuyTableViewCell.xib in Resources */,
 				1E513A6317C9A29A00DC2566 /* cell_delete_icon.png in Resources */,
 				1E513A6417C9A29A00DC2566 /* cell_delete_icon@2x.png in Resources */,
 				1E513A6617CBAF8E00DC2566 /* checkbox_on@2x.png in Resources */,
@@ -1897,6 +1780,19 @@
 				1E213C0A17E5466B00E17DBF /* FormsHomeVC.xib in Resources */,
 				1E213C0C17E5466B00E17DBF /* ContactsHomeVC.xib in Resources */,
 				1E213C0E17E5466B00E17DBF /* ChatsHomeVC.xib in Resources */,
+				1EBA5DCC17E9425800E46FFF /* modal_add_photo@2x.png in Resources */,
+				1EBA5DCD17E9425800E46FFF /* modal_new_survey@2x.png in Resources */,
+				1EBA5DCE17E9425800E46FFF /* chat_callout_row_white@2x.png in Resources */,
+				1EBA5DCF17E9425800E46FFF /* chat_callout_row@2x.png in Resources */,
+				1EBA5DD017E9425800E46FFF /* blank_btn_aqua_grad@2x.png in Resources */,
+				1EBA5DD117E9425800E46FFF /* poll_separator_bar@2x.png in Resources */,
+				1EBA5DD217E9425800E46FFF /* poll_checkbox_on@2x.png in Resources */,
+				1EBA5DD317E9425800E46FFF /* poll_checkbox@2x.png in Resources */,
+				1EBA5DD417E9425800E46FFF /* chat_survey_header_right@2px.png in Resources */,
+				1EBA5DD517E9425800E46FFF /* icon_refresh_purple@2x.png in Resources */,
+				1EBA5DD617E9425800E46FFF /* icon_rating_purple@2x.png in Resources */,
+				1EBA5DD717E9425800E46FFF /* icon_poll_purple@2x.png in Resources */,
+				1EBA5DD817E9425800E46FFF /* icon_event_purple@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2028,30 +1924,11 @@
 				1EF463341783AE1C00D38DBB /* UserVO.m in Sources */,
 				1E0AEC651793860D00710FDE /* TabBarView.m in Sources */,
 				1EB6FC161794D45E00CBF48D /* FaxTemplateView.m in Sources */,
-				1EB6FC321794DD6B00CBF48D /* EFaxService.m in Sources */,
 				1EB6FC431794F81900CBF48D /* ProfileStart1VC.m in Sources */,
 				1EB6FC4B1794F81900CBF48D /* ProfileStart3VC.m in Sources */,
 				1EB6FC4F1794F81900CBF48D /* ProfileStart4VC.m in Sources */,
 				1EB6FC531794F81900CBF48D /* ProfileStart5VC.m in Sources */,
 				1E76F4A917961283007EF5B0 /* ContactVO.m in Sources */,
-				1E8333501797745200B60612 /* OutboundRequest.m in Sources */,
-				1E8333531797746900B60612 /* TransmissionNode.m in Sources */,
-				1E8333561797747500B60612 /* TransmissionControlNode.m in Sources */,
-				1E833359179774B100B60612 /* DispositionControl.m in Sources */,
-				1E83335C1797752300B60612 /* Recipients.m in Sources */,
-				1E83335F1797752C00B60612 /* Recipient.m in Sources */,
-				1E8333621797754A00B60612 /* Files.m in Sources */,
-				1E8333651797755200B60612 /* File.m in Sources */,
-				1E833369179775CF00B60612 /* OutboundStatus.m in Sources */,
-				1E83336C179775F800B60612 /* OutboundResponse.m in Sources */,
-				1E83336F1797761900B60612 /* Response.m in Sources */,
-				1E8333721797763800B60612 /* OutboundStatusResponse.m in Sources */,
-				1E8333751797765700B60612 /* Status.m in Sources */,
-				1E8333781797768D00B60612 /* LastAttempt.m in Sources */,
-				1E83337B1797769600B60612 /* NextAttempt.m in Sources */,
-				1E83337E179776AF00B60612 /* Pages.m in Sources */,
-				1E833381179776C700B60612 /* OutboundDisposition.m in Sources */,
-				1E833384179777D600B60612 /* AccessControlNode.m in Sources */,
 				1E8333B917978C2A00B60612 /* GDataXMLNode.m in Sources */,
 				1E8333D4179792F600B60612 /* GTMNSString+HTML.m in Sources */,
 				1E8333D8179792F600B60612 /* QSFileManager.m in Sources */,
@@ -2060,13 +1937,7 @@
 				1EAFEC3117999C8A00CCBDA1 /* MBProgressHUD.m in Sources */,
 				1E751B2C179C4B11003AB13D /* UserManager.m in Sources */,
 				1EB652A2179F6F7200BEC96C /* SignatureView.m in Sources */,
-				1EADC09A17ADB4CA00DA6414 /* BuyFaxModel.m in Sources */,
-				1EADC09D17ADB53400DA6414 /* BuyFaxData.m in Sources */,
-				1EE7EAA417B084C8001D354D /* FaxLogVO.m in Sources */,
-				1E8EECDB17B84D92001D012F /* FaxManager.m in Sources */,
 				1E5CABD817BA8DF0000D8759 /* RecentTableViewCell.m in Sources */,
-				1E5CABDC17BAAABE000D8759 /* FaxAccountVO.m in Sources */,
-				1E5CABE017BAFC2C000D8759 /* BuyTableViewCell.m in Sources */,
 				1E2C7EAC17E501940043E28D /* BrandUILabel.m in Sources */,
 				1E2C7EB017E50F690043E28D /* ProfileStart2VC.m in Sources */,
 				1E213BFA17E545A100E17DBF /* GroupsHomeVC.m in Sources */,
@@ -2082,26 +1953,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E83339A17977ABA00B60612 /* OutboundStatus.m in Sources */,
-				1E83339B17977ABA00B60612 /* OutboundRequest.m in Sources */,
-				1E83339C17977ABA00B60612 /* AccessControlNode.m in Sources */,
-				1E83339D17977ABA00B60612 /* TransmissionNode.m in Sources */,
-				1E83339E17977ABA00B60612 /* TransmissionControlNode.m in Sources */,
-				1E83339F17977ABA00B60612 /* DispositionControl.m in Sources */,
-				1E8333A017977ABA00B60612 /* Recipients.m in Sources */,
-				1E8333A117977ABA00B60612 /* Recipient.m in Sources */,
-				1E8333A217977ABA00B60612 /* File.m in Sources */,
-				1E8333A317977ABA00B60612 /* Files.m in Sources */,
-				1E8333A417977ABA00B60612 /* OutboundResponse.m in Sources */,
-				1E8333A517977ABA00B60612 /* Response.m in Sources */,
-				1E8333A617977ABA00B60612 /* OutboundStatusResponse.m in Sources */,
-				1E8333A717977ABA00B60612 /* Status.m in Sources */,
-				1E8333A817977ABA00B60612 /* LastAttempt.m in Sources */,
-				1E8333A917977ABA00B60612 /* NextAttempt.m in Sources */,
-				1E8333AA17977ABA00B60612 /* Pages.m in Sources */,
-				1E8333AB17977ABA00B60612 /* OutboundDisposition.m in Sources */,
 				1EB6FC2A1794DCAF00CBF48D /* APITests.m in Sources */,
-				1EB6FC331794DD6B00CBF48D /* EFaxService.m in Sources */,
 				1E8333BA17978C2A00B60612 /* GDataXMLNode.m in Sources */,
 				1E8333D5179792F600B60612 /* GTMNSString+HTML.m in Sources */,
 				1E8333D9179792F600B60612 /* QSFileManager.m in Sources */,

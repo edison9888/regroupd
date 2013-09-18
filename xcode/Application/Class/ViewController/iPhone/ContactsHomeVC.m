@@ -7,8 +7,6 @@
 //
 
 #import "ContactsHomeVC.h"
-#import "FaxManager.h"
-#import "FaxAccountVO.h"
 
 @interface ContactsHomeVC ()
 
@@ -39,10 +37,7 @@
     self.theTableView.backgroundColor = [UIColor clearColor];
     
     self.tableData =[[NSMutableArray alloc]init];
-    
-    NSString *qtyLeftCaption = [FaxManager renderFaxQtyLabel:[DataModel shared].faxBalance];
-    self.navCaption.text = qtyLeftCaption;
-    
+        
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
     

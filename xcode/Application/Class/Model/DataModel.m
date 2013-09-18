@@ -14,7 +14,6 @@
 
 @synthesize user;
 @synthesize contact;
-@synthesize faxlog;
 
 @synthesize contactData;
 @synthesize timestampText;

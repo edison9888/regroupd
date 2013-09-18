@@ -8,7 +8,6 @@
 #import <Foundation/Foundation.h>
 #import "UserVO.h"
 #import "ContactVO.h"
-#import "FaxLogVO.h"
 
 #define contains(str1, str2) ([str1 rangeOfString: str2 ].location != NSNotFound)
 
@@ -26,7 +25,6 @@
     
     UserVO *user;
     ContactVO *contact;
-    FaxLogVO *faxlog;
 
 }
 
@@ -35,7 +33,6 @@
 
 @property (nonatomic, retain) UserVO *user;
 @property (nonatomic, retain) ContactVO *contact;
-@property (nonatomic, retain) FaxLogVO *faxlog;
 
 @property (nonatomic, retain) NSMutableDictionary *contactData;
 @property (nonatomic, retain) NSString *action;
