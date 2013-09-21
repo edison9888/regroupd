@@ -88,6 +88,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideNavNotificationHandler:)     name:@"hideNavNotification"            object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showNavNotificationHandler:)     name:@"showNavNotification"            object:nil];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideMaskNotificationHandler:)     name:@"hideMaskNotification"            object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showMaskNotificationHandler:)     name:@"showMaskNotification"            object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchNavNotificationHandler:)     name:@"switchNavNotification"            object:nil];
 
     // Do any additional setup after loading the view, typically from a nib.
@@ -113,19 +116,33 @@
 #pragma mark - Notification handlers
 - (void)hideNavNotificationHandler:(NSNotification*)notification
 {
-#ifdef DEBUGX
     NSLog(@"%s", __FUNCTION__);
-#endif
     brandNav.hidden = YES;
     
 }
 - (void)showNavNotificationHandler:(NSNotification*)notification
 {
-#ifdef DEBUGX
     NSLog(@"%s", __FUNCTION__);
-#endif
     brandNav.hidden = NO;
+}
+- (void)hideMaskNotificationHandler:(NSNotification*)notification
+{
+    NSLog(@"%s", __FUNCTION__);
+    if (navMask != nil) {
+        [navMask removeFromSuperview];
+        navMask = nil;
+    }
     
+}
+- (void)showMaskNotificationHandler:(NSNotification*)notification
+{
+    NSLog(@"%s", __FUNCTION__);
+    CGRect navFrame = brandNav.frame;
+    navMask = [[UIView alloc] initWithFrame:navFrame];
+    navMask.backgroundColor = [UIColor grayColor];
+    navMask.alpha = 0;
+
+    [self.view addSubview:navMask];
 }
 
 - (void)switchNavNotificationHandler:(NSNotification*)notification

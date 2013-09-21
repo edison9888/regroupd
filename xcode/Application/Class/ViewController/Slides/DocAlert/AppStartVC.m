@@ -61,7 +61,8 @@
     
     
     if (user == nil) {
-        [_delegate gotoSlideWithName:@"ProfileStart1"];
+        [DataModel shared].navIndex = 1;
+        [_delegate gotoSlideWithName:@"GroupsHome"];
         
     } else {
         

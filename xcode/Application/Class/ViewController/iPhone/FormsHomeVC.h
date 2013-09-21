@@ -16,6 +16,7 @@
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *tableData;
+    UIView *bgLayer;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
@@ -28,9 +29,20 @@
 @property (nonatomic, strong) IBOutlet UIButton *editButton;
 @property (nonatomic, strong) IBOutlet UIButton *addButton;
 
+@property (nonatomic, strong) IBOutlet UIView *addModal;
+
 
 - (IBAction)tapAddButton;
 
 - (IBAction)tapEditButton;
+
+- (IBAction)tapPollButton;
+- (IBAction)tapRankingButton;
+- (IBAction)tapRSVPButton;
+- (IBAction)tapCancelButton;
+
+
+- (void) showModal;
+- (void) hideModal;
 
 @end

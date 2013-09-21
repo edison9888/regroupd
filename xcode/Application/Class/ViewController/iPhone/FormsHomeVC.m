@@ -7,6 +7,7 @@
 //
 
 #import "FormsHomeVC.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface FormsHomeVC ()
 
@@ -31,6 +32,17 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    CGRect modalFrame = self.addModal.frame;
+    float ypos = -modalFrame.size.height;
+    float xpos = ([DataModel shared].stageWidth - modalFrame.size.width) / 2;
+    
+    modalFrame.origin.y = ypos;
+    modalFrame.origin.x = xpos;
+    
+    NSLog(@"modal at %f, %f", xpos, ypos);
+    self.addModal.layer.zPosition = 99;
+    self.addModal.frame = modalFrame;
+    [self.view addSubview:self.addModal];
     
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
@@ -38,8 +50,15 @@
     
     self.tableData =[[NSMutableArray alloc]init];
     
+    
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closePopupNotificationHandler:)
+                                                 name:@"closePopupNotification"
+                                               object:nil];
+
+    self.addModal.tag = 99;
     
     [self performSearch:@""];
     
@@ -174,14 +193,124 @@
 
 - (IBAction)tapAddButton
 {
-    //    BOOL isOk = YES;
-    [DataModel shared].action = kActionADD;
-    [_delegate gotoNextSlide];
+    NSLog(@"%s", __FUNCTION__);
+//    CGRect fullscreen = CGRectMake(0, 0, [DataModel shared].stageWidth, [DataModel shared].stageHeight);
+//    bgLayer = [[UIView alloc] initWithFrame:fullscreen];
+//    bgLayer.backgroundColor = [UIColor grayColor];
+//    bgLayer.alpha = 0.8;
+//    bgLayer.tag = 1000;
+//    bgLayer.layer.zPosition = 9;
+//    [self.view addSubview:bgLayer];
+
+    NSNotification* showMaskNotification = [NSNotification notificationWithName:@"showMaskNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:showMaskNotification];
+
+    [self showModal];
     
 }
 
 - (IBAction)tapEditButton
 {
     
+}
+
+- (IBAction)tapPollButton {
+    NSLog(@"%s", __FUNCTION__);
+    
+}
+- (IBAction)tapRankingButton {
+    NSLog(@"%s", __FUNCTION__);
+    
+}
+- (IBAction)tapRSVPButton {
+    NSLog(@"%s", __FUNCTION__);
+    
+}
+- (IBAction)tapCancelButton {
+    [self hideModal];
+}
+
+#pragma mark - Tap Gestures
+
+-(void)singleTap:(UITapGestureRecognizer*)tap
+{
+    NSLog(@"%s", __FUNCTION__);
+    if (UIGestureRecognizerStateEnded == tap.state)
+    {
+        
+        
+    }
+}
+
+
+#pragma mark -- Notification Handlers
+
+- (void)closePopupNotificationHandler:(NSNotification*)notification
+{
+    NSLog(@"%s", __FUNCTION__);
+    [self hideModal];
+
+    
+}
+
+
+//-(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+//    NSLog(@"%s", __FUNCTION__);
+//    
+//    CGPoint locationPoint = [[touches anyObject] locationInView:self.view];
+//    UIView* hitView = [self.view hitTest:locationPoint withEvent:event];
+//    NSLog(@"hitView.tag = %i", hitView.tag);
+//    
+//    if (hitView.tag == 1000) {
+//        NSNotification* closePopupNotification = [NSNotification notificationWithName:@"closePopupNotification" object:nil];
+//        [[NSNotificationCenter defaultCenter] postNotification:closePopupNotification];
+//    }
+//}
+
+
+- (void) showModal {
+    
+    CGRect modalFrame = self.addModal.frame;
+    float ypos = ([DataModel shared].stageHeight - modalFrame.size.height) / 2;
+    modalFrame.origin.y = ypos;
+    
+    [UIView animateWithDuration:0.5
+                          delay:0
+                        options:(UIViewAnimationCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction)
+                     animations:^{
+                         self.addModal.frame = modalFrame;
+                     }
+                     completion:^(BOOL finished){
+                         NSLog(@"Done!");
+                     }];
+
+}
+
+- (void) hideModal {
+
+    
+    CGRect modalFrame = self.addModal.frame;
+    float ypos = -modalFrame.size.height;
+    modalFrame.origin.y = ypos;
+    
+    
+    [UIView animateWithDuration:0.5
+                          delay:0
+                        options:(UIViewAnimationCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction)
+                     animations:^{
+                         self.addModal.frame = modalFrame;
+                     }
+                     completion:^(BOOL finished){
+                         if (bgLayer != nil) {
+                             [bgLayer removeFromSuperview];
+                             bgLayer = nil;
+                         }
+                         
+                         NSNotification* hideMaskNotification = [NSNotification notificationWithName:@"hideMaskNotification" object:nil];
+                         [[NSNotificationCenter defaultCenter] postNotification:hideMaskNotification];
+                         
+                     }];
+
+
 }
 @end

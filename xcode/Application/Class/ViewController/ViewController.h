@@ -12,7 +12,7 @@
 @interface ViewController : PresentationViewController {
     TabBarView *brandNav;
     NSMutableDictionary *navMap;
-    
+    UIView *navMask;
 //    UIView *_popOverNavigation;
 //    UIView *_overlayView;
 //    UIView *_tabBarOverlayView;
