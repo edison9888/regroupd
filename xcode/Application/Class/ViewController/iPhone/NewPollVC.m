@@ -1,33 +1,32 @@
 //
-//  ProfileStart1VC.m
-//  NView-iphone
+//  NewPollVC.m
+//  Regroupd
 //
-//  Created by Hugh Lang on 6/29/13.
+//  Created by Hugh Lang on 9/21/13.
 //
 //
 
-#import "ProfileStart1VC.h"
-#import "UserVO.h"
+#import "NewPollVC.h"
 
-@interface ProfileStart1VC ()
+@interface NewPollVC ()
 
 @end
 
-@implementation ProfileStart1VC
+@implementation NewPollVC
 
-@synthesize tf1;
-@synthesize nextButton;
+#define kTagPublic     101
+#define kTagPrivate    102
+#define kTagMultipleYes   103
+#define kTagMultipleNo    104
+
+#define kFirstOptionId  1
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    nibNameOrNil = @"ProfileStart1VC";
-
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        navbarHeight = 0;
-        
     }
     return self;
 }
@@ -36,20 +35,30 @@
 {
     [super viewDidLoad];
 
-    CGSize scrollContentSize = CGSizeMake([DataModel shared].stageWidth, 520);
-    self.scrollView.contentSize = scrollContentSize;
+    NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
 
-    self.tf1.delegate = self;
-    self.tf1.textAlignment = UITextAlignmentCenter;
-    
+    // scrollview setup
+    navbarHeight = 0;
+    CGSize scrollContentSize = CGSizeMake([DataModel shared].stageWidth, [DataModel shared].stageHeight - 60);
+    self.scrollView.contentSize = scrollContentSize;
     self.scrollView.delegate = self;
-    [self.tf1 setKeyboardType:UIKeyboardTypePhonePad];
+
+    self.ckPublic.ckLabel.text = @"Public";
+    self.ckPublic.tag = kTagPublic;
+    [self.ckPublic unselected];
     
-    if ([DataModel shared].user != nil) {
-        if ([DataModel shared].user.firstname != nil) {
-            self.tf1.text = [DataModel shared].user.phone;
-        }
-    }
+    self.ckPrivate.ckLabel.text = @"Private";
+    self.ckPrivate.tag = kTagPrivate;
+    [self.ckPrivate unselected];
+    
+    self.ckMultipleYes.ckLabel.text = @"Yes";
+    self.ckMultipleYes.tag = kTagMultipleYes;
+    [self.ckMultipleYes unselected];
+    
+    self.ckMultipleNo.ckLabel.text = @"No";
+    self.ckMultipleNo.tag = kTagMultipleNo;
+    [self.ckMultipleNo unselected];
     
     // register for keyboard notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -170,7 +179,7 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     _currentField = textField;
-
+    
     
 }
 - (void)textFieldDidEndEditing:(UITextField *)textField {
@@ -185,7 +194,7 @@
         case 1:
             return YES;
             break;
-                        
+            
     }
     return NO;
 }
@@ -198,37 +207,51 @@
 
 #pragma mark - Tap Gestures
 
--(void)singleTap:(UITapGestureRecognizer*)tap
+-(void)singleTap:(UITapGestureRecognizer*)sender
 {
     NSLog(@"%s", __FUNCTION__);
-    if (UIGestureRecognizerStateEnded == tap.state)
+    if (UIGestureRecognizerStateEnded == sender.state)
     {
         if (keyboardIsShown) {
             [_currentField resignFirstResponder];
             [_currentField endEditing:YES];
+        } else {
+            
+            UIView* view = sender.view;
+            CGPoint loc = [sender locationInView:view];
+            UIView* subview = [view hitTest:loc withEvent:nil];
+            NSLog(@"tag = %i", subview.tag);
+            
+            
+            switch (subview.tag) {
+                case kTagPublic:
+                    [self.ckPublic selected];
+                    [self.ckPrivate unselected];
+                    
+                    break;
+                    
+                case kTagPrivate:
+                    [self.ckPublic unselected];
+                    [self.ckPrivate selected];
+                    break;
+                    
+                case kTagMultipleYes:
+                    [self.ckMultipleYes selected];
+                    [self.ckMultipleNo unselected];
+                    break;
+                    
+                case kTagMultipleNo:
+                    [self.ckMultipleYes unselected];
+                    [self.ckMultipleNo selected];
+                    break;
+                    
+            }
+            
+            
+            
         }
     }
 }
 
-
-#pragma mark - Action handlers
-
-- (IBAction)goNext
-{
-    BOOL isOk = YES;
-    if (self.tf1.text.length == 0) {
-        isOk = NO;
-    }
-    if (isOk) {
-        UserVO *user = [[UserVO alloc] init];
-        user.phone = self.tf1.text;
-        [DataModel shared].user = user;
-        
-        [_delegate gotoNextSlide];
-    } else {
-        [[[UIAlertView alloc] initWithTitle:@"INFO" message:@"Please enter a valid phone number." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-        
-    }
-}
 
 @end

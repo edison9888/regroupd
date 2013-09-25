@@ -26,7 +26,7 @@
     
     [self setFont:[UIFont fontWithName:@"Raleway-Bold" size:self.font.pointSize]];
 //    self.textColor = [UIColor whiteColor];
-    self.textAlignment = UITextAlignmentCenter;
+//    self.textAlignment = UITextAlignmentCenter;
     
     return self;
 }

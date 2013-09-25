@@ -1,12 +1,12 @@
 //
-//  BrandUITextField
+//  FancyTextField
 //
 
-#import "BrandUITextField.h"
+#import "FancyTextField.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor+ColorWithHex.h"
 
-@implementation BrandUITextField
+@implementation FancyTextField
 
 - (id)initWithFrame:(CGRect)frame
 {

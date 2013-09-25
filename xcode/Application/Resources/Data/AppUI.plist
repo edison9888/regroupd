@@ -170,6 +170,54 @@
 			<key>nextSlideName</key>
 			<string></string>
 		</dict>
+		<dict>
+			<key>slideData</key>
+			<dict/>
+			<key>allowLeftSlide</key>
+			<false/>
+			<key>allowRightSlide</key>
+			<false/>
+			<key>category</key>
+			<string>Forms</string>
+			<key>name</key>
+			<string>NewPoll</string>
+			<key>controllerName</key>
+			<string>NewPollVC</string>
+			<key>nextSlideName</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>slideData</key>
+			<dict/>
+			<key>allowLeftSlide</key>
+			<false/>
+			<key>allowRightSlide</key>
+			<false/>
+			<key>category</key>
+			<string>Forms</string>
+			<key>name</key>
+			<string>NewRating</string>
+			<key>controllerName</key>
+			<string>NewRatingVC</string>
+			<key>nextSlideName</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>slideData</key>
+			<dict/>
+			<key>allowLeftSlide</key>
+			<false/>
+			<key>allowRightSlide</key>
+			<false/>
+			<key>category</key>
+			<string>Forms</string>
+			<key>name</key>
+			<string>NewRSVP</string>
+			<key>controllerName</key>
+			<string>NewRSVPVC</string>
+			<key>nextSlideName</key>
+			<string></string>
+		</dict>
 		<!-- ########## Contacts ########### -->
 		<dict>
 			<key>slideData</key>

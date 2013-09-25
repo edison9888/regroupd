@@ -216,7 +216,7 @@
 
 - (IBAction)tapPollButton {
     NSLog(@"%s", __FUNCTION__);
-    
+    [_delegate gotoSlideWithName:@"NewPoll"];
 }
 - (IBAction)tapRankingButton {
     NSLog(@"%s", __FUNCTION__);

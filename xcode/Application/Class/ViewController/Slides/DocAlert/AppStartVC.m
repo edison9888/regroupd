@@ -61,8 +61,10 @@
     
     
     if (user == nil) {
-        [DataModel shared].navIndex = 1;
-        [_delegate gotoSlideWithName:@"GroupsHome"];
+//        [DataModel shared].navIndex = 1;
+//        [_delegate gotoSlideWithName:@"GroupsHome"];
+        [DataModel shared].navIndex = 3;
+        [_delegate gotoSlideWithName:@"FormsHome"];
         
     } else {
         
