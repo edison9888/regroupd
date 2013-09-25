@@ -43,7 +43,41 @@
     CGSize scrollContentSize = CGSizeMake([DataModel shared].stageWidth, [DataModel shared].stageHeight - 60);
     self.scrollView.contentSize = scrollContentSize;
     self.scrollView.delegate = self;
+    
+    SurveyOptionWithPic *surveyOption;
+    
+    // Add survey options
+    int ypos = 120;
+    int count = 0;
+    surveyOptions = [[NSMutableArray alloc] init];
 
+    CGRect optionFrame;
+    NSString *defaultText = @"Option %@";
+    
+    count++;
+    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
+    surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
+    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
+    surveyOption.input.placeholder = [NSString stringWithFormat:defaultText, [NSNumber numberWithInt:count].stringValue];
+    
+    [self.scrollView addSubview:surveyOption];
+    [surveyOptions addObject:surveyOption];
+    
+    count++;
+    ypos += 60;
+    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
+    surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
+    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
+    surveyOption.input.placeholder = [NSString stringWithFormat:defaultText, [NSNumber numberWithInt:count].stringValue];
+    
+    [self.scrollView addSubview:surveyOption];
+    [surveyOptions addObject:surveyOption];
+    
+
+//    self.lowerForm.frame.origin = CGPointMake(0, ypos + 50);
+    CGRect lowerFrame = CGRectMake(0, ypos + 80, self.lowerForm.frame.size.width, self.lowerForm.frame.size.height);
+    [self.lowerForm setFrame:lowerFrame];
+    
     self.ckPublic.ckLabel.text = @"Public";
     self.ckPublic.tag = kTagPublic;
     [self.ckPublic unselected];

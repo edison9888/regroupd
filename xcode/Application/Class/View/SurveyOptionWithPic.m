@@ -12,10 +12,23 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-    self = [super initWithFrame:frame];
+    NSLog(@"===== %s", __FUNCTION__);
+   self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
+                
+        _theView = [[[NSBundle mainBundle] loadNibNamed:@"SurveyOptionWithPic" owner:self options:nil] objectAtIndex:0];
+        _theView.backgroundColor = [UIColor clearColor];
+        
+        [self addSubview:_theView];
     }
+    return self;
+}
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if ((self = [super init])) {
+        _theView = [[[NSBundle mainBundle] loadNibNamed:@"SurveyOptionWithPic" owner:self options:nil] objectAtIndex:0];
+    }
+    
     return self;
 }
 

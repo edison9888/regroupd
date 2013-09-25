@@ -4,6 +4,11 @@
 //
 
 
-@interface FancyTextField : UITextField
+@interface FancyTextField : UITextField {
+    
+}
+
+- (void) setFieldLabel:(NSString *)label;
+
 
 @end

@@ -16,7 +16,6 @@
     
     UIView *_theView;
 }
-@property int viewId;
 @property (nonatomic, strong) IBOutlet BrandUILabel *ckLabel;
 @property (nonatomic, strong) IBOutlet UIImageView *ckIcon;
 

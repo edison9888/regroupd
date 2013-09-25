@@ -30,6 +30,7 @@
 		1E1E25C917F347D70079416C /* icon_photo_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E1E25C817F347D70079416C /* icon_photo_default@2x.png */; };
 		1E1E25CC17F348D60079416C /* SurveyOptionWithPic.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1E25CB17F348D50079416C /* SurveyOptionWithPic.m */; };
 		1E1E25CE17F349020079416C /* SurveyOptionWithPic.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E1E25CD17F349020079416C /* SurveyOptionWithPic.xib */; };
+		1E1E25D017F364A80079416C /* icon_pencil_edit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E1E25CF17F364A80079416C /* icon_pencil_edit@2x.png */; };
 		1E213BF417E542BE00E17DBF /* topnav_aqua_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E213BF217E542BE00E17DBF /* topnav_aqua_bg@2x.png */; };
 		1E213BF517E542BE00E17DBF /* btn_aqua_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E213BF317E542BE00E17DBF /* btn_aqua_add@2x.png */; };
 		1E213BF917E545A100E17DBF /* GroupsHomeVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E213BF617E545A100E17DBF /* GroupsHomeVC.xib */; };
@@ -350,6 +351,7 @@
 		1E1E25CA17F348D50079416C /* SurveyOptionWithPic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurveyOptionWithPic.h; sourceTree = "<group>"; };
 		1E1E25CB17F348D50079416C /* SurveyOptionWithPic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurveyOptionWithPic.m; sourceTree = "<group>"; };
 		1E1E25CD17F349020079416C /* SurveyOptionWithPic.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SurveyOptionWithPic.xib; sourceTree = "<group>"; };
+		1E1E25CF17F364A80079416C /* icon_pencil_edit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_pencil_edit@2x.png"; sourceTree = "<group>"; };
 		1E213BF217E542BE00E17DBF /* topnav_aqua_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "topnav_aqua_bg@2x.png"; sourceTree = "<group>"; };
 		1E213BF317E542BE00E17DBF /* btn_aqua_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_aqua_add@2x.png"; sourceTree = "<group>"; };
 		1E213BF617E545A100E17DBF /* GroupsHomeVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = GroupsHomeVC.xib; path = Application/Class/ViewController/iPhone/GroupsHomeVC.xib; sourceTree = SOURCE_ROOT; };
@@ -1002,6 +1004,7 @@
 		1E9280E9177FB68F008A583C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1E1E25CF17F364A80079416C /* icon_pencil_edit@2x.png */,
 				1E1E25C817F347D70079416C /* icon_photo_default@2x.png */,
 				1EBA5DBF17E9425800E46FFF /* modal_add_photo@2x.png */,
 				1EBA5DC017E9425800E46FFF /* modal_new_survey@2x.png */,
@@ -1788,6 +1791,7 @@
 				1E1E25C417F3319F0079416C /* FancyCheckbox.xib in Resources */,
 				1E1E25C917F347D70079416C /* icon_photo_default@2x.png in Resources */,
 				1E1E25CE17F349020079416C /* SurveyOptionWithPic.xib in Resources */,
+				1E1E25D017F364A80079416C /* icon_pencil_edit@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

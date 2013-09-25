@@ -36,12 +36,16 @@
 
 // See: http://vodpodgeekblog.wordpress.com/2011/03/04/ios-trick-add-padding-to-a-uitextlabel/
 - (CGRect)textRectForBounds:(CGRect)bounds {
-    return CGRectMake(bounds.origin.x + 6, bounds.origin.y + 4,
+    return CGRectMake(bounds.origin.x + 26, bounds.origin.y + 4,
                       bounds.size.width - 12, bounds.size.height - 8);
 }
 
 - (CGRect)editingRectForBounds:(CGRect)bounds {
     return [self textRectForBounds:bounds];
+}
+
+- (void) setFieldLabel:(NSString *)label {
+    
 }
 
 //- (void) drawPlaceholderInRect:(CGRect)rect {

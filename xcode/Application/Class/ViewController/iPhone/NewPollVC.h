@@ -9,6 +9,7 @@
 #import "SlideViewController.h"
 #import "FancyCheckbox.h" 
 #import "FancyTextField.h"
+#import "SurveyOptionWithPic.h"
 
 @interface NewPollVC : SlideViewController<UIScrollViewDelegate, UITextFieldDelegate> {
  
@@ -16,10 +17,12 @@
     UITextField *_currentField;
     BOOL keyboardIsShown;
     int navbarHeight;
-
+    NSMutableArray *surveyOptions;
+    
 }
 
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, retain) IBOutlet UIView *lowerForm;
 
 @property (nonatomic, retain) IBOutlet FancyCheckbox *ckPublic;
 @property (nonatomic, retain) IBOutlet FancyCheckbox *ckPrivate;
