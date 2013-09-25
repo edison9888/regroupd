@@ -19,6 +19,7 @@
     BOOL keyboardIsShown;
     int navbarHeight;
     NSMutableArray *surveyOptions;
+    UIView *bgLayer;
     
 }
 
@@ -30,6 +31,16 @@
 @property (nonatomic, retain) IBOutlet FancyCheckbox *ckMultipleYes;
 @property (nonatomic, retain) IBOutlet FancyCheckbox *ckMultipleNo;
 
+@property (nonatomic, strong) IBOutlet UIView *photoModal;
+
 @property (nonatomic, retain) UIImagePickerController* imagePickerVC;
+
+- (IBAction)modalCameraButton;
+- (IBAction)modalChooseButton;
+- (IBAction)modalCancelButton;
+
+- (void) showModal;
+- (void) hideModal;
+
 
 @end

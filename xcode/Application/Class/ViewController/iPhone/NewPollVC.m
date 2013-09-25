@@ -58,7 +58,7 @@
     optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
     surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
     surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-    surveyOption.input.placeholder = [NSString stringWithFormat:defaultText, [NSNumber numberWithInt:count].stringValue];
+//    surveyOption.input.placeholder = [NSString stringWithFormat:defaultText, [NSNumber numberWithInt:count].stringValue];
     surveyOption.tag = count;
     surveyOption.index = count;
 
@@ -107,6 +107,7 @@
     self.ckMultipleNo.ckLabel.text = @"No";
     self.ckMultipleNo.tag = kTagMultipleNo;
     [self.ckMultipleNo unselected];
+    
     
     // register for keyboard notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -257,7 +258,7 @@
     return YES;
 }
 
-#pragma mark - Tap Gestures
+#pragma mark - Tap Gestures 
 
 -(void)singleTap:(UITapGestureRecognizer*)sender
 {
@@ -296,6 +297,9 @@
                     [self.ckMultipleYes unselected];
                     [self.ckMultipleNo selected];
                     break;
+                case 666:
+                    [self hideModal];
+                    break;
                     
             }
             
@@ -304,16 +308,77 @@
         }
     }
 }
-#pragma mark - UIImagePicker methods
 
+#pragma mark - Modal
 
-- (void)showImagePickerNotificationHandler:(NSNotification*)notification
-{
-    NSNumber *index = (NSNumber *) [notification object];
-    photoIndex = index.intValue;
+- (void) showModal {
     
-    NSLog(@"%s for index %i", __FUNCTION__, photoIndex);
+    CGRect fullscreen = CGRectMake(0, 0, [DataModel shared].stageWidth, [DataModel shared].stageHeight);
+    bgLayer = [[UIView alloc] initWithFrame:fullscreen];
+    bgLayer.backgroundColor = [UIColor grayColor];
+    bgLayer.alpha = 0.8;
+    bgLayer.tag = 1000;
+    bgLayer.layer.zPosition = 9;
+    bgLayer.tag = 666;
+    [self.view addSubview:bgLayer];
     
+    
+    // Setup photoModal
+    
+    CGRect modalFrame = self.photoModal.frame;
+    int ypos = -modalFrame.size.height;
+    int xpos = ([DataModel shared].stageWidth - modalFrame.size.width) / 2;
+    
+    modalFrame.origin.y = ypos;
+    modalFrame.origin.x = xpos;
+    
+    self.photoModal.layer.zPosition = 99;
+    self.photoModal.frame = modalFrame;
+    [self.view addSubview:self.photoModal];
+    
+
+    ypos = ([DataModel shared].stageHeight - modalFrame.size.height) / 2;
+    modalFrame.origin.y = ypos;
+    
+    [UIView animateWithDuration:0.5
+                          delay:0
+                        options:(UIViewAnimationCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction)
+                     animations:^{
+                         self.photoModal.frame = modalFrame;
+                     }
+                     completion:^(BOOL finished){
+                         NSLog(@"Done!");
+                     }];
+    
+}
+
+- (void) hideModal {
+    
+    CGRect modalFrame = self.photoModal.frame;
+    float ypos = -modalFrame.size.height;
+    modalFrame.origin.y = ypos;
+    
+    
+    [UIView animateWithDuration:0.5
+                          delay:0
+                        options:(UIViewAnimationCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction)
+                     animations:^{
+                         self.photoModal.frame = modalFrame;
+                     }
+                     completion:^(BOOL finished){
+                         if (bgLayer != nil) {
+                             [bgLayer removeFromSuperview];
+                             bgLayer = nil;
+                         }
+                                                  
+                     }];
+    
+    
+}
+
+- (IBAction)modalCameraButton {
+    NSLog(@"%s", __FUNCTION__);
+    [self hideModal];
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
     {
         if (self.imagePickerVC == nil) {
@@ -333,6 +398,33 @@
         
     }
     
+}
+- (IBAction)modalChooseButton {
+    NSLog(@"%s", __FUNCTION__);
+    [self hideModal];
+    if (self.imagePickerVC == nil) {
+        self.imagePickerVC = [[UIImagePickerController alloc] init];
+        self.imagePickerVC.delegate = self;
+    }
+    self.imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    [self presentViewController:self.imagePickerVC animated:YES completion:nil];
+    
+}
+- (IBAction)modalCancelButton {
+    [self hideModal];
+}
+
+
+#pragma mark - UIImagePicker methods
+
+
+- (void)showImagePickerNotificationHandler:(NSNotification*)notification
+{
+    NSNumber *index = (NSNumber *) [notification object];
+    photoIndex = index.intValue;
+    
+    NSLog(@"%s for index %i", __FUNCTION__, photoIndex);
+    [self showModal];
     
 }
 
