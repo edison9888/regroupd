@@ -59,6 +59,20 @@
     surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
     surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
     surveyOption.input.placeholder = [NSString stringWithFormat:defaultText, [NSNumber numberWithInt:count].stringValue];
+    surveyOption.tag = count;
+    surveyOption.index = count;
+
+    [self.scrollView addSubview:surveyOption];
+    [surveyOptions addObject:surveyOption];
+    
+    count++;
+    ypos += 60;
+    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
+    surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
+    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
+    surveyOption.input.placeholder = [NSString stringWithFormat:defaultText, [NSNumber numberWithInt:count].stringValue];
+    surveyOption.tag = count;
+    surveyOption.index = count;
     
     [self.scrollView addSubview:surveyOption];
     [surveyOptions addObject:surveyOption];
@@ -69,12 +83,12 @@
     surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
     surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
     surveyOption.input.placeholder = [NSString stringWithFormat:defaultText, [NSNumber numberWithInt:count].stringValue];
+    surveyOption.tag = count;
+    surveyOption.index = count;
     
     [self.scrollView addSubview:surveyOption];
     [surveyOptions addObject:surveyOption];
-    
 
-//    self.lowerForm.frame.origin = CGPointMake(0, ypos + 50);
     CGRect lowerFrame = CGRectMake(0, ypos + 80, self.lowerForm.frame.size.width, self.lowerForm.frame.size.height);
     [self.lowerForm setFrame:lowerFrame];
     
@@ -104,6 +118,10 @@
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:self.view.window];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showImagePickerNotificationHandler:)     name:@"showImagePickerNotification"            object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeImagePickerNotificationHandler:)     name:@"closeImagePickerNotification"            object:nil];
+    
     // Create and initialize a tap gesture
     
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
@@ -285,6 +303,69 @@
             
         }
     }
+}
+#pragma mark - UIImagePicker methods
+
+
+- (void)showImagePickerNotificationHandler:(NSNotification*)notification
+{
+    NSNumber *index = (NSNumber *) [notification object];
+    photoIndex = index.intValue;
+    
+    NSLog(@"%s for index %i", __FUNCTION__, photoIndex);
+    
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+    {
+        if (self.imagePickerVC == nil) {
+            self.imagePickerVC = [[UIImagePickerController alloc] init];
+            self.imagePickerVC.delegate = self;
+        }
+        self.imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
+        [self presentViewController:self.imagePickerVC animated:YES completion:nil];
+        
+    } else {
+        if (self.imagePickerVC == nil) {
+            self.imagePickerVC = [[UIImagePickerController alloc] init];
+            self.imagePickerVC.delegate = self;
+        }
+        self.imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [self presentViewController:self.imagePickerVC animated:YES completion:nil];
+        
+    }
+    
+    
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)Picker {
+    NSLog(@"%s", __FUNCTION__);
+	[self dismissViewControllerAnimated:YES completion:nil];
+    
+    self.imagePickerVC = nil;
+}
+
+- (void)imagePickerController:(UIImagePickerController *)Picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+    NSLog(@"%s", __FUNCTION__);
+	UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
+    
+    SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:photoIndex - 1];
+    
+    [currentOption setPhoto:tmpImage];
+//    currentOption.roundPic.image = tmpImage;
+    
+    // NSLog(@"downsizing image");
+//    if (photoView == nil) {
+//        photoView = [[UIImageView alloc] initWithFrame:previewFrame];
+//        photoView.clipsToBounds = YES;
+//        photoView.contentMode = UIViewContentModeScaleAspectFill;
+//        
+//        [self.view addSubview:photoView];
+//    }
+//    photoView.image = tmpImage;
+    
+	[self dismissViewControllerAnimated:YES completion:nil];
+    self.imagePickerVC = nil;
+//    [self setupButtonsForEdit];
+    
 }
 
 

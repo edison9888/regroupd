@@ -11,8 +11,9 @@
 #import "FancyTextField.h"
 #import "SurveyOptionWithPic.h"
 
-@interface NewPollVC : SlideViewController<UIScrollViewDelegate, UITextFieldDelegate> {
- 
+@interface NewPollVC : SlideViewController<UIScrollViewDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate> {
+    int photoIndex;
+    
     CGPoint  offset;
     UITextField *_currentField;
     BOOL keyboardIsShown;
@@ -29,5 +30,6 @@
 @property (nonatomic, retain) IBOutlet FancyCheckbox *ckMultipleYes;
 @property (nonatomic, retain) IBOutlet FancyCheckbox *ckMultipleNo;
 
+@property (nonatomic, retain) UIImagePickerController* imagePickerVC;
 
 @end

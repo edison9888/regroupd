@@ -15,6 +15,7 @@
     
 }
 
+@property int index;
 @property (nonatomic, strong) IBOutlet FancyTextField *input;
 @property (nonatomic, strong) IBOutlet UIView *photoHolder;
 @property (nonatomic, strong) IBOutlet UIImageView *roundPic;
@@ -24,5 +25,6 @@
 
 - (IBAction)tapPickPhoto;
 
+- (void) setPhoto:(UIImage *)photo;
 
 @end

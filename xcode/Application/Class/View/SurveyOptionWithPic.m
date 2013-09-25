@@ -7,6 +7,7 @@
 //
 
 #import "SurveyOptionWithPic.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation SurveyOptionWithPic
 
@@ -18,7 +19,15 @@
                 
         _theView = [[[NSBundle mainBundle] loadNibNamed:@"SurveyOptionWithPic" owner:self options:nil] objectAtIndex:0];
         _theView.backgroundColor = [UIColor clearColor];
-        
+        [self.roundPic.layer setCornerRadius:30.0f];
+        [self.roundPic.layer setMasksToBounds:YES];
+        [self.roundPic.layer setBorderWidth:1.0f];
+        [self.roundPic.layer setBorderColor:[UIColor whiteColor].CGColor];
+        self.roundPic.clipsToBounds = YES;
+        self.roundPic.contentMode = UIViewContentModeScaleAspectFill;
+
+        self.photoHolder.hidden = YES;
+
         [self addSubview:_theView];
     }
     return self;
@@ -30,6 +39,21 @@
     }
     
     return self;
+}
+
+- (IBAction)tapPickPhoto {
+    NSLog(@"%s", __FUNCTION__);
+    NSNumber *num = [NSNumber numberWithInt:self.index];
+    
+    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification
+                                                            notificationWithName:@"showImagePickerNotification"
+                                                            object:num]];
+    
+}
+- (void) setPhoto:(UIImage *)photo {
+    NSLog(@"%s", __FUNCTION__);
+    self.photoHolder.hidden = NO;
+    self.roundPic.image = photo;
 }
 
 /*
