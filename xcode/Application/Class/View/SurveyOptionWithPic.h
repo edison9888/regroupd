@@ -10,7 +10,7 @@
 #import "FancyTextField.h"
 #import "BrandUILabel.h"
 
-@interface SurveyOptionWithPic : UIView {
+@interface SurveyOptionWithPic : UIView<UITextFieldDelegate> {
     UIView *_theView;
     
 }

@@ -12,7 +12,7 @@
     
 }
 
-@property int userId;
+@property int user_id;
 @property int status;
 
 @property (nonatomic, retain) NSString *firstname;

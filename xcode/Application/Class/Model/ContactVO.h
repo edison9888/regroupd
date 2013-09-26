@@ -11,7 +11,7 @@
 @interface ContactVO : NSObject
 
 
-@property int contactId;
+@property int contact_id;
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *phone;
 @property (nonatomic, retain) NSString *fax;

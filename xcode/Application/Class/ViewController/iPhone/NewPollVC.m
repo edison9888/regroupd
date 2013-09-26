@@ -7,6 +7,9 @@
 //
 
 #import "NewPollVC.h"
+#import "FormManager.h"
+#import "FormVO.h"
+#import "FormOptionVO.h"
 
 @interface NewPollVC ()
 
@@ -18,6 +21,7 @@
 #define kTagPrivate    102
 #define kTagMultipleYes   103
 #define kTagMultipleNo    104
+#define kInputFieldInterval 65
 
 #define kFirstOptionId  1
 
@@ -39,8 +43,11 @@
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
 
     // scrollview setup
-    navbarHeight = 0;
-    CGSize scrollContentSize = CGSizeMake([DataModel shared].stageWidth, [DataModel shared].stageHeight - 60);
+    navbarHeight = 50;
+    
+    CGRect scrollFrame = CGRectMake(0, navbarHeight,[DataModel shared].stageWidth, [DataModel shared].stageHeight - navbarHeight);
+    self.scrollView.frame = scrollFrame;
+    CGSize scrollContentSize = CGSizeMake([DataModel shared].stageWidth, 600);
     self.scrollView.contentSize = scrollContentSize;
     self.scrollView.delegate = self;
     
@@ -52,40 +59,61 @@
     surveyOptions = [[NSMutableArray alloc] init];
 
     CGRect optionFrame;
-    NSString *defaultText = @"Option %@";
+    NSString *placeholderFmt = @"Option %@";
+    NSString *defaultText;
     
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle: NSNumberFormatterSpellOutStyle];
+    
+    // OPTION 1 INPUT
     count++;
+    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
     optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
     surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
     surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-//    surveyOption.input.placeholder = [NSString stringWithFormat:defaultText, [NSNumber numberWithInt:count].stringValue];
     surveyOption.tag = count;
     surveyOption.index = count;
+    surveyOption.input.placeholder = defaultText;
+    surveyOption.input.defaultText = defaultText;
+    surveyOption.input.returnKeyType = UIReturnKeyNext;
+    surveyOption.input.tag = count;
+    surveyOption.input.delegate = self;
+    [self.scrollView addSubview:surveyOption];
+    [surveyOptions addObject:surveyOption];
+    
+    // OPTION 2 INPUT
+    count++;
+    ypos += kInputFieldInterval;
+    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
+    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
+    surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
+    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
+    surveyOption.tag = count;
+    surveyOption.index = count;
+    surveyOption.input.placeholder = defaultText;
+    surveyOption.input.defaultText = defaultText;
+    surveyOption.input.returnKeyType = UIReturnKeyNext;
+    surveyOption.input.tag = count;
+    surveyOption.input.delegate = self;
 
     [self.scrollView addSubview:surveyOption];
     [surveyOptions addObject:surveyOption];
     
+    // OPTION 3 INPUT
     count++;
-    ypos += 60;
+    ypos += kInputFieldInterval;
+    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
     optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
     surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
     surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-    surveyOption.input.placeholder = [NSString stringWithFormat:defaultText, [NSNumber numberWithInt:count].stringValue];
     surveyOption.tag = count;
     surveyOption.index = count;
-    
-    [self.scrollView addSubview:surveyOption];
-    [surveyOptions addObject:surveyOption];
-    
-    count++;
-    ypos += 60;
-    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-    surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
-    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-    surveyOption.input.placeholder = [NSString stringWithFormat:defaultText, [NSNumber numberWithInt:count].stringValue];
-    surveyOption.tag = count;
-    surveyOption.index = count;
-    
+    surveyOption.input.placeholder = defaultText;
+    surveyOption.input.defaultText = defaultText;
+    surveyOption.input.returnKeyType = UIReturnKeyNext;
+    surveyOption.input.tag = count;
+    surveyOption.input.delegate = self;
+
     [self.scrollView addSubview:surveyOption];
     [surveyOptions addObject:surveyOption];
 
@@ -121,7 +149,6 @@
                                                object:self.view.window];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showImagePickerNotificationHandler:)     name:@"showImagePickerNotification"            object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeImagePickerNotificationHandler:)     name:@"closeImagePickerNotification"            object:nil];
     
     // Create and initialize a tap gesture
     
@@ -177,6 +204,8 @@
     
     // get the size of the keyboard
     CGSize keyboardSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    keyboardHeight = keyboardSize.height;
+    
     [self showKeyboard:keyboardSize];
     
 }
@@ -214,24 +243,63 @@
     keyboardIsShown = NO;
     
 }
+- (void) updateScrollView {
+    NSLog(@"%s tag=%i", __FUNCTION__, optionIndex);
+    
+    if (optionIndex > 0 && optionIndex <= surveyOptions.count) {
+        SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:optionIndex - 1];
+        
+        CGRect aRect = self.view.frame;
+        
+        aRect.size.height -= keyboardHeight;
+        CGRect targetFrame = currentOption.frame;
+        
+        targetFrame.origin.y -= 40;
+        
+//        [self.scrollView setContentOffset:CGPointMake(0.0, currentOption.frame.origin.y-keyboardHeight) animated:YES];
+        if (!CGRectContainsPoint(aRect, targetFrame.origin) ) {
+            [self.scrollView scrollRectToVisible:targetFrame animated:YES];
+        }
+        
+    }
+    
+}
 
 #pragma mark - UITextField methods
 
 -(BOOL) textFieldShouldBeginEditing:(UITextField*)textField {
     NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
     keyboardIsShown = YES;
+    
+    
     return YES;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
-    [textField resignFirstResponder];
+    
+    // Get next field
+    if (textField.tag < surveyOptions.count) {
+        SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:textField.tag];
+        [currentOption.input becomeFirstResponder];
+
+        optionIndex = textField.tag + 1;
+        [self updateScrollView];
+        
+    } else {
+        NSLog(@"Last field");
+        [textField resignFirstResponder];
+    }
+
     return YES;
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
+    
     _currentField = textField;
+    optionIndex = textField.tag;
+    [self updateScrollView];
     
     
 }
@@ -242,14 +310,7 @@
 }
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-    NSLog(@"===== %s", __FUNCTION__);
-    switch (textField.tag) {
-        case 1:
-            return YES;
-            break;
-            
-    }
-    return NO;
+    return YES;
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
@@ -355,7 +416,7 @@
 - (void) hideModal {
     
     CGRect modalFrame = self.photoModal.frame;
-    float ypos = -modalFrame.size.height;
+    float ypos = -modalFrame.size.height - 40;
     modalFrame.origin.y = ypos;
     
     
@@ -376,6 +437,60 @@
     
 }
 
+- (IBAction)tapCancelButton {
+    [_delegate gotoSlideWithName:@"FormsHome"];
+}
+- (IBAction)tapDoneButton {
+    NSLog(@"%s", __FUNCTION__);
+
+    BOOL isOK = YES;
+    
+    if (self.subjectField.text.length == 0) {
+        isOK = NO;
+    }
+
+    NSMutableArray *formOptions = [[NSMutableArray alloc] init];
+    FormOptionVO *option;
+    for (SurveyOptionWithPic* surveyOption in surveyOptions) {
+        if (surveyOption.input.text.length == 0) {
+            NSLog(@"Empty field: %i", surveyOption.index);
+            isOK = NO;
+        } else {
+            option = [[FormOptionVO alloc] init];
+            option.name = surveyOption.input.text;
+            option.type = OptionType_TEXT;
+            option.status = OptionStatus_DRAFT;
+            [formOptions addObject:option];
+        }
+    }
+
+    if (isOK) {
+        FormManager *formSvc = [[FormManager alloc] init];
+        FormVO *form = [[FormVO alloc] init];
+        
+        form.system_id = @"";
+        
+        form.name = self.subjectField.text;
+        form.type = FormType_POLL;
+        form.status = FormStatus_DRAFT;
+        
+        int formId = [formSvc saveForm:form];
+        if (formId > 0) {
+            NSLog(@"Form saved with form_id %i", formId);
+            
+            for (FormOptionVO *formOption in formOptions) {
+                formOption.form_id = formId;
+                [formSvc saveOption:formOption];
+            }
+        }
+        
+    } else {
+        NSLog(@"Data fields not complete");
+        
+    }
+
+
+}
 - (IBAction)modalCameraButton {
     NSLog(@"%s", __FUNCTION__);
     [self hideModal];
@@ -421,9 +536,9 @@
 - (void)showImagePickerNotificationHandler:(NSNotification*)notification
 {
     NSNumber *index = (NSNumber *) [notification object];
-    photoIndex = index.intValue;
+    optionIndex = index.intValue;
     
-    NSLog(@"%s for index %i", __FUNCTION__, photoIndex);
+    NSLog(@"%s for index %i", __FUNCTION__, optionIndex);
     [self showModal];
     
 }
@@ -439,7 +554,7 @@
     NSLog(@"%s", __FUNCTION__);
 	UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
     
-    SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:photoIndex - 1];
+    SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:optionIndex - 1];
     
     [currentOption setPhoto:tmpImage];
 //    currentOption.roundPic.image = tmpImage;

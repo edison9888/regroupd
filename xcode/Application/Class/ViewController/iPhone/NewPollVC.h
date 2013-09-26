@@ -9,15 +9,18 @@
 #import "SlideViewController.h"
 #import "FancyCheckbox.h" 
 #import "FancyTextField.h"
+#import "BrandUITextField.h"
 #import "SurveyOptionWithPic.h"
 
 @interface NewPollVC : SlideViewController<UIScrollViewDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate> {
-    int photoIndex;
+    int optionIndex;
     
-    CGPoint  offset;
+    CGPoint  offset; // unused
+    
     UITextField *_currentField;
     BOOL keyboardIsShown;
-    int navbarHeight;
+    float keyboardHeight;
+    float navbarHeight;
     NSMutableArray *surveyOptions;
     UIView *bgLayer;
     
@@ -25,6 +28,8 @@
 
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, retain) IBOutlet UIView *lowerForm;
+
+@property (nonatomic, retain) IBOutlet BrandUITextField *subjectField;
 
 @property (nonatomic, retain) IBOutlet FancyCheckbox *ckPublic;
 @property (nonatomic, retain) IBOutlet FancyCheckbox *ckPrivate;
@@ -34,6 +39,9 @@
 @property (nonatomic, strong) IBOutlet UIView *photoModal;
 
 @property (nonatomic, retain) UIImagePickerController* imagePickerVC;
+
+- (IBAction)tapCancelButton;
+- (IBAction)tapDoneButton;
 
 - (IBAction)modalCameraButton;
 - (IBAction)modalChooseButton;

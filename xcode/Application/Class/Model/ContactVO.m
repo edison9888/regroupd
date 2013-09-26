@@ -10,7 +10,7 @@
 
 @implementation ContactVO
 
-@synthesize contactId, name, phone, fax;
+@synthesize contact_id, name, phone, fax;
 @synthesize type, status, created, updated;
 
 + (ContactVO *) readFromDictionary:(NSDictionary *) dict {
@@ -18,7 +18,7 @@
     NSString *text;
     
     text = [dict valueForKey:@"contact_id"];
-    o.contactId = text.integerValue;
+    o.contact_id = text.integerValue;
     text = [dict valueForKey:@"name"];
     o.name = text;
     text = [dict valueForKey:@"phone"];

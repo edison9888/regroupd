@@ -125,6 +125,9 @@
 		1E8333DD179792F600B60612 /* QSStrings.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333CF179792F600B60612 /* QSStrings.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		1E8333DE179792F600B60612 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1E8333D1179792F600B60612 /* README.txt */; };
 		1E8333DF179792F600B60612 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1E8333D1179792F600B60612 /* README.txt */; };
+		1E88804A17F4BCF20070116C /* FormVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88804917F4BCF10070116C /* FormVO.m */; };
+		1E88804D17F4BD950070116C /* FormOptionVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88804C17F4BD940070116C /* FormOptionVO.m */; };
+		1E88805017F4C0240070116C /* FormManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88804F17F4C0240070116C /* FormManager.m */; };
 		1E8FBA7C17E7F7B2003758EB /* BrandUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8FBA7B17E7F7B2003758EB /* BrandUIButton.m */; };
 		1E928213177FB690008A583C /* hbar_96x2.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9280EB177FB68F008A583C /* hbar_96x2.png */; };
 		1E928214177FB690008A583C /* help_icon_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9280EC177FB68F008A583C /* help_icon_off.png */; };
@@ -470,6 +473,12 @@
 		1E8333CF179792F600B60612 /* QSStrings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSStrings.m; sourceTree = "<group>"; };
 		1E8333D0179792F600B60612 /* QSUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSUtilities.h; sourceTree = "<group>"; };
 		1E8333D1179792F600B60612 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		1E88804817F4BCF10070116C /* FormVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormVO.h; sourceTree = "<group>"; };
+		1E88804917F4BCF10070116C /* FormVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormVO.m; sourceTree = "<group>"; };
+		1E88804B17F4BD930070116C /* FormOptionVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormOptionVO.h; sourceTree = "<group>"; };
+		1E88804C17F4BD940070116C /* FormOptionVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormOptionVO.m; sourceTree = "<group>"; };
+		1E88804E17F4C0240070116C /* FormManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormManager.h; sourceTree = "<group>"; };
+		1E88804F17F4C0240070116C /* FormManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormManager.m; sourceTree = "<group>"; };
 		1E8FBA7A17E7F7B2003758EB /* BrandUIButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrandUIButton.h; sourceTree = "<group>"; };
 		1E8FBA7B17E7F7B2003758EB /* BrandUIButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrandUIButton.m; sourceTree = "<group>"; };
 		1E9280EB177FB68F008A583C /* hbar_96x2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hbar_96x2.png; sourceTree = "<group>"; };
@@ -1225,6 +1234,10 @@
 				1EF463331783AE1C00D38DBB /* UserVO.m */,
 				1E76F4A717961283007EF5B0 /* ContactVO.h */,
 				1E76F4A817961283007EF5B0 /* ContactVO.m */,
+				1E88804817F4BCF10070116C /* FormVO.h */,
+				1E88804917F4BCF10070116C /* FormVO.m */,
+				1E88804B17F4BD930070116C /* FormOptionVO.h */,
+				1E88804C17F4BD940070116C /* FormOptionVO.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1234,6 +1247,8 @@
 			children = (
 				1E751B2A179C4B11003AB13D /* UserManager.h */,
 				1E751B2B179C4B11003AB13D /* UserManager.m */,
+				1E88804E17F4C0240070116C /* FormManager.h */,
+				1E88804F17F4C0240070116C /* FormManager.m */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -1952,6 +1967,9 @@
 				1E1E25C217F32FC90079416C /* FancyCheckbox.m in Sources */,
 				1E1E25C717F342190079416C /* FancyTextField.m in Sources */,
 				1E1E25CC17F348D60079416C /* SurveyOptionWithPic.m in Sources */,
+				1E88804A17F4BCF20070116C /* FormVO.m in Sources */,
+				1E88804D17F4BD950070116C /* FormOptionVO.m in Sources */,
+				1E88805017F4C0240070116C /* FormManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2036,7 +2054,7 @@
 				GCC_PREFIX_HEADER = "Application/Regroupd-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "$(SRCROOT)/Application/Regroupd-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = regroupd;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -2116,7 +2134,7 @@
 				GCC_PREFIX_HEADER = "Application/Regroupd-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "$(SRCROOT)/Application/Regroupd-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_NAME = regroupd;
 				PROVISIONING_PROFILE = "97EC33CA-9D9C-456F-A0E4-51DB8DF2F414";
@@ -2136,7 +2154,7 @@
 				GCC_PREFIX_HEADER = "Application/Regroupd-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "$(SRCROOT)/Application/Regroupd-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = regroupd;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";

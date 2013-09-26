@@ -21,7 +21,6 @@
     int stageWidth;
     int navIndex;
     int contactId;
-    int faxBalance;
     
     UserVO *user;
     ContactVO *contact;
@@ -29,7 +28,6 @@
 }
 
 @property int contactId;
-@property int faxBalance;
 
 @property (nonatomic, retain) UserVO *user;
 @property (nonatomic, retain) ContactVO *contact;

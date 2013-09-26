@@ -16,7 +16,7 @@
     NSLog(@"===== %s", __FUNCTION__);
    self = [super initWithFrame:frame];
     if (self) {
-                
+        
         _theView = [[[NSBundle mainBundle] loadNibNamed:@"SurveyOptionWithPic" owner:self options:nil] objectAtIndex:0];
         _theView.backgroundColor = [UIColor clearColor];
         [self.roundPic.layer setCornerRadius:30.0f];
@@ -64,5 +64,6 @@
     // Drawing code
 }
 */
+
 
 @end

@@ -10,7 +10,6 @@
 @implementation DataModel
 
 @synthesize contactId;
-@synthesize faxBalance;
 
 @synthesize user;
 @synthesize contact;

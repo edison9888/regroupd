@@ -32,17 +32,6 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    CGRect modalFrame = self.addModal.frame;
-    float ypos = -modalFrame.size.height;
-    float xpos = ([DataModel shared].stageWidth - modalFrame.size.width) / 2;
-    
-    modalFrame.origin.y = ypos;
-    modalFrame.origin.x = xpos;
-    
-    NSLog(@"modal at %f, %f", xpos, ypos);
-    self.addModal.layer.zPosition = 99;
-    self.addModal.frame = modalFrame;
-    [self.view addSubview:self.addModal];
     
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
@@ -270,8 +259,28 @@
 
 - (void) showModal {
     
+    CGRect fullscreen = CGRectMake(0, 0, [DataModel shared].stageWidth, [DataModel shared].stageHeight);
+    bgLayer = [[UIView alloc] initWithFrame:fullscreen];
+    bgLayer.backgroundColor = [UIColor grayColor];
+    bgLayer.alpha = 0.8;
+    bgLayer.tag = 1000;
+    bgLayer.layer.zPosition = 9;
+    bgLayer.tag = 666;
+    [self.view addSubview:bgLayer];
+
     CGRect modalFrame = self.addModal.frame;
-    float ypos = ([DataModel shared].stageHeight - modalFrame.size.height) / 2;
+    float ypos = -modalFrame.size.height;
+    float xpos = ([DataModel shared].stageWidth - modalFrame.size.width) / 2;
+    
+    modalFrame.origin.y = ypos;
+    modalFrame.origin.x = xpos;
+    
+    NSLog(@"modal at %f, %f", xpos, ypos);
+    self.addModal.layer.zPosition = 99;
+    self.addModal.frame = modalFrame;
+    [self.view addSubview:self.addModal];
+    
+    ypos = ([DataModel shared].stageHeight - modalFrame.size.height) / 2;
     modalFrame.origin.y = ypos;
     
     [UIView animateWithDuration:0.5
@@ -290,7 +299,7 @@
 
     
     CGRect modalFrame = self.addModal.frame;
-    float ypos = -modalFrame.size.height;
+    float ypos = -modalFrame.size.height - 40;
     modalFrame.origin.y = ypos;
     
     

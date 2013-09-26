@@ -11,7 +11,7 @@
 
 @implementation UserVO
 
-@synthesize userId, status;
+@synthesize user_id, status;
 @synthesize firstname, middlename, lastname;
 @synthesize company, title, phone, fax;
 @synthesize address, city, state, zip;
@@ -79,7 +79,7 @@
     NSString *text;
     
     text = [dict valueForKey:@"user_id"];
-    o.userId = text.integerValue;
+    o.user_id = text.integerValue;
     text = [dict valueForKey:@"status"];
     o.status = text.integerValue;
     
