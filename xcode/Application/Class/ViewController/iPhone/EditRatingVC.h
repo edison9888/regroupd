@@ -15,7 +15,7 @@
 
 @interface EditRatingVC : SlideViewController<UIScrollViewDelegate, UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate> {
     int optionIndex;
-    
+    ExpandingTextView *expInput;
     CGPoint  offset; // unused
     UIResponder *_currentFocus;
     
@@ -24,6 +24,8 @@
     float navbarHeight;
     NSMutableArray *surveyOptions;
     UIView *bgLayer;
+    
+    float inputHeight;
     
 }
 

@@ -17,7 +17,7 @@
 
 static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
 
-@synthesize _borderStyle,doubleTapSpeed,parentView,showPlaceholder,delegate;
+@synthesize _borderStyle,doubleTapSpeed,parentView,showPlaceholder,delegate,tfDelegate, bgField;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -25,9 +25,10 @@ static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        __backgroundColor = [UIColor whiteColor];
+        __backgroundColor = [UIColor clearColor];
         self.textColor = [UIColor blackColor];
-        self.backgroundColor = [UIColor colorWithHexValue:0xEFEFEF andAlpha:1.0];
+        
+        self.backgroundColor = [UIColor whiteColor];
         bgField = [[UITextField alloc] initWithFrame:CGRectMake(0,0, self.frame.size.width, self.frame.size.height)];
         bgField.borderStyle = UITextBorderStyleNone;
         bgField.backgroundColor = __backgroundColor;
@@ -36,7 +37,7 @@ static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
         [self addSubview:bgField];
         [self sendSubviewToBack:bgField];
         doubleTapSpeed = 1.5;
-        self.clipsToBounds = NO;
+        self.clipsToBounds = YES;
         [self setTextColor:[UIColor colorWithHexValue:0x333333 andAlpha:1.0]];
         [self setFont:[UIFont fontWithName:@"Raleway-Regular" size:15]];
         [self setTextAlignment:NSTextAlignmentLeft];
@@ -214,14 +215,14 @@ static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
 
  - (CGRect)textRectForBounds:(CGRect)bounds {
      NSLog(@"%s", __FUNCTION__);
-     CGRect inset = CGRectMake(bounds.origin.x + 26, bounds.origin.y, bounds.size.width - 10, bounds.size.height);
+     CGRect inset = CGRectMake(bounds.origin.x + 40, bounds.origin.y, bounds.size.width - 10, bounds.size.height);
      return inset;
  }
  
  - (CGRect)editingRectForBounds:(CGRect)bounds {
      NSLog(@"%s", __FUNCTION__);
 //     return [self textRectForBounds:bounds];
-     CGRect inset = CGRectMake(bounds.origin.x + 26, bounds.origin.y, bounds.size.width - 10, bounds.size.height);
+     CGRect inset = CGRectMake(bounds.origin.x + 40, bounds.origin.y, bounds.size.width - 10, bounds.size.height);
      return inset;
  }
 

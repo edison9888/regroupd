@@ -22,6 +22,8 @@
 #define kInputFieldInterval 65
 
 #define kFirstOptionId  1
+#define kMinInputHeight 40
+#define kMaxInputHeight 120
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -42,6 +44,7 @@
 
     // scrollview setup
     navbarHeight = 50;
+    inputHeight = 0;
     
     CGRect scrollFrame = CGRectMake(0, navbarHeight,[DataModel shared].stageWidth, [DataModel shared].stageHeight - navbarHeight);
     self.scrollView.frame = scrollFrame;
@@ -49,7 +52,7 @@
     self.scrollView.contentSize = scrollContentSize;
     self.scrollView.delegate = self;
     
-    SurveyOptionWidget *surveyOption;
+//    SurveyOptionWidget *surveyOption;
     
     // Add survey options
     int ypos = 120;
@@ -62,20 +65,16 @@
     
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setNumberStyle: NSNumberFormatterSpellOutStyle];
-    ExpandingTextView *expInput;
     
     // OPTION 1 INPUT
     count++;
     defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
-    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 80);
+    optionFrame= CGRectMake(10, ypos, 236, kMinInputHeight);
     
     expInput = [[ExpandingTextView alloc] initWithFrame:optionFrame];
     //set the parent view
     expInput.parentView = self.view;
-//    expInput.delegate = self;
-//    [expInput setBorderstyle:UITextBorderStyleRoundedRect];
-//    [expInput setGalBackgroundColor:[UIColor whiteColor]];
-//    expInput.keyboardType =  UIKeyboardTypeDefault;
+    expInput.delegate = self;
     expInput.tag = count;
     [expInput setPlaceholder:defaultText];
     [self.scrollView addSubview:expInput];
@@ -224,9 +223,7 @@
 #pragma mark - UITextView delegate methods
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
-#ifdef kDEBUG
-    // NSLog(@"===== %s", __FUNCTION__);
-#endif
+    NSLog(@"===== %s", __FUNCTION__);
     _currentFocus = textView;
     optionIndex = textView.tag;
     [self updateScrollView];
@@ -241,10 +238,58 @@
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
+    NSLog(@"===== %s", __FUNCTION__);
     [_currentFocus resignFirstResponder];
     [textView endEditing:YES];
 }
 
+- (void)textViewDidChange:(UITextView *)textView {
+//    textView.bounds.size.height
+    float newsize = expInput.contentSize.height;
+    if (inputHeight != newsize ) {
+        NSLog(@"textView height is now %f", newsize);
+        inputHeight = newsize;
+        if (inputHeight < kMaxInputHeight) {
+            CGRect expFrame = CGRectMake(expInput.frame.origin.x,
+                                          expInput.frame.origin.y,
+                                          expInput.frame.size.width,
+                                          inputHeight + 5);
+            expInput.frame = expFrame;
+            
+        }
+    }
+    
+}
+
+//
+//#pragma mark - UITextField methods
+//
+//-(BOOL) textFieldShouldBeginEditing:(UITextField*)textField {
+//    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
+//    keyboardIsShown = YES;
+//    
+//    
+//    return YES;
+//}
+//
+//- (BOOL)textFieldShouldReturn:(UITextField *)textField
+//{
+//    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
+//        
+//    return YES;
+//}
+//
+//
+//- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+//    return YES;
+//}
+//
+//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+//    //    NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+//    
+//    return YES;
+//}
+//
 
 #pragma mark - Tap Gestures 
 
