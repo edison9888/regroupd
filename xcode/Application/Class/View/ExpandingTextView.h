@@ -10,10 +10,7 @@
 
 #import <UIKit/UIKit.h>
 
-
-
-
-@interface ExpandingTextView : UITextView<UITextViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface ExpandingTextView : UITextView<UITextViewDelegate,UITextFieldDelegate>
 {
 
     BOOL showPlaceholder;

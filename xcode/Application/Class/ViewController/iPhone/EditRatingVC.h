@@ -11,6 +11,7 @@
 #import "FancyTextField.h"
 #import "BrandUITextField.h"
 #import "SurveyOptionWidget.h"
+#import "ExpandingTextView.h"
 
 @interface EditRatingVC : SlideViewController<UIScrollViewDelegate, UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate> {
     int optionIndex;

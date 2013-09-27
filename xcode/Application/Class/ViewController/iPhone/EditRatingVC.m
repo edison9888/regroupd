@@ -62,66 +62,35 @@
     
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setNumberStyle: NSNumberFormatterSpellOutStyle];
+    ExpandingTextView *expInput;
     
     // OPTION 1 INPUT
     count++;
     defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
-    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-    surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
-    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-    surveyOption.tag = count;
-    surveyOption.index = count;
-    surveyOption.input.defaultText = defaultText;
-    surveyOption.input.returnKeyType = UIReturnKeyNext;
-    surveyOption.input.tag = count;
-    surveyOption.input.delegate = self;
-    [self.scrollView addSubview:surveyOption];
-    [surveyOptions addObject:surveyOption];
+    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 80);
     
-    // OPTION 2 INPUT
-    count++;
-    ypos += kInputFieldInterval;
-    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
-    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-    surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
-    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-    surveyOption.tag = count;
-    surveyOption.index = count;
-    surveyOption.input.defaultText = defaultText;
-    surveyOption.input.returnKeyType = UIReturnKeyNext;
-    surveyOption.input.tag = count;
-    surveyOption.input.delegate = self;
-
-    [self.scrollView addSubview:surveyOption];
-    [surveyOptions addObject:surveyOption];
+    expInput = [[ExpandingTextView alloc] initWithFrame:optionFrame];
+    //set the parent view
+    expInput.parentView = self.view;
+//    expInput.delegate = self;
+//    [expInput setBorderstyle:UITextBorderStyleRoundedRect];
+//    [expInput setGalBackgroundColor:[UIColor whiteColor]];
+//    expInput.keyboardType =  UIKeyboardTypeDefault;
+    expInput.tag = count;
+    [expInput setPlaceholder:defaultText];
+    [self.scrollView addSubview:expInput];
     
-    // OPTION 3 INPUT
-    count++;
-    ypos += kInputFieldInterval;
-    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
-    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-    surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
-    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-    surveyOption.tag = count;
-    surveyOption.index = count;
-    surveyOption.input.defaultText = defaultText;
-    surveyOption.input.returnKeyType = UIReturnKeyNext;
-    surveyOption.input.tag = count;
-    surveyOption.input.delegate = self;
-
-    [self.scrollView addSubview:surveyOption];
-    [surveyOptions addObject:surveyOption];
-
-    CGRect lowerFrame = CGRectMake(0, ypos + 80, self.lowerForm.frame.size.width, self.lowerForm.frame.size.height);
-    [self.lowerForm setFrame:lowerFrame];
-    
-    self.ckPublic.ckLabel.text = @"Public";
-    self.ckPublic.tag = kTagPublic;
-    [self.ckPublic unselected];
-    
-    self.ckPrivate.ckLabel.text = @"Private";
-    self.ckPrivate.tag = kTagPrivate;
-    [self.ckPrivate unselected];
+    self.lowerForm.hidden = YES;
+//    CGRect lowerFrame = CGRectMake(0, ypos + 80, self.lowerForm.frame.size.width, self.lowerForm.frame.size.height);
+//    [self.lowerForm setFrame:lowerFrame];
+//    
+//    self.ckPublic.ckLabel.text = @"Public";
+//    self.ckPublic.tag = kTagPublic;
+//    [self.ckPublic unselected];
+//    
+//    self.ckPrivate.ckLabel.text = @"Private";
+//    self.ckPrivate.tag = kTagPrivate;
+//    [self.ckPrivate unselected];
     
     
     // register for keyboard notifications

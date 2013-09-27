@@ -10,6 +10,8 @@
  
  */
 #import "ExpandingTextView.h"
+#import "UIColor+ColorWithHex.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation ExpandingTextView
 
@@ -19,12 +21,13 @@ static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
 
 - (id)initWithFrame:(CGRect)frame
 {
+    NSLog(@"%s", __FUNCTION__);
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
         __backgroundColor = [UIColor whiteColor];
         self.textColor = [UIColor blackColor];
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor colorWithHexValue:0xEFEFEF andAlpha:1.0];
         bgField = [[UITextField alloc] initWithFrame:CGRectMake(0,0, self.frame.size.width, self.frame.size.height)];
         bgField.borderStyle = UITextBorderStyleNone;
         bgField.backgroundColor = __backgroundColor;
@@ -34,17 +37,23 @@ static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
         [self sendSubviewToBack:bgField];
         doubleTapSpeed = 1.5;
         self.clipsToBounds = NO;
+        [self setTextColor:[UIColor colorWithHexValue:0x333333 andAlpha:1.0]];
+        [self setFont:[UIFont fontWithName:@"Raleway-Regular" size:15]];
+        [self setTextAlignment:NSTextAlignmentLeft];
+        [self.layer setBorderColor:[UIColor grayColor].CGColor];
+        [self.layer setBorderWidth:1.0];
+        [self.layer setCornerRadius:5];
       
-        UIToolbar *doneBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, PORTRAIT_KEYBOARD_HEIGHT - 60, 320, 35)];
-        doneBar.barStyle = UIBarStyleBlack;
-        doneBar.translucent = YES;
-        [doneBar setAlpha:0.5];
-        UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(hidekeyboard)];
-        UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-        //Add buttons to the array
-        NSArray *items = [NSArray arrayWithObjects:flexItem,doneBtn,nil];
-        [doneBar setItems:items animated:NO];
-        self.inputAccessoryView = doneBar;
+//        UIToolbar *doneBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, PORTRAIT_KEYBOARD_HEIGHT - 60, 320, 35)];
+//        doneBar.barStyle = UIBarStyleBlack;
+//        doneBar.translucent = YES;
+//        [doneBar setAlpha:0.5];
+//        UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(hidekeyboard)];
+//        UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+//        //Add buttons to the array
+//        NSArray *items = [NSArray arrayWithObjects:flexItem,doneBtn,nil];
+//        [doneBar setItems:items animated:NO];
+//        self.inputAccessoryView = doneBar;
         
         __leftView = nil;
     }
@@ -52,37 +61,11 @@ static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
     return self;
 }
 
-- (id)styleString
-{
-    if(__leftView == nil) return nil;
-    return [[super styleString] stringByAppendingString:@";margin-right: 5px; margin-left: 45px; margin-top: 5px; margin-bottom: 7px;"];
-}
 
 -(void)hidekeyboard
 {
     [self resignFirstResponder];
 }
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
-
-/*
-- (CGRect)textRectForBounds:(CGRect)bounds {
-    CGRect inset = CGRectMake(bounds.origin.x + 10, bounds.origin.y, bounds.size.width - 10, bounds.size.height);
-    return inset;
-}
-
-- (CGRect)editingRectForBounds:(CGRect)bounds {
-    CGRect inset = CGRectMake(bounds.origin.x + 10, bounds.origin.y, bounds.size.width - 10, bounds.size.height);
-    return inset;
-}
-*/
 
 
 -(void)setLeftViewImage:(UIImage*)image
@@ -127,6 +110,7 @@ static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)txtObject {
+    NSLog(@"%s", __FUNCTION__);
 	[txtObject resignFirstResponder];
 	
 	return YES;
@@ -151,6 +135,7 @@ static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
+    NSLog(@"%s", __FUNCTION__);
     static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.3;
     static const CGFloat MINIMUM_SCROLL_FRACTION = 0.2;
     static const CGFloat MAXIMUM_SCROLL_FRACTION = 0.8;
@@ -191,7 +176,8 @@ static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];
     [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
-    
+    NSLog(@"BEGIN Set viewFrame with height %f", viewFrame.size.height);
+
     [parentView setFrame:viewFrame];
     
     [UIView commitAnimations];
@@ -208,12 +194,36 @@ static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];
     [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
-    
+    NSLog(@"END Set viewFrame with height %f", viewFrame.size.height);
     [parentView setFrame:viewFrame];
     
     [UIView commitAnimations];
     
 }
+
+// See: http://vodpodgeekblog.wordpress.com/2011/03/04/ios-trick-add-padding-to-a-uitextlabel/
+//- (CGRect)textRectForBounds:(CGRect)bounds {
+//    return CGRectMake(bounds.origin.x + 26, bounds.origin.y + 4,
+//                      bounds.size.width - 12, bounds.size.height - 8);
+//}
+//
+//- (CGRect)editingRectForBounds:(CGRect)bounds {
+//    return [self textRectForBounds:bounds];
+//}
+
+
+ - (CGRect)textRectForBounds:(CGRect)bounds {
+     NSLog(@"%s", __FUNCTION__);
+     CGRect inset = CGRectMake(bounds.origin.x + 26, bounds.origin.y, bounds.size.width - 10, bounds.size.height);
+     return inset;
+ }
+ 
+ - (CGRect)editingRectForBounds:(CGRect)bounds {
+     NSLog(@"%s", __FUNCTION__);
+//     return [self textRectForBounds:bounds];
+     CGRect inset = CGRectMake(bounds.origin.x + 26, bounds.origin.y, bounds.size.width - 10, bounds.size.height);
+     return inset;
+ }
 
 
 @end
