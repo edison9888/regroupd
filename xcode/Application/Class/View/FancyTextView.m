@@ -20,7 +20,7 @@
         
         self.clipsToBounds = YES;
         [self setTextColor:[UIColor colorWithHexValue:0x333333 andAlpha:1.0]];
-        [self setFont:[UIFont fontWithName:@"Raleway-Regular" size:15]];
+        [self setFont:[UIFont fontWithName:@"Raleway-Regular" size:13]];
         [self setTextAlignment:NSTextAlignmentLeft];
         [self.layer setBorderColor:[UIColor grayColor].CGColor];
         [self.layer setBorderWidth:1.0];
@@ -41,7 +41,7 @@
     
     self.clipsToBounds = YES;
     [self setTextColor:[UIColor colorWithHexValue:0x333333 andAlpha:1.0]];
-    [self setFont:[UIFont fontWithName:@"Raleway-Regular" size:15]];
+    [self setFont:[UIFont fontWithName:@"Raleway-Regular" size:13]];
     [self setTextAlignment:NSTextAlignmentLeft];
     [self.layer setBorderColor:[UIColor grayColor].CGColor];
     [self.layer setBorderWidth:1.0];

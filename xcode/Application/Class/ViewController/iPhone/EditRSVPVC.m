@@ -6,16 +6,16 @@
 //
 //
 
-#import "EditPollVC.h"
+#import "EditRSVPVC.h"
 #import "FormManager.h"
 #import "FormVO.h"
 #import "FormOptionVO.h"
 #import "UIAlertView+Helper.h"
-@interface EditPollVC ()
+@interface EditRSVPVC ()
 
 @end
 
-@implementation EditPollVC
+@implementation EditRSVPVC
 
 #define kTagPublic     101
 #define kTagPrivate    102

@@ -1,5 +1,5 @@
 //
-//  EditRatingVC.h
+//  NewPollVC.h
 //  Regroupd
 //
 //  Created by Hugh Lang on 9/21/13.
@@ -10,24 +10,19 @@
 #import "FancyCheckbox.h" 
 #import "FancyTextField.h"
 #import "BrandUITextField.h"
-#import "SurveyOptionWidget.h"
-#import "ExpandingTextView.h"
-#import "FancyTextView.h"
+#import "SurveyOptionWithPic.h"
 
-@interface EditRatingVC : SlideViewController<UIScrollViewDelegate, UITextViewDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate> {
+@interface EditRSVPVC : SlideViewController<UIScrollViewDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate> {
     int optionIndex;
-    ExpandingTextView *expInput;
-    FancyTextView *fancyInput;
-    CGPoint  offset; // unused
-    UIResponder *_currentFocus;
     
+    CGPoint  offset; // unused
+    
+    UITextField *_currentField;
     BOOL keyboardIsShown;
     float keyboardHeight;
     float navbarHeight;
     NSMutableArray *surveyOptions;
     UIView *bgLayer;
-    
-    float inputHeight;
     
 }
 
@@ -38,6 +33,8 @@
 
 @property (nonatomic, retain) IBOutlet FancyCheckbox *ckPublic;
 @property (nonatomic, retain) IBOutlet FancyCheckbox *ckPrivate;
+@property (nonatomic, retain) IBOutlet FancyCheckbox *ckMultipleYes;
+@property (nonatomic, retain) IBOutlet FancyCheckbox *ckMultipleNo;
 
 @property (nonatomic, strong) IBOutlet UIView *photoModal;
 

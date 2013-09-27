@@ -24,6 +24,14 @@
 		1E0CAA43178253F100A294C0 /* BrandUITextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E0CAA41178253DF00A294C0 /* BrandUITextField.m */; };
 		1E0CAA461782586400A294C0 /* pattern_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA441782586400A294C0 /* pattern_background@2x.png */; };
 		1E0CAA471782586400A294C0 /* pattern_background-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA451782586400A294C0 /* pattern_background-568h@2x.png */; };
+		1E131D5517F60AE600749506 /* EditRSVPVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E131D5317F60AE500749506 /* EditRSVPVC.m */; };
+		1E131D5617F60AE600749506 /* EditRSVPVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E131D5417F60AE500749506 /* EditRSVPVC.xib */; };
+		1E131D5817F60EF900749506 /* hbar_dark_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E131D5717F60EF900749506 /* hbar_dark_grey@2x.png */; };
+		1E131D5B17F60FBE00749506 /* FancyDateTimeField.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E131D5A17F60FBE00749506 /* FancyDateTimeField.m */; };
+		1E131D6017F6187400749506 /* btn_done_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E131D5C17F6187400749506 /* btn_done_off@2x.png */; };
+		1E131D6117F6187400749506 /* btn_done_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E131D5D17F6187400749506 /* btn_done_on@2x.png */; };
+		1E131D6217F6187400749506 /* to_separator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E131D5E17F6187400749506 /* to_separator@2x.png */; };
+		1E131D6317F6187400749506 /* icon_calendar_aqua@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E131D5F17F6187400749506 /* icon_calendar_aqua@2x.png */; };
 		1E1E25C217F32FC90079416C /* FancyCheckbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1E25C117F32FC90079416C /* FancyCheckbox.m */; };
 		1E1E25C417F3319F0079416C /* FancyCheckbox.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E1E25C317F3319F0079416C /* FancyCheckbox.xib */; };
 		1E1E25C717F342190079416C /* FancyTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1E25C617F342180079416C /* FancyTextField.m */; };
@@ -354,6 +362,16 @@
 		1E0CAA441782586400A294C0 /* pattern_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pattern_background@2x.png"; sourceTree = "<group>"; };
 		1E0CAA451782586400A294C0 /* pattern_background-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pattern_background-568h@2x.png"; sourceTree = "<group>"; };
 		1E0CAA4B1782638200A294C0 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		1E131D5217F60AE500749506 /* EditRSVPVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditRSVPVC.h; path = Application/Class/ViewController/iPhone/EditRSVPVC.h; sourceTree = SOURCE_ROOT; };
+		1E131D5317F60AE500749506 /* EditRSVPVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditRSVPVC.m; path = Application/Class/ViewController/iPhone/EditRSVPVC.m; sourceTree = SOURCE_ROOT; };
+		1E131D5417F60AE500749506 /* EditRSVPVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EditRSVPVC.xib; path = Application/Class/ViewController/iPhone/EditRSVPVC.xib; sourceTree = SOURCE_ROOT; };
+		1E131D5717F60EF900749506 /* hbar_dark_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hbar_dark_grey@2x.png"; sourceTree = "<group>"; };
+		1E131D5917F60FBE00749506 /* FancyDateTimeField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FancyDateTimeField.h; sourceTree = "<group>"; };
+		1E131D5A17F60FBE00749506 /* FancyDateTimeField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FancyDateTimeField.m; sourceTree = "<group>"; };
+		1E131D5C17F6187400749506 /* btn_done_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_done_off@2x.png"; sourceTree = "<group>"; };
+		1E131D5D17F6187400749506 /* btn_done_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_done_on@2x.png"; sourceTree = "<group>"; };
+		1E131D5E17F6187400749506 /* to_separator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "to_separator@2x.png"; sourceTree = "<group>"; };
+		1E131D5F17F6187400749506 /* icon_calendar_aqua@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_calendar_aqua@2x.png"; sourceTree = "<group>"; };
 		1E1E25C017F32FC90079416C /* FancyCheckbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FancyCheckbox.h; sourceTree = "<group>"; };
 		1E1E25C117F32FC90079416C /* FancyCheckbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FancyCheckbox.m; sourceTree = "<group>"; };
 		1E1E25C317F3319F0079416C /* FancyCheckbox.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FancyCheckbox.xib; sourceTree = "<group>"; };
@@ -902,6 +920,8 @@
 				1E88806117F4FC310070116C /* SurveyOptionWidget.h */,
 				1E88806217F4FC320070116C /* SurveyOptionWidget.m */,
 				1E88806317F4FC330070116C /* SurveyOptionWidget.xib */,
+				1E131D5917F60FBE00749506 /* FancyDateTimeField.h */,
+				1E131D5A17F60FBE00749506 /* FancyDateTimeField.m */,
 			);
 			name = Widget;
 			sourceTree = "<group>";
@@ -1002,6 +1022,9 @@
 				1E88805217F4E9980070116C /* EditRatingVC.h */,
 				1E88805317F4E9990070116C /* EditRatingVC.m */,
 				1E88805417F4E99A0070116C /* EditRatingVC.xib */,
+				1E131D5217F60AE500749506 /* EditRSVPVC.h */,
+				1E131D5317F60AE500749506 /* EditRSVPVC.m */,
+				1E131D5417F60AE500749506 /* EditRSVPVC.xib */,
 			);
 			name = Forms;
 			sourceTree = "<group>";
@@ -1045,6 +1068,11 @@
 		1E9280E9177FB68F008A583C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1E131D5C17F6187400749506 /* btn_done_off@2x.png */,
+				1E131D5D17F6187400749506 /* btn_done_on@2x.png */,
+				1E131D5E17F6187400749506 /* to_separator@2x.png */,
+				1E131D5F17F6187400749506 /* icon_calendar_aqua@2x.png */,
+				1E131D5717F60EF900749506 /* hbar_dark_grey@2x.png */,
 				1E1E25D117F395EE0079416C /* icon_cancel@2x.png */,
 				1E1E25D217F395EF0079416C /* icon_pick_photo@2x.png */,
 				1E1E25D317F395EF0079416C /* icon_pick_camera@2x.png */,
@@ -1847,6 +1875,12 @@
 				1E88805C17F4E9A10070116C /* EditRatingVC.xib in Resources */,
 				1E88805E17F4E9A10070116C /* EditPollVC.xib in Resources */,
 				1E88806517F4FC340070116C /* SurveyOptionWidget.xib in Resources */,
+				1E131D5617F60AE600749506 /* EditRSVPVC.xib in Resources */,
+				1E131D5817F60EF900749506 /* hbar_dark_grey@2x.png in Resources */,
+				1E131D6017F6187400749506 /* btn_done_off@2x.png in Resources */,
+				1E131D6117F6187400749506 /* btn_done_on@2x.png in Resources */,
+				1E131D6217F6187400749506 /* to_separator@2x.png in Resources */,
+				1E131D6317F6187400749506 /* icon_calendar_aqua@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2002,6 +2036,8 @@
 				1E88806417F4FC340070116C /* SurveyOptionWidget.m in Sources */,
 				1E88806817F4FC650070116C /* FancyTextView.m in Sources */,
 				1E88806B17F50B790070116C /* ExpandingTextView.m in Sources */,
+				1E131D5517F60AE600749506 /* EditRSVPVC.m in Sources */,
+				1E131D5B17F60FBE00749506 /* FancyDateTimeField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

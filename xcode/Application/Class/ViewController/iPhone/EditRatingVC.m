@@ -136,16 +136,16 @@
     [surveyOptions addObject:surveyOption];
 
     self.lowerForm.hidden = YES;
-//    CGRect lowerFrame = CGRectMake(0, ypos + 80, self.lowerForm.frame.size.width, self.lowerForm.frame.size.height);
-//    [self.lowerForm setFrame:lowerFrame];
-//    
-//    self.ckPublic.ckLabel.text = @"Public";
-//    self.ckPublic.tag = kTagPublic;
-//    [self.ckPublic unselected];
-//    
-//    self.ckPrivate.ckLabel.text = @"Private";
-//    self.ckPrivate.tag = kTagPrivate;
-//    [self.ckPrivate unselected];
+    CGRect lowerFrame = CGRectMake(0, ypos + 80, self.lowerForm.frame.size.width, self.lowerForm.frame.size.height);
+    [self.lowerForm setFrame:lowerFrame];
+    
+    self.ckPublic.ckLabel.text = @"Public";
+    self.ckPublic.tag = kTagPublic;
+    [self.ckPublic unselected];
+    
+    self.ckPrivate.ckLabel.text = @"Private";
+    self.ckPrivate.tag = kTagPrivate;
+    [self.ckPrivate unselected];
     
     
     // register for keyboard notifications
@@ -284,6 +284,8 @@
     optionIndex = textView.tag;
     [self updateScrollView];
     
+    inputHeight = textView.frame.size.height;
+    
 //    CGRect target = CGRectMake(textView.frame.origin.x,
 //                               textView.frame.origin.y + 30,
 //                               textView.frame.size.width,
@@ -312,31 +314,41 @@
         
         inputHeight = newsize;
         if (inputHeight < kMaxInputHeight) {
-            SurveyOptionWidget *currentOption = [surveyOptions objectAtIndex:optionIndex - 1];
-            CGRect optionFrame = CGRectMake(currentOption.frame.origin.x,
+            int pointer = optionIndex - 1;
+            SurveyOptionWidget *currentOption;
+            CGRect optionFrame;
+
+            currentOption= [surveyOptions objectAtIndex:pointer];
+            optionFrame = CGRectMake(currentOption.frame.origin.x,
                                            currentOption.frame.origin.y,
                                            currentOption.frame.size.width,
                                            currentOption.frame.size.height + vshift);
             
             currentOption.frame = optionFrame;
             [currentOption resizeHeight:inputHeight];
+            pointer++;
+            
+            // Now shift the remaining SurveyOptionWidgets with vshift
+            while (pointer < surveyOptions.count) {
+                NSLog(@"Moving next option %i -- vshift = %f", pointer + 1, vshift);
+                currentOption= [surveyOptions objectAtIndex:pointer];
+                optionFrame = CGRectMake(currentOption.frame.origin.x,
+                                         currentOption.frame.origin.y + vshift,
+                                         currentOption.frame.size.width,
+                                         currentOption.frame.size.height);
+                
+                currentOption.frame = optionFrame;
+                pointer ++;
+            }
+            // Move lower form
+            self.lowerForm.frame = CGRectMake(self.lowerForm.frame.origin.x,
+                                     self.lowerForm.frame.origin.y + vshift,
+                                     self.lowerForm.frame.size.width,
+                                     self.lowerForm.frame.size.height);
+            
+            
         }
     }
-
-    //    if (inputHeight != newsize ) {
-//        NSLog(@"textView height is now %f", newsize);
-//        vshift = newsize - inputHeight;
-//        
-//        inputHeight = newsize;
-//        if (inputHeight < kMaxInputHeight) {
-//            CGRect fancyFrame = CGRectMake(fancyInput.frame.origin.x,
-//                                           fancyInput.frame.origin.y,
-//                                           fancyInput.frame.size.width,
-//                                           inputHeight);
-//            fancyInput.frame = fancyFrame;
-//            
-//        }
-//    }
 
     
 }
@@ -415,7 +427,8 @@
 #pragma mark - Modal
 
 - (void) showModal {
-    
+    [self becomeFirstResponder];
+
     CGRect fullscreen = CGRectMake(0, 0, [DataModel shared].stageWidth, [DataModel shared].stageHeight);
     bgLayer = [[UIView alloc] initWithFrame:fullscreen];
     bgLayer.backgroundColor = [UIColor grayColor];
