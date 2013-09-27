@@ -24,7 +24,7 @@
     [self.titleLabel setFont:[UIFont fontWithName:@"Raleway-Bold" size:self.titleLabel.font.pointSize]];
 
     self.titleLabel.textColor = [UIColor whiteColor];
-    self.titleLabel.textAlignment = UITextAlignmentCenter;
+    self.titleLabel.textAlignment = NSTextAlignmentCenter;
     
     return self;
 }

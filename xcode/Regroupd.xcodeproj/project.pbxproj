@@ -40,8 +40,6 @@
 		1E213BFA17E545A100E17DBF /* GroupsHomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E213BF817E545A100E17DBF /* GroupsHomeVC.m */; };
 		1E213C0717E5466B00E17DBF /* SettingsHomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E213BFC17E5466B00E17DBF /* SettingsHomeVC.m */; };
 		1E213C0817E5466B00E17DBF /* SettingsHomeVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E213BFD17E5466B00E17DBF /* SettingsHomeVC.xib */; };
-		1E213C0917E5466B00E17DBF /* FormsHomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E213BFF17E5466B00E17DBF /* FormsHomeVC.m */; };
-		1E213C0A17E5466B00E17DBF /* FormsHomeVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E213C0017E5466B00E17DBF /* FormsHomeVC.xib */; };
 		1E213C0B17E5466B00E17DBF /* ContactsHomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E213C0217E5466B00E17DBF /* ContactsHomeVC.m */; };
 		1E213C0C17E5466B00E17DBF /* ContactsHomeVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E213C0317E5466B00E17DBF /* ContactsHomeVC.xib */; };
 		1E213C0D17E5466B00E17DBF /* ChatsHomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E213C0517E5466B00E17DBF /* ChatsHomeVC.m */; };
@@ -96,8 +94,6 @@
 		1E2C7EAC17E501940043E28D /* BrandUILabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C7EAB17E501940043E28D /* BrandUILabel.m */; };
 		1E2C7EB017E50F690043E28D /* ProfileStart2VC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C7EAE17E50F680043E28D /* ProfileStart2VC.m */; };
 		1E2C7EB117E50F690043E28D /* ProfileStart2VC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E2C7EAF17E50F690043E28D /* ProfileStart2VC.xib */; };
-		1E35AFC117EE0BCE003A2DBF /* NewPollVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E35AFBF17EE0BCD003A2DBF /* NewPollVC.m */; };
-		1E35AFC217EE0BCE003A2DBF /* NewPollVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E35AFC017EE0BCE003A2DBF /* NewPollVC.xib */; };
 		1E513A6317C9A29A00DC2566 /* cell_delete_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6117C9A29A00DC2566 /* cell_delete_icon.png */; };
 		1E513A6417C9A29A00DC2566 /* cell_delete_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6217C9A29A00DC2566 /* cell_delete_icon@2x.png */; };
 		1E513A6617CBAF8E00DC2566 /* checkbox_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6517CBAF8E00DC2566 /* checkbox_on@2x.png */; };
@@ -128,6 +124,16 @@
 		1E88804A17F4BCF20070116C /* FormVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88804917F4BCF10070116C /* FormVO.m */; };
 		1E88804D17F4BD950070116C /* FormOptionVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88804C17F4BD940070116C /* FormOptionVO.m */; };
 		1E88805017F4C0240070116C /* FormManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88804F17F4C0240070116C /* FormManager.m */; };
+		1E88805A17F4E9A10070116C /* FormsHomeVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E88805117F4E9980070116C /* FormsHomeVC.xib */; };
+		1E88805B17F4E9A10070116C /* EditRatingVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88805317F4E9990070116C /* EditRatingVC.m */; };
+		1E88805C17F4E9A10070116C /* EditRatingVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E88805417F4E99A0070116C /* EditRatingVC.xib */; };
+		1E88805D17F4E9A10070116C /* EditPollVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88805517F4E99B0070116C /* EditPollVC.m */; };
+		1E88805E17F4E9A10070116C /* EditPollVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E88805617F4E99C0070116C /* EditPollVC.xib */; };
+		1E88805F17F4E9A10070116C /* FormsHomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88805817F4E99E0070116C /* FormsHomeVC.m */; };
+		1E88806417F4FC340070116C /* SurveyOptionWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88806217F4FC320070116C /* SurveyOptionWidget.m */; };
+		1E88806517F4FC340070116C /* SurveyOptionWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E88806317F4FC330070116C /* SurveyOptionWidget.xib */; };
+		1E88806817F4FC650070116C /* FancyTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88806717F4FC630070116C /* FancyTextView.m */; };
+		1E88806B17F50B790070116C /* ExpandingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88806917F50B740070116C /* ExpandingTextView.m */; };
 		1E8FBA7C17E7F7B2003758EB /* BrandUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8FBA7B17E7F7B2003758EB /* BrandUIButton.m */; };
 		1E928213177FB690008A583C /* hbar_96x2.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9280EB177FB68F008A583C /* hbar_96x2.png */; };
 		1E928214177FB690008A583C /* help_icon_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9280EC177FB68F008A583C /* help_icon_off.png */; };
@@ -369,9 +375,6 @@
 		1E213BFB17E5466B00E17DBF /* SettingsHomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsHomeVC.h; path = Application/Class/ViewController/iPhone/SettingsHomeVC.h; sourceTree = SOURCE_ROOT; };
 		1E213BFC17E5466B00E17DBF /* SettingsHomeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsHomeVC.m; path = Application/Class/ViewController/iPhone/SettingsHomeVC.m; sourceTree = SOURCE_ROOT; };
 		1E213BFD17E5466B00E17DBF /* SettingsHomeVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SettingsHomeVC.xib; path = Application/Class/ViewController/iPhone/SettingsHomeVC.xib; sourceTree = SOURCE_ROOT; };
-		1E213BFE17E5466B00E17DBF /* FormsHomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FormsHomeVC.h; path = Application/Class/ViewController/iPhone/FormsHomeVC.h; sourceTree = SOURCE_ROOT; };
-		1E213BFF17E5466B00E17DBF /* FormsHomeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FormsHomeVC.m; path = Application/Class/ViewController/iPhone/FormsHomeVC.m; sourceTree = SOURCE_ROOT; };
-		1E213C0017E5466B00E17DBF /* FormsHomeVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FormsHomeVC.xib; path = Application/Class/ViewController/iPhone/FormsHomeVC.xib; sourceTree = SOURCE_ROOT; };
 		1E213C0117E5466B00E17DBF /* ContactsHomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ContactsHomeVC.h; path = Application/Class/ViewController/iPhone/ContactsHomeVC.h; sourceTree = SOURCE_ROOT; };
 		1E213C0217E5466B00E17DBF /* ContactsHomeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ContactsHomeVC.m; path = Application/Class/ViewController/iPhone/ContactsHomeVC.m; sourceTree = SOURCE_ROOT; };
 		1E213C0317E5466B00E17DBF /* ContactsHomeVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactsHomeVC.xib; path = Application/Class/ViewController/iPhone/ContactsHomeVC.xib; sourceTree = SOURCE_ROOT; };
@@ -431,9 +434,6 @@
 		1E2C7EAD17E50F680043E28D /* ProfileStart2VC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProfileStart2VC.h; path = DocAlert/ProfileStart2VC.h; sourceTree = "<group>"; };
 		1E2C7EAE17E50F680043E28D /* ProfileStart2VC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProfileStart2VC.m; path = DocAlert/ProfileStart2VC.m; sourceTree = "<group>"; };
 		1E2C7EAF17E50F690043E28D /* ProfileStart2VC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ProfileStart2VC.xib; path = DocAlert/ProfileStart2VC.xib; sourceTree = "<group>"; };
-		1E35AFBE17EE0BCD003A2DBF /* NewPollVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewPollVC.h; path = Application/Class/ViewController/iPhone/NewPollVC.h; sourceTree = SOURCE_ROOT; };
-		1E35AFBF17EE0BCD003A2DBF /* NewPollVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewPollVC.m; path = Application/Class/ViewController/iPhone/NewPollVC.m; sourceTree = SOURCE_ROOT; };
-		1E35AFC017EE0BCE003A2DBF /* NewPollVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NewPollVC.xib; path = Application/Class/ViewController/iPhone/NewPollVC.xib; sourceTree = SOURCE_ROOT; };
 		1E513A6117C9A29A00DC2566 /* cell_delete_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cell_delete_icon.png; sourceTree = "<group>"; };
 		1E513A6217C9A29A00DC2566 /* cell_delete_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell_delete_icon@2x.png"; sourceTree = "<group>"; };
 		1E513A6517CBAF8E00DC2566 /* checkbox_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox_on@2x.png"; sourceTree = "<group>"; };
@@ -479,6 +479,22 @@
 		1E88804C17F4BD940070116C /* FormOptionVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormOptionVO.m; sourceTree = "<group>"; };
 		1E88804E17F4C0240070116C /* FormManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormManager.h; sourceTree = "<group>"; };
 		1E88804F17F4C0240070116C /* FormManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormManager.m; sourceTree = "<group>"; };
+		1E88805117F4E9980070116C /* FormsHomeVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FormsHomeVC.xib; path = Application/Class/ViewController/iPhone/FormsHomeVC.xib; sourceTree = SOURCE_ROOT; };
+		1E88805217F4E9980070116C /* EditRatingVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditRatingVC.h; path = Application/Class/ViewController/iPhone/EditRatingVC.h; sourceTree = SOURCE_ROOT; };
+		1E88805317F4E9990070116C /* EditRatingVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditRatingVC.m; path = Application/Class/ViewController/iPhone/EditRatingVC.m; sourceTree = SOURCE_ROOT; };
+		1E88805417F4E99A0070116C /* EditRatingVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EditRatingVC.xib; path = Application/Class/ViewController/iPhone/EditRatingVC.xib; sourceTree = SOURCE_ROOT; };
+		1E88805517F4E99B0070116C /* EditPollVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditPollVC.m; path = Application/Class/ViewController/iPhone/EditPollVC.m; sourceTree = SOURCE_ROOT; };
+		1E88805617F4E99C0070116C /* EditPollVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EditPollVC.xib; path = Application/Class/ViewController/iPhone/EditPollVC.xib; sourceTree = SOURCE_ROOT; };
+		1E88805717F4E99D0070116C /* EditPollVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditPollVC.h; path = Application/Class/ViewController/iPhone/EditPollVC.h; sourceTree = SOURCE_ROOT; };
+		1E88805817F4E99E0070116C /* FormsHomeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FormsHomeVC.m; path = Application/Class/ViewController/iPhone/FormsHomeVC.m; sourceTree = SOURCE_ROOT; };
+		1E88805917F4E9A10070116C /* FormsHomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FormsHomeVC.h; path = Application/Class/ViewController/iPhone/FormsHomeVC.h; sourceTree = SOURCE_ROOT; };
+		1E88806117F4FC310070116C /* SurveyOptionWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurveyOptionWidget.h; sourceTree = "<group>"; };
+		1E88806217F4FC320070116C /* SurveyOptionWidget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurveyOptionWidget.m; sourceTree = "<group>"; };
+		1E88806317F4FC330070116C /* SurveyOptionWidget.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SurveyOptionWidget.xib; sourceTree = "<group>"; };
+		1E88806617F4FC620070116C /* FancyTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FancyTextView.h; sourceTree = "<group>"; };
+		1E88806717F4FC630070116C /* FancyTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FancyTextView.m; sourceTree = "<group>"; };
+		1E88806917F50B740070116C /* ExpandingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExpandingTextView.m; sourceTree = "<group>"; };
+		1E88806A17F50B770070116C /* ExpandingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExpandingTextView.h; sourceTree = "<group>"; };
 		1E8FBA7A17E7F7B2003758EB /* BrandUIButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrandUIButton.h; sourceTree = "<group>"; };
 		1E8FBA7B17E7F7B2003758EB /* BrandUIButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrandUIButton.m; sourceTree = "<group>"; };
 		1E9280EB177FB68F008A583C /* hbar_96x2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hbar_96x2.png; sourceTree = "<group>"; };
@@ -871,14 +887,21 @@
 		1E1E25BF17F32F450079416C /* Widget */ = {
 			isa = PBXGroup;
 			children = (
+				1E88806A17F50B770070116C /* ExpandingTextView.h */,
+				1E88806917F50B740070116C /* ExpandingTextView.m */,
 				1E1E25C517F342180079416C /* FancyTextField.h */,
 				1E1E25C617F342180079416C /* FancyTextField.m */,
+				1E88806617F4FC620070116C /* FancyTextView.h */,
+				1E88806717F4FC630070116C /* FancyTextView.m */,
 				1E1E25C017F32FC90079416C /* FancyCheckbox.h */,
 				1E1E25C117F32FC90079416C /* FancyCheckbox.m */,
 				1E1E25C317F3319F0079416C /* FancyCheckbox.xib */,
 				1E1E25CA17F348D50079416C /* SurveyOptionWithPic.h */,
 				1E1E25CB17F348D50079416C /* SurveyOptionWithPic.m */,
 				1E1E25CD17F349020079416C /* SurveyOptionWithPic.xib */,
+				1E88806117F4FC310070116C /* SurveyOptionWidget.h */,
+				1E88806217F4FC320070116C /* SurveyOptionWidget.m */,
+				1E88806317F4FC330070116C /* SurveyOptionWidget.xib */,
 			);
 			name = Widget;
 			sourceTree = "<group>";
@@ -907,19 +930,6 @@
 			children = (
 			);
 			name = Chats;
-			sourceTree = "<group>";
-		};
-		1E213BE917E5411700E17DBF /* Forms */ = {
-			isa = PBXGroup;
-			children = (
-				1E213BFE17E5466B00E17DBF /* FormsHomeVC.h */,
-				1E213BFF17E5466B00E17DBF /* FormsHomeVC.m */,
-				1E213C0017E5466B00E17DBF /* FormsHomeVC.xib */,
-				1E35AFBE17EE0BCD003A2DBF /* NewPollVC.h */,
-				1E35AFBF17EE0BCD003A2DBF /* NewPollVC.m */,
-				1E35AFC017EE0BCE003A2DBF /* NewPollVC.xib */,
-			);
-			name = Forms;
 			sourceTree = "<group>";
 		};
 		1E213BEA17E5412800E17DBF /* Contacts */ = {
@@ -978,6 +988,22 @@
 				1E8333C8179792F600B60612 /* GTMNSString+HTML.m */,
 			);
 			path = GTM;
+			sourceTree = "<group>";
+		};
+		1E88806017F4E9A90070116C /* Forms */ = {
+			isa = PBXGroup;
+			children = (
+				1E88805917F4E9A10070116C /* FormsHomeVC.h */,
+				1E88805817F4E99E0070116C /* FormsHomeVC.m */,
+				1E88805117F4E9980070116C /* FormsHomeVC.xib */,
+				1E88805717F4E99D0070116C /* EditPollVC.h */,
+				1E88805517F4E99B0070116C /* EditPollVC.m */,
+				1E88805617F4E99C0070116C /* EditPollVC.xib */,
+				1E88805217F4E9980070116C /* EditRatingVC.h */,
+				1E88805317F4E9990070116C /* EditRatingVC.m */,
+				1E88805417F4E99A0070116C /* EditRatingVC.xib */,
+			);
+			name = Forms;
 			sourceTree = "<group>";
 		};
 		1E9280DB177FB68F008A583C /* Resources */ = {
@@ -1300,9 +1326,9 @@
 		1E92817F177FB68F008A583C /* iPhone */ = {
 			isa = PBXGroup;
 			children = (
+				1E88806017F4E9A90070116C /* Forms */,
 				1E213BEB17E5412D00E17DBF /* Settings */,
 				1E213BEA17E5412800E17DBF /* Contacts */,
-				1E213BE917E5411700E17DBF /* Forms */,
 				1E213BE817E540E200E17DBF /* Chats */,
 				1E213BE717E540D100E17DBF /* Groups */,
 				1EB6FC571794F84B00CBF48D /* ProfileStart */,
@@ -1795,7 +1821,6 @@
 				1E213BF517E542BE00E17DBF /* btn_aqua_add@2x.png in Resources */,
 				1E213BF917E545A100E17DBF /* GroupsHomeVC.xib in Resources */,
 				1E213C0817E5466B00E17DBF /* SettingsHomeVC.xib in Resources */,
-				1E213C0A17E5466B00E17DBF /* FormsHomeVC.xib in Resources */,
 				1E213C0C17E5466B00E17DBF /* ContactsHomeVC.xib in Resources */,
 				1E213C0E17E5466B00E17DBF /* ChatsHomeVC.xib in Resources */,
 				1EBA5DCC17E9425800E46FFF /* modal_add_photo@2x.png in Resources */,
@@ -1811,7 +1836,6 @@
 				1EBA5DD617E9425800E46FFF /* icon_rating_purple@2x.png in Resources */,
 				1EBA5DD717E9425800E46FFF /* icon_poll_purple@2x.png in Resources */,
 				1EBA5DD817E9425800E46FFF /* icon_event_purple@2x.png in Resources */,
-				1E35AFC217EE0BCE003A2DBF /* NewPollVC.xib in Resources */,
 				1E1E25C417F3319F0079416C /* FancyCheckbox.xib in Resources */,
 				1E1E25C917F347D70079416C /* icon_photo_default@2x.png in Resources */,
 				1E1E25CE17F349020079416C /* SurveyOptionWithPic.xib in Resources */,
@@ -1819,6 +1843,10 @@
 				1E1E25D417F395EF0079416C /* icon_cancel@2x.png in Resources */,
 				1E1E25D517F395EF0079416C /* icon_pick_photo@2x.png in Resources */,
 				1E1E25D617F395EF0079416C /* icon_pick_camera@2x.png in Resources */,
+				1E88805A17F4E9A10070116C /* FormsHomeVC.xib in Resources */,
+				1E88805C17F4E9A10070116C /* EditRatingVC.xib in Resources */,
+				1E88805E17F4E9A10070116C /* EditPollVC.xib in Resources */,
+				1E88806517F4FC340070116C /* SurveyOptionWidget.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1959,17 +1987,21 @@
 				1E2C7EB017E50F690043E28D /* ProfileStart2VC.m in Sources */,
 				1E213BFA17E545A100E17DBF /* GroupsHomeVC.m in Sources */,
 				1E213C0717E5466B00E17DBF /* SettingsHomeVC.m in Sources */,
-				1E213C0917E5466B00E17DBF /* FormsHomeVC.m in Sources */,
 				1E213C0B17E5466B00E17DBF /* ContactsHomeVC.m in Sources */,
 				1E213C0D17E5466B00E17DBF /* ChatsHomeVC.m in Sources */,
 				1E8FBA7C17E7F7B2003758EB /* BrandUIButton.m in Sources */,
-				1E35AFC117EE0BCE003A2DBF /* NewPollVC.m in Sources */,
 				1E1E25C217F32FC90079416C /* FancyCheckbox.m in Sources */,
 				1E1E25C717F342190079416C /* FancyTextField.m in Sources */,
 				1E1E25CC17F348D60079416C /* SurveyOptionWithPic.m in Sources */,
 				1E88804A17F4BCF20070116C /* FormVO.m in Sources */,
 				1E88804D17F4BD950070116C /* FormOptionVO.m in Sources */,
 				1E88805017F4C0240070116C /* FormManager.m in Sources */,
+				1E88805B17F4E9A10070116C /* EditRatingVC.m in Sources */,
+				1E88805D17F4E9A10070116C /* EditPollVC.m in Sources */,
+				1E88805F17F4E9A10070116C /* FormsHomeVC.m in Sources */,
+				1E88806417F4FC340070116C /* SurveyOptionWidget.m in Sources */,
+				1E88806817F4FC650070116C /* FancyTextView.m in Sources */,
+				1E88806B17F50B790070116C /* ExpandingTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,26 +1,24 @@
 //
-//  NewPollVC.m
+//  EditRatingVC.m
 //  Regroupd
 //
 //  Created by Hugh Lang on 9/21/13.
 //
 //
 
-#import "NewPollVC.h"
+#import "EditRatingVC.h"
 #import "FormManager.h"
 #import "FormVO.h"
 #import "FormOptionVO.h"
 
-@interface NewPollVC ()
+@interface EditRatingVC ()
 
 @end
 
-@implementation NewPollVC
+@implementation EditRatingVC
 
 #define kTagPublic     101
 #define kTagPrivate    102
-#define kTagMultipleYes   103
-#define kTagMultipleNo    104
 #define kInputFieldInterval 65
 
 #define kFirstOptionId  1
@@ -51,7 +49,7 @@
     self.scrollView.contentSize = scrollContentSize;
     self.scrollView.delegate = self;
     
-    SurveyOptionWithPic *surveyOption;
+    SurveyOptionWidget *surveyOption;
     
     // Add survey options
     int ypos = 120;
@@ -69,11 +67,10 @@
     count++;
     defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
     optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-    surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
+    surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
     surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
     surveyOption.tag = count;
     surveyOption.index = count;
-    surveyOption.input.placeholder = defaultText;
     surveyOption.input.defaultText = defaultText;
     surveyOption.input.returnKeyType = UIReturnKeyNext;
     surveyOption.input.tag = count;
@@ -86,11 +83,10 @@
     ypos += kInputFieldInterval;
     defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
     optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-    surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
+    surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
     surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
     surveyOption.tag = count;
     surveyOption.index = count;
-    surveyOption.input.placeholder = defaultText;
     surveyOption.input.defaultText = defaultText;
     surveyOption.input.returnKeyType = UIReturnKeyNext;
     surveyOption.input.tag = count;
@@ -104,11 +100,10 @@
     ypos += kInputFieldInterval;
     defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
     optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-    surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
+    surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
     surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
     surveyOption.tag = count;
     surveyOption.index = count;
-    surveyOption.input.placeholder = defaultText;
     surveyOption.input.defaultText = defaultText;
     surveyOption.input.returnKeyType = UIReturnKeyNext;
     surveyOption.input.tag = count;
@@ -127,14 +122,6 @@
     self.ckPrivate.ckLabel.text = @"Private";
     self.ckPrivate.tag = kTagPrivate;
     [self.ckPrivate unselected];
-    
-    self.ckMultipleYes.ckLabel.text = @"Yes";
-    self.ckMultipleYes.tag = kTagMultipleYes;
-    [self.ckMultipleYes unselected];
-    
-    self.ckMultipleNo.ckLabel.text = @"No";
-    self.ckMultipleNo.tag = kTagMultipleNo;
-    [self.ckMultipleNo unselected];
     
     
     // register for keyboard notifications
@@ -247,7 +234,7 @@
     NSLog(@"%s tag=%i", __FUNCTION__, optionIndex);
     
     if (optionIndex > 0 && optionIndex <= surveyOptions.count) {
-        SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:optionIndex - 1];
+        SurveyOptionWidget *currentOption = [surveyOptions objectAtIndex:optionIndex - 1];
         
         CGRect aRect = self.view.frame;
         
@@ -265,59 +252,30 @@
     
 }
 
-#pragma mark - UITextField methods
+#pragma mark - UITextView delegate methods
 
--(BOOL) textFieldShouldBeginEditing:(UITextField*)textField {
-    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
-    keyboardIsShown = YES;
-    
-    
-    return YES;
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
-    
-    // Get next field
-    if (textField.tag < surveyOptions.count) {
-        SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:textField.tag];
-        [currentOption.input becomeFirstResponder];
-
-        optionIndex = textField.tag + 1;
-        [self updateScrollView];
-        
-    } else {
-        NSLog(@"Last field");
-        [textField resignFirstResponder];
-    }
-
-    return YES;
-}
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    
-    _currentField = textField;
-    optionIndex = textField.tag;
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+#ifdef kDEBUG
+    // NSLog(@"===== %s", __FUNCTION__);
+#endif
+    _currentFocus = textView;
+    optionIndex = textView.tag;
     [self updateScrollView];
     
-    
-}
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    [textField resignFirstResponder];
-    [textField endEditing:YES];
+//    CGRect target = CGRectMake(textView.frame.origin.x,
+//                               textView.frame.origin.y + 30,
+//                               textView.frame.size.width,
+//                               textView.frame.size.height);
+//    
+//    [self.scrollView scrollRectToVisible:target animated:YES];
     
 }
 
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-    return YES;
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    [_currentFocus resignFirstResponder];
+    [textView endEditing:YES];
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    //    NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
-    return YES;
-}
 
 #pragma mark - Tap Gestures 
 
@@ -327,8 +285,7 @@
     if (UIGestureRecognizerStateEnded == sender.state)
     {
         if (keyboardIsShown) {
-            [_currentField resignFirstResponder];
-            [_currentField endEditing:YES];
+            [_currentFocus resignFirstResponder];
         } else {
             
             UIView* view = sender.view;
@@ -349,15 +306,6 @@
                     [self.ckPrivate selected];
                     break;
                     
-                case kTagMultipleYes:
-                    [self.ckMultipleYes selected];
-                    [self.ckMultipleNo unselected];
-                    break;
-                    
-                case kTagMultipleNo:
-                    [self.ckMultipleYes unselected];
-                    [self.ckMultipleNo selected];
-                    break;
                 case 666:
                     [self hideModal];
                     break;
@@ -451,7 +399,7 @@
 
     NSMutableArray *formOptions = [[NSMutableArray alloc] init];
     FormOptionVO *option;
-    for (SurveyOptionWithPic* surveyOption in surveyOptions) {
+    for (SurveyOptionWidget* surveyOption in surveyOptions) {
         if (surveyOption.input.text.length == 0) {
             NSLog(@"Empty field: %i", surveyOption.index);
             isOK = NO;
@@ -471,7 +419,7 @@
         form.system_id = @"";
         
         form.name = self.subjectField.text;
-        form.type = FormType_POLL;
+        form.type = FormType_RATING;
         form.status = FormStatus_DRAFT;
         
         int formId = [formSvc saveForm:form];
@@ -482,6 +430,7 @@
                 formOption.form_id = formId;
                 [formSvc saveOption:formOption];
             }
+            [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Survey created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         }
         
     } else {
@@ -529,6 +478,13 @@
     [self hideModal];
 }
 
+#pragma mark - UIAlertView
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    
+    [_delegate gotoSlideWithName:@"FormsHome"];
+    
+}
 
 #pragma mark - UIImagePicker methods
 
@@ -554,7 +510,7 @@
     NSLog(@"%s", __FUNCTION__);
 	UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
     
-    SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:optionIndex - 1];
+    SurveyOptionWidget *currentOption = [surveyOptions objectAtIndex:optionIndex - 1];
     
     [currentOption setPhoto:tmpImage];
 //    currentOption.roundPic.image = tmpImage;

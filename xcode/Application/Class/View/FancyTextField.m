@@ -24,7 +24,7 @@
     self.isChanged = NO;
     [self setFont:[UIFont fontWithName:@"Raleway-Regular" size:self.font.pointSize]];
     self.textColor = [UIColor colorWithHexValue:0x333333];
-    self.textAlignment = UITextAlignmentLeft;
+    self.textAlignment = NSTextAlignmentLeft;
     
 //    self.borderStyle = UITextBorderStyleRoundedRect; // clear out default border
     

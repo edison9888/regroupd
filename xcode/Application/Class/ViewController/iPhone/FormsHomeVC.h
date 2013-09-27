@@ -37,7 +37,7 @@
 - (IBAction)tapEditButton;
 
 - (IBAction)tapPollButton;
-- (IBAction)tapRankingButton;
+- (IBAction)tapRatingButton;
 - (IBAction)tapRSVPButton;
 - (IBAction)tapCancelButton;
 

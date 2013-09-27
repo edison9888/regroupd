@@ -40,7 +40,7 @@
     self.scrollView.contentSize = scrollContentSize;
 
     self.tf1.delegate = self;
-    self.tf1.textAlignment = UITextAlignmentCenter;
+    self.tf1.textAlignment = NSTextAlignmentCenter;
     
     self.scrollView.delegate = self;
     [self.tf1 setKeyboardType:UIKeyboardTypePhonePad];

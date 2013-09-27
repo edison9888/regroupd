@@ -55,7 +55,7 @@
         _label.lineBreakMode = UILineBreakModeTailTruncation;
         _label.adjustsFontSizeToFitWidth = YES;
         _label.backgroundColor = [UIColor clearColor];
-        _label.textAlignment = UITextAlignmentCenter;
+        _label.textAlignment = NSTextAlignmentCenter;
         _label.shadowColor = [UIColor darkGrayColor];
         _label.shadowOffset = CGSizeMake(0, -1);
         

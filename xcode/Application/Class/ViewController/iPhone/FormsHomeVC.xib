@@ -174,6 +174,7 @@
 						<string key="NSFrame">{{0, 90}, {320, 500}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<reference key="IBUIBackgroundColor" ref="974881452"/>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -427,6 +428,7 @@
 						<string key="NSFrame">{{0, 162}, {302, 54}}</string>
 						<reference key="NSSuperview" ref="1053699865"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIAutoresizesSubviews">NO</bool>
@@ -533,12 +535,12 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
-						<string key="label">tapRankingButton</string>
+						<string key="label">tapRatingButton</string>
 						<reference key="source" ref="772345901"/>
 						<reference key="destination" ref="372490531"/>
 						<int key="IBEventType">7</int>
 					</object>
-					<int key="connectionID">45</int>
+					<int key="connectionID">48</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
@@ -668,7 +670,7 @@
 						<int key="objectID">41</int>
 						<reference key="object" ref="772345901"/>
 						<reference key="parent" ref="1053699865"/>
-						<string key="objectName">Button - ranking</string>
+						<string key="objectName">Button - rating</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">42</int>
@@ -715,7 +717,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">47</int>
+			<int key="maxID">48</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -752,7 +754,7 @@
 						<string key="tapEditButton">id</string>
 						<string key="tapPollButton">id</string>
 						<string key="tapRSVPButton">id</string>
-						<string key="tapRankingButton">id</string>
+						<string key="tapRatingButton">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="tapAddButton">
@@ -775,8 +777,8 @@
 							<string key="name">tapRSVPButton</string>
 							<string key="candidateClassName">id</string>
 						</object>
-						<object class="IBActionInfo" key="tapRankingButton">
-							<string key="name">tapRankingButton</string>
+						<object class="IBActionInfo" key="tapRatingButton">
+							<string key="name">tapRatingButton</string>
 							<string key="candidateClassName">id</string>
 						</object>
 					</dictionary>

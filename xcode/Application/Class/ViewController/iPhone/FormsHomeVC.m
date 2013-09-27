@@ -205,14 +205,16 @@
 
 - (IBAction)tapPollButton {
     NSLog(@"%s", __FUNCTION__);
-    [_delegate gotoSlideWithName:@"NewPoll"];
+    [_delegate gotoSlideWithName:@"EditPoll"];
 }
-- (IBAction)tapRankingButton {
+- (IBAction)tapRatingButton {
     NSLog(@"%s", __FUNCTION__);
+    [_delegate gotoSlideWithName:@"EditRating"];
     
 }
 - (IBAction)tapRSVPButton {
     NSLog(@"%s", __FUNCTION__);
+    [_delegate gotoSlideWithName:@"EditRSVP"];
     
 }
 - (IBAction)tapCancelButton {
