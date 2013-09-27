@@ -73,7 +73,6 @@
     
     fancyInput = [[FancyTextView alloc] initWithFrame:optionFrame];
     //set the parent view
-    fancyInput.parentView = self.view;
     fancyInput.delegate = self;
     fancyInput.tag = count;
     [fancyInput setNumLabel:@"3"];

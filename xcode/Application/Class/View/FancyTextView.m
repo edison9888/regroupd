@@ -9,7 +9,6 @@
 
 @implementation FancyTextView
 
-@synthesize _borderStyle,parentView,showPlaceholder,bgField;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -17,9 +16,6 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        __backgroundColor = [UIColor clearColor];
-        self.textColor = [UIColor blackColor];
-        
         self.backgroundColor = [UIColor whiteColor];
         
 //        CGRect bgFrame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
@@ -58,54 +54,14 @@
     __numLabel.text = num;    
 }
 
--(void)setBorderstyle:(UITextBorderStyle)borderStyle
-{
-    self._borderStyle = borderStyle;
-    bgField.borderStyle = borderStyle;
-}
-
-
 -(void)setPlaceholder:(NSString*)placeholder
 {
     showPlaceholder = YES;
     self.text = placeholder;
 }
 
-// Doesn't work in iOS7
-//- (id)styleString
-//{
-//    return @"line-height: 1.6em;margin-right: 0px; margin-left: 25px; ";
-//}
-
-//- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-//{
-//    return YES;
-//}
-//
-//-(BOOL)textFieldShouldReturn:(UITextField *)txtObject {
-//    NSLog(@"%s", __FUNCTION__);
-//	[txtObject resignFirstResponder];
-//	
-//	return YES;
-//}
-//
-//- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
-//{
-//    if(showPlaceholder){
-//        showPlaceholder = NO;
-//        self.text = @"";
-//    }
-//    return YES;
-//}
-//
-//- (void)textViewDidBeginEditing:(UITextView *)textView
-//{
-//    if(showPlaceholder){
-//        showPlaceholder = NO;
-//        self.text = @"";
-//    }
-//    
-//}
-
+-(void)unsetPlaceholder:(NSString*)placeholder {
+    
+}
 
 @end

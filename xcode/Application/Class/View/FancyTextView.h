@@ -14,27 +14,16 @@
 {
     
     BOOL showPlaceholder;
-    UITextBorderStyle _borderStyle;
-    UIColor *__backgroundColor;
-    UITextField *bgField;
-    id<UITextViewDelegate> delegate;
-    
-    UIView * parentView;
-    
-    CGFloat animatedDistance;
     
     UILabel *__numLabel;
     
 }
 
-@property(nonatomic,retain)UIView * parentView;
-@property(nonatomic)BOOL showPlaceholder;
-@property(nonatomic)UITextBorderStyle _borderStyle;
-
-@property(nonatomic,retain) UITextField *bgField;
+@property (nonatomic, retain) NSString* defaultText;
+@property (nonatomic)BOOL showPlaceholder;
+@property BOOL isChanged;
 
 -(void)setNumLabel:(NSString*)num;
--(void)setBorderstyle:(UITextBorderStyle)borderStyle;
 -(void)setPlaceholder:(NSString*)placeholder;
-
+-(void)unsetPlaceholder:(NSString*)placeholder;
 @end
