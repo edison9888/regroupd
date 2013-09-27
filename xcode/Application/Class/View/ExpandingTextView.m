@@ -44,7 +44,9 @@ static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
         [self.layer setBorderColor:[UIColor grayColor].CGColor];
         [self.layer setBorderWidth:1.0];
         [self.layer setCornerRadius:5];
-      
+
+        [self setContentInset:UIEdgeInsetsMake(0.0, 30.0, 0.0, 0.0)];
+
 //        UIToolbar *doneBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, PORTRAIT_KEYBOARD_HEIGHT - 60, 320, 35)];
 //        doneBar.barStyle = UIBarStyleBlack;
 //        doneBar.translucent = YES;
@@ -67,7 +69,6 @@ static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
 {
     [self resignFirstResponder];
 }
-
 
 -(void)setLeftViewImage:(UIImage*)image
 {

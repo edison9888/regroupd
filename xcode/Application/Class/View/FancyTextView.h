@@ -10,7 +10,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FancyTextView : UITextView<UITextViewDelegate,UITextFieldDelegate>
+@interface FancyTextView : UITextView
 {
     
     BOOL showPlaceholder;
@@ -23,9 +23,9 @@
     
     CGFloat animatedDistance;
     
-    UIImageView *__leftView;
+    UILabel *__numLabel;
+    
 }
-@property(nonatomic,retain) id<UITextViewDelegate> delegate;
 
 @property(nonatomic,retain)UIView * parentView;
 @property(nonatomic)BOOL showPlaceholder;
@@ -33,9 +33,8 @@
 
 @property(nonatomic,retain) UITextField *bgField;
 
+-(void)setNumLabel:(NSString*)num;
 -(void)setBorderstyle:(UITextBorderStyle)borderStyle;
 -(void)setPlaceholder:(NSString*)placeholder;
-- (CGRect)textRectForBounds:(CGRect)bounds;
-- (CGRect)editingRectForBounds:(CGRect)bounds;
 
 @end

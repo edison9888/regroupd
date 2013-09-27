@@ -41,6 +41,8 @@
  */
 -(void)setBorderstyle:(UITextBorderStyle)borderStyle;
 -(void)setLeftViewImage:(UIImage*)image;
+
+
 -(void)setPlaceholder:(NSString*)placeholder;
 -(void)setGalBackgroundColor:(UIColor *)_backgroundColor;
 - (CGRect)textRectForBounds:(CGRect)bounds;

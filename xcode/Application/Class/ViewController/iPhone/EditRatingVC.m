@@ -76,7 +76,10 @@
     fancyInput.parentView = self.view;
     fancyInput.delegate = self;
     fancyInput.tag = count;
+    [fancyInput setNumLabel:@"3"];
     [fancyInput setPlaceholder:defaultText];
+    
+    [fancyInput scrollRectToVisible:CGRectMake(0,0,1,1) animated:NO];
     [self.scrollView addSubview:fancyInput];
 
 //    expInput = [[ExpandingTextView alloc] initWithFrame:optionFrame];
