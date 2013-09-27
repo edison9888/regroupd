@@ -51,8 +51,8 @@
 
         _label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width - 2 * 5, self.frame.size.height)];
         _label.textColor = [UIColor whiteColor];
-        _label.minimumFontSize = 10;
-        _label.lineBreakMode = UILineBreakModeTailTruncation;
+//        _label.minimumFontSize = 10;
+//        _label.lineBreakMode = UILineBreakModeTailTruncation;
         _label.adjustsFontSizeToFitWidth = YES;
         _label.backgroundColor = [UIColor clearColor];
         _label.textAlignment = NSTextAlignmentCenter;

@@ -18,11 +18,6 @@
     UIColor *__backgroundColor;
     UITextField *bgField;
     id<UITextViewDelegate> delegate;
-    id<UITextFieldDelegate> tfDelegate;
-
-    ///doubletapspeed=delay in seconds or milliseconds ( depends on whatever you set it for ) between first "Return" tap and second to hids the keyboard.
-    //default is 1.5 seconds
-    CGFloat doubleTapSpeed;
 
     UIView * parentView;
     
@@ -31,12 +26,10 @@
     UIImageView *__leftView;
 }
 @property(nonatomic,retain) id<UITextViewDelegate> delegate;
-@property(nonatomic,retain) id<UITextFieldDelegate> tfDelegate;
 
 @property(nonatomic,retain)UIView * parentView;
 @property(nonatomic)BOOL showPlaceholder;
 @property(nonatomic)UITextBorderStyle _borderStyle;
-@property(nonatomic)CGFloat doubleTapSpeed;
 
 @property(nonatomic,retain) UITextField *bgField;
 

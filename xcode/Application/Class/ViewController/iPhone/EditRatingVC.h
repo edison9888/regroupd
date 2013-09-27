@@ -12,10 +12,12 @@
 #import "BrandUITextField.h"
 #import "SurveyOptionWidget.h"
 #import "ExpandingTextView.h"
+#import "FancyTextView.h"
 
 @interface EditRatingVC : SlideViewController<UIScrollViewDelegate, UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate> {
     int optionIndex;
     ExpandingTextView *expInput;
+    FancyTextView *fancyInput;
     CGPoint  offset; // unused
     UIResponder *_currentFocus;
     

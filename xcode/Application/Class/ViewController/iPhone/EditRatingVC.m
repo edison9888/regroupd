@@ -71,13 +71,21 @@
     defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
     optionFrame= CGRectMake(10, ypos, 236, kMinInputHeight);
     
-    expInput = [[ExpandingTextView alloc] initWithFrame:optionFrame];
+    fancyInput = [[FancyTextView alloc] initWithFrame:optionFrame];
     //set the parent view
-    expInput.parentView = self.view;
-    expInput.delegate = self;
-    expInput.tag = count;
-    [expInput setPlaceholder:defaultText];
-    [self.scrollView addSubview:expInput];
+    fancyInput.parentView = self.view;
+    fancyInput.delegate = self;
+    fancyInput.tag = count;
+    [fancyInput setPlaceholder:defaultText];
+    [self.scrollView addSubview:fancyInput];
+
+//    expInput = [[ExpandingTextView alloc] initWithFrame:optionFrame];
+//    //set the parent view
+//    expInput.parentView = self.view;
+//    expInput.delegate = self;
+//    expInput.tag = count;
+//    [expInput setPlaceholder:defaultText];
+//    [self.scrollView addSubview:expInput];
     
     self.lowerForm.hidden = YES;
 //    CGRect lowerFrame = CGRectMake(0, ypos + 80, self.lowerForm.frame.size.width, self.lowerForm.frame.size.height);
@@ -245,19 +253,34 @@
 
 - (void)textViewDidChange:(UITextView *)textView {
 //    textView.bounds.size.height
-    float newsize = expInput.contentSize.height;
+    
+    float newsize = fancyInput.contentSize.height;
     if (inputHeight != newsize ) {
         NSLog(@"textView height is now %f", newsize);
         inputHeight = newsize;
         if (inputHeight < kMaxInputHeight) {
-            CGRect expFrame = CGRectMake(expInput.frame.origin.x,
-                                          expInput.frame.origin.y,
-                                          expInput.frame.size.width,
-                                          inputHeight + 5);
-            expInput.frame = expFrame;
+            CGRect fancyFrame = CGRectMake(fancyInput.frame.origin.x,
+                                           fancyInput.frame.origin.y,
+                                           fancyInput.frame.size.width,
+                                           inputHeight + 5);
+            fancyInput.frame = fancyFrame;
             
         }
     }
+
+    //    float newsize = expInput.contentSize.height;
+//    if (inputHeight != newsize ) {
+//        NSLog(@"textView height is now %f", newsize);
+//        inputHeight = newsize;
+//        if (inputHeight < kMaxInputHeight) {
+//            CGRect expFrame = CGRectMake(expInput.frame.origin.x,
+//                                          expInput.frame.origin.y,
+//                                          expInput.frame.size.width,
+//                                          inputHeight + 5);
+//            expInput.frame = expFrame;
+//            
+//        }
+//    }
     
 }
 

@@ -17,7 +17,7 @@
 
 static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
 
-@synthesize _borderStyle,doubleTapSpeed,parentView,showPlaceholder,delegate,tfDelegate, bgField;
+@synthesize _borderStyle,parentView,showPlaceholder,delegate,bgField;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -34,9 +34,9 @@ static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
         bgField.backgroundColor = __backgroundColor;
         bgField.delegate = nil;
         bgField.enabled = NO;
+        
         [self addSubview:bgField];
         [self sendSubviewToBack:bgField];
-        doubleTapSpeed = 1.5;
         self.clipsToBounds = YES;
         [self setTextColor:[UIColor colorWithHexValue:0x333333 andAlpha:1.0]];
         [self setFont:[UIFont fontWithName:@"Raleway-Regular" size:15]];
@@ -134,74 +134,6 @@ static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
     }
 
 }
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField{
-    NSLog(@"%s", __FUNCTION__);
-    static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.3;
-    static const CGFloat MINIMUM_SCROLL_FRACTION = 0.2;
-    static const CGFloat MAXIMUM_SCROLL_FRACTION = 0.8;
-    static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 216;
-    static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
-    
-    CGRect textFieldRect = [parentView convertRect:textField.bounds fromView:textField];
-    CGRect viewRect = [parentView convertRect:parentView.bounds fromView:parentView];
-    
-    CGFloat midline = textFieldRect.origin.y + 0.5 * textFieldRect.size.height;
-    CGFloat numerator = midline - viewRect.origin.y - MINIMUM_SCROLL_FRACTION * viewRect.size.height;
-    CGFloat denominator = (MAXIMUM_SCROLL_FRACTION - MINIMUM_SCROLL_FRACTION) * viewRect.size.height;
-    CGFloat heightFraction = numerator / denominator;
-    if (heightFraction < 0.0)
-    {
-        heightFraction = 0.0;
-    }
-    else if (heightFraction > 1.0)
-    {
-        heightFraction = 1.0;
-    }
-    
-    UIInterfaceOrientation orientation =
-    [[UIApplication sharedApplication] statusBarOrientation];
-    if (orientation == UIInterfaceOrientationPortrait ||
-        orientation == UIInterfaceOrientationPortraitUpsideDown)
-    {
-        animatedDistance = floor(PORTRAIT_KEYBOARD_HEIGHT * heightFraction);
-    }
-    else
-    {
-        animatedDistance = floor(LANDSCAPE_KEYBOARD_HEIGHT * heightFraction);
-    }
-    
-    CGRect viewFrame = parentView.frame;
-    viewFrame.origin.y -= animatedDistance;
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
-    NSLog(@"BEGIN Set viewFrame with height %f", viewFrame.size.height);
-
-    [parentView setFrame:viewFrame];
-    
-    [UIView commitAnimations];
-    
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField{
-    
-    static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.3;
-    
-    CGRect viewFrame = parentView.frame;
-    viewFrame.origin.y += animatedDistance;
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
-    NSLog(@"END Set viewFrame with height %f", viewFrame.size.height);
-    [parentView setFrame:viewFrame];
-    
-    [UIView commitAnimations];
-    
-}
-
 // See: http://vodpodgeekblog.wordpress.com/2011/03/04/ios-trick-add-padding-to-a-uitextlabel/
 //- (CGRect)textRectForBounds:(CGRect)bounds {
 //    return CGRectMake(bounds.origin.x + 26, bounds.origin.y + 4,

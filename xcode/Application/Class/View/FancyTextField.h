@@ -13,8 +13,6 @@
 
 - (void) setFieldLabel:(NSString *)label;
 
-- (void) onEntry;
-- (void) onExit;
 
 
 @end
