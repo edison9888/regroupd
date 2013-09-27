@@ -28,5 +28,6 @@
 - (IBAction)tapPickPhoto;
 
 - (void) setPhoto:(UIImage *)photo;
+- (void) resizeHeight:(float)height;
 
 @end

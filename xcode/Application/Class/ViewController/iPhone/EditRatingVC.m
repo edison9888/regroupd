@@ -23,7 +23,7 @@
 
 #define kFirstOptionId  1
 #define kMinInputHeight 40
-#define kMaxInputHeight 120
+#define kMaxInputHeight 80
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -66,29 +66,75 @@
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setNumberStyle: NSNumberFormatterSpellOutStyle];
     
+//    // OPTION 1 INPUT
+//    count++;
+//    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
+//
+//    optionFrame= CGRectMake(10, ypos, 236, kMinInputHeight);
+//    
+//    fancyInput = [[FancyTextView alloc] initWithFrame:optionFrame];
+//    //set the parent view
+//    fancyInput.delegate = self;
+//    fancyInput.tag = count;
+//    [fancyInput setNumLabel:@"3"];
+//    [fancyInput setPlaceholder:defaultText];
+//    
+//    [fancyInput scrollRectToVisible:CGRectMake(0,0,1,1) animated:NO];
+//    [self.scrollView addSubview:fancyInput];
+
+    SurveyOptionWidget *surveyOption;
     // OPTION 1 INPUT
     count++;
     defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
-    optionFrame= CGRectMake(10, ypos, 236, kMinInputHeight);
+    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
+    surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
+    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
+    surveyOption.tag = count;
+    surveyOption.index = count;
+    surveyOption.input.placeholder = defaultText;
+    surveyOption.input.defaultText = defaultText;
+    surveyOption.input.returnKeyType = UIReturnKeyNext;
+    surveyOption.input.tag = count;
+    surveyOption.input.delegate = self;
+    [self.scrollView addSubview:surveyOption];
+    [surveyOptions addObject:surveyOption];
     
-    fancyInput = [[FancyTextView alloc] initWithFrame:optionFrame];
-    //set the parent view
-    fancyInput.delegate = self;
-    fancyInput.tag = count;
-    [fancyInput setNumLabel:@"3"];
-    [fancyInput setPlaceholder:defaultText];
+    // OPTION 2 INPUT
+    count++;
+    ypos += kInputFieldInterval;
+    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
+    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
+    surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
+    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
+    surveyOption.tag = count;
+    surveyOption.index = count;
+    surveyOption.input.placeholder = defaultText;
+    surveyOption.input.defaultText = defaultText;
+    surveyOption.input.returnKeyType = UIReturnKeyNext;
+    surveyOption.input.tag = count;
+    surveyOption.input.delegate = self;
     
-    [fancyInput scrollRectToVisible:CGRectMake(0,0,1,1) animated:NO];
-    [self.scrollView addSubview:fancyInput];
+    [self.scrollView addSubview:surveyOption];
+    [surveyOptions addObject:surveyOption];
+    
+    // OPTION 3 INPUT
+    count++;
+    ypos += kInputFieldInterval;
+    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
+    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
+    surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
+    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
+    surveyOption.tag = count;
+    surveyOption.index = count;
+    surveyOption.input.placeholder = defaultText;
+    surveyOption.input.defaultText = defaultText;
+    surveyOption.input.returnKeyType = UIReturnKeyNext;
+    surveyOption.input.tag = count;
+    surveyOption.input.delegate = self;
+    
+    [self.scrollView addSubview:surveyOption];
+    [surveyOptions addObject:surveyOption];
 
-//    expInput = [[ExpandingTextView alloc] initWithFrame:optionFrame];
-//    //set the parent view
-//    expInput.parentView = self.view;
-//    expInput.delegate = self;
-//    expInput.tag = count;
-//    [expInput setPlaceholder:defaultText];
-//    [self.scrollView addSubview:expInput];
-    
     self.lowerForm.hidden = YES;
 //    CGRect lowerFrame = CGRectMake(0, ypos + 80, self.lowerForm.frame.size.width, self.lowerForm.frame.size.height);
 //    [self.lowerForm setFrame:lowerFrame];
@@ -254,35 +300,44 @@
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
-//    textView.bounds.size.height
+//    NSLog(@"%s tag=%i", __FUNCTION__, textView.tag);
+    optionIndex = textView.tag;
     
-    float newsize = fancyInput.contentSize.height;
+    float vshift = 0;
+    
+    float newsize = textView.contentSize.height;
     if (inputHeight != newsize ) {
         NSLog(@"textView height is now %f", newsize);
+        vshift = newsize - inputHeight;
+        
         inputHeight = newsize;
         if (inputHeight < kMaxInputHeight) {
-            CGRect fancyFrame = CGRectMake(fancyInput.frame.origin.x,
-                                           fancyInput.frame.origin.y,
-                                           fancyInput.frame.size.width,
-                                           inputHeight + 5);
-            fancyInput.frame = fancyFrame;
+            SurveyOptionWidget *currentOption = [surveyOptions objectAtIndex:optionIndex - 1];
+            CGRect optionFrame = CGRectMake(currentOption.frame.origin.x,
+                                           currentOption.frame.origin.y,
+                                           currentOption.frame.size.width,
+                                           currentOption.frame.size.height + vshift);
             
+            currentOption.frame = optionFrame;
+            [currentOption resizeHeight:inputHeight];
         }
     }
 
-    //    float newsize = expInput.contentSize.height;
-//    if (inputHeight != newsize ) {
+    //    if (inputHeight != newsize ) {
 //        NSLog(@"textView height is now %f", newsize);
+//        vshift = newsize - inputHeight;
+//        
 //        inputHeight = newsize;
 //        if (inputHeight < kMaxInputHeight) {
-//            CGRect expFrame = CGRectMake(expInput.frame.origin.x,
-//                                          expInput.frame.origin.y,
-//                                          expInput.frame.size.width,
-//                                          inputHeight + 5);
-//            expInput.frame = expFrame;
+//            CGRect fancyFrame = CGRectMake(fancyInput.frame.origin.x,
+//                                           fancyInput.frame.origin.y,
+//                                           fancyInput.frame.size.width,
+//                                           inputHeight);
+//            fancyInput.frame = fancyFrame;
 //            
 //        }
 //    }
+
     
 }
 

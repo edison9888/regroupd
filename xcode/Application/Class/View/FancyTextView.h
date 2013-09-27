@@ -20,7 +20,6 @@
 }
 
 @property (nonatomic, retain) NSString* defaultText;
-@property (nonatomic)BOOL showPlaceholder;
 @property BOOL isChanged;
 
 -(void)setNumLabel:(NSString*)num;

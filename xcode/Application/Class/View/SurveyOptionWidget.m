@@ -59,6 +59,15 @@
     self.roundPic.image = photo;
 }
 
+- (void) resizeHeight:(float)height {
+    
+    CGRect inputFrame = CGRectMake(self.input.frame.origin.x,
+                                   self.input.frame.origin.y,
+                                   self.input.frame.size.width,
+                                   height);
+    self.input.frame = inputFrame;
+
+}
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
