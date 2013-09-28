@@ -10,35 +10,52 @@
 #import "FancyCheckbox.h" 
 #import "FancyTextField.h"
 #import "BrandUITextField.h"
-#import "SurveyOptionWithPic.h"
+#import "FancyDateTimeField.h"
+#import "BSKeyboardControls.h"
 
-@interface EditRSVPVC : SlideViewController<UIScrollViewDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate> {
-    int optionIndex;
+@interface EditRSVPVC : SlideViewController<UIScrollViewDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate, BSKeyboardControlsDelegate> {
+    int fieldIndex;
     
     CGPoint  offset; // unused
-    
+    UIResponder *_currentFocus;
     UITextField *_currentField;
+    
     BOOL keyboardIsShown;
     float keyboardHeight;
     float navbarHeight;
-    NSMutableArray *surveyOptions;
+    
     UIView *bgLayer;
     
 }
 
+@property (nonatomic, retain) UIImagePickerController* imagePickerVC;
+@property (nonatomic, retain) IBOutlet UIDatePicker *datePicker;
+@property (nonatomic, retain) IBOutlet UIDatePicker *timePicker;
+@property (nonatomic, retain) IBOutlet UIToolbar* doneToolbar;
+@property (nonatomic, strong) BSKeyboardControls *keyboardControls;
+
+
+
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, retain) IBOutlet UIView *lowerForm;
 
-@property (nonatomic, retain) IBOutlet BrandUITextField *subjectField;
+@property (nonatomic, strong) IBOutlet UIView *photoHolder;
+@property (nonatomic, strong) IBOutlet UIImageView *roundPic;
+@property (nonatomic, strong) IBOutlet UIButton *pickPhoto;
 
-@property (nonatomic, retain) IBOutlet FancyCheckbox *ckPublic;
-@property (nonatomic, retain) IBOutlet FancyCheckbox *ckPrivate;
-@property (nonatomic, retain) IBOutlet FancyCheckbox *ckMultipleYes;
-@property (nonatomic, retain) IBOutlet FancyCheckbox *ckMultipleNo;
+@property (nonatomic, retain) IBOutlet BrandUITextField *subjectField;
+@property (nonatomic, retain) IBOutlet BrandUITextField *whereField;
+@property (nonatomic, retain) IBOutlet BrandUITextField *descriptionField;
+
+@property (nonatomic, retain) IBOutlet FancyDateTimeField *tfStartDate;
+@property (nonatomic, retain) IBOutlet FancyDateTimeField *tfStartTime;
+@property (nonatomic, retain) IBOutlet FancyDateTimeField *tfEndDate;
+@property (nonatomic, retain) IBOutlet FancyDateTimeField *tfEndTime;
+
+@property (nonatomic, retain) IBOutlet FancyCheckbox *ckAllowOthersYes;
+@property (nonatomic, retain) IBOutlet FancyCheckbox *ckAllowOthersNo;
 
 @property (nonatomic, strong) IBOutlet UIView *photoModal;
-
-@property (nonatomic, retain) UIImagePickerController* imagePickerVC;
 
 - (IBAction)tapCancelButton;
 - (IBAction)tapDoneButton;
@@ -46,6 +63,11 @@
 - (IBAction)modalCameraButton;
 - (IBAction)modalChooseButton;
 - (IBAction)modalCancelButton;
+
+- (IBAction)tapPickPhoto;
+- (IBAction)dismissDatePicker:(id)sender;
+
+- (void) setPhoto:(UIImage *)photo;
 
 - (void) showModal;
 - (void) hideModal;

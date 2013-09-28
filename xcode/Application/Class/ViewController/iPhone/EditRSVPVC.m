@@ -11,17 +11,22 @@
 #import "FormVO.h"
 #import "FormOptionVO.h"
 #import "UIAlertView+Helper.h"
+#import "DateTimeUtils.h"
+//#import "NSDate+Extensions.h"
+
 @interface EditRSVPVC ()
 
 @end
 
 @implementation EditRSVPVC
 
-#define kTagPublic     101
-#define kTagPrivate    102
-#define kTagMultipleYes   103
-#define kTagMultipleNo    104
-#define kInputFieldInterval 65
+#define kTagStartDate       101
+#define kTagStartTime       102
+#define kTagEndDate         103
+#define kTagEndTime         104
+
+#define kTagAllowOthersYes   201
+#define kTagAllowOthersNo    202
 
 #define kFirstOptionId  1
 
@@ -42,6 +47,15 @@
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
 
+    // photo thumbnail setup
+    [self.roundPic.layer setCornerRadius:30.0f];
+    [self.roundPic.layer setMasksToBounds:YES];
+    [self.roundPic.layer setBorderWidth:1.0f];
+    [self.roundPic.layer setBorderColor:[UIColor whiteColor].CGColor];
+    self.roundPic.clipsToBounds = YES;
+    self.roundPic.contentMode = UIViewContentModeScaleAspectFill;
+    self.photoHolder.hidden = YES;
+
     // scrollview setup
     navbarHeight = 50;
     
@@ -51,91 +65,60 @@
     self.scrollView.contentSize = scrollContentSize;
     self.scrollView.delegate = self;
     
-    SurveyOptionWithPic *surveyOption;
-    
     // Add survey options
-    int ypos = 120;
-    int count = 0;
-    surveyOptions = [[NSMutableArray alloc] init];
 
-    CGRect optionFrame;
-    NSString *placeholderFmt = @"Option %@";
-    NSString *defaultText;
     
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-    [formatter setNumberStyle: NSNumberFormatterSpellOutStyle];
     
-    // OPTION 1 INPUT
-    count++;
-    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
-    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-    surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
-    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-    surveyOption.tag = count;
-    surveyOption.index = count;
-    surveyOption.input.placeholder = defaultText;
-    surveyOption.input.defaultText = defaultText;
-    surveyOption.input.returnKeyType = UIReturnKeyNext;
-    surveyOption.input.tag = count;
-    surveyOption.input.delegate = self;
-    [self.scrollView addSubview:surveyOption];
-    [surveyOptions addObject:surveyOption];
-    
-    // OPTION 2 INPUT
-    count++;
-    ypos += kInputFieldInterval;
-    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
-    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-    surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
-    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-    surveyOption.tag = count;
-    surveyOption.index = count;
-    surveyOption.input.placeholder = defaultText;
-    surveyOption.input.defaultText = defaultText;
-    surveyOption.input.returnKeyType = UIReturnKeyNext;
-    surveyOption.input.tag = count;
-    surveyOption.input.delegate = self;
+    UIImage *icon_calendar = [UIImage imageNamed:@"icon_calendar_aqua"];
+    UIImage *icon_clock = [UIImage imageNamed:@"icon_clock_aqua"];
+            
+    self.tfStartDate.tag = kTagStartDate;
+//    self.tfStartDate.text = @"2013-10-01";
+    self.tfStartDate.inputView = self.datePicker;
+    self.tfStartDate.inputAccessoryView = self.doneToolbar;
+    self.tfStartDate.delegate = self;
+    [self.tfStartDate setIcon:icon_calendar];
 
-    [self.scrollView addSubview:surveyOption];
-    [surveyOptions addObject:surveyOption];
-    
-    // OPTION 3 INPUT
-    count++;
-    ypos += kInputFieldInterval;
-    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
-    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-    surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
-    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-    surveyOption.tag = count;
-    surveyOption.index = count;
-    surveyOption.input.placeholder = defaultText;
-    surveyOption.input.defaultText = defaultText;
-    surveyOption.input.returnKeyType = UIReturnKeyNext;
-    surveyOption.input.tag = count;
-    surveyOption.input.delegate = self;
+    self.tfStartTime.tag = kTagStartTime;
+//    self.tfStartTime.text = @"12:00 PM";
+    self.tfStartTime.inputView = self.timePicker;
+    self.tfStartTime.inputAccessoryView = self.doneToolbar;
+    self.tfStartTime.delegate = self;
+    [self.tfStartTime setIcon:icon_clock];
 
-    [self.scrollView addSubview:surveyOption];
-    [surveyOptions addObject:surveyOption];
+    self.tfEndDate.tag = kTagEndDate;
+//    self.tfEndDate.text = @"2013-10-01";
+    self.tfEndDate.inputView = self.datePicker;
+    self.tfEndDate.inputAccessoryView = self.doneToolbar;
+    self.tfEndDate.delegate = self;
+    [self.tfEndDate setIcon:icon_calendar];
+    
+    self.tfEndTime.tag = kTagEndTime;
+//    self.tfEndTime.text = @"12:00 PM";
+    self.tfEndTime.inputView = self.timePicker;
+    self.tfEndTime.inputAccessoryView = self.doneToolbar;
+    self.tfEndTime.delegate = self;
+    [self.tfEndTime setIcon:icon_clock];
 
-    CGRect lowerFrame = CGRectMake(0, ypos + 80, self.lowerForm.frame.size.width, self.lowerForm.frame.size.height);
-    [self.lowerForm setFrame:lowerFrame];
+    self.ckAllowOthersYes.ckLabel.text = @"Yes";
+    self.ckAllowOthersYes.tag = kTagAllowOthersYes;
+    [self.ckAllowOthersYes unselected];
     
-    self.ckPublic.ckLabel.text = @"Public";
-    self.ckPublic.tag = kTagPublic;
-    [self.ckPublic unselected];
+    self.ckAllowOthersNo.ckLabel.text = @"No";
+    self.ckAllowOthersNo.tag = kTagAllowOthersNo;
+    [self.ckAllowOthersNo unselected];
     
-    self.ckPrivate.ckLabel.text = @"Private";
-    self.ckPrivate.tag = kTagPrivate;
-    [self.ckPrivate unselected];
+    NSArray *fields = @[ self.subjectField,
+                         self.tfStartDate,
+                         self.tfStartTime,
+                         self.tfEndDate,
+                         self.tfEndTime,
+                         self.whereField,
+                         self.descriptionField ];
     
-    self.ckMultipleYes.ckLabel.text = @"Yes";
-    self.ckMultipleYes.tag = kTagMultipleYes;
-    [self.ckMultipleYes unselected];
-    
-    self.ckMultipleNo.ckLabel.text = @"No";
-    self.ckMultipleNo.tag = kTagMultipleNo;
-    [self.ckMultipleNo unselected];
-    
+    [self setKeyboardControls:[[BSKeyboardControls alloc] initWithFields:fields]];
+    [self.keyboardControls setDelegate:self];
+
     
     // register for keyboard notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -244,24 +227,24 @@
     
 }
 - (void) updateScrollView {
-    NSLog(@"%s tag=%i", __FUNCTION__, optionIndex);
+    NSLog(@"%s tag=%i", __FUNCTION__, fieldIndex);
     
-    if (optionIndex > 0 && optionIndex <= surveyOptions.count) {
-        SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:optionIndex - 1];
-        
-        CGRect aRect = self.view.frame;
-        
-        aRect.size.height -= keyboardHeight;
-        CGRect targetFrame = currentOption.frame;
-        
-        targetFrame.origin.y -= 40;
-        
-//        [self.scrollView setContentOffset:CGPointMake(0.0, currentOption.frame.origin.y-keyboardHeight) animated:YES];
-        if (!CGRectContainsPoint(aRect, targetFrame.origin) ) {
-            [self.scrollView scrollRectToVisible:targetFrame animated:YES];
-        }
-        
-    }
+//    if (optionIndex > 0 && optionIndex <= surveyOptions.count) {
+//        SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:optionIndex - 1];
+//        
+//        CGRect aRect = self.view.frame;
+//        
+//        aRect.size.height -= keyboardHeight;
+//        CGRect targetFrame = currentOption.frame;
+//        
+//        targetFrame.origin.y -= 40;
+//        
+////        [self.scrollView setContentOffset:CGPointMake(0.0, currentOption.frame.origin.y-keyboardHeight) animated:YES];
+//        if (!CGRectContainsPoint(aRect, targetFrame.origin) ) {
+//            [self.scrollView scrollRectToVisible:targetFrame animated:YES];
+//        }
+//        
+//    }
     
 }
 
@@ -270,35 +253,67 @@
 -(BOOL) textFieldShouldBeginEditing:(UITextField*)textField {
     NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
     keyboardIsShown = YES;
+    fieldIndex = textField.tag;
     
-    
+    _currentField = textField;
+
+    if (textField == self.tfStartDate) {
+        NSLog(@"tfStartDate");
+    }
+
+    switch (textField.tag) {
+        case kTagStartDate:
+            
+            break;
+            
+        case kTagStartTime:
+            
+            break;
+            
+        case kTagEndDate:
+            
+            break;
+            
+        case kTagEndTime:
+            
+            break;
+            
+    }
     return YES;
+
+//    if(textField.tag == kTagStartDate || textField) {
+//        
+//        return YES;
+//    } else {
+//        return YES;
+//    }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
-    
-    // Get next field
-    if (textField.tag < surveyOptions.count) {
-        SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:textField.tag];
-        [currentOption.input becomeFirstResponder];
 
-        optionIndex = textField.tag + 1;
-        [self updateScrollView];
-        
-    } else {
-        NSLog(@"Last field");
-        [textField resignFirstResponder];
-    }
+    [textField resignFirstResponder];
+
+    // Get next field
+//    if (textField.tag < surveyOptions.count) {
+//        SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:textField.tag];
+//        [currentOption.input becomeFirstResponder];
+//
+//        optionIndex = textField.tag + 1;
+//        [self updateScrollView];
+//        
+//    } else {
+//        NSLog(@"Last field");
+//        [textField resignFirstResponder];
+//    }
 
     return YES;
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     
-    _currentField = textField;
-    optionIndex = textField.tag;
+    fieldIndex = textField.tag;
     [self updateScrollView];
     
     
@@ -328,7 +343,7 @@
     {
         if (keyboardIsShown) {
             [_currentField resignFirstResponder];
-            [_currentField endEditing:YES];
+//            [_currentField endEditing:YES];
         } else {
             
             UIView* view = sender.view;
@@ -338,26 +353,33 @@
             
             
             switch (subview.tag) {
-                case kTagPublic:
-                    [self.ckPublic selected];
-                    [self.ckPrivate unselected];
+                case kTagStartDate:
                     
                     break;
                     
-                case kTagPrivate:
-                    [self.ckPublic unselected];
-                    [self.ckPrivate selected];
+                case kTagStartTime:
+
                     break;
                     
-                case kTagMultipleYes:
-                    [self.ckMultipleYes selected];
-                    [self.ckMultipleNo unselected];
+                case kTagEndDate:
+                    
                     break;
                     
-                case kTagMultipleNo:
-                    [self.ckMultipleYes unselected];
-                    [self.ckMultipleNo selected];
+                case kTagEndTime:
+                    
                     break;
+                    
+                case kTagAllowOthersYes:
+                    [self.ckAllowOthersYes selected];
+                    [self.ckAllowOthersNo unselected];
+                    break;
+                    
+                case kTagAllowOthersNo:
+                    [self.ckAllowOthersYes unselected];
+                    [self.ckAllowOthersNo selected];
+                    
+                    break;
+                    
                 case 666:
                     [self hideModal];
                     break;
@@ -450,20 +472,20 @@
         isOK = NO;
     }
 
-    NSMutableArray *formOptions = [[NSMutableArray alloc] init];
-    FormOptionVO *option;
-    for (SurveyOptionWithPic* surveyOption in surveyOptions) {
-        if (surveyOption.input.text.length == 0) {
-            NSLog(@"Empty field: %i", surveyOption.index);
-            isOK = NO;
-        } else {
-            option = [[FormOptionVO alloc] init];
-            option.name = surveyOption.input.text;
-            option.type = OptionType_TEXT;
-            option.status = OptionStatus_DRAFT;
-            [formOptions addObject:option];
-        }
-    }
+//    NSMutableArray *formOptions = [[NSMutableArray alloc] init];
+//    FormOptionVO *option;
+//    for (SurveyOptionWithPic* surveyOption in surveyOptions) {
+//        if (surveyOption.input.text.length == 0) {
+//            NSLog(@"Empty field: %i", surveyOption.index);
+//            isOK = NO;
+//        } else {
+//            option = [[FormOptionVO alloc] init];
+//            option.name = surveyOption.input.text;
+//            option.type = OptionType_TEXT;
+//            option.status = OptionStatus_DRAFT;
+//            [formOptions addObject:option];
+//        }
+//    }
 
     if (isOK) {
         FormManager *formSvc = [[FormManager alloc] init];
@@ -479,10 +501,10 @@
         if (formId > 0) {
             NSLog(@"Form saved with form_id %i", formId);
             
-            for (FormOptionVO *formOption in formOptions) {
-                formOption.form_id = formId;
-                [formSvc saveOption:formOption];
-            }
+//            for (FormOptionVO *formOption in formOptions) {
+//                formOption.form_id = formId;
+//                [formSvc saveOption:formOption];
+//            }
             [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Survey created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         }
         
@@ -531,6 +553,72 @@
     [self hideModal];
 }
 
+#pragma mark - BSKeyboard
+
+
+#pragma mark -
+#pragma mark Keyboard Controls Delegate
+
+- (void)keyboardControls:(BSKeyboardControls *)controls directionPressed:(BSKeyboardControlsDirection)direction
+{
+#ifdef kDEBUG
+    // NSLog(@"%s", __FUNCTION__);
+#endif
+    UIView *view = controls.activeField.superview.superview;
+    [self.scrollView scrollRectToVisible:view.frame animated:YES];
+    
+}
+
+- (void)keyboardControlsDonePressed:(BSKeyboardControls *)controls
+{
+#ifdef kDEBUG
+    // NSLog(@"%s", __FUNCTION__);
+#endif
+    [controls.activeField resignFirstResponder];
+    [self.scrollView scrollRectToVisible:self.view.frame animated:YES];
+    
+}
+
+#pragma mark - picker actions
+
+-(IBAction)dismissDatePicker:(id)sender {
+    NSDate *pickDate = self.datePicker.date;
+    switch (fieldIndex) {
+            
+        case kTagStartDate:
+            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
+            break;
+            
+        case kTagStartTime:
+            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
+            break;
+            
+        case kTagEndDate:
+            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
+            break;
+            
+        case kTagEndTime:
+            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
+            break;
+    }
+    [_currentField resignFirstResponder];
+}
+
+
+- (IBAction)tapPickPhoto {
+    NSLog(@"%s", __FUNCTION__);
+    
+    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification
+                                                            notificationWithName:@"showImagePickerNotification"
+                                                            object:nil]];
+    
+}
+- (void) setPhoto:(UIImage *)photo {
+    NSLog(@"%s", __FUNCTION__);
+    self.photoHolder.hidden = NO;
+    self.roundPic.image = photo;
+}
+
 #pragma mark - UIAlertView
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
@@ -545,9 +633,9 @@
 - (void)showImagePickerNotificationHandler:(NSNotification*)notification
 {
     NSNumber *index = (NSNumber *) [notification object];
-    optionIndex = index.intValue;
+    fieldIndex = index.intValue;
     
-    NSLog(@"%s for index %i", __FUNCTION__, optionIndex);
+    NSLog(@"%s for index %i", __FUNCTION__, fieldIndex);
     [self showModal];
     
 }
@@ -563,9 +651,7 @@
     NSLog(@"%s", __FUNCTION__);
 	UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
     
-    SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:optionIndex - 1];
-    
-    [currentOption setPhoto:tmpImage];
+    [self setPhoto:tmpImage];
 //    currentOption.roundPic.image = tmpImage;
     
     // NSLog(@"downsizing image");

@@ -32,6 +32,7 @@
 		1E131D6117F6187400749506 /* btn_done_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E131D5D17F6187400749506 /* btn_done_on@2x.png */; };
 		1E131D6217F6187400749506 /* to_separator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E131D5E17F6187400749506 /* to_separator@2x.png */; };
 		1E131D6317F6187400749506 /* icon_calendar_aqua@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E131D5F17F6187400749506 /* icon_calendar_aqua@2x.png */; };
+		1E131D6517F633F900749506 /* icon_clock_aqua@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E131D6417F633F900749506 /* icon_clock_aqua@2x.png */; };
 		1E1E25C217F32FC90079416C /* FancyCheckbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1E25C117F32FC90079416C /* FancyCheckbox.m */; };
 		1E1E25C417F3319F0079416C /* FancyCheckbox.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E1E25C317F3319F0079416C /* FancyCheckbox.xib */; };
 		1E1E25C717F342190079416C /* FancyTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1E25C617F342180079416C /* FancyTextField.m */; };
@@ -142,6 +143,13 @@
 		1E88806517F4FC340070116C /* SurveyOptionWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E88806317F4FC330070116C /* SurveyOptionWidget.xib */; };
 		1E88806817F4FC650070116C /* FancyTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88806717F4FC630070116C /* FancyTextView.m */; };
 		1E88806B17F50B790070116C /* ExpandingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88806917F50B740070116C /* ExpandingTextView.m */; };
+		1E8BFAC317F738280053BEE3 /* navbtn_done@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAC217F738280053BEE3 /* navbtn_done@2x.png */; };
+		1E8BFAC517F738540053BEE3 /* navbtn_done.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAC417F738540053BEE3 /* navbtn_done.png */; };
+		1E8BFACF17F73B3C0053BEE3 /* NSArray+Random.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFAC917F73B3C0053BEE3 /* NSArray+Random.m */; };
+		1E8BFAD017F73B3C0053BEE3 /* NSDate+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFACB17F73B3C0053BEE3 /* NSDate+Extensions.m */; };
+		1E8BFAD117F73B3C0053BEE3 /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFACD17F73B3C0053BEE3 /* NSString+Extensions.m */; };
+		1E8BFAD617F760CE0053BEE3 /* BSKeyboardControls.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFAD517F760CE0053BEE3 /* BSKeyboardControls.m */; };
+		1E8BFAD717F7624D0053BEE3 /* BSKeyboardControls.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFAD517F760CE0053BEE3 /* BSKeyboardControls.m */; };
 		1E8FBA7C17E7F7B2003758EB /* BrandUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8FBA7B17E7F7B2003758EB /* BrandUIButton.m */; };
 		1E928213177FB690008A583C /* hbar_96x2.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9280EB177FB68F008A583C /* hbar_96x2.png */; };
 		1E928214177FB690008A583C /* help_icon_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9280EC177FB68F008A583C /* help_icon_off.png */; };
@@ -210,7 +218,6 @@
 		1E928258177FB690008A583C /* DataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E92813F177FB68F008A583C /* DataModel.m */; };
 		1E92825B177FB690008A583C /* HelpCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E928145177FB68F008A583C /* HelpCopy.m */; };
 		1E92825C177FB690008A583C /* HelpModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E928147177FB68F008A583C /* HelpModel.m */; };
-		1E928265177FB690008A583C /* NSStringExt.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E928159177FB68F008A583C /* NSStringExt.m */; };
 		1E928267177FB690008A583C /* CalculatorEditableLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E92815F177FB68F008A583C /* CalculatorEditableLabelView.m */; };
 		1E928268177FB690008A583C /* CalculatorKeyPadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E928161177FB68F008A583C /* CalculatorKeyPadView.m */; };
 		1E928269177FB690008A583C /* CalculatorKeyPadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E928162177FB68F008A583C /* CalculatorKeyPadView.xib */; };
@@ -372,6 +379,7 @@
 		1E131D5D17F6187400749506 /* btn_done_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_done_on@2x.png"; sourceTree = "<group>"; };
 		1E131D5E17F6187400749506 /* to_separator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "to_separator@2x.png"; sourceTree = "<group>"; };
 		1E131D5F17F6187400749506 /* icon_calendar_aqua@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_calendar_aqua@2x.png"; sourceTree = "<group>"; };
+		1E131D6417F633F900749506 /* icon_clock_aqua@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_clock_aqua@2x.png"; sourceTree = "<group>"; };
 		1E1E25C017F32FC90079416C /* FancyCheckbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FancyCheckbox.h; sourceTree = "<group>"; };
 		1E1E25C117F32FC90079416C /* FancyCheckbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FancyCheckbox.m; sourceTree = "<group>"; };
 		1E1E25C317F3319F0079416C /* FancyCheckbox.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FancyCheckbox.xib; sourceTree = "<group>"; };
@@ -513,6 +521,16 @@
 		1E88806717F4FC630070116C /* FancyTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FancyTextView.m; sourceTree = "<group>"; };
 		1E88806917F50B740070116C /* ExpandingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExpandingTextView.m; sourceTree = "<group>"; };
 		1E88806A17F50B770070116C /* ExpandingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExpandingTextView.h; sourceTree = "<group>"; };
+		1E8BFAC217F738280053BEE3 /* navbtn_done@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbtn_done@2x.png"; sourceTree = "<group>"; };
+		1E8BFAC417F738540053BEE3 /* navbtn_done.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navbtn_done.png; sourceTree = "<group>"; };
+		1E8BFAC817F73B3C0053BEE3 /* NSArray+Random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Random.h"; sourceTree = "<group>"; };
+		1E8BFAC917F73B3C0053BEE3 /* NSArray+Random.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Random.m"; sourceTree = "<group>"; };
+		1E8BFACA17F73B3C0053BEE3 /* NSDate+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Extensions.h"; sourceTree = "<group>"; };
+		1E8BFACB17F73B3C0053BEE3 /* NSDate+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Extensions.m"; sourceTree = "<group>"; };
+		1E8BFACC17F73B3C0053BEE3 /* NSString+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Extensions.h"; sourceTree = "<group>"; };
+		1E8BFACD17F73B3C0053BEE3 /* NSString+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extensions.m"; sourceTree = "<group>"; };
+		1E8BFAD417F760CD0053BEE3 /* BSKeyboardControls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSKeyboardControls.h; sourceTree = "<group>"; };
+		1E8BFAD517F760CE0053BEE3 /* BSKeyboardControls.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSKeyboardControls.m; sourceTree = "<group>"; };
 		1E8FBA7A17E7F7B2003758EB /* BrandUIButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrandUIButton.h; sourceTree = "<group>"; };
 		1E8FBA7B17E7F7B2003758EB /* BrandUIButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrandUIButton.m; sourceTree = "<group>"; };
 		1E9280EB177FB68F008A583C /* hbar_96x2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hbar_96x2.png; sourceTree = "<group>"; };
@@ -592,8 +610,6 @@
 		1E928145177FB68F008A583C /* HelpCopy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpCopy.m; sourceTree = "<group>"; };
 		1E928146177FB68F008A583C /* HelpModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpModel.h; sourceTree = "<group>"; };
 		1E928147177FB68F008A583C /* HelpModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpModel.m; sourceTree = "<group>"; };
-		1E928158177FB68F008A583C /* NSStringExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringExt.h; sourceTree = "<group>"; };
-		1E928159177FB68F008A583C /* NSStringExt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringExt.m; sourceTree = "<group>"; };
 		1E92815E177FB68F008A583C /* CalculatorEditableLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalculatorEditableLabelView.h; sourceTree = "<group>"; };
 		1E92815F177FB68F008A583C /* CalculatorEditableLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalculatorEditableLabelView.m; sourceTree = "<group>"; };
 		1E928160177FB68F008A583C /* CalculatorKeyPadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalculatorKeyPadView.h; sourceTree = "<group>"; };
@@ -1029,6 +1045,15 @@
 			name = Forms;
 			sourceTree = "<group>";
 		};
+		1E8BFAD317F760AF0053BEE3 /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				1E8BFAD417F760CD0053BEE3 /* BSKeyboardControls.h */,
+				1E8BFAD517F760CE0053BEE3 /* BSKeyboardControls.m */,
+			);
+			name = Misc;
+			sourceTree = "<group>";
+		};
 		1E9280DB177FB68F008A583C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -1068,6 +1093,9 @@
 		1E9280E9177FB68F008A583C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1E8BFAC417F738540053BEE3 /* navbtn_done.png */,
+				1E8BFAC217F738280053BEE3 /* navbtn_done@2x.png */,
+				1E131D6417F633F900749506 /* icon_clock_aqua@2x.png */,
 				1E131D5C17F6187400749506 /* btn_done_off@2x.png */,
 				1E131D5D17F6187400749506 /* btn_done_on@2x.png */,
 				1E131D5E17F6187400749506 /* to_separator@2x.png */,
@@ -1240,8 +1268,6 @@
 				1E92812C177FB68F008A583C /* Category */,
 				1E928135177FB68F008A583C /* Helper */,
 				1E92813B177FB68F008A583C /* Model */,
-				1E928158177FB68F008A583C /* NSStringExt.h */,
-				1E928159177FB68F008A583C /* NSStringExt.m */,
 				1E92815A177FB68F008A583C /* Service */,
 				1E92815D177FB68F008A583C /* View */,
 				1E92817E177FB68F008A583C /* ViewController */,
@@ -1253,6 +1279,12 @@
 		1E92812C177FB68F008A583C /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				1E8BFAC817F73B3C0053BEE3 /* NSArray+Random.h */,
+				1E8BFAC917F73B3C0053BEE3 /* NSArray+Random.m */,
+				1E8BFACA17F73B3C0053BEE3 /* NSDate+Extensions.h */,
+				1E8BFACB17F73B3C0053BEE3 /* NSDate+Extensions.m */,
+				1E8BFACC17F73B3C0053BEE3 /* NSString+Extensions.h */,
+				1E8BFACD17F73B3C0053BEE3 /* NSString+Extensions.m */,
 				1E92812D177FB68F008A583C /* NSString+NumberFormat.h */,
 				1E92812E177FB68F008A583C /* NSString+NumberFormat.m */,
 				1E92812F177FB68F008A583C /* UIColor+ColorWithHex.h */,
@@ -1463,6 +1495,7 @@
 		1E9281DB177FB690008A583C /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				1E8BFAD317F760AF0053BEE3 /* Misc */,
 				1EAFEC2E17999C8A00CCBDA1 /* MBProgressHUD */,
 				1E8333C3179792F600B60612 /* QSUtilities */,
 				1E8333AE17978C2A00B60612 /* XML */,
@@ -1881,6 +1914,9 @@
 				1E131D6117F6187400749506 /* btn_done_on@2x.png in Resources */,
 				1E131D6217F6187400749506 /* to_separator@2x.png in Resources */,
 				1E131D6317F6187400749506 /* icon_calendar_aqua@2x.png in Resources */,
+				1E131D6517F633F900749506 /* icon_clock_aqua@2x.png in Resources */,
+				1E8BFAC317F738280053BEE3 /* navbtn_done@2x.png in Resources */,
+				1E8BFAC517F738540053BEE3 /* navbtn_done.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1939,6 +1975,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E8BFAD717F7624D0053BEE3 /* BSKeyboardControls.m in Sources */,
 				1E0CAA43178253F100A294C0 /* BrandUITextField.m in Sources */,
 				1E928250177FB690008A583C /* AppDelegate.m in Sources */,
 				1E928251177FB690008A583C /* NSString+NumberFormat.m in Sources */,
@@ -1949,7 +1986,6 @@
 				1E928258177FB690008A583C /* DataModel.m in Sources */,
 				1E92825B177FB690008A583C /* HelpCopy.m in Sources */,
 				1E92825C177FB690008A583C /* HelpModel.m in Sources */,
-				1E928265177FB690008A583C /* NSStringExt.m in Sources */,
 				1E928267177FB690008A583C /* CalculatorEditableLabelView.m in Sources */,
 				1E928268177FB690008A583C /* CalculatorKeyPadView.m in Sources */,
 				1E92826A177FB690008A583C /* CalculatorView.m in Sources */,
@@ -2038,6 +2074,9 @@
 				1E88806B17F50B790070116C /* ExpandingTextView.m in Sources */,
 				1E131D5517F60AE600749506 /* EditRSVPVC.m in Sources */,
 				1E131D5B17F60FBE00749506 /* FancyDateTimeField.m in Sources */,
+				1E8BFACF17F73B3C0053BEE3 /* NSArray+Random.m in Sources */,
+				1E8BFAD017F73B3C0053BEE3 /* NSDate+Extensions.m in Sources */,
+				1E8BFAD117F73B3C0053BEE3 /* NSString+Extensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2059,6 +2098,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E0CAA42178253DF00A294C0 /* BrandUITextField.m in Sources */,
+				1E8BFAD617F760CE0053BEE3 /* BSKeyboardControls.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -19,11 +19,20 @@
     return self;
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    
+    self.clipsToBounds = YES;
+    
+    return self;
+}
+
+
 - (void) setIcon:(UIImage *)image {
-    __leftView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
+    __leftView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 5, image.size.width, image.size.height)];
+    __leftView.bounds = self.leftView.bounds;
     __leftView.image = image;
-    //[self addSubview:__leftView];
-    //[self bringSubviewToFront:__leftView];
+    
     [self setLeftView:__leftView];
     [self setLeftViewMode:UITextFieldViewModeAlways];
 }
