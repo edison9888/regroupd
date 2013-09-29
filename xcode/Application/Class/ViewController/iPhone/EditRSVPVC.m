@@ -20,6 +20,10 @@
 
 @implementation EditRSVPVC
 
+#define kTagSubject     11
+#define kTagLocation    12
+#define kTagDescription 13
+
 #define kTagStartDate       101
 #define kTagStartTime       102
 #define kTagEndDate         103
@@ -65,41 +69,49 @@
     self.scrollView.contentSize = scrollContentSize;
     self.scrollView.delegate = self;
     
+    
+    // Setup text fields
+    
+    self.subjectField.delegate = self;
+    self.whereField.delegate = self;
+    self.descriptionField.delegate = self;
+    
     // Add survey options
 
+    self.datePicker = [[UIDatePicker alloc] init];
+    self.datePicker.datePickerMode = UIDatePickerModeDate;
     
+    self.timePicker = [[UIDatePicker alloc] init];
+    self.timePicker.datePickerMode = UIDatePickerModeTime;
     
     UIImage *icon_calendar = [UIImage imageNamed:@"icon_calendar_aqua"];
     UIImage *icon_clock = [UIImage imageNamed:@"icon_clock_aqua"];
             
     self.tfStartDate.tag = kTagStartDate;
-//    self.tfStartDate.text = @"2013-10-01";
+    self.tfStartDate.text = @"";
     self.tfStartDate.inputView = self.datePicker;
-    self.tfStartDate.inputAccessoryView = self.doneToolbar;
     self.tfStartDate.delegate = self;
     [self.tfStartDate setIcon:icon_calendar];
 
     self.tfStartTime.tag = kTagStartTime;
-//    self.tfStartTime.text = @"12:00 PM";
+    self.tfStartTime.text = @"";
     self.tfStartTime.inputView = self.timePicker;
-    self.tfStartTime.inputAccessoryView = self.doneToolbar;
     self.tfStartTime.delegate = self;
     [self.tfStartTime setIcon:icon_clock];
 
     self.tfEndDate.tag = kTagEndDate;
-//    self.tfEndDate.text = @"2013-10-01";
+    self.tfEndDate.text = @"";
     self.tfEndDate.inputView = self.datePicker;
-    self.tfEndDate.inputAccessoryView = self.doneToolbar;
     self.tfEndDate.delegate = self;
     [self.tfEndDate setIcon:icon_calendar];
     
     self.tfEndTime.tag = kTagEndTime;
-//    self.tfEndTime.text = @"12:00 PM";
+    self.tfEndTime.text = @"";
     self.tfEndTime.inputView = self.timePicker;
-    self.tfEndTime.inputAccessoryView = self.doneToolbar;
     self.tfEndTime.delegate = self;
     [self.tfEndTime setIcon:icon_clock];
 
+    allow_public = -1;
     self.ckAllowOthersYes.ckLabel.text = @"Yes";
     self.ckAllowOthersYes.tag = kTagAllowOthersYes;
     [self.ckAllowOthersYes unselected];
@@ -229,22 +241,17 @@
 - (void) updateScrollView {
     NSLog(@"%s tag=%i", __FUNCTION__, fieldIndex);
     
-//    if (optionIndex > 0 && optionIndex <= surveyOptions.count) {
-//        SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:optionIndex - 1];
-//        
-//        CGRect aRect = self.view.frame;
-//        
-//        aRect.size.height -= keyboardHeight;
-//        CGRect targetFrame = currentOption.frame;
-//        
-//        targetFrame.origin.y -= 40;
-//        
-////        [self.scrollView setContentOffset:CGPointMake(0.0, currentOption.frame.origin.y-keyboardHeight) animated:YES];
-//        if (!CGRectContainsPoint(aRect, targetFrame.origin) ) {
-//            [self.scrollView scrollRectToVisible:targetFrame animated:YES];
-//        }
-//        
-//    }
+    CGRect aRect = self.view.frame;
+    
+    aRect.size.height -= keyboardHeight;
+    CGRect targetFrame = _currentField.frame;
+    
+    targetFrame.origin.y += 40;
+    
+//        [self.scrollView setContentOffset:CGPointMake(0.0, currentOption.frame.origin.y-keyboardHeight) animated:YES];
+    if (!CGRectContainsPoint(aRect, targetFrame.origin) ) {
+        [self.scrollView scrollRectToVisible:targetFrame animated:YES];
+    }
     
 }
 
@@ -254,12 +261,8 @@
     NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
     keyboardIsShown = YES;
     fieldIndex = textField.tag;
-    
+        
     _currentField = textField;
-
-    if (textField == self.tfStartDate) {
-        NSLog(@"tfStartDate");
-    }
 
     switch (textField.tag) {
         case kTagStartDate:
@@ -281,12 +284,6 @@
     }
     return YES;
 
-//    if(textField.tag == kTagStartDate || textField) {
-//        
-//        return YES;
-//    } else {
-//        return YES;
-//    }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -314,13 +311,16 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     
     fieldIndex = textField.tag;
+    [self.keyboardControls setActiveField:textField];
+
     [self updateScrollView];
     
     
 }
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-    [textField resignFirstResponder];
-    [textField endEditing:YES];
+    [self.keyboardControls.activeField resignFirstResponder];
+//    [textField resignFirstResponder];
+//    [textField endEditing:YES];
     
 }
 
@@ -370,11 +370,13 @@
                     break;
                     
                 case kTagAllowOthersYes:
+                    allow_public = 1;
                     [self.ckAllowOthersYes selected];
                     [self.ckAllowOthersNo unselected];
                     break;
                     
                 case kTagAllowOthersNo:
+                    allow_public = 0;
                     [self.ckAllowOthersYes unselected];
                     [self.ckAllowOthersNo selected];
                     
@@ -467,34 +469,64 @@
     NSLog(@"%s", __FUNCTION__);
 
     BOOL isOK = YES;
+    NSMutableArray *errorIds = [[NSMutableArray alloc] init];
     
     if (self.subjectField.text.length == 0) {
         isOK = NO;
+        [errorIds addObject:[NSNumber numberWithInt:kTagSubject]];
+    }
+    if (self.whereField.text.length == 0) {
+        isOK = NO;
+        [errorIds addObject:[NSNumber numberWithInt:kTagLocation]];
+    }
+    if (self.descriptionField.text.length == 0) {
+        [errorIds addObject:[NSNumber numberWithInt:kTagDescription]];
+        isOK = NO;
+    }
+    if (self.tfStartDate.text.length == 0) {
+        isOK = NO;
+        [errorIds addObject:[NSNumber numberWithInt:kTagStartDate]];
+    }
+    if (self.tfStartTime.text.length == 0) {
+        isOK = NO;
+        [errorIds addObject:[NSNumber numberWithInt:kTagStartTime]];
+    }
+    if (self.tfEndDate.text.length == 0) {
+        isOK = NO;
+        [errorIds addObject:[NSNumber numberWithInt:kTagEndDate]];
+    }
+    if (self.tfEndTime.text.length == 0) {
+        isOK = NO;
+        [errorIds addObject:[NSNumber numberWithInt:kTagEndTime]];
+    }
+    if (allow_public < 0) {
+        isOK = NO;
+        [errorIds addObject:[NSNumber numberWithInt:kTagAllowOthersYes]];
     }
 
-//    NSMutableArray *formOptions = [[NSMutableArray alloc] init];
-//    FormOptionVO *option;
-//    for (SurveyOptionWithPic* surveyOption in surveyOptions) {
-//        if (surveyOption.input.text.length == 0) {
-//            NSLog(@"Empty field: %i", surveyOption.index);
-//            isOK = NO;
-//        } else {
-//            option = [[FormOptionVO alloc] init];
-//            option.name = surveyOption.input.text;
-//            option.type = OptionType_TEXT;
-//            option.status = OptionStatus_DRAFT;
-//            [formOptions addObject:option];
-//        }
-//    }
-
     if (isOK) {
+        // Read date fields and combine
+        NSString *dtFormat = @"%@ %@";
+        NSString *start_time = [NSString stringWithFormat:dtFormat, self.tfStartDate, self.tfStartTime];
+        NSString *end_time = [NSString stringWithFormat:dtFormat, self.tfEndDate, self.tfEndTime];
+        
+        NSDate *date1 = [DateTimeUtils dateFromDBDateString:start_time];
+        NSDate *date2 = [DateTimeUtils dateFromDBDateString:end_time];
+        
+        // TODO: Convert back to db format
+        start_time = [DateTimeUtils dbDateStampFromDate:date1];
+        end_time = [DateTimeUtils dbDateStampFromDate:date2];
+        
         FormManager *formSvc = [[FormManager alloc] init];
         FormVO *form = [[FormVO alloc] init];
         
         form.system_id = @"";
         
         form.name = self.subjectField.text;
-        form.type = FormType_POLL;
+        form.location = self.whereField.text;
+        form.description = self.descriptionField.text;
+        
+        form.type = FormType_RSVP;
         form.status = FormStatus_DRAFT;
         
         int formId = [formSvc saveForm:form];
@@ -509,8 +541,8 @@
         }
         
     } else {
-        NSLog(@"Data fields not complete");
-        
+        // Data not complete. 
+        [[[UIAlertView alloc] initWithTitle:@"Sorry" message:@"Please complete all fields." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }
 
 
@@ -553,27 +585,59 @@
     [self hideModal];
 }
 
-#pragma mark - BSKeyboard
-
-
-#pragma mark -
 #pragma mark Keyboard Controls Delegate
 
-- (void)keyboardControls:(BSKeyboardControls *)controls directionPressed:(BSKeyboardControlsDirection)direction
-{
-#ifdef kDEBUG
-    // NSLog(@"%s", __FUNCTION__);
-#endif
-    UIView *view = controls.activeField.superview.superview;
-    [self.scrollView scrollRectToVisible:view.frame animated:YES];
+- (void)keyboardControlsBeforeMove:(BSKeyboardControls *)keyboardControls currentField:(UIView *)field inDirection:(BSKeyboardControlsDirection)direction {
+    NSLog(@"%s at field %i", __FUNCTION__, fieldIndex);
+    
+    NSDate *pickDate;
+    switch (fieldIndex) {
+            
+        case kTagStartDate:
+            pickDate = self.datePicker.date;
+            
+            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
+            break;
+            
+        case kTagStartTime:
+            pickDate = self.datePicker.date;
+            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
+            
+            break;
+            
+        case kTagEndDate:
+            pickDate = self.datePicker.date;
+            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
+            
+            break;
+            
+        case kTagEndTime:
+            
+            pickDate = self.datePicker.date;
+            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
+            break;
+    }
     
 }
 
+
+- (void)keyboardControls:(BSKeyboardControls *)keyboardControls selectedField:(UIView *)field inDirection:(BSKeyboardControlsDirection)direction
+{
+    
+//    UIView *active = keyboardControls.activeField;
+////    CGRect aRect = self.view.frame;    
+////    aRect.size.height -= keyboardHeight;
+//
+//    CGRect targetFrame = active.frame;
+//    targetFrame.origin.y -= keyboardHeight;
+//    
+//    [self.scrollView scrollRectToVisible:targetFrame animated:YES];
+}
+
+
 - (void)keyboardControlsDonePressed:(BSKeyboardControls *)controls
 {
-#ifdef kDEBUG
-    // NSLog(@"%s", __FUNCTION__);
-#endif
+    NSLog(@"%s", __FUNCTION__);
     [controls.activeField resignFirstResponder];
     [self.scrollView scrollRectToVisible:self.view.frame animated:YES];
     

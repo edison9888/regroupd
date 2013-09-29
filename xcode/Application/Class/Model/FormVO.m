@@ -30,12 +30,39 @@
     
     text = [dict valueForKey:@"system_id"];
     o.system_id = text;
+
+    text = [dict valueForKey:@"name"];
+    o.name = text;
+
+    text = [dict valueForKey:@"location"];
+    o.location = text;
+    
+    text = [dict valueForKey:@"description"];
+    o.description = text;
+
+    text = [dict valueForKey:@"imagefile"];
+    o.description = text;
     
     text = [dict valueForKey:@"type"];
     o.type = text.integerValue;
     
     text = [dict valueForKey:@"status"];
     o.status = text.integerValue;
+
+    text = [dict valueForKey:@"start_time"];
+    o.start_time = text;
+    
+    text = [dict valueForKey:@"end_time"];
+    o.end_time = text;
+
+    text = [dict valueForKey:@"allow_public"];
+    o.allow_public = text.integerValue;
+    
+    text = [dict valueForKey:@"allow_share"];
+    o.allow_share = text.integerValue;
+    
+    text = [dict valueForKey:@"allow_multiple"];
+    o.allow_multiple = text.integerValue;
 
     text = [dict valueForKey:@"created"];
     o.created = text;

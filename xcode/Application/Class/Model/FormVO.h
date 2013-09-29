@@ -24,9 +24,15 @@ typedef enum {
  form_id INTEGER PRIMARY KEY,
  system_id TEXT,
  name TEXT,
+ location TEXT,
+ description TEXT,
  type int DEFAULT 1,
  status INT DEFAULT 0,
- event_date TEXT,
+ start_time TEXT,
+ end_time TEXT,
+ allow_public INT DEFAULT 0,
+ allow_share INT DEFAULT 0,
+ allow_multiple INT DEFAULT 0,
  created TEXT,
  updated TEXT
  */
@@ -37,9 +43,16 @@ typedef enum {
 @property int form_id;
 @property (nonatomic, retain) NSString *system_id;
 @property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *location;
+@property (nonatomic, retain) NSString *description;
+@property (nonatomic, retain) NSString *imagefile;
 @property int type;
 @property int status;
-@property (nonatomic, retain) NSString *event_date;
+@property (nonatomic, retain) NSString *start_time;
+@property (nonatomic, retain) NSString *end_time;
+@property int allow_public;
+@property int allow_share;
+@property int allow_multiple;
 @property (nonatomic, retain) NSString *created;
 @property (nonatomic, retain) NSString *updated;
 

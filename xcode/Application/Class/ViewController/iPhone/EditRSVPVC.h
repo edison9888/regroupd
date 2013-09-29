@@ -26,12 +26,16 @@
     
     UIView *bgLayer;
     
+    int allow_public;
+    
 }
 
 @property (nonatomic, retain) UIImagePickerController* imagePickerVC;
-@property (nonatomic, retain) IBOutlet UIDatePicker *datePicker;
-@property (nonatomic, retain) IBOutlet UIDatePicker *timePicker;
+//@property (nonatomic, retain) IBOutlet UIDatePicker *datePicker;
+//@property (nonatomic, retain) IBOutlet UIDatePicker *timePicker;
 @property (nonatomic, retain) IBOutlet UIToolbar* doneToolbar;
+@property (nonatomic, retain) UIDatePicker *datePicker;
+@property (nonatomic, retain) UIDatePicker *timePicker;
 @property (nonatomic, strong) BSKeyboardControls *keyboardControls;
 
 

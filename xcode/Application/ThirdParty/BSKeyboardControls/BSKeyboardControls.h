@@ -103,6 +103,15 @@ typedef enum
 
 @protocol BSKeyboardControlsDelegate <NSObject>
 @optional
+
+/**
+ *  Called before moving to next field.
+ *  @param keyboardControls The instance of keyboard controls.
+ *  @param field The selected field.
+ *  @param direction Direction in which the field was selected.
+ */
+- (void)keyboardControlsBeforeMove:(BSKeyboardControls *)keyboardControls currentField:(UIView *)field inDirection:(BSKeyboardControlsDirection)direction;
+
 /**
  *  Called when a field was selected by going to the previous or the next field.
  *  The implementation of this method should scroll to the view.

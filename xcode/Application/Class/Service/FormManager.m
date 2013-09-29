@@ -53,6 +53,69 @@
     }
     
 }
+
+
+//- (int) saveForm:(FormVO *) form {
+//    
+//    NSString *sql;
+//    BOOL success;
+//    NSDate *now = [NSDate date];
+//    NSString *dt = [DateTimeUtils dbDateTimeStampFromDate:now];
+//    NSLog(@"dt %@", dt);
+//    
+//    @try {
+//        sql = @"INSERT into form (system_id, name, type, status, created, updated) values (?, ?, ?, ?, ?, ?);";
+//        success = [[SQLiteDB sharedConnection] executeUpdate:sql,
+//                   form.system_id,
+//                   form.name,
+//                   [NSNumber numberWithInt:form.type],
+//                   [NSNumber numberWithInt:form.status],
+//                   dt,
+//                   dt
+//                   ];
+//        
+//        if (!success) {
+//            NSLog(@"####### SQL Insert failed #######");
+//        } else {
+//            NSLog(@"====== SQL INSERT SUCCESS ======");
+//            
+//            sql = @"SELECT last_insert_rowid()";
+//            
+//            FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+//            
+//            if ([rs next]) {
+//                int lastId = [rs intForColumnIndex:0];
+//                NSLog(@"lastId = %i", lastId);
+//                return lastId;
+//            }
+//            
+//        }
+//    }
+//    @catch (NSException *exception) {
+//        NSLog(@"EXCEPTION %@", exception);
+//    }
+//    return -1;
+//    
+//}
+
+/*
+ 
+ form_id INTEGER PRIMARY KEY,
+ system_id TEXT,
+ name TEXT,
+ location TEXT,
+ description TEXT,
+ imagefile TEXT,
+ type int DEFAULT 1,
+ status INT DEFAULT 0,
+ start_time TEXT,
+ end_time TEXT,
+ allow_public INT DEFAULT 0,
+ allow_share INT DEFAULT 0,
+ allow_multiple INT DEFAULT 0,
+ created TEXT,
+ updated TEXT
+ */
 - (int) saveForm:(FormVO *) form {
     
     NSString *sql;
@@ -62,12 +125,19 @@
     NSLog(@"dt %@", dt);
     
     @try {
-        sql = @"INSERT into form (system_id, name, type, status, created, updated) values (?, ?, ?, ?, ?, ?);";
+        sql = @"INSERT into form (system_id, name, location, description, imagefile, type, status, start_time, end_time, allow_public, allow_share, created, updated) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         success = [[SQLiteDB sharedConnection] executeUpdate:sql,
                    form.system_id,
                    form.name,
+                   form.location,
+                   form.description,
+                   form.imagefile,
                    [NSNumber numberWithInt:form.type],
                    [NSNumber numberWithInt:form.status],
+                   form.start_time,
+                   form.end_time,
+                   [NSNumber numberWithInt:form.allow_public],
+                   [NSNumber numberWithInt:form.allow_share],
                    dt,
                    dt
                    ];
@@ -95,6 +165,7 @@
     return -1;
     
 }
+
 - (void) deleteForm:(FormVO *) form {
 
     NSString *sql;
@@ -120,14 +191,22 @@
     NSString *dt = [DateTimeUtils dbDateTimeStampFromDate:now];
     NSLog(@"dt %@", dt);
     
-    sql = @"UPDATE form set system_id=?, name=?, type=?, status=?, created=?, updated=? where form_id=?";
+    sql = @"UPDATE form set system_id=?, name=?, location=?, description=?, imagefile=?, type=?, status=?, start_time=?, end_time=?, allow_public=?, allow_share=?, allow_multiple=?, updated=? where form_id=?";
     success = [[SQLiteDB sharedConnection] executeUpdate:sql,
                form.system_id,
                form.name,
+               form.location,
+               form.description,
+               form.imagefile,
                [NSNumber numberWithInt:form.type],
                [NSNumber numberWithInt:form.status],
+               form.start_time,
+               form.end_time,
+               [NSNumber numberWithInt:form.allow_public],
+               [NSNumber numberWithInt:form.allow_share],
+               [NSNumber numberWithInt:form.allow_multiple],
                dt,
-               dt
+               [NSNumber numberWithInt:form.form_id]
                ];
     
     if (!success) {

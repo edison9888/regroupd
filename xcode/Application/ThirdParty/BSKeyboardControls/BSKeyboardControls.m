@@ -40,7 +40,7 @@
         [self addSubview:self.toolbar];
         
         [self setSegmentedControl:[[UISegmentedControl alloc] initWithItems:@[ NSLocalizedStringFromTable(@"Previous", @"BSKeyboardControls", @"Previous button title."),
-                                                                               NSLocalizedStringFromTable(@"Next", @"BSKeyboardControls", @"Next button title.") ]]];
+                                   NSLocalizedStringFromTable(@"Next", @"BSKeyboardControls", @"Next button title.") ]]];
         [self.segmentedControl addTarget:self action:@selector(segmentedControlValueChanged:) forControlEvents:UIControlEventValueChanged];
         [self.segmentedControl setMomentary:YES];
         [self.segmentedControl setSegmentedControlStyle:UISegmentedControlStyleBar];
@@ -87,12 +87,12 @@
         if ([self.fields containsObject:activeField])
         {
             _activeField = activeField;
-        
+            
             if (![activeField isFirstResponder])
             {
                 [activeField becomeFirstResponder];
             }
-        
+            
             [self updateSegmentedControlEnabledStates];
         }
     }
@@ -193,7 +193,7 @@
     if (visibleControls != _visibleControls)
     {
         _visibleControls = visibleControls;
-
+        
         [self.toolbar setItems:[self toolbarItems]];
     }
 }
@@ -239,6 +239,11 @@
     NSInteger index = [self.fields indexOfObject:self.activeField];
     if (index > 0)
     {
+        if ([self.delegate respondsToSelector:@selector(keyboardControlsBeforeMove:currentField:inDirection:)])
+        {
+            [self.delegate keyboardControlsBeforeMove:self currentField:self.activeField inDirection:BSKeyboardControlsDirectionPrevious];
+        }
+
         index -= 1;
         UIView *field = [self.fields objectAtIndex:index];
         [self setActiveField:field];
@@ -255,6 +260,10 @@
     NSInteger index = [self.fields indexOfObject:self.activeField];
     if (index < [self.fields count] - 1)
     {
+        if ([self.delegate respondsToSelector:@selector(keyboardControlsBeforeMove:currentField:inDirection:)])
+        {
+            [self.delegate keyboardControlsBeforeMove:self currentField:self.activeField inDirection:BSKeyboardControlsDirectionNext];
+        }
         index += 1;
         UIView *field = [self.fields objectAtIndex:index];
         [self setActiveField:field];

@@ -8,6 +8,8 @@
 
 #import "FormsHomeVC.h"
 #import <QuartzCore/QuartzCore.h>
+#import "FormVO.h"
+#import "UIColor+ColorWithHex.h"
 
 @interface FormsHomeVC ()
 
@@ -33,10 +35,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    typeFilter = 0;
+    
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
-    self.theTableView.backgroundColor = [UIColor clearColor];
-    
+    self.theTableView.backgroundColor = [UIColor colorWithHexValue:0xEFEFEF];
+//    self.theTableView.separatorColor = [UIColor grayColor];
     self.tableData =[[NSMutableArray alloc]init];
     
     
@@ -78,20 +82,20 @@
     NSLog(@"%s", __FUNCTION__);
     // http://stackoverflow.com/questions/413993/loading-a-reusable-uitableviewcell-from-a-nib
     
-    static NSString *CellIdentifier = @"CCTableCell";
-    static NSString *CellNib = @"CCTableViewCell";
+    static NSString *CellIdentifier = @"FormsTableCell";
+    static NSString *CellNib = @"FormsTableViewCell";
     
-    CCTableViewCell *cell = (CCTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    FormsTableViewCell *cell = (FormsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     @try {
         
         if (cell == nil) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:CellNib owner:self options:nil];
-            cell = (CCTableViewCell *)[nib objectAtIndex:0];
+            cell = (FormsTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
         }
         
-        NSDictionary *rowData = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
-        cell.rowdata = rowData;
+        FormVO *form = (FormVO *)[tableData objectAtIndex:indexPath.row];
+        cell.rowdata = form;
         
     } @catch (NSException * e) {
         NSLog(@"Exception: %@", e);
@@ -102,8 +106,19 @@
     
 }
 
+/*
+ 66px for rating or poll
+ 100px for rsvp event
+ */
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 54;
+
+    FormVO *form = [tableData objectAtIndex:indexPath.row];
+    
+    if (form.type == FormType_POLL || form.type == FormType_RATING) {
+        return 66;
+    } else {
+        return 100;
+    }
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -117,12 +132,12 @@
             NSLog(@"Selected row %i", indexPath.row);
             
             selectedIndex = indexPath.row;
-            NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
+//            FormVO *form = [tableData objectAtIndex:indexPath.row];
             
-            [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
-            
-            [DataModel shared].action = kActionEDIT;
-            [_delegate gotoNextSlide];
+//            [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
+//            
+//            [DataModel shared].action = kActionEDIT;
+//            [_delegate gotoNextSlide];
             
         }
     } @catch (NSException * e) {
@@ -135,40 +150,39 @@
 
 - (void)performSearch:(NSString *)searchText
 {
-    NSLog(@"%s: %@", __FUNCTION__, searchText);
     
-    if (searchText.length > 0) {
-        NSString *sqlTemplate = @"select * from contact where name like '%%%@%%' limit 20";
+    if (typeFilter == 0) {
+        NSString *sql = @"select * from form order by updated desc";
         
         isLoading = YES;
         
-        NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
-        
         FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
         [tableData removeAllObjects];
+        FormVO *row;
         
         while ([rs next]) {
-            [tableData addObject:[rs resultDictionary]];
+            row = [FormVO readFromDictionary:[rs resultDictionary]];
+            [tableData addObject:row];
         }
         isLoading = NO;
         
         [self.theTableView reloadData];
         
     } else {
-        NSString *sqlTemplate = @"select * from contact order by name";
+        NSLog(@"%s: %i", __FUNCTION__, typeFilter);
+        NSString *sql = @"select * from form where type=? order by updated desc";
         
         isLoading = YES;
         
-        NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
-        
-        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
+                           [NSNumber numberWithInt:typeFilter]];
         [tableData removeAllObjects];
         
+        FormVO *row;
+        
         while ([rs next]) {
-            NSDictionary *dict =[rs resultDictionary];
-            NSLog(@"Result %@", [dict objectForKey:@"name"]);
-            
-            [tableData addObject:dict];
+            row = [FormVO readFromDictionary:[rs resultDictionary]];
+            [tableData addObject:row];
         }
         isLoading = NO;
         
@@ -183,13 +197,6 @@
 - (IBAction)tapAddButton
 {
     NSLog(@"%s", __FUNCTION__);
-//    CGRect fullscreen = CGRectMake(0, 0, [DataModel shared].stageWidth, [DataModel shared].stageHeight);
-//    bgLayer = [[UIView alloc] initWithFrame:fullscreen];
-//    bgLayer.backgroundColor = [UIColor grayColor];
-//    bgLayer.alpha = 0.8;
-//    bgLayer.tag = 1000;
-//    bgLayer.layer.zPosition = 9;
-//    [self.view addSubview:bgLayer];
 
     NSNotification* showMaskNotification = [NSNotification notificationWithName:@"showMaskNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showMaskNotification];
@@ -201,6 +208,13 @@
 - (IBAction)tapEditButton
 {
     
+}
+- (IBAction)tapFormNav:(UIButton*)sender {
+    NSLog(@"button clicked - %d",sender.tag);
+    typeFilter = sender.tag;
+    
+    [self updateFormsNav];
+    [self performSearch:nil];
 }
 
 - (IBAction)tapPollButton {
@@ -221,18 +235,6 @@
     [self hideModal];
 }
 
-#pragma mark - Tap Gestures
-
--(void)singleTap:(UITapGestureRecognizer*)tap
-{
-    NSLog(@"%s", __FUNCTION__);
-    if (UIGestureRecognizerStateEnded == tap.state)
-    {
-        
-        
-    }
-}
-
 
 #pragma mark -- Notification Handlers
 
@@ -244,21 +246,142 @@
     
 }
 
+#pragma -- Interface methods
 
-//-(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-//    NSLog(@"%s", __FUNCTION__);
+- (void) updateFormsNav {
+    
+    switch (typeFilter) {
+        case 0:
+            self.navImage0.image = [self lookupImage:0 withState:1];
+            self.navImage1.image = [self lookupImage:1 withState:0];
+            self.navImage2.image = [self lookupImage:2 withState:0];
+            self.navImage3.image = [self lookupImage:3 withState:0];
+            
+            break;
+            
+        case FormType_POLL:
+            self.navImage0.image = [self lookupImage:0 withState:0];
+            self.navImage1.image = [self lookupImage:1 withState:1];
+            self.navImage2.image = [self lookupImage:2 withState:0];
+            self.navImage3.image = [self lookupImage:3 withState:0];
+            break;
+            
+        case FormType_RATING:
+            self.navImage0.image = [self lookupImage:0 withState:0];
+            self.navImage1.image = [self lookupImage:1 withState:0];
+            self.navImage2.image = [self lookupImage:2 withState:1];
+            self.navImage3.image = [self lookupImage:3 withState:0];
+            break;
+            
+        case FormType_RSVP:
+            self.navImage0.image = [self lookupImage:0 withState:0];
+            self.navImage1.image = [self lookupImage:1 withState:0];
+            self.navImage2.image = [self lookupImage:2 withState:0];
+            self.navImage3.image = [self lookupImage:3 withState:1];
+            break;
+            
+    }
+}
+
+//- (void) updateFormsNav {
 //    
-//    CGPoint locationPoint = [[touches anyObject] locationInView:self.view];
-//    UIView* hitView = [self.view hitTest:locationPoint withEvent:event];
-//    NSLog(@"hitView.tag = %i", hitView.tag);
-//    
-//    if (hitView.tag == 1000) {
-//        NSNotification* closePopupNotification = [NSNotification notificationWithName:@"closePopupNotification" object:nil];
-//        [[NSNotificationCenter defaultCenter] postNotification:closePopupNotification];
+//    switch (typeFilter) {
+//        case 0:
+//            [self.navBtnAll setImage:[self lookupImage:0 withState:1] forState:UIControlStateNormal];
+//            [self.navBtnPolls setImage:[self lookupImage:1 withState:0] forState:UIControlStateNormal];
+//            [self.navBtnRatings setImage:[self lookupImage:2 withState:0] forState:UIControlStateNormal];
+//            [self.navBtnRSVPs setImage:[self lookupImage:3 withState:0] forState:UIControlStateNormal];
+//            break;
+//            
+//        case FormType_POLL:
+//            [self.navBtnAll setImage:[self lookupImage:0 withState:0] forState:UIControlStateNormal];
+//            [self.navBtnPolls setImage:[self lookupImage:1 withState:1] forState:UIControlStateNormal];
+//            [self.navBtnRatings setImage:[self lookupImage:2 withState:0] forState:UIControlStateNormal];
+//            [self.navBtnRSVPs setImage:[self lookupImage:3 withState:0] forState:UIControlStateNormal];
+//            break;
+//            
+//        case FormType_RATING:
+//            [self.navBtnAll setImage:[self lookupImage:0 withState:0] forState:UIControlStateNormal];
+//            [self.navBtnPolls setImage:[self lookupImage:1 withState:0] forState:UIControlStateNormal];
+//            [self.navBtnRatings setImage:[self lookupImage:2 withState:1] forState:UIControlStateNormal];
+//            [self.navBtnRSVPs setImage:[self lookupImage:3 withState:0] forState:UIControlStateNormal];
+//            break;
+//            
+//        case FormType_RSVP:
+//            [self.navBtnAll setImage:[self lookupImage:0 withState:0] forState:UIControlStateNormal];
+//            [self.navBtnPolls setImage:[self lookupImage:1 withState:0] forState:UIControlStateNormal];
+//            [self.navBtnRatings setImage:[self lookupImage:2 withState:0] forState:UIControlStateNormal];
+//            [self.navBtnRSVPs setImage:[self lookupImage:3 withState:1] forState:UIControlStateNormal];
+//            break;
+//            
 //    }
 //}
 
-
+/*
+ Helper method for lazy-loading images
+ */
+- (UIImage *) lookupImage:(int)_type withState:(int)_state {
+    
+    switch (_type) {
+        case 0:
+            if (_state == 0) {
+                if (nav0ImageOff == nil) {
+                    nav0ImageOff = [UIImage imageNamed:@"navbtn_forms_all_off@2x.png"];
+                }
+                return nav0ImageOff;
+            } else {
+                if (nav0ImageOn == nil) {
+                    nav0ImageOn = [UIImage imageNamed:@"navbtn_forms_all_on@2x.png"];
+                }
+                return nav0ImageOn;
+            }
+            break;
+            
+        case FormType_POLL:
+            if (_state == 0) {
+                if (nav1ImageOff == nil) {
+                    nav1ImageOff = [UIImage imageNamed:@"navbtn_forms_polls_off@2x.png"];
+                }
+                return nav1ImageOff;
+            } else {
+                if (nav1ImageOn == nil) {
+                    nav1ImageOn = [UIImage imageNamed:@"navbtn_forms_polls_on@2x.png"];
+                }
+                return nav1ImageOn;
+            }
+            break;
+            
+        case FormType_RATING:
+            if (_state == 0) {
+                if (nav2ImageOff == nil) {
+                    nav2ImageOff = [UIImage imageNamed:@"navbtn_forms_ratings_off@2x.png"];
+                }
+                return nav2ImageOff;
+            } else {
+                if (nav2ImageOn == nil) {
+                    nav2ImageOn = [UIImage imageNamed:@"navbtn_forms_ratings_on@2x.png"];
+                }
+                return nav2ImageOn;
+            }
+            break;
+            
+        case FormType_RSVP:
+            if (_state == 0) {
+                if (nav3ImageOff == nil) {
+                    nav3ImageOff = [UIImage imageNamed:@"navbtn_forms_rsvps_off@2x.png"];
+                }
+                return nav3ImageOff;
+            } else {
+                if (nav3ImageOn == nil) {
+                    nav3ImageOn = [UIImage imageNamed:@"navbtn_forms_rsvps_on@2x.png"];
+                }
+                return nav3ImageOn;
+            }
+            break;
+            
+    }
+    return nil;
+}
 - (void) showModal {
     
     CGRect fullscreen = CGRectMake(0, 0, [DataModel shared].stageWidth, [DataModel shared].stageHeight);

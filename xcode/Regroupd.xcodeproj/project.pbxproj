@@ -148,8 +148,19 @@
 		1E8BFACF17F73B3C0053BEE3 /* NSArray+Random.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFAC917F73B3C0053BEE3 /* NSArray+Random.m */; };
 		1E8BFAD017F73B3C0053BEE3 /* NSDate+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFACB17F73B3C0053BEE3 /* NSDate+Extensions.m */; };
 		1E8BFAD117F73B3C0053BEE3 /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFACD17F73B3C0053BEE3 /* NSString+Extensions.m */; };
-		1E8BFAD617F760CE0053BEE3 /* BSKeyboardControls.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFAD517F760CE0053BEE3 /* BSKeyboardControls.m */; };
-		1E8BFAD717F7624D0053BEE3 /* BSKeyboardControls.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFAD517F760CE0053BEE3 /* BSKeyboardControls.m */; };
+		1E8BFADF17F767290053BEE3 /* BSKeyboardControls.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFADA17F767290053BEE3 /* BSKeyboardControls.m */; };
+		1E8BFAE017F767290053BEE3 /* BSKeyboardControls.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFADB17F767290053BEE3 /* BSKeyboardControls.strings */; };
+		1E8BFAE417F78D750053BEE3 /* FormsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFAE217F78D750053BEE3 /* FormsTableViewCell.m */; };
+		1E8BFAE517F78D750053BEE3 /* FormsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAE317F78D750053BEE3 /* FormsTableViewCell.xib */; };
+		1E8BFAE717F78DB10053BEE3 /* icon_send_arrow_purple@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAE617F78DB10053BEE3 /* icon_send_arrow_purple@2x.png */; };
+		1E8BFAF017F7A82E0053BEE3 /* navbtn_forms_ratings_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAE817F7A82E0053BEE3 /* navbtn_forms_ratings_off@2x.png */; };
+		1E8BFAF117F7A82E0053BEE3 /* navbtn_forms_ratings_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAE917F7A82E0053BEE3 /* navbtn_forms_ratings_on@2x.png */; };
+		1E8BFAF217F7A82E0053BEE3 /* navbtn_forms_rsvps_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAEA17F7A82E0053BEE3 /* navbtn_forms_rsvps_off@2x.png */; };
+		1E8BFAF317F7A82E0053BEE3 /* navbtn_forms_rsvps_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAEB17F7A82E0053BEE3 /* navbtn_forms_rsvps_on@2x.png */; };
+		1E8BFAF417F7A82E0053BEE3 /* navbtn_forms_all_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAEC17F7A82E0053BEE3 /* navbtn_forms_all_off@2x.png */; };
+		1E8BFAF517F7A82E0053BEE3 /* navbtn_forms_all_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAED17F7A82E0053BEE3 /* navbtn_forms_all_on@2x.png */; };
+		1E8BFAF617F7A82E0053BEE3 /* navbtn_forms_polls_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAEE17F7A82E0053BEE3 /* navbtn_forms_polls_off@2x.png */; };
+		1E8BFAF717F7A82E0053BEE3 /* navbtn_forms_polls_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAEF17F7A82E0053BEE3 /* navbtn_forms_polls_on@2x.png */; };
 		1E8FBA7C17E7F7B2003758EB /* BrandUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8FBA7B17E7F7B2003758EB /* BrandUIButton.m */; };
 		1E928213177FB690008A583C /* hbar_96x2.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9280EB177FB68F008A583C /* hbar_96x2.png */; };
 		1E928214177FB690008A583C /* help_icon_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9280EC177FB68F008A583C /* help_icon_off.png */; };
@@ -529,8 +540,23 @@
 		1E8BFACB17F73B3C0053BEE3 /* NSDate+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Extensions.m"; sourceTree = "<group>"; };
 		1E8BFACC17F73B3C0053BEE3 /* NSString+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Extensions.h"; sourceTree = "<group>"; };
 		1E8BFACD17F73B3C0053BEE3 /* NSString+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extensions.m"; sourceTree = "<group>"; };
-		1E8BFAD417F760CD0053BEE3 /* BSKeyboardControls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSKeyboardControls.h; sourceTree = "<group>"; };
-		1E8BFAD517F760CE0053BEE3 /* BSKeyboardControls.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSKeyboardControls.m; sourceTree = "<group>"; };
+		1E8BFAD917F767290053BEE3 /* BSKeyboardControls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSKeyboardControls.h; sourceTree = "<group>"; };
+		1E8BFADA17F767290053BEE3 /* BSKeyboardControls.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSKeyboardControls.m; sourceTree = "<group>"; };
+		1E8BFADC17F767290053BEE3 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/BSKeyboardControls.strings; sourceTree = "<group>"; };
+		1E8BFADD17F767290053BEE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/BSKeyboardControls.strings; sourceTree = "<group>"; };
+		1E8BFADE17F767290053BEE3 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/BSKeyboardControls.strings; sourceTree = "<group>"; };
+		1E8BFAE117F78D750053BEE3 /* FormsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormsTableViewCell.h; sourceTree = "<group>"; };
+		1E8BFAE217F78D750053BEE3 /* FormsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormsTableViewCell.m; sourceTree = "<group>"; };
+		1E8BFAE317F78D750053BEE3 /* FormsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FormsTableViewCell.xib; sourceTree = "<group>"; };
+		1E8BFAE617F78DB10053BEE3 /* icon_send_arrow_purple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_send_arrow_purple@2x.png"; sourceTree = "<group>"; };
+		1E8BFAE817F7A82E0053BEE3 /* navbtn_forms_ratings_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbtn_forms_ratings_off@2x.png"; sourceTree = "<group>"; };
+		1E8BFAE917F7A82E0053BEE3 /* navbtn_forms_ratings_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbtn_forms_ratings_on@2x.png"; sourceTree = "<group>"; };
+		1E8BFAEA17F7A82E0053BEE3 /* navbtn_forms_rsvps_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbtn_forms_rsvps_off@2x.png"; sourceTree = "<group>"; };
+		1E8BFAEB17F7A82E0053BEE3 /* navbtn_forms_rsvps_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbtn_forms_rsvps_on@2x.png"; sourceTree = "<group>"; };
+		1E8BFAEC17F7A82E0053BEE3 /* navbtn_forms_all_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbtn_forms_all_off@2x.png"; sourceTree = "<group>"; };
+		1E8BFAED17F7A82E0053BEE3 /* navbtn_forms_all_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbtn_forms_all_on@2x.png"; sourceTree = "<group>"; };
+		1E8BFAEE17F7A82E0053BEE3 /* navbtn_forms_polls_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbtn_forms_polls_off@2x.png"; sourceTree = "<group>"; };
+		1E8BFAEF17F7A82E0053BEE3 /* navbtn_forms_polls_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbtn_forms_polls_on@2x.png"; sourceTree = "<group>"; };
 		1E8FBA7A17E7F7B2003758EB /* BrandUIButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrandUIButton.h; sourceTree = "<group>"; };
 		1E8FBA7B17E7F7B2003758EB /* BrandUIButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrandUIButton.m; sourceTree = "<group>"; };
 		1E9280EB177FB68F008A583C /* hbar_96x2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hbar_96x2.png; sourceTree = "<group>"; };
@@ -1045,13 +1071,14 @@
 			name = Forms;
 			sourceTree = "<group>";
 		};
-		1E8BFAD317F760AF0053BEE3 /* Misc */ = {
+		1E8BFAD817F767290053BEE3 /* BSKeyboardControls */ = {
 			isa = PBXGroup;
 			children = (
-				1E8BFAD417F760CD0053BEE3 /* BSKeyboardControls.h */,
-				1E8BFAD517F760CE0053BEE3 /* BSKeyboardControls.m */,
+				1E8BFAD917F767290053BEE3 /* BSKeyboardControls.h */,
+				1E8BFADA17F767290053BEE3 /* BSKeyboardControls.m */,
+				1E8BFADB17F767290053BEE3 /* BSKeyboardControls.strings */,
 			);
-			name = Misc;
+			path = BSKeyboardControls;
 			sourceTree = "<group>";
 		};
 		1E9280DB177FB68F008A583C /* Resources */ = {
@@ -1093,6 +1120,15 @@
 		1E9280E9177FB68F008A583C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1E8BFAE817F7A82E0053BEE3 /* navbtn_forms_ratings_off@2x.png */,
+				1E8BFAE917F7A82E0053BEE3 /* navbtn_forms_ratings_on@2x.png */,
+				1E8BFAEA17F7A82E0053BEE3 /* navbtn_forms_rsvps_off@2x.png */,
+				1E8BFAEB17F7A82E0053BEE3 /* navbtn_forms_rsvps_on@2x.png */,
+				1E8BFAEC17F7A82E0053BEE3 /* navbtn_forms_all_off@2x.png */,
+				1E8BFAED17F7A82E0053BEE3 /* navbtn_forms_all_on@2x.png */,
+				1E8BFAEE17F7A82E0053BEE3 /* navbtn_forms_polls_off@2x.png */,
+				1E8BFAEF17F7A82E0053BEE3 /* navbtn_forms_polls_on@2x.png */,
+				1E8BFAE617F78DB10053BEE3 /* icon_send_arrow_purple@2x.png */,
 				1E8BFAC417F738540053BEE3 /* navbtn_done.png */,
 				1E8BFAC217F738280053BEE3 /* navbtn_done@2x.png */,
 				1E131D6417F633F900749506 /* icon_clock_aqua@2x.png */,
@@ -1356,6 +1392,9 @@
 				1E928167177FB68F008A583C /* CCTableViewCell.h */,
 				1E928168177FB68F008A583C /* CCTableViewCell.m */,
 				1E76F4A517961169007EF5B0 /* CCTableViewCell.xib */,
+				1E8BFAE117F78D750053BEE3 /* FormsTableViewCell.h */,
+				1E8BFAE217F78D750053BEE3 /* FormsTableViewCell.m */,
+				1E8BFAE317F78D750053BEE3 /* FormsTableViewCell.xib */,
 				1E5CABD517BA8DF0000D8759 /* RecentTableViewCell.h */,
 				1E5CABD617BA8DF0000D8759 /* RecentTableViewCell.m */,
 				1E5CABD717BA8DF0000D8759 /* RecentTableViewCell.xib */,
@@ -1495,7 +1534,7 @@
 		1E9281DB177FB690008A583C /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
-				1E8BFAD317F760AF0053BEE3 /* Misc */,
+				1E8BFAD817F767290053BEE3 /* BSKeyboardControls */,
 				1EAFEC2E17999C8A00CCBDA1 /* MBProgressHUD */,
 				1E8333C3179792F600B60612 /* QSUtilities */,
 				1E8333AE17978C2A00B60612 /* XML */,
@@ -1692,6 +1731,8 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				da,
+				sv,
 			);
 			mainGroup = 02B80A901518FA8600DE3F39;
 			productRefGroup = 02B80A9C1518FA8600DE3F39 /* Products */;
@@ -1917,6 +1958,17 @@
 				1E131D6517F633F900749506 /* icon_clock_aqua@2x.png in Resources */,
 				1E8BFAC317F738280053BEE3 /* navbtn_done@2x.png in Resources */,
 				1E8BFAC517F738540053BEE3 /* navbtn_done.png in Resources */,
+				1E8BFAE017F767290053BEE3 /* BSKeyboardControls.strings in Resources */,
+				1E8BFAE517F78D750053BEE3 /* FormsTableViewCell.xib in Resources */,
+				1E8BFAE717F78DB10053BEE3 /* icon_send_arrow_purple@2x.png in Resources */,
+				1E8BFAF017F7A82E0053BEE3 /* navbtn_forms_ratings_off@2x.png in Resources */,
+				1E8BFAF117F7A82E0053BEE3 /* navbtn_forms_ratings_on@2x.png in Resources */,
+				1E8BFAF217F7A82E0053BEE3 /* navbtn_forms_rsvps_off@2x.png in Resources */,
+				1E8BFAF317F7A82E0053BEE3 /* navbtn_forms_rsvps_on@2x.png in Resources */,
+				1E8BFAF417F7A82E0053BEE3 /* navbtn_forms_all_off@2x.png in Resources */,
+				1E8BFAF517F7A82E0053BEE3 /* navbtn_forms_all_on@2x.png in Resources */,
+				1E8BFAF617F7A82E0053BEE3 /* navbtn_forms_polls_off@2x.png in Resources */,
+				1E8BFAF717F7A82E0053BEE3 /* navbtn_forms_polls_on@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1975,7 +2027,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E8BFAD717F7624D0053BEE3 /* BSKeyboardControls.m in Sources */,
 				1E0CAA43178253F100A294C0 /* BrandUITextField.m in Sources */,
 				1E928250177FB690008A583C /* AppDelegate.m in Sources */,
 				1E928251177FB690008A583C /* NSString+NumberFormat.m in Sources */,
@@ -2077,6 +2128,8 @@
 				1E8BFACF17F73B3C0053BEE3 /* NSArray+Random.m in Sources */,
 				1E8BFAD017F73B3C0053BEE3 /* NSDate+Extensions.m in Sources */,
 				1E8BFAD117F73B3C0053BEE3 /* NSString+Extensions.m in Sources */,
+				1E8BFADF17F767290053BEE3 /* BSKeyboardControls.m in Sources */,
+				1E8BFAE417F78D750053BEE3 /* FormsTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2098,13 +2151,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E0CAA42178253DF00A294C0 /* BrandUITextField.m in Sources */,
-				1E8BFAD617F760CE0053BEE3 /* BSKeyboardControls.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		1E8BFADB17F767290053BEE3 /* BSKeyboardControls.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1E8BFADC17F767290053BEE3 /* da */,
+				1E8BFADD17F767290053BEE3 /* en */,
+				1E8BFADE17F767290053BEE3 /* sv */,
+			);
+			name = BSKeyboardControls.strings;
+			sourceTree = "<group>";
+		};
 		1E9281A4177FB690008A583C /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
