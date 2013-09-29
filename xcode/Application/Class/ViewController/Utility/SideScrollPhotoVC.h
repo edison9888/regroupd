@@ -12,7 +12,7 @@
 /*
  This view is designed to allow a horizontal scrollable container inside a vertical scroller
  */
-@interface SideScrollMenuViewController : UIViewController <UIScrollViewDelegate>
+@interface SideScrollPhotoVC : UIViewController <UIScrollViewDelegate>
 {
     UIView *mainView;
     PhotoScrollView *scrollView;

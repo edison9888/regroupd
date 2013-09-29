@@ -7,10 +7,10 @@
 
 @implementation BaseItemView
 
-@synthesize product;
+@synthesize page;
 @synthesize isInScrollWindow;
 
-- (id)initWithFrame:(CGRect)frame andProduct:(Product *)product {
+- (id)initWithFrame:(CGRect)frame andPage:(Page *)page {
     if ((self = [super initWithFrame:frame])) {
         // Initialization code
 		isInScrollWindow = NO;

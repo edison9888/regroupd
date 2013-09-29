@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 Tastemakerlabs. All rights reserved.
 //
 
-#import "SideScrollMenuViewController.h"
+#import "SideScrollPhotoVC.h"
 #import "ImageItemView.h"
+#import "Page.h"
 
-
-@implementation SideScrollMenuViewController
+@implementation SideScrollPhotoVC
 
 @synthesize scrollView;
 
@@ -46,16 +46,14 @@
 
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 - (void)loadView {
-#ifdef kDEBUG
     NSLog(@"%s", __FUNCTION__);
-#endif
 	currentState = @"scroll";
 	currentIndex = 0;
 	previousView = nil;
     
 	// initialize ScrollView
 	scrollView = [[PhotoScrollView alloc] initWithFrame:CGRectMake(10,10,kPhotoWidth,kPhotoHeight)];
-	[scrollView setContentSize:CGSizeMake(kPhotoWidth, kPhotoHeight * viewCount)];
+	[scrollView setContentSize:CGSizeMake(kPhotoWidth * viewCount, kPhotoHeight)];
 	[scrollView setPagingEnabled:YES];
 	[scrollView setShowsHorizontalScrollIndicator:NO];
 	[scrollView setShowsVerticalScrollIndicator:NO];
@@ -98,10 +96,10 @@
 		if (i >= 0 && i < viewCount) {
 			aView = [loadedViewsDictionary objectForKey:[NSNumber numberWithInt:i]];
 			if (aView == nil) {
-                Product *p = [photos objectAtIndex:i];
+                Page *p = [photos objectAtIndex:i];
                 NSLog(@"ypos = %d", i*kPhotoHeight);
                 
-				aView = [[ImageItemView alloc] initWithFrame:CGRectMake(0,i*kPhotoHeight,kPhotoWidth,kPhotoHeight) andProduct:p];
+				aView = [[ImageItemView alloc] initWithFrame:CGRectMake(i*kPhotoWidth, 0,kPhotoWidth,kPhotoHeight) andPage:p];
                 
 				[scrollView addSubview:aView];
 				[loadedViewsDictionary setObject: aView forKey:[NSNumber numberWithInt:i]];

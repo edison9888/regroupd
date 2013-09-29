@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+#define kPhotoWidth 300
+#define kPhotoHeight 300
+
 @interface Page : NSObject
 
 @property (nonatomic, retain) NSString* view;

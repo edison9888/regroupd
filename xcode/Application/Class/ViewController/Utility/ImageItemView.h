@@ -12,7 +12,7 @@
 
 @property (nonatomic, retain) UIImageView *imageView;
 
-- (id)initWithFrame:(CGRect)frame andProduct:(Product *)product;
+- (id)initWithFrame:(CGRect)frame andPage:(Page *)page;
 
 - (void)swapViews;
 
