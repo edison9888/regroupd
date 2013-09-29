@@ -77,11 +77,13 @@
         self.whereField.hidden = YES;
         
     } else if (form.type == FormType_RSVP) {
-//        self.whenField = 
+        icon = [UIImage imageNamed:kIconEvent];
+        self.iconType.image = icon;
+        self.whenLabel.hidden = NO;
+        self.whenField.hidden = NO;
+        self.whereLabel.hidden = NO;
+        self.whereField.hidden = NO;
         
-        
-    } else {
-        // Use default Poll icon already set in NIB
     }
     
     

@@ -180,6 +180,54 @@
 			<key>category</key>
 			<string>Forms</string>
 			<key>name</key>
+			<string>PollDetail</string>
+			<key>controllerName</key>
+			<string>PollDetailVC</string>
+			<key>nextSlideName</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>slideData</key>
+			<dict/>
+			<key>allowLeftSlide</key>
+			<false/>
+			<key>allowRightSlide</key>
+			<false/>
+			<key>category</key>
+			<string>Forms</string>
+			<key>name</key>
+			<string>RatingDetail</string>
+			<key>controllerName</key>
+			<string>RatingDetailVC</string>
+			<key>nextSlideName</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>slideData</key>
+			<dict/>
+			<key>allowLeftSlide</key>
+			<false/>
+			<key>allowRightSlide</key>
+			<false/>
+			<key>category</key>
+			<string>Forms</string>
+			<key>name</key>
+			<string>RSVPDetail</string>
+			<key>controllerName</key>
+			<string>RSVPDetailVC</string>
+			<key>nextSlideName</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>slideData</key>
+			<dict/>
+			<key>allowLeftSlide</key>
+			<false/>
+			<key>allowRightSlide</key>
+			<false/>
+			<key>category</key>
+			<string>Forms</string>
+			<key>name</key>
 			<string>EditPoll</string>
 			<key>controllerName</key>
 			<string>EditPollVC</string>

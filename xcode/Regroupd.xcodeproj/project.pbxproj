@@ -161,6 +161,18 @@
 		1E8BFAF517F7A82E0053BEE3 /* navbtn_forms_all_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAED17F7A82E0053BEE3 /* navbtn_forms_all_on@2x.png */; };
 		1E8BFAF617F7A82E0053BEE3 /* navbtn_forms_polls_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAEE17F7A82E0053BEE3 /* navbtn_forms_polls_off@2x.png */; };
 		1E8BFAF717F7A82E0053BEE3 /* navbtn_forms_polls_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAEF17F7A82E0053BEE3 /* navbtn_forms_polls_on@2x.png */; };
+		1E8BFAFC17F7B8320053BEE3 /* checkbox_aqua@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAF817F7B8320053BEE3 /* checkbox_aqua@2x.png */; };
+		1E8BFAFD17F7B8320053BEE3 /* btn_close_x@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAF917F7B8320053BEE3 /* btn_close_x@2x.png */; };
+		1E8BFAFE17F7B8320053BEE3 /* browse_right_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAFA17F7B8320053BEE3 /* browse_right_arrow@2x.png */; };
+		1E8BFAFF17F7B8320053BEE3 /* browse_left_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAFB17F7B8320053BEE3 /* browse_left_arrow@2x.png */; };
+		1E8BFB0317F7B8A80053BEE3 /* PollDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFB0117F7B8A60053BEE3 /* PollDetailVC.m */; };
+		1E8BFB0417F7B8A80053BEE3 /* PollDetailVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFB0217F7B8A70053BEE3 /* PollDetailVC.xib */; };
+		1E8BFB0B17F7BEAC0053BEE3 /* PhotoScrollerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFB0817F7BEAC0053BEE3 /* PhotoScrollerVC.m */; };
+		1E8BFB0C17F7BEAC0053BEE3 /* SideScrollItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFB0A17F7BEAC0053BEE3 /* SideScrollItemView.m */; };
+		1E8BFB0F17F7BEE70053BEE3 /* PhotoScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFB0E17F7BEE70053BEE3 /* PhotoScrollView.m */; };
+		1E8BFB1217F7BF230053BEE3 /* BaseItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFB1017F7BF230053BEE3 /* BaseItemView.m */; };
+		1E8BFB1717F7BF8F0053BEE3 /* ImageItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFB1417F7BF8D0053BEE3 /* ImageItemView.m */; };
+		1E8BFB1B17F7C3AB0053BEE3 /* Page.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFB1A17F7C3AA0053BEE3 /* Page.m */; };
 		1E8FBA7C17E7F7B2003758EB /* BrandUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8FBA7B17E7F7B2003758EB /* BrandUIButton.m */; };
 		1E928213177FB690008A583C /* hbar_96x2.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9280EB177FB68F008A583C /* hbar_96x2.png */; };
 		1E928214177FB690008A583C /* help_icon_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9280EC177FB68F008A583C /* help_icon_off.png */; };
@@ -557,6 +569,25 @@
 		1E8BFAED17F7A82E0053BEE3 /* navbtn_forms_all_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbtn_forms_all_on@2x.png"; sourceTree = "<group>"; };
 		1E8BFAEE17F7A82E0053BEE3 /* navbtn_forms_polls_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbtn_forms_polls_off@2x.png"; sourceTree = "<group>"; };
 		1E8BFAEF17F7A82E0053BEE3 /* navbtn_forms_polls_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbtn_forms_polls_on@2x.png"; sourceTree = "<group>"; };
+		1E8BFAF817F7B8320053BEE3 /* checkbox_aqua@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox_aqua@2x.png"; sourceTree = "<group>"; };
+		1E8BFAF917F7B8320053BEE3 /* btn_close_x@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_close_x@2x.png"; sourceTree = "<group>"; };
+		1E8BFAFA17F7B8320053BEE3 /* browse_right_arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "browse_right_arrow@2x.png"; sourceTree = "<group>"; };
+		1E8BFAFB17F7B8320053BEE3 /* browse_left_arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "browse_left_arrow@2x.png"; sourceTree = "<group>"; };
+		1E8BFB0017F7B8A50053BEE3 /* PollDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PollDetailVC.h; path = Application/Class/ViewController/iPhone/PollDetailVC.h; sourceTree = SOURCE_ROOT; };
+		1E8BFB0117F7B8A60053BEE3 /* PollDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PollDetailVC.m; path = Application/Class/ViewController/iPhone/PollDetailVC.m; sourceTree = SOURCE_ROOT; };
+		1E8BFB0217F7B8A70053BEE3 /* PollDetailVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PollDetailVC.xib; path = Application/Class/ViewController/iPhone/PollDetailVC.xib; sourceTree = SOURCE_ROOT; };
+		1E8BFB0717F7BEAC0053BEE3 /* PhotoScrollerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoScrollerVC.h; sourceTree = "<group>"; };
+		1E8BFB0817F7BEAC0053BEE3 /* PhotoScrollerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoScrollerVC.m; sourceTree = "<group>"; };
+		1E8BFB0917F7BEAC0053BEE3 /* SideScrollItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SideScrollItemView.h; sourceTree = "<group>"; };
+		1E8BFB0A17F7BEAC0053BEE3 /* SideScrollItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SideScrollItemView.m; sourceTree = "<group>"; };
+		1E8BFB0D17F7BEE70053BEE3 /* PhotoScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoScrollView.h; sourceTree = "<group>"; };
+		1E8BFB0E17F7BEE70053BEE3 /* PhotoScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoScrollView.m; sourceTree = "<group>"; };
+		1E8BFB1017F7BF230053BEE3 /* BaseItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseItemView.m; sourceTree = "<group>"; };
+		1E8BFB1117F7BF230053BEE3 /* BaseItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseItemView.h; sourceTree = "<group>"; };
+		1E8BFB1317F7BF8D0053BEE3 /* ImageItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageItemView.h; sourceTree = "<group>"; };
+		1E8BFB1417F7BF8D0053BEE3 /* ImageItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageItemView.m; sourceTree = "<group>"; };
+		1E8BFB1917F7C3A90053BEE3 /* Page.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Page.h; sourceTree = "<group>"; };
+		1E8BFB1A17F7C3AA0053BEE3 /* Page.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Page.m; sourceTree = "<group>"; };
 		1E8FBA7A17E7F7B2003758EB /* BrandUIButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrandUIButton.h; sourceTree = "<group>"; };
 		1E8FBA7B17E7F7B2003758EB /* BrandUIButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrandUIButton.m; sourceTree = "<group>"; };
 		1E9280EB177FB68F008A583C /* hbar_96x2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hbar_96x2.png; sourceTree = "<group>"; };
@@ -1055,6 +1086,9 @@
 		1E88806017F4E9A90070116C /* Forms */ = {
 			isa = PBXGroup;
 			children = (
+				1E8BFB0017F7B8A50053BEE3 /* PollDetailVC.h */,
+				1E8BFB0117F7B8A60053BEE3 /* PollDetailVC.m */,
+				1E8BFB0217F7B8A70053BEE3 /* PollDetailVC.xib */,
 				1E88805917F4E9A10070116C /* FormsHomeVC.h */,
 				1E88805817F4E99E0070116C /* FormsHomeVC.m */,
 				1E88805117F4E9980070116C /* FormsHomeVC.xib */,
@@ -1079,6 +1113,25 @@
 				1E8BFADB17F767290053BEE3 /* BSKeyboardControls.strings */,
 			);
 			path = BSKeyboardControls;
+			sourceTree = "<group>";
+		};
+		1E8BFB0617F7BEAA0053BEE3 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				1E8BFB0717F7BEAC0053BEE3 /* PhotoScrollerVC.h */,
+				1E8BFB0817F7BEAC0053BEE3 /* PhotoScrollerVC.m */,
+				1E8BFB0D17F7BEE70053BEE3 /* PhotoScrollView.h */,
+				1E8BFB0E17F7BEE70053BEE3 /* PhotoScrollView.m */,
+				1E8BFB1017F7BF230053BEE3 /* BaseItemView.m */,
+				1E8BFB1117F7BF230053BEE3 /* BaseItemView.h */,
+				1E8BFB1317F7BF8D0053BEE3 /* ImageItemView.h */,
+				1E8BFB1417F7BF8D0053BEE3 /* ImageItemView.m */,
+				1E8BFB0917F7BEAC0053BEE3 /* SideScrollItemView.h */,
+				1E8BFB0A17F7BEAC0053BEE3 /* SideScrollItemView.m */,
+				1E8BFB1917F7C3A90053BEE3 /* Page.h */,
+				1E8BFB1A17F7C3AA0053BEE3 /* Page.m */,
+			);
+			path = Utility;
 			sourceTree = "<group>";
 		};
 		1E9280DB177FB68F008A583C /* Resources */ = {
@@ -1120,6 +1173,10 @@
 		1E9280E9177FB68F008A583C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1E8BFAF817F7B8320053BEE3 /* checkbox_aqua@2x.png */,
+				1E8BFAF917F7B8320053BEE3 /* btn_close_x@2x.png */,
+				1E8BFAFA17F7B8320053BEE3 /* browse_right_arrow@2x.png */,
+				1E8BFAFB17F7B8320053BEE3 /* browse_left_arrow@2x.png */,
 				1E8BFAE817F7A82E0053BEE3 /* navbtn_forms_ratings_off@2x.png */,
 				1E8BFAE917F7A82E0053BEE3 /* navbtn_forms_ratings_on@2x.png */,
 				1E8BFAEA17F7A82E0053BEE3 /* navbtn_forms_rsvps_off@2x.png */,
@@ -1414,6 +1471,7 @@
 		1E92817E177FB68F008A583C /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				1E8BFB0617F7BEAA0053BEE3 /* Utility */,
 				1E92819F177FB690008A583C /* ViewController.h */,
 				1E9281A0177FB690008A583C /* ViewController.m */,
 				1E92817D177FB68F008A583C /* ViewController.xib */,
@@ -1969,6 +2027,11 @@
 				1E8BFAF517F7A82E0053BEE3 /* navbtn_forms_all_on@2x.png in Resources */,
 				1E8BFAF617F7A82E0053BEE3 /* navbtn_forms_polls_off@2x.png in Resources */,
 				1E8BFAF717F7A82E0053BEE3 /* navbtn_forms_polls_on@2x.png in Resources */,
+				1E8BFAFC17F7B8320053BEE3 /* checkbox_aqua@2x.png in Resources */,
+				1E8BFAFD17F7B8320053BEE3 /* btn_close_x@2x.png in Resources */,
+				1E8BFAFE17F7B8320053BEE3 /* browse_right_arrow@2x.png in Resources */,
+				1E8BFAFF17F7B8320053BEE3 /* browse_left_arrow@2x.png in Resources */,
+				1E8BFB0417F7B8A80053BEE3 /* PollDetailVC.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2130,6 +2193,13 @@
 				1E8BFAD117F73B3C0053BEE3 /* NSString+Extensions.m in Sources */,
 				1E8BFADF17F767290053BEE3 /* BSKeyboardControls.m in Sources */,
 				1E8BFAE417F78D750053BEE3 /* FormsTableViewCell.m in Sources */,
+				1E8BFB0317F7B8A80053BEE3 /* PollDetailVC.m in Sources */,
+				1E8BFB0B17F7BEAC0053BEE3 /* PhotoScrollerVC.m in Sources */,
+				1E8BFB0C17F7BEAC0053BEE3 /* SideScrollItemView.m in Sources */,
+				1E8BFB0F17F7BEE70053BEE3 /* PhotoScrollView.m in Sources */,
+				1E8BFB1217F7BF230053BEE3 /* BaseItemView.m in Sources */,
+				1E8BFB1717F7BF8F0053BEE3 /* ImageItemView.m in Sources */,
+				1E8BFB1B17F7C3AB0053BEE3 /* Page.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
