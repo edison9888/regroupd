@@ -129,10 +129,19 @@
     
     @try {
         if (indexPath != nil) {
-            NSLog(@"Selected row %i", indexPath.row);
-            
             selectedIndex = indexPath.row;
-//            FormVO *form = [tableData objectAtIndex:indexPath.row];
+            
+            FormVO *form = [tableData objectAtIndex:indexPath.row];
+            
+            NSLog(@"Selected row %i with type %i", indexPath.row, form.type);
+            
+            if (form.type == FormType_POLL) {
+                [DataModel shared].form = form;
+                [_delegate gotoSlideWithName:@"PollDetail"];
+                
+            } else {
+                
+            }
             
 //            [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
 //            

@@ -13,6 +13,7 @@
 
 @synthesize user;
 @synthesize contact;
+@synthesize form;
 
 @synthesize contactData;
 @synthesize timestampText;

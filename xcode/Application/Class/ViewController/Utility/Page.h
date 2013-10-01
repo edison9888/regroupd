@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define kPhotoWidth 300
+#define kPhotoWidth 320
 #define kPhotoHeight 300
 
 @interface Page : NSObject

@@ -30,7 +30,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    
+    formSvc = [[FormManager alloc] init];
+    
+    [self loadFormOptions];
     
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
@@ -40,9 +43,6 @@
     self.theTableView.backgroundColor = [UIColor clearColor];
     
     self.tableData =[[NSMutableArray alloc]init];
-        
-    NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
     
     [self performSearch:@""];
     
@@ -55,6 +55,22 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - Form Options handling
+
+- (void) loadFormOptions {
+    
+    @try {
+        NSMutableArray *options = [formSvc listFormOptions:[DataModel shared].form.form_id];
+        for (FormOptionVO* option in options) {
+            NSLog(@"option %@", option.name);
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"%@", exception);
+    }
+    
+    
+}
 #pragma mark - UITableViewDataSource
 
 

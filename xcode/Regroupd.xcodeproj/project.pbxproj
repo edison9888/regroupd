@@ -53,7 +53,6 @@
 		1E213C0C17E5466B00E17DBF /* ContactsHomeVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E213C0317E5466B00E17DBF /* ContactsHomeVC.xib */; };
 		1E213C0D17E5466B00E17DBF /* ChatsHomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E213C0517E5466B00E17DBF /* ChatsHomeVC.m */; };
 		1E213C0E17E5466B00E17DBF /* ChatsHomeVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E213C0617E5466B00E17DBF /* ChatsHomeVC.xib */; };
-		1E2C7E4D17E4F28F0043E28D /* Regroupd-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1E2C7E4B17E4F28F0043E28D /* Regroupd-Info.plist */; };
 		1E2C7E5017E4F6660043E28D /* regroupd.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 1E2C7E4E17E4F6660043E28D /* regroupd.sqlite */; };
 		1E2C7E5117E4F6660043E28D /* AppUI.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1E2C7E4F17E4F6660043E28D /* AppUI.plist */; };
 		1E2C7E5B17E4F7530043E28D /* Raleway-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1E2C7E5217E4F7530043E28D /* Raleway-Bold.otf */; };
@@ -329,6 +328,13 @@
 		1E92830F177FDCEB008A583C /* icon_recents@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9282E8177FDCEB008A583C /* icon_recents@2x.png */; };
 		1E928311177FDCEB008A583C /* splash-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9282EA177FDCEB008A583C /* splash-568h@2x.png */; };
 		1E928312177FDCEB008A583C /* fpo_fax.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9282EB177FDCEB008A583C /* fpo_fax.png */; };
+		1E9C36BC17FA43880017E9AD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1E9C36BB17FA43880017E9AD /* Images.xcassets */; };
+		1E9C36BE17FA43CD0017E9AD /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9C36BD17FA43CD0017E9AD /* Default.png */; };
+		1E9C36C217FA49F10017E9AD /* ScrollOptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9C36C017FA49F10017E9AD /* ScrollOptionView.m */; };
+		1E9C36C317FA49F10017E9AD /* ScrollOptionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E9C36C117FA49F10017E9AD /* ScrollOptionView.xib */; };
+		1E9C36C717FA4DBC0017E9AD /* tesla.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1E9C36C417FA4DBC0017E9AD /* tesla.jpg */; };
+		1E9C36C817FA4DBC0017E9AD /* maserati.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1E9C36C517FA4DBC0017E9AD /* maserati.jpg */; };
+		1E9C36C917FA4DBC0017E9AD /* audi.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1E9C36C617FA4DBC0017E9AD /* audi.jpg */; };
 		1EAFEC3117999C8A00CCBDA1 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAFEC3017999C8A00CCBDA1 /* MBProgressHUD.m */; };
 		1EAFEC321799BFAF00CCBDA1 /* pattern_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA441782586400A294C0 /* pattern_background@2x.png */; };
 		1EAFEC331799BFAF00CCBDA1 /* pattern_background-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA451782586400A294C0 /* pattern_background-568h@2x.png */; };
@@ -804,6 +810,14 @@
 		1E9282E8177FDCEB008A583C /* icon_recents@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_recents@2x.png"; sourceTree = "<group>"; };
 		1E9282EA177FDCEB008A583C /* splash-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "splash-568h@2x.png"; sourceTree = "<group>"; };
 		1E9282EB177FDCEB008A583C /* fpo_fax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fpo_fax.png; sourceTree = "<group>"; };
+		1E9C36BB17FA43880017E9AD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Regroupd/Images.xcassets; sourceTree = "<group>"; };
+		1E9C36BD17FA43CD0017E9AD /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		1E9C36BF17FA49F10017E9AD /* ScrollOptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollOptionView.h; sourceTree = "<group>"; };
+		1E9C36C017FA49F10017E9AD /* ScrollOptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollOptionView.m; sourceTree = "<group>"; };
+		1E9C36C117FA49F10017E9AD /* ScrollOptionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScrollOptionView.xib; sourceTree = "<group>"; };
+		1E9C36C417FA4DBC0017E9AD /* tesla.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = tesla.jpg; sourceTree = "<group>"; };
+		1E9C36C517FA4DBC0017E9AD /* maserati.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = maserati.jpg; sourceTree = "<group>"; };
+		1E9C36C617FA4DBC0017E9AD /* audi.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = audi.jpg; sourceTree = "<group>"; };
 		1EAFEC2F17999C8A00CCBDA1 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		1EAFEC3017999C8A00CCBDA1 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		1EAFEC341799BFC400CCBDA1 /* fax_template_hires.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fax_template_hires.png; sourceTree = "<group>"; };
@@ -894,6 +908,8 @@
 		02B80A901518FA8600DE3F39 = {
 			isa = PBXGroup;
 			children = (
+				1E9C36BD17FA43CD0017E9AD /* Default.png */,
+				1E9C36BB17FA43880017E9AD /* Images.xcassets */,
 				1E00981917BD7F0C002C5223 /* libxml2.dylib */,
 				1E8333AC17977B9400B60612 /* libxml2.2.dylib */,
 				1E76F4961795EE41007EF5B0 /* AppIcon.png */,
@@ -975,6 +991,9 @@
 		1E1E25BF17F32F450079416C /* Widget */ = {
 			isa = PBXGroup;
 			children = (
+				1E9C36BF17FA49F10017E9AD /* ScrollOptionView.h */,
+				1E9C36C017FA49F10017E9AD /* ScrollOptionView.m */,
+				1E9C36C117FA49F10017E9AD /* ScrollOptionView.xib */,
 				1E88806A17F50B770070116C /* ExpandingTextView.h */,
 				1E88806917F50B740070116C /* ExpandingTextView.m */,
 				1E1E25C517F342180079416C /* FancyTextField.h */,
@@ -1083,9 +1102,6 @@
 		1E88806017F4E9A90070116C /* Forms */ = {
 			isa = PBXGroup;
 			children = (
-				1E8BFB0017F7B8A50053BEE3 /* PollDetailVC.h */,
-				1E8BFB0117F7B8A60053BEE3 /* PollDetailVC.m */,
-				1E8BFB0217F7B8A70053BEE3 /* PollDetailVC.xib */,
 				1E88805917F4E9A10070116C /* FormsHomeVC.h */,
 				1E88805817F4E99E0070116C /* FormsHomeVC.m */,
 				1E88805117F4E9980070116C /* FormsHomeVC.xib */,
@@ -1098,6 +1114,9 @@
 				1E131D5217F60AE500749506 /* EditRSVPVC.h */,
 				1E131D5317F60AE500749506 /* EditRSVPVC.m */,
 				1E131D5417F60AE500749506 /* EditRSVPVC.xib */,
+				1E8BFB0017F7B8A50053BEE3 /* PollDetailVC.h */,
+				1E8BFB0117F7B8A60053BEE3 /* PollDetailVC.m */,
+				1E8BFB0217F7B8A70053BEE3 /* PollDetailVC.xib */,
 			);
 			name = Forms;
 			sourceTree = "<group>";
@@ -1168,6 +1187,9 @@
 		1E9280E9177FB68F008A583C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1E9C36C417FA4DBC0017E9AD /* tesla.jpg */,
+				1E9C36C517FA4DBC0017E9AD /* maserati.jpg */,
+				1E9C36C617FA4DBC0017E9AD /* audi.jpg */,
 				1E8BFAF817F7B8320053BEE3 /* checkbox_aqua@2x.png */,
 				1E8BFAF917F7B8320053BEE3 /* btn_close_x@2x.png */,
 				1E8BFAFA17F7B8320053BEE3 /* browse_right_arrow@2x.png */,
@@ -1466,11 +1488,11 @@
 		1E92817E177FB68F008A583C /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				1E92817F177FB68F008A583C /* iPhone */,
 				1E8BFB0617F7BEAA0053BEE3 /* Utility */,
 				1E92819F177FB690008A583C /* ViewController.h */,
 				1E9281A0177FB690008A583C /* ViewController.m */,
 				1E92817D177FB68F008A583C /* ViewController.xib */,
-				1E92817F177FB68F008A583C /* iPhone */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -1776,7 +1798,12 @@
 		02B80A921518FA8600DE3F39 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
+				TargetAttributes = {
+					02B80A9A1518FA8600DE3F39 = {
+						DevelopmentTeam = 283U9AE89W;
+					};
+				};
 			};
 			buildConfigurationList = 02B80A951518FA8600DE3F39 /* Build configuration list for PBXProject "Regroupd" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1851,6 +1878,7 @@
 				1E92823F177FB690008A583C /* question-icon-off.png in Resources */,
 				1E928240177FB690008A583C /* question-icon-off@2x.png in Resources */,
 				1E928241177FB690008A583C /* question-icon-on.png in Resources */,
+				1E9C36BC17FA43880017E9AD /* Images.xcassets in Resources */,
 				1E928242177FB690008A583C /* question-icon-on@2x.png in Resources */,
 				1E928243177FB690008A583C /* reset_button.png in Resources */,
 				1E928244177FB690008A583C /* reset_button@2x.png in Resources */,
@@ -1858,6 +1886,7 @@
 				1E928246177FB690008A583C /* search_go_button.png in Resources */,
 				1E928247177FB690008A583C /* search_go_button@2x.png in Resources */,
 				1E928248177FB690008A583C /* sync_button.png in Resources */,
+				1E9C36C817FA4DBC0017E9AD /* maserati.jpg in Resources */,
 				1E928249177FB690008A583C /* trend_bubble_bg.png in Resources */,
 				1E92824A177FB690008A583C /* trend_bubble_bg@2x.png in Resources */,
 				1E92824B177FB690008A583C /* trend_bubble_guide.png in Resources */,
@@ -1870,6 +1899,7 @@
 				1E928278177FB690008A583C /* ViewController.xib in Resources */,
 				1E92828E177FB690008A583C /* InfoPlist.strings in Resources */,
 				1E9282C4177FDB6C008A583C /* AppStartVC.xib in Resources */,
+				1E9C36BE17FA43CD0017E9AD /* Default.png in Resources */,
 				1E9282EC177FDCEB008A583C /* cell_arrow_teal.png in Resources */,
 				1E9282EF177FDCEB008A583C /* icon_buyfaxes.png in Resources */,
 				1E9282F0177FDCEB008A583C /* icon_contacts.png in Resources */,
@@ -1924,7 +1954,6 @@
 				1E513A6917CBAF9600DC2566 /* checkbox_off.png in Resources */,
 				1E513A6A17CBAF9600DC2566 /* checkbox_on.png in Resources */,
 				1E513A6C17CBAFAF00DC2566 /* checkbox_off@2x.png in Resources */,
-				1E2C7E4D17E4F28F0043E28D /* Regroupd-Info.plist in Resources */,
 				1E2C7E5017E4F6660043E28D /* regroupd.sqlite in Resources */,
 				1E2C7E5117E4F6660043E28D /* AppUI.plist in Resources */,
 				1E2C7E5B17E4F7530043E28D /* Raleway-Bold.otf in Resources */,
@@ -1974,10 +2003,13 @@
 				1E2C7EB117E50F690043E28D /* ProfileStart2VC.xib in Resources */,
 				1E213BF417E542BE00E17DBF /* topnav_aqua_bg@2x.png in Resources */,
 				1E213BF517E542BE00E17DBF /* btn_aqua_add@2x.png in Resources */,
+				1E9C36C717FA4DBC0017E9AD /* tesla.jpg in Resources */,
 				1E213BF917E545A100E17DBF /* GroupsHomeVC.xib in Resources */,
 				1E213C0817E5466B00E17DBF /* SettingsHomeVC.xib in Resources */,
+				1E9C36C317FA49F10017E9AD /* ScrollOptionView.xib in Resources */,
 				1E213C0C17E5466B00E17DBF /* ContactsHomeVC.xib in Resources */,
 				1E213C0E17E5466B00E17DBF /* ChatsHomeVC.xib in Resources */,
+				1E9C36C917FA4DBC0017E9AD /* audi.jpg in Resources */,
 				1EBA5DCC17E9425800E46FFF /* modal_add_photo@2x.png in Resources */,
 				1EBA5DCD17E9425800E46FFF /* modal_new_survey@2x.png in Resources */,
 				1EBA5DCE17E9425800E46FFF /* chat_callout_row_white@2x.png in Resources */,
@@ -2193,6 +2225,7 @@
 				1E8BFB1217F7BF230053BEE3 /* BaseItemView.m in Sources */,
 				1E8BFB1717F7BF8F0053BEE3 /* ImageItemView.m in Sources */,
 				1E8BFB1B17F7C3AB0053BEE3 /* Page.m in Sources */,
+				1E9C36C217FA49F10017E9AD /* ScrollOptionView.m in Sources */,
 				1E8BFB1E17F7C5A20053BEE3 /* SideScrollPhotoVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2254,8 +2287,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -2264,9 +2298,12 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
@@ -2281,17 +2318,18 @@
 		02753CAF152F4ED9004493FA /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Appetizer Mobile LLC (283U9AE89W)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Application/Regroupd-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "$(SRCROOT)/Application/Regroupd-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = regroupd;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "7CBB6405-A28A-4734-AA9F-91BB0BAC7390";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7CBB6405-A28A-4734-AA9F-91BB0BAC7390";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2301,8 +2339,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -2318,11 +2357,15 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "42170C93-4CCB-4A80-8A8A-DA3122598629";
 				SDKROOT = iphoneos;
@@ -2334,8 +2377,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -2344,9 +2388,12 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
@@ -2361,9 +2408,10 @@
 		02B80AB41518FA8700DE3F39 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Appetizer Mobile LLC (283U9AE89W)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Appetizer Mobile LLC (283U9AE89W)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Application/Regroupd-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -2371,8 +2419,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_NAME = regroupd;
-				PROVISIONING_PROFILE = "97EC33CA-9D9C-456F-A0E4-51DB8DF2F414";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "97EC33CA-9D9C-456F-A0E4-51DB8DF2F414";
+				PROVISIONING_PROFILE = "6FA8FE41-B50F-4CEB-A997-0D206D7B5D78";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6FA8FE41-B50F-4CEB-A997-0D206D7B5D78";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2381,8 +2429,9 @@
 		02B80AB51518FA8700DE3F39 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Appetizer Mobile LLC (283U9AE89W)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Application/Regroupd-Prefix.pch";
@@ -2390,8 +2439,8 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Application/Regroupd-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = regroupd;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "7CBB6405-A28A-4734-AA9F-91BB0BAC7390";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7CBB6405-A28A-4734-AA9F-91BB0BAC7390";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

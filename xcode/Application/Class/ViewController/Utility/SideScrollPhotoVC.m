@@ -52,7 +52,7 @@
 	previousView = nil;
     
 	// initialize ScrollView
-	scrollView = [[PhotoScrollView alloc] initWithFrame:CGRectMake(10,10,kPhotoWidth,kPhotoHeight)];
+	scrollView = [[PhotoScrollView alloc] initWithFrame:CGRectMake(0,0,kPhotoWidth,kPhotoHeight)];
 	[scrollView setContentSize:CGSizeMake(kPhotoWidth * viewCount, kPhotoHeight)];
 	[scrollView setPagingEnabled:YES];
 	[scrollView setShowsHorizontalScrollIndicator:NO];
@@ -204,25 +204,6 @@
 	[[self scrollView] setScrollEnabled:NO];
 }
 
-//- (void)shareContentNotification:(NSNotification*)notification
-//{
-//	Page *aPage      = [[book pages] objectAtIndex: currentIndex];
-//	Chapter *aChapter = [aPage chapter];
-//
-//	if([aChapter shareSubject] && [aChapter shareLink]) {
-//		NSMutableString* ms = [NSMutableString stringWithString:@"mailto:?subject="];
-//		[ms appendString:[aChapter shareSubject]];
-//		[ms appendString:@"&body=\n\n<a href=\""];
-//		[ms appendString:[aChapter shareLink]];
-//		[ms appendString:@"\">Steichen Autochrome: "];
-//		[ms appendString:[aChapter title]];
-//		[ms appendString:@"</a>"];
-//
-//		NSString *encodedBody = [ms stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-//		NSURL *url = [[NSURL alloc] initWithString:encodedBody];
-//		[[UIApplication sharedApplication] openURL:url];
-//	}
-//}
 
 
 @end

@@ -19,11 +19,12 @@
 - (int) saveForm:(FormVO *) form;
 - (void) deleteForm:(FormVO *) form;
 - (void) updateForm:(FormVO *) form;
-- (NSMutableArray *) listForms:(NSString *)orderBy;
+- (NSMutableArray *) listForms:(int)type;
 
 - (FormOptionVO *) loadOption:(int)_optionId;
 - (int) saveOption:(FormOptionVO *) option;
 - (void) deleteOption:(FormOptionVO *) option;
 - (void) updateOption:(FormOptionVO *) option;
+- (NSMutableArray *) listFormOptions:(int)formId;
 
 @end

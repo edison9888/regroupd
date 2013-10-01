@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>FC3727B6-5D88-484E-8D09-00F5C1A06D59</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Regroupd</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>41951081-4716-4DDB-89EC-F155831C5EEB</key>
+		<string>https://github.com/appetizermobile/regroupd.git</string>
+		<key>8C8B6B12-2C48-4683-937F-F6F3D351AB0A</key>
+		<string>https://github.com/behance/ios-QSUtilities.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>xcode/Regroupd.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>41951081-4716-4DDB-89EC-F155831C5EEB</key>
+		<string>../../..</string>
+		<key>8C8B6B12-2C48-4683-937F-F6F3D351AB0A</key>
+		<string>../../Application/ThirdParty/QSUtilities</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/appetizermobile/regroupd.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>41951081-4716-4DDB-89EC-F155831C5EEB</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>8C8B6B12-2C48-4683-937F-F6F3D351AB0A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>QSUtilities</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>41951081-4716-4DDB-89EC-F155831C5EEB</string>
+			<key>IDESourceControlWCCName</key>
+			<string>regroupd</string>
+		</dict>
+	</array>
+</dict>
+</plist>

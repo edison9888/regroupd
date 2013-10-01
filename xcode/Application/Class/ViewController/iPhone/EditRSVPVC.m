@@ -509,13 +509,15 @@
         NSString *dtFormat = @"%@ %@";
         NSString *start_time = [NSString stringWithFormat:dtFormat, self.tfStartDate, self.tfStartTime];
         NSString *end_time = [NSString stringWithFormat:dtFormat, self.tfEndDate, self.tfEndTime];
+        NSLog(@"start date = %@", start_time);
+        NSLog(@"end date = %@", end_time);
         
-        NSDate *date1 = [DateTimeUtils dateFromDBDateString:start_time];
-        NSDate *date2 = [DateTimeUtils dateFromDBDateString:end_time];
-        
-        // TODO: Convert back to db format
-        start_time = [DateTimeUtils dbDateStampFromDate:date1];
-        end_time = [DateTimeUtils dbDateStampFromDate:date2];
+//        NSDate *date1 = [DateTimeUtils dateFromDBDateString:start_time];
+//        NSDate *date2 = [DateTimeUtils dateFromDBDateString:end_time];
+//        
+//        // TODO: Convert back to db format
+//        start_time = [DateTimeUtils dbDateStampFromDate:date1];
+//        end_time = [DateTimeUtils dbDateStampFromDate:date2];
         
         FormManager *formSvc = [[FormManager alloc] init];
         FormVO *form = [[FormVO alloc] init];

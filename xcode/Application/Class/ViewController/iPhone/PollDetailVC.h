@@ -8,14 +8,18 @@
 
 #import "SlideViewController.h"
 #import "SQLiteDB.h"
-#import "CCSearchBar.h"
 #import "CCTableViewCell.h"
 #import "ContactVO.h"
+#import "FormManager.h"
+#import "FormVO.h"
+#import "FormOptionVO.h"
 
 @interface PollDetailVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *tableData;
+    FormManager *formSvc;
+    
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
@@ -32,5 +36,7 @@
 - (IBAction)tapAddButton;
 
 - (IBAction)tapEditButton;
+
+- (void) loadFormOptions;
 
 @end

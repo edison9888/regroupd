@@ -55,67 +55,6 @@
 }
 
 
-//- (int) saveForm:(FormVO *) form {
-//    
-//    NSString *sql;
-//    BOOL success;
-//    NSDate *now = [NSDate date];
-//    NSString *dt = [DateTimeUtils dbDateTimeStampFromDate:now];
-//    NSLog(@"dt %@", dt);
-//    
-//    @try {
-//        sql = @"INSERT into form (system_id, name, type, status, created, updated) values (?, ?, ?, ?, ?, ?);";
-//        success = [[SQLiteDB sharedConnection] executeUpdate:sql,
-//                   form.system_id,
-//                   form.name,
-//                   [NSNumber numberWithInt:form.type],
-//                   [NSNumber numberWithInt:form.status],
-//                   dt,
-//                   dt
-//                   ];
-//        
-//        if (!success) {
-//            NSLog(@"####### SQL Insert failed #######");
-//        } else {
-//            NSLog(@"====== SQL INSERT SUCCESS ======");
-//            
-//            sql = @"SELECT last_insert_rowid()";
-//            
-//            FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-//            
-//            if ([rs next]) {
-//                int lastId = [rs intForColumnIndex:0];
-//                NSLog(@"lastId = %i", lastId);
-//                return lastId;
-//            }
-//            
-//        }
-//    }
-//    @catch (NSException *exception) {
-//        NSLog(@"EXCEPTION %@", exception);
-//    }
-//    return -1;
-//    
-//}
-
-/*
- 
- form_id INTEGER PRIMARY KEY,
- system_id TEXT,
- name TEXT,
- location TEXT,
- description TEXT,
- imagefile TEXT,
- type int DEFAULT 1,
- status INT DEFAULT 0,
- start_time TEXT,
- end_time TEXT,
- allow_public INT DEFAULT 0,
- allow_share INT DEFAULT 0,
- allow_multiple INT DEFAULT 0,
- created TEXT,
- updated TEXT
- */
 - (int) saveForm:(FormVO *) form {
     
     NSString *sql;
@@ -225,8 +164,33 @@
     }
 
 }
-- (NSMutableArray *) listForms:(NSString *)orderBy {
+- (NSMutableArray *) listForms:(int)typeFilter {
     NSMutableArray *results = [[NSMutableArray alloc] init];
+ 
+    if (typeFilter == 0) {
+        NSString *sql = @"select * from form order by updated desc";
+        
+        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+        FormVO *row;
+        
+        while ([rs next]) {
+            row = [FormVO readFromDictionary:[rs resultDictionary]];
+            [results addObject:row];
+        }
+        
+    } else {
+        NSLog(@"%s: %i", __FUNCTION__, typeFilter);
+        NSString *sql = @"select * from form where type=? order by updated desc";
+        
+        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
+                           [NSNumber numberWithInt:typeFilter]];
+        FormVO *row;
+
+        while ([rs next]) {
+            row = [FormVO readFromDictionary:[rs resultDictionary]];
+            [results addObject:row];
+        }
+    }
     
     return results;
 }
@@ -294,5 +258,20 @@
     
 }
 
-
+- (NSMutableArray *) listFormOptions:(int)formId {
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    
+    NSString *sql = @"select * from form_option where form_id=?";
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
+                       [NSNumber numberWithInt:formId]];
+    FormVO *row;
+    
+    while ([rs next]) {
+        row = [FormVO readFromDictionary:[rs resultDictionary]];
+        [results addObject:row];
+    }
+    
+    return results;
+}
 @end
