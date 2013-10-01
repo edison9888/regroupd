@@ -1,12 +1,12 @@
 //
-//  PhotoScrollView.m
+//  PageScrollView.m
 //
 //  Created by Hugh Lang on 8/11/11.
 //
 
-#import "PhotoScrollView.h"
+#import "PageScrollView.h"
 
-@implementation PhotoScrollView
+@implementation PageScrollView
 
 - (id)initWithFrame:(CGRect)frame 
 {

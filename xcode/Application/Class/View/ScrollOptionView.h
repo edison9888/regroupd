@@ -9,11 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "FancyTextField.h"
 #import "BrandUILabel.h"
+#import "BaseItemView.h"
 
-@interface ScrollOptionView : UIView<UITextFieldDelegate> {
+@interface ScrollOptionView : BaseItemView {
     UIView *_theView;
-    
 }
+
+- (id)initWithFrame:(CGRect)frame andData:(NSDictionary *)data;
 
 @property int index;
 @property (nonatomic, strong) IBOutlet UIImageView *roundPic;

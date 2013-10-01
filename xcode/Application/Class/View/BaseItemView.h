@@ -4,17 +4,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Page.h"
 
 @interface BaseItemView : UIView {
 	BOOL isInScrollWindow;
     UIView *subview;
 }
 
-@property (nonatomic, retain) Page *page;
+@property (nonatomic, retain) NSDictionary *data;
 @property (nonatomic) BOOL isInScrollWindow;
 
-- (id)initWithFrame:(CGRect)frame andPage:(Page *)page;
+- (id)initWithFrame:(CGRect)frame andData:(NSDictionary *)data;
 - (id)initWithFrame:(CGRect)frame andView:(UIView *)embedView;
 
 - (void)willFocus;

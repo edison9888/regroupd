@@ -1,41 +1,30 @@
 //
-//  SideScrollItemView.m
-//  photiq
+//  SideScrollVC.h
+//  Regroupd
 //
-//  Created by Hugh Lang on 2/13/13.
-//  Copyright (c) 2013 Tastemakerlabs. All rights reserved.
 //
 
-#import "SideScrollPhotoVC.h"
-#import "ImageItemView.h"
-#import "Page.h"
+#import "SideScrollVC.h"
+#import "ScrollOptionView.h"
 
-@implementation SideScrollPhotoVC
+#define kPhotoWidth 320
+#define kPhotoHeight 300
+
+@implementation SideScrollVC
 
 @synthesize scrollView;
 
 @synthesize currentState;
 @synthesize currentIndex;
 
-//- (id)initWithFrame:(CGRect)frame
-//{
-//    self = [super initWithFrame:frame];
-//    if (self) {
-//        // Initialization code
-//    }
-//    return self;
-//}
-
-
-
-- (id)initWithPhotos:(NSMutableArray *)photosArray
+- (id)initWithData:(NSMutableArray *)pageArray
 {
 #ifdef kDEBUG
     NSLog(@"%s", __FUNCTION__);
 #endif
     
-    viewCount = photosArray.count;
-    photos = photosArray;
+    viewCount = pageArray.count;
+    pages = pageArray;
     
     self = [super init];
     if (self) {
@@ -51,8 +40,10 @@
 	currentIndex = 0;
 	previousView = nil;
     
+    loadedViewsDictionary = [[NSMutableDictionary alloc] init];
+
 	// initialize ScrollView
-	scrollView = [[PhotoScrollView alloc] initWithFrame:CGRectMake(0,0,kPhotoWidth,kPhotoHeight)];
+	scrollView = [[PageScrollView alloc] initWithFrame:CGRectMake(0,0,kPhotoWidth,kPhotoHeight)];
 	[scrollView setContentSize:CGSizeMake(kPhotoWidth * viewCount, kPhotoHeight)];
 	[scrollView setPagingEnabled:YES];
 	[scrollView setShowsHorizontalScrollIndicator:NO];
@@ -85,6 +76,7 @@
 		[previousView willBlur];
 	}
     
+    
 	// set all views to invisible
 	for (NSNumber *key in loadedViewsDictionary) {
 		aView = [loadedViewsDictionary objectForKey:key];
@@ -96,10 +88,10 @@
 		if (i >= 0 && i < viewCount) {
 			aView = [loadedViewsDictionary objectForKey:[NSNumber numberWithInt:i]];
 			if (aView == nil) {
-                Page *p = [photos objectAtIndex:i];
-                NSLog(@"ypos = %d", i*kPhotoHeight);
+                NSDictionary *pageData = (NSDictionary *)[pages objectAtIndex:i];
+                NSLog(@"xpos = %d", i*kPhotoWidth);
                 
-				aView = [[ImageItemView alloc] initWithFrame:CGRectMake(i*kPhotoWidth, 0,kPhotoWidth,kPhotoHeight) andPage:p];
+				aView = [[ScrollOptionView alloc] initWithFrame:CGRectMake(i*kPhotoWidth, 0,kPhotoWidth,kPhotoHeight) andData:pageData];
                 
 				[scrollView addSubview:aView];
 				[loadedViewsDictionary setObject: aView forKey:[NSNumber numberWithInt:i]];
@@ -162,7 +154,7 @@
 
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    NSLog(@"scrollViewWillBeginDragging");
+//    NSLog(@"scrollViewWillBeginDragging");
     NSNotification* hideInfoNotification = [NSNotification notificationWithName:@"hideInfoNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideInfoNotification];
 }
@@ -173,8 +165,8 @@
 	}
 }
 
-- (void)scrollViewDidEndDecelerating:(PhotoScrollView *)aScrollView {
-	int newIndex = (int)scrollView.contentOffset.y/kPhotoHeight;
+- (void)scrollViewDidEndDecelerating:(PageScrollView *)aScrollView {
+	int newIndex = (int)scrollView.contentOffset.y/kPhotoWidth;
 	if (newIndex != currentIndex) {
 		currentIndex = newIndex;
 		

@@ -7,10 +7,10 @@
 
 @implementation BaseItemView
 
-@synthesize page;
+@synthesize data;
 @synthesize isInScrollWindow;
 
-- (id)initWithFrame:(CGRect)frame andPage:(Page *)page {
+- (id)initWithFrame:(CGRect)frame andData:(NSDictionary *)pageData {
     if ((self = [super initWithFrame:frame])) {
         // Initialization code
 		isInScrollWindow = NO;
@@ -18,6 +18,7 @@
     }
     return self;
 }
+
 - (id)initWithFrame:(CGRect)frame andView:(UIView *)embedView {
     
     if ((self = [super initWithFrame:frame])) {

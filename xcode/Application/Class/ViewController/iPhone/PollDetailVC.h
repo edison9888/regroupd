@@ -13,6 +13,7 @@
 #import "FormManager.h"
 #import "FormVO.h"
 #import "FormOptionVO.h"
+#import "SideScrollVC.h"
 
 @interface PollDetailVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     BOOL isLoading;
@@ -21,6 +22,9 @@
     FormManager *formSvc;
     
 }
+
+@property (nonatomic, retain) SideScrollVC *carouselVC;
+@property (nonatomic, retain) IBOutlet UIView *browseView;
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
 @property(retain) NSMutableArray *tableData;

@@ -7,6 +7,7 @@
 //
 
 #import "PollDetailVC.h"
+#import "SQLiteDB.h"
 
 @interface PollDetailVC ()
 
@@ -35,6 +36,7 @@
     
     [self loadFormOptions];
     
+    
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
     
@@ -60,10 +62,29 @@
 - (void) loadFormOptions {
     
     @try {
-        NSMutableArray *options = [formSvc listFormOptions:[DataModel shared].form.form_id];
-        for (FormOptionVO* option in options) {
-            NSLog(@"option %@", option.name);
+        
+        NSMutableArray *results = [[NSMutableArray alloc] init];
+        
+        NSString *sql = @"select * from form_option where form_id=?";
+        
+        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
+                           [NSNumber numberWithInt:[DataModel shared].form.form_id]];
+        
+        NSDictionary *dict;
+        
+        while ([rs next]) {
+            dict = [rs resultDictionary];
+            [dict setValue:@"tesla.jpg" forKey:@"imagefile"];
+            [results addObject:dict];
         }
+        
+        self.carouselVC = [[SideScrollVC alloc] initWithData:results];
+        
+        CGRect carouselFrame = CGRectMake(0, 0, 320, 300);
+        self.carouselVC.view.frame = carouselFrame;
+        [self.browseView addSubview:self.carouselVC.view];
+        
+        
     }
     @catch (NSException *exception) {
         NSLog(@"%@", exception);

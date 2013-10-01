@@ -1,38 +1,41 @@
 //
-//  SideScrollItemView.h
-//  photiq
+//  SideScrollVC.h
+//  Regroupd
 //
-//  Created by Hugh Lang on 2/13/13.
-//  Copyright (c) 2013 Tastemakerlabs. All rights reserved.
+//  Created by Hugh Lang on 9/30/13.
+//
 //
 
 #import "BaseItemView.h"
-#import "PhotoScrollView.h"
+#import "PageScrollView.h"
+#import "ScrollOptionView.h"
+#import "FormOptionVO.h"
+
 
 /*
  This view is designed to allow a horizontal scrollable container inside a vertical scroller
  */
-@interface SideScrollPhotoVC : UIViewController <UIScrollViewDelegate>
+@interface SideScrollVC : UIViewController <UIScrollViewDelegate>
 {
     UIView *mainView;
-    PhotoScrollView *scrollView;
+    PageScrollView *scrollView;
 	NSMutableDictionary *loadedViewsDictionary;
     BaseItemView *previousView;
     
     NSString *currentState;
-    NSMutableArray *photos;
-
+    NSMutableArray *pages;
+    
     int viewCount;
 	int currentIndex;
     
 }
 
-@property (nonatomic, retain) PhotoScrollView *scrollView;
+@property (nonatomic, retain) PageScrollView *scrollView;
 
 @property (nonatomic,retain) NSString *currentState;
 @property (nonatomic) int currentIndex;
 
-- (id)initWithPhotos:(NSMutableArray *)photosArray;
+- (id)initWithData:(NSMutableArray *)pageArray;
 
 - (void) handleScrollWindow;
 - (void) handleSwapImages;
