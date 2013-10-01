@@ -9,6 +9,7 @@
 
 #define kPhotoWidth 320
 #define kPhotoHeight 300
+#define kPageCounter @"%@ / %@"
 
 @implementation SideScrollVC
 
@@ -51,7 +52,7 @@
 	[scrollView setUserInteractionEnabled:YES];
 	[scrollView setScrollEnabled:YES];
 	[scrollView setDelaysContentTouches:NO];
-	[scrollView setBackgroundColor:[UIColor blackColor]];
+	[scrollView setBackgroundColor:[UIColor clearColor]];
 	[scrollView setDecelerationRate:UIScrollViewDecelerationRateFast];
 	[scrollView setDelegate:self];
 	
@@ -67,9 +68,10 @@
 }
 
 - (void) handleScrollWindow {
-#ifdef kDEBUG
+    
     NSLog(@"%s", __FUNCTION__);
-#endif
+    
+    
 	BaseItemView* aView = nil;
 	
     if(previousView) {
@@ -85,6 +87,8 @@
 	
 	// iterate over three views, one visible, one on the left one on the right
 	for(int i=currentIndex-1; i <= currentIndex+1; i++) {
+        NSLog(@"Iterate pages: i=%i",i);
+        
 		if (i >= 0 && i < viewCount) {
 			aView = [loadedViewsDictionary objectForKey:[NSNumber numberWithInt:i]];
 			if (aView == nil) {
@@ -92,6 +96,7 @@
                 NSLog(@"xpos = %d", i*kPhotoWidth);
                 
 				aView = [[ScrollOptionView alloc] initWithFrame:CGRectMake(i*kPhotoWidth, 0,kPhotoWidth,kPhotoHeight) andData:pageData];
+                aView.backgroundColor = [UIColor clearColor];
                 
 				[scrollView addSubview:aView];
 				[loadedViewsDictionary setObject: aView forKey:[NSNumber numberWithInt:i]];
@@ -124,18 +129,25 @@
 	[aView willFocus];
     previousView = aView;
     
+    
+    NSString *pageCounter = [NSString stringWithFormat:kPageCounter,
+                             [NSNumber numberWithInt:currentIndex + 1],
+                             [NSNumber numberWithInt:viewCount]];
+    
+    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification
+                                                            notificationWithName:@"updatePageNumber"
+                                                            object:pageCounter]];
+
 }
 
 - (void) handleSwapImages {
-    NSLog(@"handleSwapImages %i", currentIndex);
-    
-    BaseItemView* aView = [loadedViewsDictionary objectForKey:[NSNumber numberWithInt:currentIndex]];
-    
-    //    ImageViewTemplate* aView = (ImageViewTemplate *) [loadedSitesDictionary objectForKey:[NSNumber numberWithInt:currentIndex]];
-    //    NSLog(@"Page title is: %@", [[[aView page] chapter] title]);
-    
-    [aView swapViews];
+//    NSLog(@"handleSwapImages %i", currentIndex);
+//    
+//    BaseItemView* aView = [loadedViewsDictionary objectForKey:[NSNumber numberWithInt:currentIndex]];
+//    
+//    [aView swapViews];
 }
+
 
 #pragma mark Handle ScrollView
 
@@ -143,8 +155,8 @@
 {
     // Process the single tap here
     
-    NSNotification* toggleInfoNotification = [NSNotification notificationWithName:@"toggleInfoNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] postNotification:toggleInfoNotification];
+//    NSNotification* toggleInfoNotification = [NSNotification notificationWithName:@"toggleInfoNotification" object:nil];
+//    [[NSNotificationCenter defaultCenter] postNotification:toggleInfoNotification];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -154,9 +166,11 @@
 
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-//    NSLog(@"scrollViewWillBeginDragging");
-    NSNotification* hideInfoNotification = [NSNotification notificationWithName:@"hideInfoNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] postNotification:hideInfoNotification];
+    
+    
+//    NSNotification* hideInfoNotification = [NSNotification notificationWithName:@"hideInfoNotification" object:nil];
+//    [[NSNotificationCenter defaultCenter] postNotification:hideInfoNotification];
+    
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)aScrollView willDecelerate:(BOOL)decelerate {
@@ -166,8 +180,12 @@
 }
 
 - (void)scrollViewDidEndDecelerating:(PageScrollView *)aScrollView {
-	int newIndex = (int)scrollView.contentOffset.y/kPhotoWidth;
+    NSLog(@"%s", __FUNCTION__);
+	int newIndex = (int)scrollView.contentOffset.x / (int)kPhotoWidth;
+    NSLog(@"newIndex %i -- currentIndex %i", newIndex, currentIndex);
+
 	if (newIndex != currentIndex) {
+        
 		currentIndex = newIndex;
 		
 		[self handleScrollWindow];
@@ -177,6 +195,8 @@
 
 - (void)scrollToPageNotificationHandler:(NSNotification*)notification
 {
+//    NSLog(@"%s", __FUNCTION__);
+//    NSNumber *num = (NSNumber *) notification.object;
     
 	
     //	[self setCurrentIndex: [chapter index]];
@@ -194,6 +214,30 @@
 - (void)disableScrollingNotificationHandler:(NSNotification*)notification
 {
 	[[self scrollView] setScrollEnabled:NO];
+}
+
+#pragma mark - actions 
+- (void) goPrevious {
+    if (currentIndex > 0) {
+        currentIndex -= 1;
+        
+        CGRect frame = CGRectMake(currentIndex * kPhotoWidth, 0, kPhotoWidth, kPhotoWidth); 
+        [self.scrollView scrollRectToVisible:frame animated:YES];
+		[self handleScrollWindow];
+        
+    }
+    
+}
+- (void) goNext {
+    if (currentIndex < viewCount - 1) {
+        currentIndex += 1;
+        
+        CGRect frame = CGRectMake(currentIndex * kPhotoWidth, 0, kPhotoWidth, kPhotoWidth);
+        [self.scrollView scrollRectToVisible:frame animated:YES];
+		[self handleScrollWindow];
+        
+    }
+    
 }
 
 

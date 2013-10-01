@@ -20,9 +20,7 @@
 @property int index;
 @property (nonatomic, strong) IBOutlet UIImageView *roundPic;
 
-@property (nonatomic, strong) IBOutlet BrandUILabel *subjectLabel;
 @property (nonatomic, strong) IBOutlet BrandUILabel *optionLabel;
-@property (nonatomic, strong) IBOutlet BrandUILabel *counterLabel;
 
 
 - (void) setPhoto:(UIImage *)photo;

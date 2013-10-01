@@ -34,6 +34,8 @@
     
     formSvc = [[FormManager alloc] init];
     
+    self.subjectLabel.text = [DataModel shared].form.name;
+    
     [self loadFormOptions];
     
     
@@ -45,10 +47,12 @@
     self.theTableView.backgroundColor = [UIColor clearColor];
     
     self.tableData =[[NSMutableArray alloc]init];
-    
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePageNumberHandler:)     name:@"updatePageNumber"            object:nil];
+
     [self performSearch:@""];
     
-    
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -84,6 +88,7 @@
         self.carouselVC.view.frame = carouselFrame;
         [self.browseView addSubview:self.carouselVC.view];
         
+        [self.browseView sendSubviewToBack:self.carouselVC.view];
         
     }
     @catch (NSException *exception) {
@@ -92,6 +97,13 @@
     
     
 }
+
+- (void)updatePageNumberHandler:(NSNotification*)notification
+{
+    NSString *text = (NSString *) notification.object;
+    self.counterLabel.text = text;
+}
+
 #pragma mark - UITableViewDataSource
 
 
@@ -212,16 +224,16 @@
 
 #pragma mark - Action handlers
 
-- (IBAction)tapAddButton
+- (IBAction)tapCloseButton
 {
-    //    BOOL isOk = YES;
-    [DataModel shared].action = kActionADD;
-    [_delegate gotoNextSlide];
+    [_delegate gotoSlideWithName:@"FormsHome"];
     
 }
 
-- (IBAction)tapEditButton
-{
-    
+- (IBAction)tapLeftArrow {
+    [self.carouselVC goPrevious];
+}
+- (IBAction)tapRightArrow {
+    [self.carouselVC goNext];
 }
 @end

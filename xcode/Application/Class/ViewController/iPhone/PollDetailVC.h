@@ -24,22 +24,21 @@
 }
 
 @property (nonatomic, retain) SideScrollVC *carouselVC;
+
 @property (nonatomic, retain) IBOutlet UIView *browseView;
+@property (nonatomic, strong) IBOutlet BrandUILabel *subjectLabel;
+@property (nonatomic, strong) IBOutlet BrandUILabel *counterLabel;
+
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
 @property(retain) NSMutableArray *tableData;
 - (void)performSearch:(NSString *)searchText;
 
-@property (nonatomic, strong) IBOutlet UILabel *navTitle;
-@property (nonatomic, strong) IBOutlet UILabel *navCaption;
 
-@property (nonatomic, strong) IBOutlet UIButton *editButton;
-@property (nonatomic, strong) IBOutlet UIButton *addButton;
+- (IBAction)tapCloseButton;
+- (IBAction)tapLeftArrow;
+- (IBAction)tapRightArrow;
 
-
-- (IBAction)tapAddButton;
-
-- (IBAction)tapEditButton;
 
 - (void) loadFormOptions;
 

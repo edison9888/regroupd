@@ -32,6 +32,9 @@
         [self.roundPic.layer setBorderColor:[UIColor whiteColor].CGColor];
         self.roundPic.clipsToBounds = YES;
         self.roundPic.contentMode = UIViewContentModeScaleAspectFill;
+        
+        self.optionLabel.text = [self.data objectForKey:@"name"];
+        
         [self addSubview:_theView];
         
     }
@@ -47,7 +50,7 @@
         _theView.backgroundColor = [UIColor clearColor];
         [self.roundPic.layer setCornerRadius:96.0f];
         [self.roundPic.layer setMasksToBounds:YES];
-        [self.roundPic.layer setBorderWidth:2.0f];
+        [self.roundPic.layer setBorderWidth:3.0f];
         [self.roundPic.layer setBorderColor:[UIColor whiteColor].CGColor];
         self.roundPic.clipsToBounds = YES;
         self.roundPic.contentMode = UIViewContentModeScaleAspectFill;

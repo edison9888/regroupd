@@ -1049,12 +1049,12 @@
 		1E59F10C17FA5E8D00EE2902 /* Scroller */ = {
 			isa = PBXGroup;
 			children = (
-				1E59F10D17FA5ED400EE2902 /* BaseItemView.m */,
-				1E59F10E17FA5ED400EE2902 /* BaseItemView.h */,
 				1E59F10617FA532D00EE2902 /* SideScrollVC.h */,
 				1E59F10717FA532D00EE2902 /* SideScrollVC.m */,
 				1E59F10917FA544C00EE2902 /* PageScrollView.m */,
 				1E59F10A17FA544C00EE2902 /* PageScrollView.h */,
+				1E59F10D17FA5ED400EE2902 /* BaseItemView.m */,
+				1E59F10E17FA5ED400EE2902 /* BaseItemView.h */,
 				1E9C36BF17FA49F10017E9AD /* ScrollOptionView.h */,
 				1E9C36C017FA49F10017E9AD /* ScrollOptionView.m */,
 				1E9C36C117FA49F10017E9AD /* ScrollOptionView.xib */,

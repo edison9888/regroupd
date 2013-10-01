@@ -40,5 +40,10 @@
 - (void) handleScrollWindow;
 - (void) handleSwapImages;
 
+- (void) goPrevious;
+- (void) goNext;
+
+
+
 
 @end
