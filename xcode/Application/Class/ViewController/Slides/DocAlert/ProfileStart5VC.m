@@ -33,6 +33,7 @@
 {
     [super viewDidLoad];
     
+    userSvc = [[UserManager alloc] init];
     
 }
 
@@ -47,14 +48,27 @@
 
 - (IBAction)tapNoButton
 {
+    UserVO *user = [[UserVO alloc] init];
+    user.firstname = @"default";
+    [userSvc createUser:user];
+    [[[UIAlertView alloc] initWithTitle:@"Thank you" message:@"Sign up complete." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+
+    
     [DataModel shared].navIndex = 4;
-    [_delegate gotoSlideWithName:@"ContactsHome" andOverrideTransition:kPresentationTransitionDown];
+    [_delegate gotoSlideWithName:@"FormsHome" andOverrideTransition:kPresentationTransitionDown];
 }
 
 - (IBAction)tapYesButton
 {
+    UserVO *user = [[UserVO alloc] init];
+    user.firstname = @"default";
+
+    [userSvc createUser:user];
+    
+    [[[UIAlertView alloc] initWithTitle:@"Thank you" message:@"Sign up complete." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+
     [DataModel shared].navIndex = 4;
-    [_delegate gotoSlideWithName:@"ContactsHome" andOverrideTransition:kPresentationTransitionDown];
+    [_delegate gotoSlideWithName:@"FormsHome" andOverrideTransition:kPresentationTransitionDown];
 }
 
 @end

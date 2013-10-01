@@ -27,4 +27,7 @@
 - (void) updateOption:(FormOptionVO *) option;
 - (NSMutableArray *) listFormOptions:(int)formId;
 
+- (NSString *)saveFormImage:(UIImage *)saveImage withName:(NSString *)filename;
+- (UIImage *)loadFormImage:(NSString *)filename;
+
 @end

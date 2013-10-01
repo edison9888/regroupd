@@ -80,7 +80,7 @@
     
     NSLog(@"dimensions = %i x %i", [DataModel shared].stageWidth, [DataModel shared].stageHeight);
     
-    CGRect frame = CGRectMake(0, [DataModel shared].stageHeight - 50, [DataModel shared].stageWidth, 50);
+    CGRect frame = CGRectMake(0, [DataModel shared].stageHeight - 63, [DataModel shared].stageWidth, 63);
     brandNav.frame = frame;
     brandNav.hidden = YES;
     [self.view addSubview:brandNav];

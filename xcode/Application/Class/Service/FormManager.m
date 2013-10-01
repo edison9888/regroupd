@@ -274,4 +274,40 @@
     
     return results;
 }
+
+/*
+ Create a temporary filename and save image data to file in Documents or temp dir
+ */
+- (NSString *)saveFormImage:(UIImage *)saveImage withName:(NSString *)filename
+{
+    NSArray *pathsToDocuments = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    
+    NSString *documentsDirectory = [pathsToDocuments objectAtIndex:0];
+    
+    NSString *savePath = [documentsDirectory stringByAppendingPathComponent:filename];
+    
+    NSData *imageData = UIImagePNGRepresentation(saveImage);
+    
+    [imageData writeToFile:savePath atomically:NO];
+    
+    return savePath;
+}
+
+- (UIImage *)loadFormImage:(NSString *)filename {
+    
+    @try {
+        NSArray *pathsToDocuments = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        
+        NSString *documentsDirectory = [pathsToDocuments objectAtIndex:0];
+        
+        NSString *filepath = [documentsDirectory stringByAppendingPathComponent:filename];
+        
+        UIImage *image = [UIImage imageWithContentsOfFile:filepath];
+        return image;
+    }
+    @catch (NSException *exception) {
+        return nil;
+    }
+}
+
 @end

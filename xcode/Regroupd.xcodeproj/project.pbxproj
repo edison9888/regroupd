@@ -111,6 +111,10 @@
 		1E59F10817FA532D00EE2902 /* SideScrollVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E59F10717FA532D00EE2902 /* SideScrollVC.m */; };
 		1E59F10B17FA544C00EE2902 /* PageScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E59F10917FA544C00EE2902 /* PageScrollView.m */; };
 		1E59F10F17FA5ED400EE2902 /* BaseItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E59F10D17FA5ED400EE2902 /* BaseItemView.m */; };
+		1E59F11317FA6BF100EE2902 /* RatingDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E59F11117FA6BF100EE2902 /* RatingDetailVC.m */; };
+		1E59F11417FA6BF100EE2902 /* RatingDetailVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E59F11217FA6BF100EE2902 /* RatingDetailVC.xib */; };
+		1E59F11617FB0EF500EE2902 /* tabbar_with_arc@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E59F11517FB0EF500EE2902 /* tabbar_with_arc@2x.png */; };
+		1E59F11817FB100F00EE2902 /* tabnav_selected_bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E59F11717FB100F00EE2902 /* tabnav_selected_bar@2x.png */; };
 		1E5CABD817BA8DF0000D8759 /* RecentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5CABD617BA8DF0000D8759 /* RecentTableViewCell.m */; };
 		1E5CABD917BA8DF0000D8759 /* RecentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E5CABD717BA8DF0000D8759 /* RecentTableViewCell.xib */; };
 		1E751B2C179C4B11003AB13D /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E751B2B179C4B11003AB13D /* UserManager.m */; };
@@ -498,6 +502,11 @@
 		1E59F10A17FA544C00EE2902 /* PageScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageScrollView.h; sourceTree = "<group>"; };
 		1E59F10D17FA5ED400EE2902 /* BaseItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseItemView.m; sourceTree = "<group>"; };
 		1E59F10E17FA5ED400EE2902 /* BaseItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseItemView.h; sourceTree = "<group>"; };
+		1E59F11017FA6BF100EE2902 /* RatingDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RatingDetailVC.h; sourceTree = "<group>"; };
+		1E59F11117FA6BF100EE2902 /* RatingDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RatingDetailVC.m; sourceTree = "<group>"; };
+		1E59F11217FA6BF100EE2902 /* RatingDetailVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RatingDetailVC.xib; sourceTree = "<group>"; };
+		1E59F11517FB0EF500EE2902 /* tabbar_with_arc@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabbar_with_arc@2x.png"; sourceTree = "<group>"; };
+		1E59F11717FB100F00EE2902 /* tabnav_selected_bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabnav_selected_bar@2x.png"; sourceTree = "<group>"; };
 		1E5CABD517BA8DF0000D8759 /* RecentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecentTableViewCell.h; sourceTree = "<group>"; };
 		1E5CABD617BA8DF0000D8759 /* RecentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecentTableViewCell.m; sourceTree = "<group>"; };
 		1E5CABD717BA8DF0000D8759 /* RecentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecentTableViewCell.xib; sourceTree = "<group>"; };
@@ -1124,6 +1133,9 @@
 				1E8BFB0017F7B8A50053BEE3 /* PollDetailVC.h */,
 				1E8BFB0117F7B8A60053BEE3 /* PollDetailVC.m */,
 				1E8BFB0217F7B8A70053BEE3 /* PollDetailVC.xib */,
+				1E59F11017FA6BF100EE2902 /* RatingDetailVC.h */,
+				1E59F11117FA6BF100EE2902 /* RatingDetailVC.m */,
+				1E59F11217FA6BF100EE2902 /* RatingDetailVC.xib */,
 			);
 			name = Forms;
 			sourceTree = "<group>";
@@ -1184,6 +1196,8 @@
 		1E9280E9177FB68F008A583C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1E59F11717FB100F00EE2902 /* tabnav_selected_bar@2x.png */,
+				1E59F11517FB0EF500EE2902 /* tabbar_with_arc@2x.png */,
 				1E9C36C417FA4DBC0017E9AD /* tesla.jpg */,
 				1E9C36C517FA4DBC0017E9AD /* maserati.jpg */,
 				1E9C36C617FA4DBC0017E9AD /* audi.jpg */,
@@ -1998,6 +2012,7 @@
 				1E2C7EA717E4FFCB0043E28D /* S1.2_btn_enter_code@2x.png in Resources */,
 				1E2C7EA817E4FFCB0043E28D /* S1.1_button_enter@2x.png in Resources */,
 				1E2C7EA917E4FFCB0043E28D /* full_bg_aqua@2x.png in Resources */,
+				1E59F11817FB100F00EE2902 /* tabnav_selected_bar@2x.png in Resources */,
 				1E2C7EB117E50F690043E28D /* ProfileStart2VC.xib in Resources */,
 				1E213BF417E542BE00E17DBF /* topnav_aqua_bg@2x.png in Resources */,
 				1E213BF517E542BE00E17DBF /* btn_aqua_add@2x.png in Resources */,
@@ -2024,12 +2039,14 @@
 				1E1E25C417F3319F0079416C /* FancyCheckbox.xib in Resources */,
 				1E1E25C917F347D70079416C /* icon_photo_default@2x.png in Resources */,
 				1E1E25CE17F349020079416C /* SurveyOptionWithPic.xib in Resources */,
+				1E59F11617FB0EF500EE2902 /* tabbar_with_arc@2x.png in Resources */,
 				1E1E25D017F364A80079416C /* icon_pencil_edit@2x.png in Resources */,
 				1E1E25D417F395EF0079416C /* icon_cancel@2x.png in Resources */,
 				1E1E25D517F395EF0079416C /* icon_pick_photo@2x.png in Resources */,
 				1E1E25D617F395EF0079416C /* icon_pick_camera@2x.png in Resources */,
 				1E88805A17F4E9A10070116C /* FormsHomeVC.xib in Resources */,
 				1E88805C17F4E9A10070116C /* EditRatingVC.xib in Resources */,
+				1E59F11417FA6BF100EE2902 /* RatingDetailVC.xib in Resources */,
 				1E88805E17F4E9A10070116C /* EditPollVC.xib in Resources */,
 				1E88806517F4FC340070116C /* SurveyOptionWidget.xib in Resources */,
 				1E131D5617F60AE600749506 /* EditRSVPVC.xib in Resources */,
@@ -2190,6 +2207,7 @@
 				1E8333D8179792F600B60612 /* QSFileManager.m in Sources */,
 				1E8333DA179792F600B60612 /* QSHttpClient.m in Sources */,
 				1E8333DC179792F600B60612 /* QSStrings.m in Sources */,
+				1E59F11317FA6BF100EE2902 /* RatingDetailVC.m in Sources */,
 				1EAFEC3117999C8A00CCBDA1 /* MBProgressHUD.m in Sources */,
 				1E751B2C179C4B11003AB13D /* UserManager.m in Sources */,
 				1EB652A2179F6F7200BEC96C /* SignatureView.m in Sources */,

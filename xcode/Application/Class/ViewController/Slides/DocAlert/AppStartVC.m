@@ -63,13 +63,12 @@
     if (user == nil) {
 //        [DataModel shared].navIndex = 1;
 //        [_delegate gotoSlideWithName:@"GroupsHome"];
-        [DataModel shared].navIndex = 3;
-        [_delegate gotoSlideWithName:@"FormsHome"];
+        [_delegate gotoSlideWithName:@"ProfileStart1"];
         
     } else {
-        
         [DataModel shared].navIndex = 3;
         [_delegate gotoSlideWithName:@"FormsHome"];
+        
     }
     
 }

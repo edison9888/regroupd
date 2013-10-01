@@ -499,10 +499,10 @@
         isOK = NO;
         [errorIds addObject:[NSNumber numberWithInt:kTagEndTime]];
     }
-    if (allow_public < 0) {
-        isOK = NO;
-        [errorIds addObject:[NSNumber numberWithInt:kTagAllowOthersYes]];
-    }
+//    if (allow_public < 0) {
+//        isOK = NO;
+//        [errorIds addObject:[NSNumber numberWithInt:kTagAllowOthersYes]];
+//    }
 
     if (isOK) {
         // Read date fields and combine
@@ -527,6 +527,8 @@
         form.name = self.subjectField.text;
         form.location = self.whereField.text;
         form.description = self.descriptionField.text;
+        form.start_time = start_time;
+        form.end_time = end_time;
         
         form.type = FormType_RSVP;
         form.status = FormStatus_DRAFT;
@@ -639,7 +641,36 @@
 
 - (void)keyboardControlsDonePressed:(BSKeyboardControls *)controls
 {
-    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s at field %i", __FUNCTION__, fieldIndex);
+    
+    NSDate *pickDate;
+    switch (fieldIndex) {
+            
+        case kTagStartDate:
+            pickDate = self.datePicker.date;
+            
+            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
+            break;
+            
+        case kTagStartTime:
+            pickDate = self.datePicker.date;
+            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
+            
+            break;
+            
+        case kTagEndDate:
+            pickDate = self.datePicker.date;
+            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
+            
+            break;
+            
+        case kTagEndTime:
+            
+            pickDate = self.datePicker.date;
+            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
+            break;
+    }
+    
     [controls.activeField resignFirstResponder];
     [self.scrollView scrollRectToVisible:self.view.frame animated:YES];
     

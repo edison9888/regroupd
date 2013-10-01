@@ -8,10 +8,12 @@
 
 #import "SlideViewController.h"
 #import "BrandUILabel.h"
+#import "UserManager.h"
 
 @interface ProfileStart5VC : SlideViewController<UIAlertViewDelegate>
 {
     CGPoint  offset;
+    UserManager *userSvc;
 }
 
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
