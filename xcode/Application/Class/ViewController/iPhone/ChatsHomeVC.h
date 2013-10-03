@@ -8,8 +8,7 @@
 
 #import "SlideViewController.h"
 #import "SQLiteDB.h"
-#import "CCSearchBar.h"
-#import "CCTableViewCell.h"
+#import "ChatTableViewCell.h"
 #import "ContactVO.h"
 
 @interface ChatsHomeVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {

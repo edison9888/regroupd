@@ -34,6 +34,11 @@
 
 #define kFirstOptionId  1
 
+static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.3;
+static const CGFloat MINIMUM_SCROLL_FRACTION = 0.2;
+static const CGFloat MAXIMUM_SCROLL_FRACTION = 0.8;
+static const CGFloat PORTRAIT_KEYBOARD_HEIGHT = 260;
+static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -226,7 +231,7 @@
     // resize the scrollview
     CGRect viewFrame = self.scrollView.frame;
     // I'm also subtracting a constant kTabBarHeight because my UIScrollView was offset by the UITabBar so really only the portion of the keyboard that is leftover pass the UITabBar is obscuring my UIScrollView.
-    viewFrame.size.height += (keyboardSize.height - navbarHeight);
+    viewFrame.size.height += (keyboardSize.height - navbarHeight - 44);
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];
@@ -238,22 +243,22 @@
     keyboardIsShown = NO;
     
 }
-- (void) updateScrollView {
-    NSLog(@"%s tag=%i", __FUNCTION__, fieldIndex);
-    
-    CGRect aRect = self.view.frame;
-    
-    aRect.size.height -= keyboardHeight;
-    CGRect targetFrame = _currentField.frame;
-    
-    targetFrame.origin.y += 40;
-    
-//        [self.scrollView setContentOffset:CGPointMake(0.0, currentOption.frame.origin.y-keyboardHeight) animated:YES];
-    if (!CGRectContainsPoint(aRect, targetFrame.origin) ) {
-        [self.scrollView scrollRectToVisible:targetFrame animated:YES];
-    }
-    
-}
+//- (void) updateScrollView {
+//    NSLog(@"%s tag=%i", __FUNCTION__, fieldIndex);
+//    
+//    CGRect aRect = self.view.frame;
+//    
+//    aRect.size.height -= keyboardHeight;
+//    CGRect targetFrame = _currentField.frame;
+//    
+//    targetFrame.origin.y += 40;
+//    
+////        [self.scrollView setContentOffset:CGPointMake(0.0, currentOption.frame.origin.y-keyboardHeight) animated:YES];
+//    if (!CGRectContainsPoint(aRect, targetFrame.origin) ) {
+//        [self.scrollView scrollRectToVisible:targetFrame animated:YES];
+//    }
+//    
+//}
 
 #pragma mark - UITextField methods
 
@@ -264,24 +269,6 @@
         
     _currentField = textField;
 
-    switch (textField.tag) {
-        case kTagStartDate:
-            
-            break;
-            
-        case kTagStartTime:
-            
-            break;
-            
-        case kTagEndDate:
-            
-            break;
-            
-        case kTagEndTime:
-            
-            break;
-            
-    }
     return YES;
 
 }
@@ -292,32 +279,63 @@
 
     [textField resignFirstResponder];
 
-    // Get next field
-//    if (textField.tag < surveyOptions.count) {
-//        SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:textField.tag];
-//        [currentOption.input becomeFirstResponder];
-//
-//        optionIndex = textField.tag + 1;
-//        [self updateScrollView];
-//        
-//    } else {
-//        NSLog(@"Last field");
-//        [textField resignFirstResponder];
-//    }
-
     return YES;
 }
 
+
+// SEE: http://www.cocoawithlove.com/2008/10/sliding-uitextfields-around-to-avoid.html
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
+    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
+    
+    CGRect textFieldRect = [self.view.window convertRect:textField.bounds fromView:textField];
+    CGRect viewRect = [self.view.window convertRect:self.view.bounds fromView:self.view];
+    
+    CGFloat midline = textFieldRect.origin.y + 0.5 * textFieldRect.size.height;
+    CGFloat numerator = midline - viewRect.origin.y - MINIMUM_SCROLL_FRACTION * viewRect.size.height;
+    CGFloat denominator = (MAXIMUM_SCROLL_FRACTION - MINIMUM_SCROLL_FRACTION) * viewRect.size.height;
+    CGFloat heightFraction = numerator / denominator;
+    
+    if (heightFraction < 0.0)
+    {
+        heightFraction = 0.0;
+    }
+    else if (heightFraction > 1.0)
+    {
+        heightFraction = 1.0;
+    }
+    
+    animatedDistance = floor(PORTRAIT_KEYBOARD_HEIGHT * heightFraction);
+    
+    CGRect viewFrame = self.view.frame;
+    viewFrame.origin.y -= animatedDistance;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
+    
+    [self.view setFrame:viewFrame];
+    
+    [UIView commitAnimations];
     
     fieldIndex = textField.tag;
     [self.keyboardControls setActiveField:textField];
 
-    [self updateScrollView];
+//    [self updateScrollView];
     
     
 }
 - (void)textFieldDidEndEditing:(UITextField *)textField {
+    CGRect viewFrame = self.view.frame;
+    viewFrame.origin.y += animatedDistance;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
+    
+    [self.view setFrame:viewFrame];
+    
+    [UIView commitAnimations];
+    
     [self.keyboardControls.activeField resignFirstResponder];
 //    [textField resignFirstResponder];
 //    [textField endEditing:YES];
@@ -671,8 +689,9 @@
             break;
     }
     
-    [controls.activeField resignFirstResponder];
-    [self.scrollView scrollRectToVisible:self.view.frame animated:YES];
+    [_currentField resignFirstResponder];
+    
+//    [self.scrollView scrollRectToVisible:self.view.frame animated:YES];
     
 }
 

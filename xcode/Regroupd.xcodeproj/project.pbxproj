@@ -115,6 +115,16 @@
 		1E59F11417FA6BF100EE2902 /* RatingDetailVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E59F11217FA6BF100EE2902 /* RatingDetailVC.xib */; };
 		1E59F11617FB0EF500EE2902 /* tabbar_with_arc@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E59F11517FB0EF500EE2902 /* tabbar_with_arc@2x.png */; };
 		1E59F11817FB100F00EE2902 /* tabnav_selected_bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E59F11717FB100F00EE2902 /* tabnav_selected_bar@2x.png */; };
+		1E59F11D17FC7AF200EE2902 /* NotoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1E59F11917FC7AF200EE2902 /* NotoSans-Bold.ttf */; };
+		1E59F11E17FC7AF300EE2902 /* NotoSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1E59F11A17FC7AF200EE2902 /* NotoSans-BoldItalic.ttf */; };
+		1E59F11F17FC7AF300EE2902 /* NotoSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1E59F11B17FC7AF200EE2902 /* NotoSans-Italic.ttf */; };
+		1E59F12017FC7AF300EE2902 /* NotoSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1E59F11C17FC7AF200EE2902 /* NotoSans-Regular.ttf */; };
+		1E59F12417FC873900EE2902 /* ChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E59F12217FC873900EE2902 /* ChatTableViewCell.m */; };
+		1E59F12517FC873900EE2902 /* ChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E59F12317FC873900EE2902 /* ChatTableViewCell.xib */; };
+		1E59F12C17FC879800EE2902 /* EditChatVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E59F12717FC879800EE2902 /* EditChatVC.m */; };
+		1E59F12D17FC879800EE2902 /* EditChatVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E59F12817FC879800EE2902 /* EditChatVC.xib */; };
+		1E59F12E17FC879800EE2902 /* ChatVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E59F12A17FC879800EE2902 /* ChatVC.m */; };
+		1E59F12F17FC879800EE2902 /* ChatVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E59F12B17FC879800EE2902 /* ChatVC.xib */; };
 		1E5CABD817BA8DF0000D8759 /* RecentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5CABD617BA8DF0000D8759 /* RecentTableViewCell.m */; };
 		1E5CABD917BA8DF0000D8759 /* RecentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E5CABD717BA8DF0000D8759 /* RecentTableViewCell.xib */; };
 		1E751B2C179C4B11003AB13D /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E751B2B179C4B11003AB13D /* UserManager.m */; };
@@ -507,6 +517,19 @@
 		1E59F11217FA6BF100EE2902 /* RatingDetailVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RatingDetailVC.xib; sourceTree = "<group>"; };
 		1E59F11517FB0EF500EE2902 /* tabbar_with_arc@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabbar_with_arc@2x.png"; sourceTree = "<group>"; };
 		1E59F11717FB100F00EE2902 /* tabnav_selected_bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tabnav_selected_bar@2x.png"; sourceTree = "<group>"; };
+		1E59F11917FC7AF200EE2902 /* NotoSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Bold.ttf"; sourceTree = "<group>"; };
+		1E59F11A17FC7AF200EE2902 /* NotoSans-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-BoldItalic.ttf"; sourceTree = "<group>"; };
+		1E59F11B17FC7AF200EE2902 /* NotoSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Italic.ttf"; sourceTree = "<group>"; };
+		1E59F11C17FC7AF200EE2902 /* NotoSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSans-Regular.ttf"; sourceTree = "<group>"; };
+		1E59F12117FC873900EE2902 /* ChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatTableViewCell.h; sourceTree = "<group>"; };
+		1E59F12217FC873900EE2902 /* ChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatTableViewCell.m; sourceTree = "<group>"; };
+		1E59F12317FC873900EE2902 /* ChatTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatTableViewCell.xib; sourceTree = "<group>"; };
+		1E59F12617FC879800EE2902 /* EditChatVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditChatVC.h; sourceTree = "<group>"; };
+		1E59F12717FC879800EE2902 /* EditChatVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditChatVC.m; sourceTree = "<group>"; };
+		1E59F12817FC879800EE2902 /* EditChatVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditChatVC.xib; sourceTree = "<group>"; };
+		1E59F12917FC879800EE2902 /* ChatVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatVC.h; sourceTree = "<group>"; };
+		1E59F12A17FC879800EE2902 /* ChatVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatVC.m; sourceTree = "<group>"; };
+		1E59F12B17FC879800EE2902 /* ChatVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatVC.xib; sourceTree = "<group>"; };
 		1E5CABD517BA8DF0000D8759 /* RecentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecentTableViewCell.h; sourceTree = "<group>"; };
 		1E5CABD617BA8DF0000D8759 /* RecentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecentTableViewCell.m; sourceTree = "<group>"; };
 		1E5CABD717BA8DF0000D8759 /* RecentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecentTableViewCell.xib; sourceTree = "<group>"; };
@@ -1018,15 +1041,6 @@
 		1E213BE717E540D100E17DBF /* Groups */ = {
 			isa = PBXGroup;
 			children = (
-				1E213BFB17E5466B00E17DBF /* SettingsHomeVC.h */,
-				1E213BFC17E5466B00E17DBF /* SettingsHomeVC.m */,
-				1E213BFD17E5466B00E17DBF /* SettingsHomeVC.xib */,
-				1E213C0117E5466B00E17DBF /* ContactsHomeVC.h */,
-				1E213C0217E5466B00E17DBF /* ContactsHomeVC.m */,
-				1E213C0317E5466B00E17DBF /* ContactsHomeVC.xib */,
-				1E213C0417E5466B00E17DBF /* ChatsHomeVC.h */,
-				1E213C0517E5466B00E17DBF /* ChatsHomeVC.m */,
-				1E213C0617E5466B00E17DBF /* ChatsHomeVC.xib */,
 				1E213BF717E545A100E17DBF /* GroupsHomeVC.h */,
 				1E213BF817E545A100E17DBF /* GroupsHomeVC.m */,
 				1E213BF617E545A100E17DBF /* GroupsHomeVC.xib */,
@@ -1037,6 +1051,15 @@
 		1E213BE817E540E200E17DBF /* Chats */ = {
 			isa = PBXGroup;
 			children = (
+				1E213C0417E5466B00E17DBF /* ChatsHomeVC.h */,
+				1E213C0517E5466B00E17DBF /* ChatsHomeVC.m */,
+				1E213C0617E5466B00E17DBF /* ChatsHomeVC.xib */,
+				1E59F12617FC879800EE2902 /* EditChatVC.h */,
+				1E59F12717FC879800EE2902 /* EditChatVC.m */,
+				1E59F12817FC879800EE2902 /* EditChatVC.xib */,
+				1E59F12917FC879800EE2902 /* ChatVC.h */,
+				1E59F12A17FC879800EE2902 /* ChatVC.m */,
+				1E59F12B17FC879800EE2902 /* ChatVC.xib */,
 			);
 			name = Chats;
 			sourceTree = "<group>";
@@ -1044,6 +1067,9 @@
 		1E213BEA17E5412800E17DBF /* Contacts */ = {
 			isa = PBXGroup;
 			children = (
+				1E213C0117E5466B00E17DBF /* ContactsHomeVC.h */,
+				1E213C0217E5466B00E17DBF /* ContactsHomeVC.m */,
+				1E213C0317E5466B00E17DBF /* ContactsHomeVC.xib */,
 			);
 			name = Contacts;
 			sourceTree = "<group>";
@@ -1051,6 +1077,9 @@
 		1E213BEB17E5412D00E17DBF /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				1E213BFB17E5466B00E17DBF /* SettingsHomeVC.h */,
+				1E213BFC17E5466B00E17DBF /* SettingsHomeVC.m */,
+				1E213BFD17E5466B00E17DBF /* SettingsHomeVC.xib */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1180,6 +1209,10 @@
 		1E9280DF177FB68F008A583C /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				1E59F11917FC7AF200EE2902 /* NotoSans-Bold.ttf */,
+				1E59F11A17FC7AF200EE2902 /* NotoSans-BoldItalic.ttf */,
+				1E59F11B17FC7AF200EE2902 /* NotoSans-Italic.ttf */,
+				1E59F11C17FC7AF200EE2902 /* NotoSans-Regular.ttf */,
 				1E2C7E5217E4F7530043E28D /* Raleway-Bold.otf */,
 				1E2C7E5317E4F7530043E28D /* Raleway-ExtraBold.otf */,
 				1E2C7E5417E4F7530043E28D /* Raleway-ExtraLight.otf */,
@@ -1469,6 +1502,9 @@
 				1E92815E177FB68F008A583C /* CalculatorEditableLabelView.h */,
 				1E92815F177FB68F008A583C /* CalculatorEditableLabelView.m */,
 				1E928160177FB68F008A583C /* CalculatorKeyPadView.h */,
+				1E59F12117FC873900EE2902 /* ChatTableViewCell.h */,
+				1E59F12217FC873900EE2902 /* ChatTableViewCell.m */,
+				1E59F12317FC873900EE2902 /* ChatTableViewCell.xib */,
 				1E928161177FB68F008A583C /* CalculatorKeyPadView.m */,
 				1E928162177FB68F008A583C /* CalculatorKeyPadView.xib */,
 				1E928163177FB68F008A583C /* CalculatorView.h */,
@@ -1852,6 +1888,7 @@
 				1E928217177FB690008A583C /* invisibutton-60x36.png in Resources */,
 				1E928218177FB690008A583C /* key0.png in Resources */,
 				1E928219177FB690008A583C /* key0@2x.png in Resources */,
+				1E59F11E17FC7AF300EE2902 /* NotoSans-BoldItalic.ttf in Resources */,
 				1E92821A177FB690008A583C /* key1.png in Resources */,
 				1E92821B177FB690008A583C /* key1@2x.png in Resources */,
 				1E92821C177FB690008A583C /* key2.png in Resources */,
@@ -1887,6 +1924,7 @@
 				1E92823C177FB690008A583C /* popup_volume_rebate.png in Resources */,
 				1E92823D177FB690008A583C /* popup_volume_rebate@2x.png in Resources */,
 				1E92823E177FB690008A583C /* purple_alert_overlay.png in Resources */,
+				1E59F11F17FC7AF300EE2902 /* NotoSans-Italic.ttf in Resources */,
 				1E92823F177FB690008A583C /* question-icon-off.png in Resources */,
 				1E928240177FB690008A583C /* question-icon-off@2x.png in Resources */,
 				1E928241177FB690008A583C /* question-icon-on.png in Resources */,
@@ -1916,8 +1954,10 @@
 				1E9282EF177FDCEB008A583C /* icon_buyfaxes.png in Resources */,
 				1E9282F0177FDCEB008A583C /* icon_contacts.png in Resources */,
 				1E9282F1177FDCEB008A583C /* icon_newfax.png in Resources */,
+				1E59F12D17FC879800EE2902 /* EditChatVC.xib in Resources */,
 				1E9282F2177FDCEB008A583C /* icon_profile.png in Resources */,
 				1E9282F3177FDCEB008A583C /* icon_recents.png in Resources */,
+				1E59F12017FC7AF300EE2902 /* NotoSans-Regular.ttf in Resources */,
 				1E9282F4177FDCEB008A583C /* icon_search.png in Resources */,
 				1E9282F5177FDCEB008A583C /* opaque_bg.png in Resources */,
 				1E9282F6177FDCEB008A583C /* page_dot_grey.png in Resources */,
@@ -1925,6 +1965,7 @@
 				1E9282F8177FDCEB008A583C /* popup_bg.png in Resources */,
 				1E9282FB177FDCEB008A583C /* tabbar_bg.png in Resources */,
 				1E9282FC177FDCEB008A583C /* tabbar_current_bg.png in Resources */,
+				1E59F12F17FC879800EE2902 /* ChatVC.xib in Resources */,
 				1E9282FD177FDCEB008A583C /* wood_bg-568h.png in Resources */,
 				1E9282FE177FDCEB008A583C /* wood_bg.png in Resources */,
 				1E9282FF177FDCEB008A583C /* opaque_bg@2x.png in Resources */,
@@ -2003,6 +2044,7 @@
 				1E2C7E9E17E4FFCB0043E28D /* chat_right_tail_grey@2x.png in Resources */,
 				1E2C7E9F17E4FFCB0043E28D /* chat_left_tail_white@2x.png in Resources */,
 				1E2C7EA017E4FFCB0043E28D /* top_pull_handle@2x.png in Resources */,
+				1E59F11D17FC7AF200EE2902 /* NotoSans-Bold.ttf in Resources */,
 				1E2C7EA117E4FFCB0043E28D /* dkblue_small2_btn_bg@2x.png in Resources */,
 				1E2C7EA217E4FFCB0043E28D /* dkblue_btn_bg_slice@2x.png in Resources */,
 				1E2C7EA317E4FFCB0043E28D /* dkblue_med2_btn_bg@2x.png in Resources */,
@@ -2072,6 +2114,7 @@
 				1E8BFAFC17F7B8320053BEE3 /* checkbox_aqua@2x.png in Resources */,
 				1E8BFAFD17F7B8320053BEE3 /* btn_close_x@2x.png in Resources */,
 				1E8BFAFE17F7B8320053BEE3 /* browse_right_arrow@2x.png in Resources */,
+				1E59F12517FC873900EE2902 /* ChatTableViewCell.xib in Resources */,
 				1E8BFAFF17F7B8320053BEE3 /* browse_left_arrow@2x.png in Resources */,
 				1E8BFB0417F7B8A80053BEE3 /* PollDetailVC.xib in Resources */,
 			);
@@ -2192,6 +2235,7 @@
 				1E9282B6177FB690008A583C /* SBJsonStreamWriterState.m in Sources */,
 				1E9282B7177FB690008A583C /* SBJsonTokeniser.m in Sources */,
 				1E9282B8177FB690008A583C /* SBJsonUTF8Stream.m in Sources */,
+				1E59F12E17FC879800EE2902 /* ChatVC.m in Sources */,
 				1E9282B9177FB690008A583C /* SBJsonWriter.m in Sources */,
 				1E9282C3177FDB6C008A583C /* AppStartVC.m in Sources */,
 				1EF463341783AE1C00D38DBB /* UserVO.m in Sources */,
@@ -2209,6 +2253,7 @@
 				1E8333DC179792F600B60612 /* QSStrings.m in Sources */,
 				1E59F11317FA6BF100EE2902 /* RatingDetailVC.m in Sources */,
 				1EAFEC3117999C8A00CCBDA1 /* MBProgressHUD.m in Sources */,
+				1E59F12417FC873900EE2902 /* ChatTableViewCell.m in Sources */,
 				1E751B2C179C4B11003AB13D /* UserManager.m in Sources */,
 				1EB652A2179F6F7200BEC96C /* SignatureView.m in Sources */,
 				1E5CABD817BA8DF0000D8759 /* RecentTableViewCell.m in Sources */,
@@ -2222,6 +2267,7 @@
 				1E1E25C217F32FC90079416C /* FancyCheckbox.m in Sources */,
 				1E1E25C717F342190079416C /* FancyTextField.m in Sources */,
 				1E1E25CC17F348D60079416C /* SurveyOptionWithPic.m in Sources */,
+				1E59F12C17FC879800EE2902 /* EditChatVC.m in Sources */,
 				1E88804A17F4BCF20070116C /* FormVO.m in Sources */,
 				1E88804D17F4BD950070116C /* FormOptionVO.m in Sources */,
 				1E88805017F4C0240070116C /* FormManager.m in Sources */,

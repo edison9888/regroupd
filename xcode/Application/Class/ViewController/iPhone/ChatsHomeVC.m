@@ -70,15 +70,15 @@
     NSLog(@"%s", __FUNCTION__);
     // http://stackoverflow.com/questions/413993/loading-a-reusable-uitableviewcell-from-a-nib
     
-    static NSString *CellIdentifier = @"CCTableCell";
-    static NSString *CellNib = @"CCTableViewCell";
+    static NSString *CellIdentifier = @"ChatTableCell";
+    static NSString *CellNib = @"ChatTableViewCell";
     
-    CCTableViewCell *cell = (CCTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    ChatTableViewCell *cell = (ChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     @try {
         
         if (cell == nil) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:CellNib owner:self options:nil];
-            cell = (CCTableViewCell *)[nib objectAtIndex:0];
+            cell = (ChatTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
         }
         
@@ -129,43 +129,21 @@
 {
     NSLog(@"%s: %@", __FUNCTION__, searchText);
     
-    if (searchText.length > 0) {
-        NSString *sqlTemplate = @"select * from contact where name like '%%%@%%' limit 20";
-        
-        isLoading = YES;
-        
-        NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
-        
-        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-        [tableData removeAllObjects];
-        
-        while ([rs next]) {
-            [tableData addObject:[rs resultDictionary]];
-        }
-        isLoading = NO;
-        
-        [self.theTableView reloadData];
-        
-    } else {
-        NSString *sqlTemplate = @"select * from contact order by name";
-        
-        isLoading = YES;
-        
-        NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
-        
-        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-        [tableData removeAllObjects];
-        
-        while ([rs next]) {
-            NSDictionary *dict =[rs resultDictionary];
-            NSLog(@"Result %@", [dict objectForKey:@"name"]);
-            
-            [tableData addObject:dict];
-        }
-        isLoading = NO;
-        
-        [self.theTableView reloadData];
+    NSString *sqlTemplate = @"select * from chat order by chat_id desc";
+    
+    isLoading = YES;
+    
+    NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+    [tableData removeAllObjects];
+    
+    while ([rs next]) {
+        [tableData addObject:[rs resultDictionary]];
     }
+    isLoading = NO;
+    
+    [self.theTableView reloadData];
     
     
 }

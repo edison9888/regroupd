@@ -39,6 +39,10 @@
 		<string>Raleway-Bold.otf</string>
 		<string>Raleway-Light.otf</string>
 		<string>Raleway-Medium.otf</string>
+		<string>NotoSans-Regular</string>
+		<string>NotoSans-Bold</string>
+		<string>NotoSans-Italic</string>
+		<string>NotoSans-BoldItalic</string>
 	</array>
 	<key>UIPrerenderedIcon</key>
 	<true/>

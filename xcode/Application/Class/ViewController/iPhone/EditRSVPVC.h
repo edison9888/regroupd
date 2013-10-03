@@ -28,6 +28,9 @@
     
     int allow_public;
     
+//    NEW SCROLLER
+    CGFloat animatedDistance;
+    
 }
 
 @property (nonatomic, retain) UIImagePickerController* imagePickerVC;

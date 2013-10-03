@@ -45,7 +45,7 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" autoresizesSubviews="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="6">
+                        <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="6">
                             <rect key="frame" x="8" y="7" width="60" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.31372549020000001" green="0.61960784310000006" blue="0.6705882353" alpha="1" colorSpace="calibratedRGB"/>
@@ -61,7 +61,7 @@
                                 <action selector="tapCancelButton" destination="-1" eventType="touchUpInside" id="69"/>
                             </connections>
                         </button>
-                        <button opaque="NO" autoresizesSubviews="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="20" userLabel="Button - Done">
+                        <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="20" userLabel="Button - Done">
                             <rect key="frame" x="252" y="7" width="60" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.31372549020000001" green="0.61960784310000006" blue="0.6705882353" alpha="1" colorSpace="calibratedRGB"/>
@@ -91,7 +91,7 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <textField opaque="NO" autoresizesSubviews="NO" clipsSubviews="YES" tag="11" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="23" customClass="BrandUITextField">
+                        <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" tag="11" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="23" customClass="BrandUITextField">
                             <rect key="frame" x="10" y="46" width="236" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -145,7 +145,7 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <textField opaque="NO" autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" id="78" customClass="FancyDateTimeField">
+                        <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" id="78" customClass="FancyDateTimeField">
                             <rect key="frame" x="24" y="122" width="132" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.38431372549999998" green="0.43529411759999997" blue="0.47058823529999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -153,7 +153,7 @@
                             <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
                             <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next"/>
                         </textField>
-                        <textField opaque="NO" autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="12:00 PM" textAlignment="center" minimumFontSize="17" id="79" customClass="FancyDateTimeField">
+                        <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="12:00 PM" textAlignment="center" minimumFontSize="17" id="79" customClass="FancyDateTimeField">
                             <rect key="frame" x="164" y="122" width="132" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.38431372549999998" green="0.43529411759999997" blue="0.47058823529999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -165,7 +165,7 @@
                             <rect key="frame" x="24" y="166" width="272" height="9"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
-                        <textField opaque="NO" autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" id="81" customClass="FancyDateTimeField">
+                        <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" id="81" customClass="FancyDateTimeField">
                             <rect key="frame" x="24" y="182" width="132" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.38431372549999998" green="0.43529411759999997" blue="0.47058823529999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -173,7 +173,7 @@
                             <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
                             <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next"/>
                         </textField>
-                        <textField opaque="NO" autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" id="82" customClass="FancyDateTimeField">
+                        <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" id="82" customClass="FancyDateTimeField">
                             <rect key="frame" x="164" y="182" width="132" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.38431372549999998" green="0.43529411759999997" blue="0.47058823529999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -192,7 +192,7 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <textField opaque="NO" autoresizesSubviews="NO" clipsSubviews="YES" tag="12" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="84" customClass="BrandUITextField">
+                        <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" tag="12" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="84" customClass="BrandUITextField">
                             <rect key="frame" x="10" y="256" width="300" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -207,7 +207,7 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <textField opaque="NO" autoresizesSubviews="NO" clipsSubviews="YES" tag="13" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="86" customClass="BrandUITextField">
+                        <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" tag="13" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="86" customClass="BrandUITextField">
                             <rect key="frame" x="10" y="320" width="300" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -230,7 +230,7 @@
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <view opaque="NO" autoresizesSubviews="NO" tag="103" contentMode="TopLeft" id="37" customClass="FancyCheckbox">
+                                <view autoresizesSubviews="NO" opaque="NO" tag="103" contentMode="TopLeft" id="37" customClass="FancyCheckbox">
                                     <rect key="frame" x="10" y="30" width="120" height="36"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" red="0.80000001190000003" green="1" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -238,7 +238,7 @@
                                         <accessibilityTraits key="traits" none="YES" button="YES"/>
                                     </accessibility>
                                 </view>
-                                <view opaque="NO" autoresizesSubviews="NO" tag="104" contentMode="TopLeft" id="41" customClass="FancyCheckbox">
+                                <view autoresizesSubviews="NO" opaque="NO" tag="104" contentMode="TopLeft" id="41" customClass="FancyCheckbox">
                                     <rect key="frame" x="140" y="30" width="120" height="36"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" red="0.80000001190000003" green="1" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -246,7 +246,7 @@
                                         <accessibilityTraits key="traits" none="YES" button="YES"/>
                                     </accessibility>
                                 </view>
-                                <button opaque="NO" autoresizesSubviews="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="89" userLabel="Button - Done">
+                                <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="89" userLabel="Button - Done">
                                     <rect key="frame" x="9" y="74" width="302" height="47"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" red="0.31372549020000001" green="0.61960784310000006" blue="0.6705882353" alpha="1" colorSpace="calibratedRGB"/>
@@ -280,7 +280,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="302" height="159"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </imageView>
-                <button opaque="NO" autoresizesSubviews="NO" tag="201" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="60" userLabel="Button - photo">
+                <button autoresizesSubviews="NO" opaque="NO" tag="201" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="60" userLabel="Button - photo">
                     <rect key="frame" x="0.0" y="0.0" width="302" height="52"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -295,7 +295,7 @@
                         <action selector="modalCameraButton" destination="-1" eventType="touchUpInside" id="66"/>
                     </connections>
                 </button>
-                <button opaque="NO" autoresizesSubviews="NO" tag="202" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="59" userLabel="Button - choose">
+                <button autoresizesSubviews="NO" opaque="NO" tag="202" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="59" userLabel="Button - choose">
                     <rect key="frame" x="0.0" y="52" width="302" height="51"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -310,7 +310,7 @@
                         <action selector="modalChooseButton" destination="-1" eventType="touchUpInside" id="67"/>
                     </connections>
                 </button>
-                <button opaque="NO" autoresizesSubviews="NO" tag="203" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="58" userLabel="Button - cancel">
+                <button autoresizesSubviews="NO" opaque="NO" tag="203" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="58" userLabel="Button - cancel">
                     <rect key="frame" x="0.0" y="103" width="302" height="54"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
