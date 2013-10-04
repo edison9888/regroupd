@@ -102,6 +102,8 @@
 		1E2C7EAC17E501940043E28D /* BrandUILabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C7EAB17E501940043E28D /* BrandUILabel.m */; };
 		1E2C7EB017E50F690043E28D /* ProfileStart2VC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C7EAE17E50F680043E28D /* ProfileStart2VC.m */; };
 		1E2C7EB117E50F690043E28D /* ProfileStart2VC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E2C7EAF17E50F690043E28D /* ProfileStart2VC.xib */; };
+		1E37C2A017FE2B8D0029D95F /* SelectedItemWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E37C29F17FE2B8D0029D95F /* SelectedItemWidget.m */; };
+		1E37C2A317FE31080029D95F /* UIView+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E37C2A217FE31080029D95F /* UIView+Resize.m */; };
 		1E513A6317C9A29A00DC2566 /* cell_delete_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6117C9A29A00DC2566 /* cell_delete_icon.png */; };
 		1E513A6417C9A29A00DC2566 /* cell_delete_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6217C9A29A00DC2566 /* cell_delete_icon@2x.png */; };
 		1E513A6617CBAF8E00DC2566 /* checkbox_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6517CBAF8E00DC2566 /* checkbox_on@2x.png */; };
@@ -500,6 +502,10 @@
 		1E2C7EAD17E50F680043E28D /* ProfileStart2VC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProfileStart2VC.h; path = DocAlert/ProfileStart2VC.h; sourceTree = "<group>"; };
 		1E2C7EAE17E50F680043E28D /* ProfileStart2VC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProfileStart2VC.m; path = DocAlert/ProfileStart2VC.m; sourceTree = "<group>"; };
 		1E2C7EAF17E50F690043E28D /* ProfileStart2VC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ProfileStart2VC.xib; path = DocAlert/ProfileStart2VC.xib; sourceTree = "<group>"; };
+		1E37C29E17FE2B8D0029D95F /* SelectedItemWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectedItemWidget.h; sourceTree = "<group>"; };
+		1E37C29F17FE2B8D0029D95F /* SelectedItemWidget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectedItemWidget.m; sourceTree = "<group>"; };
+		1E37C2A117FE31080029D95F /* UIView+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Resize.h"; sourceTree = "<group>"; };
+		1E37C2A217FE31080029D95F /* UIView+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Resize.m"; sourceTree = "<group>"; };
 		1E513A6117C9A29A00DC2566 /* cell_delete_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cell_delete_icon.png; sourceTree = "<group>"; };
 		1E513A6217C9A29A00DC2566 /* cell_delete_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell_delete_icon@2x.png"; sourceTree = "<group>"; };
 		1E513A6517CBAF8E00DC2566 /* checkbox_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox_on@2x.png"; sourceTree = "<group>"; };
@@ -1034,6 +1040,8 @@
 				1E88806317F4FC330070116C /* SurveyOptionWidget.xib */,
 				1E131D5917F60FBE00749506 /* FancyDateTimeField.h */,
 				1E131D5A17F60FBE00749506 /* FancyDateTimeField.m */,
+				1E37C29E17FE2B8D0029D95F /* SelectedItemWidget.h */,
+				1E37C29F17FE2B8D0029D95F /* SelectedItemWidget.m */,
 			);
 			name = Widget;
 			sourceTree = "<group>";
@@ -1445,6 +1453,8 @@
 				1E928130177FB68F008A583C /* UIColor+ColorWithHex.m */,
 				1E928131177FB68F008A583C /* UIView+Helper.h */,
 				1E928132177FB68F008A583C /* UIView+Helper.m */,
+				1E37C2A117FE31080029D95F /* UIView+Resize.h */,
+				1E37C2A217FE31080029D95F /* UIView+Resize.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -2186,6 +2196,7 @@
 				1E92825B177FB690008A583C /* HelpCopy.m in Sources */,
 				1E92825C177FB690008A583C /* HelpModel.m in Sources */,
 				1E928267177FB690008A583C /* CalculatorEditableLabelView.m in Sources */,
+				1E37C2A017FE2B8D0029D95F /* SelectedItemWidget.m in Sources */,
 				1E928268177FB690008A583C /* CalculatorKeyPadView.m in Sources */,
 				1E92826A177FB690008A583C /* CalculatorView.m in Sources */,
 				1E92826B177FB690008A583C /* CCSearchBar.m in Sources */,
@@ -2282,6 +2293,7 @@
 				1E8BFACF17F73B3C0053BEE3 /* NSArray+Random.m in Sources */,
 				1E8BFAD017F73B3C0053BEE3 /* NSDate+Extensions.m in Sources */,
 				1E59F10F17FA5ED400EE2902 /* BaseItemView.m in Sources */,
+				1E37C2A317FE31080029D95F /* UIView+Resize.m in Sources */,
 				1E8BFAD117F73B3C0053BEE3 /* NSString+Extensions.m in Sources */,
 				1E8BFADF17F767290053BEE3 /* BSKeyboardControls.m in Sources */,
 				1E8BFAE417F78D750053BEE3 /* FormsTableViewCell.m in Sources */,

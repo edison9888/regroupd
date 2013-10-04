@@ -332,10 +332,6 @@
     </objects>
     <resources>
         <image name="btn_aqua_bg_small.png" width="55" height="28"/>
-        <image name="btn_aqua_bg_small.png" width="55" height="28"/>
-        <image name="btn_aqua_bg_small.png" width="55" height="28"/>
-        <image name="hbar_dark_grey.png" width="1" height="1"/>
-        <image name="hbar_dark_grey.png" width="1" height="1"/>
         <image name="hbar_dark_grey.png" width="1" height="1"/>
         <image name="icon_pencil_edit.png" width="26" height="26"/>
         <image name="icon_photo_default.png" width="23" height="16"/>

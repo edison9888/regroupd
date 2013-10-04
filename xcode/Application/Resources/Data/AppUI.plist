@@ -153,6 +153,38 @@
 			<key>nextSlideName</key>
 			<string></string>
 		</dict>
+		<dict>
+			<key>slideData</key>
+			<dict/>
+			<key>allowLeftSlide</key>
+			<false/>
+			<key>allowRightSlide</key>
+			<false/>
+			<key>category</key>
+			<string>Chats</string>
+			<key>name</key>
+			<string>EditChat</string>
+			<key>controllerName</key>
+			<string>EditChatVC</string>
+			<key>nextSlideName</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>slideData</key>
+			<dict/>
+			<key>allowLeftSlide</key>
+			<false/>
+			<key>allowRightSlide</key>
+			<false/>
+			<key>category</key>
+			<string>Chats</string>
+			<key>name</key>
+			<string>Chat</string>
+			<key>controllerName</key>
+			<string>ChatVC</string>
+			<key>nextSlideName</key>
+			<string></string>
+		</dict>
 		<!-- ########## Forms ########### -->
 		<dict>
 			<key>slideData</key>

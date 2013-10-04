@@ -7,7 +7,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditChatVC">
             <connections>
-                <outlet property="editButton" destination="21" id="28"/>
+                <outlet property="navTitle" destination="19" id="2sL-TB-73k"/>
+                <outlet property="selectionsView" destination="RAX-bf-4s9" id="Axm-YO-wEY"/>
                 <outlet property="theTableView" destination="30" id="31"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
@@ -34,7 +35,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="tapEditButton" destination="-1" eventType="touchUpInside" id="29"/>
+                        <action selector="tapCancelButton" destination="-1" eventType="touchUpInside" id="cta-NB-lRS"/>
                     </connections>
                 </button>
                 <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="vOI-sO-1iq">
@@ -50,9 +51,21 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="tapEditButton" destination="-1" eventType="touchUpInside" id="2we-5w-LfY"/>
+                        <action selector="tapDoneButton" destination="-1" eventType="touchUpInside" id="ncw-8i-bNF"/>
                     </connections>
                 </button>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Participants" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="16m-rO-ask" customClass="BrandUILabel">
+                    <rect key="frame" x="10" y="56" width="180" height="28"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="16"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" id="RAX-bf-4s9" userLabel="View - selections">
+                    <rect key="frame" x="10" y="85" width="300" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                </view>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="New Chat" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="19" customClass="BrandUILabel">
                     <rect key="frame" x="70" y="12" width="180" height="28"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -61,18 +74,19 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="59" sectionHeaderHeight="22" sectionFooterHeight="22" id="30">
-                    <rect key="frame" x="0.0" y="50" width="320" height="520"/>
+                    <rect key="frame" x="11" y="180" width="300" height="369"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </tableView>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="0.90196078431372551" green="0.92156862745098034" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
     <resources>
+        <image name="btn_aqua_bg_small.png" width="55" height="28"/>
         <image name="btn_aqua_bg_small.png" width="55" height="28"/>
         <image name="topnav_aqua_bg.png" width="320" height="50"/>
     </resources>

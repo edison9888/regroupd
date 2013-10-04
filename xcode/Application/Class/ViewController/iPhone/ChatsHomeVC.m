@@ -113,8 +113,9 @@
             
             [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
             
-            [DataModel shared].action = kActionEDIT;
-            [_delegate gotoNextSlide];
+            [DataModel shared].action = kActionADD;
+            [_delegate gotoSlideWithName:@"EditChat"];
+            
             
         }
     } @catch (NSException * e) {
