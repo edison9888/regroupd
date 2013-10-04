@@ -41,7 +41,7 @@
     o.description = text;
 
     text = [dict valueForKey:@"imagefile"];
-    o.description = text;
+    o.imagefile = text;
     
     text = [dict valueForKey:@"type"];
     o.type = text.integerValue;

@@ -33,6 +33,14 @@
 		1E131D6217F6187400749506 /* to_separator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E131D5E17F6187400749506 /* to_separator@2x.png */; };
 		1E131D6317F6187400749506 /* icon_calendar_aqua@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E131D5F17F6187400749506 /* icon_calendar_aqua@2x.png */; };
 		1E131D6517F633F900749506 /* icon_clock_aqua@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E131D6417F633F900749506 /* icon_clock_aqua@2x.png */; };
+		1E1A9A9417FE4A4C008D81E6 /* ChatVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1A9A9317FE4A4C008D81E6 /* ChatVO.m */; };
+		1E1A9A9717FE4C08008D81E6 /* ChatMessageVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1A9A9617FE4C08008D81E6 /* ChatMessageVO.m */; };
+		1E1A9A9A17FE4D3D008D81E6 /* ChatManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1A9A9917FE4D3D008D81E6 /* ChatManager.m */; };
+		1E1A9AA717FE5016008D81E6 /* NSBubbleData.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1A9A9D17FE5016008D81E6 /* NSBubbleData.m */; };
+		1E1A9AA817FE5016008D81E6 /* UIBubbleHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1A9A9F17FE5016008D81E6 /* UIBubbleHeaderTableViewCell.m */; };
+		1E1A9AA917FE5016008D81E6 /* UIBubbleTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1A9AA117FE5016008D81E6 /* UIBubbleTableView.m */; };
+		1E1A9AAA17FE5016008D81E6 /* UIBubbleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1A9AA317FE5016008D81E6 /* UIBubbleTableViewCell.m */; };
+		1E1A9AAB17FE5016008D81E6 /* UIBubbleTypingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1A9AA617FE5016008D81E6 /* UIBubbleTypingTableViewCell.m */; };
 		1E1E25C217F32FC90079416C /* FancyCheckbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1E25C117F32FC90079416C /* FancyCheckbox.m */; };
 		1E1E25C417F3319F0079416C /* FancyCheckbox.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E1E25C317F3319F0079416C /* FancyCheckbox.xib */; };
 		1E1E25C717F342190079416C /* FancyTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1E25C617F342180079416C /* FancyTextField.m */; };
@@ -422,6 +430,23 @@
 		1E131D5E17F6187400749506 /* to_separator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "to_separator@2x.png"; sourceTree = "<group>"; };
 		1E131D5F17F6187400749506 /* icon_calendar_aqua@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_calendar_aqua@2x.png"; sourceTree = "<group>"; };
 		1E131D6417F633F900749506 /* icon_clock_aqua@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_clock_aqua@2x.png"; sourceTree = "<group>"; };
+		1E1A9A9217FE4A4C008D81E6 /* ChatVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatVO.h; sourceTree = "<group>"; };
+		1E1A9A9317FE4A4C008D81E6 /* ChatVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatVO.m; sourceTree = "<group>"; };
+		1E1A9A9517FE4C08008D81E6 /* ChatMessageVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatMessageVO.h; sourceTree = "<group>"; };
+		1E1A9A9617FE4C08008D81E6 /* ChatMessageVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatMessageVO.m; sourceTree = "<group>"; };
+		1E1A9A9817FE4D3D008D81E6 /* ChatManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatManager.h; sourceTree = "<group>"; };
+		1E1A9A9917FE4D3D008D81E6 /* ChatManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatManager.m; sourceTree = "<group>"; };
+		1E1A9A9C17FE5016008D81E6 /* NSBubbleData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSBubbleData.h; sourceTree = "<group>"; };
+		1E1A9A9D17FE5016008D81E6 /* NSBubbleData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSBubbleData.m; sourceTree = "<group>"; };
+		1E1A9A9E17FE5016008D81E6 /* UIBubbleHeaderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBubbleHeaderTableViewCell.h; sourceTree = "<group>"; };
+		1E1A9A9F17FE5016008D81E6 /* UIBubbleHeaderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBubbleHeaderTableViewCell.m; sourceTree = "<group>"; };
+		1E1A9AA017FE5016008D81E6 /* UIBubbleTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBubbleTableView.h; sourceTree = "<group>"; };
+		1E1A9AA117FE5016008D81E6 /* UIBubbleTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBubbleTableView.m; sourceTree = "<group>"; };
+		1E1A9AA217FE5016008D81E6 /* UIBubbleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBubbleTableViewCell.h; sourceTree = "<group>"; };
+		1E1A9AA317FE5016008D81E6 /* UIBubbleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBubbleTableViewCell.m; sourceTree = "<group>"; };
+		1E1A9AA417FE5016008D81E6 /* UIBubbleTableViewDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBubbleTableViewDataSource.h; sourceTree = "<group>"; };
+		1E1A9AA517FE5016008D81E6 /* UIBubbleTypingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBubbleTypingTableViewCell.h; sourceTree = "<group>"; };
+		1E1A9AA617FE5016008D81E6 /* UIBubbleTypingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBubbleTypingTableViewCell.m; sourceTree = "<group>"; };
 		1E1E25C017F32FC90079416C /* FancyCheckbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FancyCheckbox.h; sourceTree = "<group>"; };
 		1E1E25C117F32FC90079416C /* FancyCheckbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FancyCheckbox.m; sourceTree = "<group>"; };
 		1E1E25C317F3319F0079416C /* FancyCheckbox.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FancyCheckbox.xib; sourceTree = "<group>"; };
@@ -1020,6 +1045,24 @@
 			name = UI;
 			sourceTree = "<group>";
 		};
+		1E1A9A9B17FE5016008D81E6 /* UIBubbleTableView */ = {
+			isa = PBXGroup;
+			children = (
+				1E1A9A9C17FE5016008D81E6 /* NSBubbleData.h */,
+				1E1A9A9D17FE5016008D81E6 /* NSBubbleData.m */,
+				1E1A9A9E17FE5016008D81E6 /* UIBubbleHeaderTableViewCell.h */,
+				1E1A9A9F17FE5016008D81E6 /* UIBubbleHeaderTableViewCell.m */,
+				1E1A9AA017FE5016008D81E6 /* UIBubbleTableView.h */,
+				1E1A9AA117FE5016008D81E6 /* UIBubbleTableView.m */,
+				1E1A9AA217FE5016008D81E6 /* UIBubbleTableViewCell.h */,
+				1E1A9AA317FE5016008D81E6 /* UIBubbleTableViewCell.m */,
+				1E1A9AA417FE5016008D81E6 /* UIBubbleTableViewDataSource.h */,
+				1E1A9AA517FE5016008D81E6 /* UIBubbleTypingTableViewCell.h */,
+				1E1A9AA617FE5016008D81E6 /* UIBubbleTypingTableViewCell.m */,
+			);
+			path = UIBubbleTableView;
+			sourceTree = "<group>";
+		};
 		1E1E25BF17F32F450079416C /* Widget */ = {
 			isa = PBXGroup;
 			children = (
@@ -1488,6 +1531,10 @@
 				1E88804917F4BCF10070116C /* FormVO.m */,
 				1E88804B17F4BD930070116C /* FormOptionVO.h */,
 				1E88804C17F4BD940070116C /* FormOptionVO.m */,
+				1E1A9A9217FE4A4C008D81E6 /* ChatVO.h */,
+				1E1A9A9317FE4A4C008D81E6 /* ChatVO.m */,
+				1E1A9A9517FE4C08008D81E6 /* ChatMessageVO.h */,
+				1E1A9A9617FE4C08008D81E6 /* ChatMessageVO.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1499,6 +1546,8 @@
 				1E751B2B179C4B11003AB13D /* UserManager.m */,
 				1E88804E17F4C0240070116C /* FormManager.h */,
 				1E88804F17F4C0240070116C /* FormManager.m */,
+				1E1A9A9817FE4D3D008D81E6 /* ChatManager.h */,
+				1E1A9A9917FE4D3D008D81E6 /* ChatManager.m */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -1667,6 +1716,7 @@
 		1E9281DB177FB690008A583C /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				1E1A9A9B17FE5016008D81E6 /* UIBubbleTableView */,
 				1E8BFAD817F767290053BEE3 /* BSKeyboardControls */,
 				1EAFEC2E17999C8A00CCBDA1 /* MBProgressHUD */,
 				1E8333C3179792F600B60612 /* QSUtilities */,
@@ -2185,6 +2235,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E1A9AA717FE5016008D81E6 /* NSBubbleData.m in Sources */,
 				1E0CAA43178253F100A294C0 /* BrandUITextField.m in Sources */,
 				1E928250177FB690008A583C /* AppDelegate.m in Sources */,
 				1E928251177FB690008A583C /* NSString+NumberFormat.m in Sources */,
@@ -2194,6 +2245,7 @@
 				1E928255177FB690008A583C /* Constants.m in Sources */,
 				1E928258177FB690008A583C /* DataModel.m in Sources */,
 				1E92825B177FB690008A583C /* HelpCopy.m in Sources */,
+				1E1A9A9417FE4A4C008D81E6 /* ChatVO.m in Sources */,
 				1E92825C177FB690008A583C /* HelpModel.m in Sources */,
 				1E928267177FB690008A583C /* CalculatorEditableLabelView.m in Sources */,
 				1E37C2A017FE2B8D0029D95F /* SelectedItemWidget.m in Sources */,
@@ -2201,6 +2253,8 @@
 				1E92826A177FB690008A583C /* CalculatorView.m in Sources */,
 				1E92826B177FB690008A583C /* CCSearchBar.m in Sources */,
 				1E92826C177FB690008A583C /* CCTableViewCell.m in Sources */,
+				1E1A9A9A17FE4D3D008D81E6 /* ChatManager.m in Sources */,
+				1E1A9AA917FE5016008D81E6 /* UIBubbleTableView.m in Sources */,
 				1E928276177FB690008A583C /* KeypadViewController.m in Sources */,
 				1E92828C177FB690008A583C /* ViewController.m in Sources */,
 				1E92828F177FB690008A583C /* PresentationViewController.m in Sources */,
@@ -2238,6 +2292,7 @@
 				1E59F10B17FA544C00EE2902 /* PageScrollView.m in Sources */,
 				1E9282AF177FB690008A583C /* SBJsonParser.m in Sources */,
 				1E9282B0177FB690008A583C /* SBJsonStreamParser.m in Sources */,
+				1E1A9AAA17FE5016008D81E6 /* UIBubbleTableViewCell.m in Sources */,
 				1E9282B1177FB690008A583C /* SBJsonStreamParserAccumulator.m in Sources */,
 				1E9282B2177FB690008A583C /* SBJsonStreamParserAdapter.m in Sources */,
 				1E9282B3177FB690008A583C /* SBJsonStreamParserState.m in Sources */,
@@ -2256,8 +2311,10 @@
 				1EB6FC4F1794F81900CBF48D /* ProfileStart4VC.m in Sources */,
 				1EB6FC531794F81900CBF48D /* ProfileStart5VC.m in Sources */,
 				1E76F4A917961283007EF5B0 /* ContactVO.m in Sources */,
+				1E1A9AAB17FE5016008D81E6 /* UIBubbleTypingTableViewCell.m in Sources */,
 				1E8333B917978C2A00B60612 /* GDataXMLNode.m in Sources */,
 				1E59F10817FA532D00EE2902 /* SideScrollVC.m in Sources */,
+				1E1A9AA817FE5016008D81E6 /* UIBubbleHeaderTableViewCell.m in Sources */,
 				1E8333D4179792F600B60612 /* GTMNSString+HTML.m in Sources */,
 				1E8333D8179792F600B60612 /* QSFileManager.m in Sources */,
 				1E8333DA179792F600B60612 /* QSHttpClient.m in Sources */,
@@ -2281,6 +2338,7 @@
 				1E59F12C17FC879800EE2902 /* EditChatVC.m in Sources */,
 				1E88804A17F4BCF20070116C /* FormVO.m in Sources */,
 				1E88804D17F4BD950070116C /* FormOptionVO.m in Sources */,
+				1E1A9A9717FE4C08008D81E6 /* ChatMessageVO.m in Sources */,
 				1E88805017F4C0240070116C /* FormManager.m in Sources */,
 				1E88805B17F4E9A10070116C /* EditRatingVC.m in Sources */,
 				1E88805D17F4E9A10070116C /* EditPollVC.m in Sources */,
@@ -2398,7 +2456,7 @@
 				GCC_PREFIX_HEADER = "Application/Regroupd-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "$(SRCROOT)/Application/Regroupd-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = regroupd;
 				PROVISIONING_PROFILE = "7CBB6405-A28A-4734-AA9F-91BB0BAC7390";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7CBB6405-A28A-4734-AA9F-91BB0BAC7390";
@@ -2488,7 +2546,7 @@
 				GCC_PREFIX_HEADER = "Application/Regroupd-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "$(SRCROOT)/Application/Regroupd-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_NAME = regroupd;
 				PROVISIONING_PROFILE = "6FA8FE41-B50F-4CEB-A997-0D206D7B5D78";
@@ -2509,7 +2567,7 @@
 				GCC_PREFIX_HEADER = "Application/Regroupd-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "$(SRCROOT)/Application/Regroupd-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = regroupd;
 				PROVISIONING_PROFILE = "7CBB6405-A28A-4734-AA9F-91BB0BAC7390";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7CBB6405-A28A-4734-AA9F-91BB0BAC7390";

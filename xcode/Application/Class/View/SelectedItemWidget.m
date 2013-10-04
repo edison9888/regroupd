@@ -14,6 +14,8 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
+    NSLog(@"%s", __FUNCTION__);
+
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code

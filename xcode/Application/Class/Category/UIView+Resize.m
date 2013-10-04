@@ -15,24 +15,17 @@
     CGSize size = [theLabel.text sizeWithFont:theLabel.font
                             constrainedToSize:CGSizeMake(frame.size.width, 9999)
                                 lineBreakMode:NSLineBreakByWordWrapping];
-    NSLog(@"size width=%f // height=%f", size.width, size.height);
     
-    CGFloat deltaY = size.height - frame.size.height;
-    CGFloat deltaX = size.width - frame.size.width;
-    
+    CGFloat delta = size.height - frame.size.height;
     frame.size.height = size.height;
-    frame.size.width = size.width;
-    
     [theLabel setFrame:frame];
     
     CGRect contentFrame = self.frame;
-    contentFrame.size.height = contentFrame.size.height + deltaY;
-    contentFrame.size.width = contentFrame.size.width + deltaX;
-    
-    if(canShrink || deltaY > 0) {
+    contentFrame.size.height = contentFrame.size.height + delta;
+    if(canShrink || delta > 0) {
         [self setFrame:contentFrame];
     }
-    return deltaY;
+    return delta;
 }
 
 - (CGFloat) resizeLabel:(UILabel *)theLabel {

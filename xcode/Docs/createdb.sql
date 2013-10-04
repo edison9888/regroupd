@@ -56,6 +56,18 @@ CREATE TABLE IF NOT EXISTS chat (
     status INT DEFAULT 0,
 	updated TEXT
 );
+CREATE TABLE IF NOT EXISTS chat_message (
+    message_id INTEGER PRIMARY KEY,  
+    chat_id INTEGER,
+    contact_id INTEGER,
+    form_id INTEGER,
+    system_id TEXT,
+    message TEXT, 	
+    attachment TEXT, 	
+    type int DEFAULT 1, 
+    status INT DEFAULT 0,
+    created TEXT
+);
 
 CREATE TABLE IF NOT EXISTS form ( 
     form_id INTEGER PRIMARY KEY,  

@@ -7,6 +7,7 @@
 //
 
 #import "EditChatVC.h"
+#import "DataModel.h"
 
 @interface EditChatVC ()
 
@@ -150,9 +151,6 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-#ifdef DEBUGX
-    NSLog(@"%s", __FUNCTION__);
-#endif
     
     @try {
         if (indexPath != nil) {
@@ -237,9 +235,16 @@
 {
     //    BOOL isOk = YES;
     
-    BOOL isOK = NO;
+    BOOL isOK = YES;
+    
+    if (contactIds.count == 0) {
+        isOK = NO;
+    }
     if (isOK) {
         [_delegate gotoSlideWithName:@"Chat"];
+    } else {
+        [[[UIAlertView alloc] initWithTitle:@"Try again" message:@"Please add at least one contact" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+
     }
     
     
