@@ -18,8 +18,6 @@
 
 - (ChatVO *) loadChat:(int)_chatId fetchAll:(BOOL)all {
     
-    NSLog(@"%s", __FUNCTION__);
-    
     NSString *sql = nil;
     sql = @"select * from chat where chat_id=?";
     

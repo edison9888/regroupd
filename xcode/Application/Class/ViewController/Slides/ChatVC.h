@@ -12,8 +12,13 @@
 #import "FancyTextView.h"
 
 #import "BrandUITextField.h"
+#import "UIBubbleTableViewDataSource.h"
 
-@interface ChatVC : SlideViewController<UIScrollViewDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate> {
+#import "ChatManager.h"
+#import "ChatVO.h"
+#import "ChatMessageVO.h"
+
+@interface ChatVC : SlideViewController<UIBubbleTableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate> {
     int fieldIndex;
     
     CGPoint  offset; // unused
@@ -31,11 +36,14 @@
 //    NEW SCROLLER
     CGFloat animatedDistance;
     
+    ChatManager *chatSvc;
+    
 }
+
+@property (nonatomic, retain) NSMutableArray *bubbleData;
 
 @property (nonatomic, retain) UIImagePickerController* imagePickerVC;
 
-@property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, retain) IBOutlet BrandUILabel *navTitle;
 
 @property (nonatomic, strong) IBOutlet UIView *chatBar;
@@ -43,6 +51,7 @@
 @property (nonatomic, strong) IBOutlet UIButton *sendButton;
 @property (nonatomic, retain) IBOutlet FancyTextView *inputField;
 
+@property (nonatomic, strong) IBOutlet UIView *photoModal;
 
 - (IBAction)tapCancelButton;
 - (IBAction)tapClearButton;

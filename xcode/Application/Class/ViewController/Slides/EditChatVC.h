@@ -10,6 +10,8 @@
 #import "SQLiteDB.h"
 #import "CCSearchBar.h"
 #import "CCTableViewCell.h"
+#import "ChatManager.h"
+#import "ChatVO.h"
 #import "ContactVO.h"
 #import "SelectedItemWidget.h"
 
@@ -22,6 +24,8 @@
     NSMutableArray *contactIds;
     float ypos;
     float xpos;
+    ChatManager *chatSvc;
+    
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;

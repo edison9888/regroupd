@@ -7,8 +7,12 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChatVC">
             <connections>
+                <outlet property="attachButton" destination="Ddx-FC-uCy" id="eK8-jM-Fxg"/>
+                <outlet property="bubbleTable" destination="YhV-Zy-cDk" id="XsO-d0-GEO"/>
                 <outlet property="inputField" destination="5JB-Ai-Vv9" id="PXM-2z-8LL"/>
+                <outlet property="navTitle" destination="22" id="K7T-L0-xiK"/>
                 <outlet property="photoModal" destination="56" id="62"/>
+                <outlet property="sendButton" destination="2x0-BK-fQF" id="wJW-Q6-reg"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -53,7 +57,7 @@
                                 <action selector="tapCancelButton" destination="-1" eventType="touchUpInside" id="hao-V7-TYv"/>
                             </connections>
                         </button>
-                        <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="20" userLabel="Button - Done">
+                        <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="20">
                             <rect key="frame" x="252" y="7" width="60" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.31372549020000001" green="0.61960784310000006" blue="0.6705882353" alpha="1" colorSpace="calibratedRGB"/>
@@ -116,7 +120,6 @@
                 </view>
             </subviews>
             <color key="backgroundColor" red="0.90196078431372551" green="0.92156862745098034" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
         </view>
         <view autoresizesSubviews="NO" contentMode="scaleToFill" id="56" userLabel="View - modal">

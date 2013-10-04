@@ -7,30 +7,27 @@
 //
 
 #import "ChatVC.h"
-#import "FormManager.h"
-#import "FormVO.h"
-#import "FormOptionVO.h"
 #import "UIAlertView+Helper.h"
 #import "DateTimeUtils.h"
 //#import "NSDate+Extensions.h"
 
+#import "UIBubbleTableView.h"
+#import "UIBubbleTableViewDataSource.h"
+#import "NSBubbleData.h"
+
+
 @interface ChatVC ()
+{
+    IBOutlet UIBubbleTableView *bubbleTable;
+    
+    NSMutableArray *bubbleData;
+}
 
 @end
 
 @implementation ChatVC
 
-#define kTagSubject     11
-#define kTagLocation    12
-#define kTagDescription 13
-
-#define kTagStartDate       101
-#define kTagStartTime       102
-#define kTagEndDate         103
-#define kTagEndTime         104
-
-#define kTagAllowOthersYes   201
-#define kTagAllowOthersNo    202
+@synthesize bubbleData;
 
 #define kFirstOptionId  1
 
@@ -53,115 +50,51 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 {
     [super viewDidLoad];
 
+    chatSvc = [[ChatManager alloc] init];
+
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
-
-    // photo thumbnail setup
-    [self.roundPic.layer setCornerRadius:30.0f];
-    [self.roundPic.layer setMasksToBounds:YES];
-    [self.roundPic.layer setBorderWidth:1.0f];
-    [self.roundPic.layer setBorderColor:[UIColor whiteColor].CGColor];
-    self.roundPic.clipsToBounds = YES;
-    self.roundPic.contentMode = UIViewContentModeScaleAspectFill;
-    self.photoHolder.hidden = YES;
-
-    // scrollview setup
-    navbarHeight = 50;
-    
-    CGRect scrollFrame = CGRectMake(0, navbarHeight,[DataModel shared].stageWidth, [DataModel shared].stageHeight - navbarHeight);
-    self.scrollView.frame = scrollFrame;
-    CGSize scrollContentSize = CGSizeMake([DataModel shared].stageWidth, 600);
-    self.scrollView.contentSize = scrollContentSize;
-    self.scrollView.delegate = self;
-    
-    
-    // Setup text fields
-    
-    self.subjectField.delegate = self;
-    self.whereField.delegate = self;
-    self.descriptionField.delegate = self;
-    
-    // Add survey options
-
-    self.datePicker = [[UIDatePicker alloc] init];
-    self.datePicker.datePickerMode = UIDatePickerModeDate;
-    
-    self.timePicker = [[UIDatePicker alloc] init];
-    self.timePicker.datePickerMode = UIDatePickerModeTime;
-    
-    UIImage *icon_calendar = [UIImage imageNamed:@"icon_calendar_aqua"];
-    UIImage *icon_clock = [UIImage imageNamed:@"icon_clock_aqua"];
-            
-    self.tfStartDate.tag = kTagStartDate;
-    self.tfStartDate.text = @"";
-    self.tfStartDate.inputView = self.datePicker;
-    self.tfStartDate.delegate = self;
-    [self.tfStartDate setIcon:icon_calendar];
-
-    self.tfStartTime.tag = kTagStartTime;
-    self.tfStartTime.text = @"";
-    self.tfStartTime.inputView = self.timePicker;
-    self.tfStartTime.delegate = self;
-    [self.tfStartTime setIcon:icon_clock];
-
-    self.tfEndDate.tag = kTagEndDate;
-    self.tfEndDate.text = @"";
-    self.tfEndDate.inputView = self.datePicker;
-    self.tfEndDate.delegate = self;
-    [self.tfEndDate setIcon:icon_calendar];
-    
-    self.tfEndTime.tag = kTagEndTime;
-    self.tfEndTime.text = @"";
-    self.tfEndTime.inputView = self.timePicker;
-    self.tfEndTime.delegate = self;
-    [self.tfEndTime setIcon:icon_clock];
-
-    allow_public = -1;
-    self.ckAllowOthersYes.ckLabel.text = @"Yes";
-    self.ckAllowOthersYes.tag = kTagAllowOthersYes;
-    [self.ckAllowOthersYes unselected];
-    
-    self.ckAllowOthersNo.ckLabel.text = @"No";
-    self.ckAllowOthersNo.tag = kTagAllowOthersNo;
-    [self.ckAllowOthersNo unselected];
-    
-    NSArray *fields = @[ self.subjectField,
-                         self.tfStartDate,
-                         self.tfStartTime,
-                         self.tfEndDate,
-                         self.tfEndTime,
-                         self.whereField,
-                         self.descriptionField ];
-    
-    [self setKeyboardControls:[[BSKeyboardControls alloc] initWithFields:fields]];
-    [self.keyboardControls setDelegate:self];
-
-    
-    // register for keyboard notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:self.view.window];
-    // register for keyboard notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:self.view.window];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showImagePickerNotificationHandler:)     name:@"showImagePickerNotification"            object:nil];
     
-    // Create and initialize a tap gesture
+    NSBubbleData *heyBubble = [NSBubbleData dataWithText:@"Hey, halloween is soon" date:[NSDate dateWithTimeIntervalSinceNow:-300] type:BubbleTypeSomeoneElse];
+    heyBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
     
-    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
-                                             
-                                             initWithTarget:self action:@selector(singleTap:)];
+    NSBubbleData *photoBubble = [NSBubbleData dataWithImage:[UIImage imageNamed:@"halloween.jpg"] date:[NSDate dateWithTimeIntervalSinceNow:-290] type:BubbleTypeSomeoneElse];
+    photoBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
     
-    // Specify that the gesture must be a single tap
+    NSBubbleData *replyBubble = [NSBubbleData dataWithText:@"Wow.. Really cool picture out there. iPhone 5 has really nice camera, yeah?" date:[NSDate dateWithTimeIntervalSinceNow:-5] type:BubbleTypeMine];
+    replyBubble.avatar = nil;
     
-    tapRecognizer.numberOfTapsRequired = 1;
+    bubbleData = [[NSMutableArray alloc] initWithObjects:heyBubble, photoBubble, replyBubble, nil];
+    bubbleTable.bubbleDataSource = self;
     
-    [self.view addGestureRecognizer:tapRecognizer];
+    // The line below sets the snap interval in seconds. This defines how the bubbles will be grouped in time.
+    // Interval of 120 means that if the next messages comes in 2 minutes since the last message, it will be added into the same group.
+    // Groups are delimited with header which contains date and time for the first message in the group.
     
+    bubbleTable.snapInterval = 120;
+    
+    // The line below enables avatar support. Avatar can be specified for each bubble with .avatar property of NSBubbleData.
+    // Avatars are enabled for the whole table at once. If particular NSBubbleData misses the avatar, a default placeholder will be set (missingAvatar.png)
+    
+    bubbleTable.showAvatars = YES;
+    
+    // Uncomment the line below to add "Now typing" bubble
+    // Possible values are
+    //    - NSBubbleTypingTypeSomebody - shows "now typing" bubble on the left
+    //    - NSBubbleTypingTypeMe - shows "now typing" bubble on the right
+    //    - NSBubbleTypingTypeNone - no "now typing" bubble
+    
+    bubbleTable.typingBubble = NSBubbleTypingTypeSomebody;
+    
+    [bubbleTable reloadData];
+    
+    // Keyboard events
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
+
     
 }
 
@@ -172,245 +105,55 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 
 
-#pragma mark - Keyboard event handlers
+#pragma mark - UIBubbleTableViewDataSource implementation
 
-/*
- SEE: http://stackoverflow.com/questions/1126726/how-to-make-a-uitextfield-move-up-when-keyboard-is-present/2703756#2703756
- */
-- (void)keyboardWillHide:(NSNotification *)n
+- (NSInteger)rowsForBubbleTable:(UIBubbleTableView *)tableView
 {
-#ifdef kDEBUG
-    NSLog(@"===== %s", __FUNCTION__);
-#endif
-    NSDictionary* userInfo = [n userInfo];
-    
-    // get the size of the keyboard
-    CGSize keyboardSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    
-    [self hideKeyboard:keyboardSize];
+    return [bubbleData count];
 }
 
-- (void)keyboardWillShow:(NSNotification *)n
+- (NSBubbleData *)bubbleTableView:(UIBubbleTableView *)tableView dataForRow:(NSInteger)row
 {
-#ifdef kDEBUG
-    NSLog(@"===== %s", __FUNCTION__);
-#endif
-    // This is an ivar I'm using to ensure that we do not do the frame size adjustment on the UIScrollView if the keyboard is already shown.  This can happen if the user, after fixing editing a UITextField, scrolls the resized UIScrollView to another UITextField and attempts to edit the next UITextField.  If we were to resize the UIScrollView again, it would be disastrous.  NOTE: The keyboard notification will fire even when the keyboard is already shown.
-    if (keyboardIsShown) {
-        return;
-    }
-    
-    NSDictionary* userInfo = [n userInfo];
-    
-    // get the size of the keyboard
-    CGSize keyboardSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    keyboardHeight = keyboardSize.height;
-    
-    [self showKeyboard:keyboardSize];
-    
+    return [bubbleData objectAtIndex:row];
 }
-- (void) showKeyboard:(CGSize)keyboardSize
-{
-    // resize the noteView
-    CGRect viewFrame = self.scrollView.frame;
-    // I'm also subtracting a constant kTabBarHeight because my UIScrollView was offset by the UITabBar so really only the portion of the keyboard that is leftover pass the UITabBar is obscuring my UIScrollView.
-    viewFrame.size.height -= (keyboardSize.height - navbarHeight);
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    // The kKeyboardAnimationDuration I am using is 0.3
-    [UIView setAnimationDuration:0.3];
-    [self.scrollView setFrame:viewFrame];
-    [UIView commitAnimations];
-    
-    keyboardIsShown = YES;
-    
-}
-- (void) hideKeyboard:(CGSize)keyboardSize
-{
-    // resize the scrollview
-    CGRect viewFrame = self.scrollView.frame;
-    // I'm also subtracting a constant kTabBarHeight because my UIScrollView was offset by the UITabBar so really only the portion of the keyboard that is leftover pass the UITabBar is obscuring my UIScrollView.
-    viewFrame.size.height += (keyboardSize.height - navbarHeight - 44);
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    // The kKeyboardAnimationDuration I am using is 0.3
-    [UIView setAnimationDuration:0.3];
-    [self.scrollView setFrame:viewFrame];
-    [UIView commitAnimations];
-    
-    keyboardIsShown = NO;
-    
-}
-//- (void) updateScrollView {
-//    NSLog(@"%s tag=%i", __FUNCTION__, fieldIndex);
-//    
-//    CGRect aRect = self.view.frame;
-//    
-//    aRect.size.height -= keyboardHeight;
-//    CGRect targetFrame = _currentField.frame;
-//    
-//    targetFrame.origin.y += 40;
-//    
-////        [self.scrollView setContentOffset:CGPointMake(0.0, currentOption.frame.origin.y-keyboardHeight) animated:YES];
-//    if (!CGRectContainsPoint(aRect, targetFrame.origin) ) {
-//        [self.scrollView scrollRectToVisible:targetFrame animated:YES];
-//    }
-//    
-//}
 
-#pragma mark - UITextField methods
+#pragma mark - Keyboard events
 
--(BOOL) textFieldShouldBeginEditing:(UITextField*)textField {
-    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
-    keyboardIsShown = YES;
-    fieldIndex = textField.tag;
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    [UIView animateWithDuration:0.2f animations:^{
         
-    _currentField = textField;
-
-    return YES;
-
+        CGRect frame = self.chatBar.frame;
+        frame.origin.y -= kbSize.height;
+        self.chatBar.frame = frame;
+        
+        frame = bubbleTable.frame;
+        frame.size.height -= kbSize.height;
+        bubbleTable.frame = frame;
+    }];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
-    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
-
-    [textField resignFirstResponder];
-
-    return YES;
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    [UIView animateWithDuration:0.2f animations:^{
+        
+        CGRect frame = self.chatBar.frame;
+        frame.origin.y += kbSize.height;
+        self.chatBar.frame = frame;
+        
+        frame = bubbleTable.frame;
+        frame.size.height += kbSize.height;
+        bubbleTable.frame = frame;
+    }];
 }
 
-
-// SEE: http://www.cocoawithlove.com/2008/10/sliding-uitextfields-around-to-avoid.html
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
-    
-    CGRect textFieldRect = [self.view.window convertRect:textField.bounds fromView:textField];
-    CGRect viewRect = [self.view.window convertRect:self.view.bounds fromView:self.view];
-    
-    CGFloat midline = textFieldRect.origin.y + 0.5 * textFieldRect.size.height;
-    CGFloat numerator = midline - viewRect.origin.y - MINIMUM_SCROLL_FRACTION * viewRect.size.height;
-    CGFloat denominator = (MAXIMUM_SCROLL_FRACTION - MINIMUM_SCROLL_FRACTION) * viewRect.size.height;
-    CGFloat heightFraction = numerator / denominator;
-    
-    if (heightFraction < 0.0)
-    {
-        heightFraction = 0.0;
-    }
-    else if (heightFraction > 1.0)
-    {
-        heightFraction = 1.0;
-    }
-    
-    animatedDistance = floor(PORTRAIT_KEYBOARD_HEIGHT * heightFraction);
-    
-    CGRect viewFrame = self.view.frame;
-    viewFrame.origin.y -= animatedDistance;
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
-    
-    [self.view setFrame:viewFrame];
-    
-    [UIView commitAnimations];
-    
-    fieldIndex = textField.tag;
-    [self.keyboardControls setActiveField:textField];
-
-//    [self updateScrollView];
-    
-    
-}
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    CGRect viewFrame = self.view.frame;
-    viewFrame.origin.y += animatedDistance;
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
-    
-    [self.view setFrame:viewFrame];
-    
-    [UIView commitAnimations];
-    
-    [self.keyboardControls.activeField resignFirstResponder];
-//    [textField resignFirstResponder];
-//    [textField endEditing:YES];
-    
-}
-
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-    return YES;
-}
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    //    NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
-    return YES;
-}
-
-#pragma mark - Tap Gestures 
-
--(void)singleTap:(UITapGestureRecognizer*)sender
-{
-    NSLog(@"%s", __FUNCTION__);
-    if (UIGestureRecognizerStateEnded == sender.state)
-    {
-        if (keyboardIsShown) {
-            [_currentField resignFirstResponder];
-//            [_currentField endEditing:YES];
-        } else {
-            
-            UIView* view = sender.view;
-            CGPoint loc = [sender locationInView:view];
-            UIView* subview = [view hitTest:loc withEvent:nil];
-            NSLog(@"tag = %i", subview.tag);
-            
-            
-            switch (subview.tag) {
-                case kTagStartDate:
-                    
-                    break;
-                    
-                case kTagStartTime:
-
-                    break;
-                    
-                case kTagEndDate:
-                    
-                    break;
-                    
-                case kTagEndTime:
-                    
-                    break;
-                    
-                case kTagAllowOthersYes:
-                    allow_public = 1;
-                    [self.ckAllowOthersYes selected];
-                    [self.ckAllowOthersNo unselected];
-                    break;
-                    
-                case kTagAllowOthersNo:
-                    allow_public = 0;
-                    [self.ckAllowOthersYes unselected];
-                    [self.ckAllowOthersNo selected];
-                    
-                    break;
-                    
-                case 666:
-                    [self hideModal];
-                    break;
-                    
-            }
-            
-            
-            
-        }
-    }
-}
+#pragma mark - Actions
 
 #pragma mark - Modal
 
@@ -481,94 +224,29 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 
 - (IBAction)tapCancelButton {
-    [_delegate gotoSlideWithName:@"FormsHome"];
+    [_delegate gotoSlideWithName:@"ChatHome"];
 }
-- (IBAction)tapDoneButton {
+- (IBAction)tapClearButton {
     NSLog(@"%s", __FUNCTION__);
-
-    BOOL isOK = YES;
-    NSMutableArray *errorIds = [[NSMutableArray alloc] init];
     
-    if (self.subjectField.text.length == 0) {
-        isOK = NO;
-        [errorIds addObject:[NSNumber numberWithInt:kTagSubject]];
-    }
-    if (self.whereField.text.length == 0) {
-        isOK = NO;
-        [errorIds addObject:[NSNumber numberWithInt:kTagLocation]];
-    }
-    if (self.descriptionField.text.length == 0) {
-        [errorIds addObject:[NSNumber numberWithInt:kTagDescription]];
-        isOK = NO;
-    }
-    if (self.tfStartDate.text.length == 0) {
-        isOK = NO;
-        [errorIds addObject:[NSNumber numberWithInt:kTagStartDate]];
-    }
-    if (self.tfStartTime.text.length == 0) {
-        isOK = NO;
-        [errorIds addObject:[NSNumber numberWithInt:kTagStartTime]];
-    }
-    if (self.tfEndDate.text.length == 0) {
-        isOK = NO;
-        [errorIds addObject:[NSNumber numberWithInt:kTagEndDate]];
-    }
-    if (self.tfEndTime.text.length == 0) {
-        isOK = NO;
-        [errorIds addObject:[NSNumber numberWithInt:kTagEndTime]];
-    }
-//    if (allow_public < 0) {
-//        isOK = NO;
-//        [errorIds addObject:[NSNumber numberWithInt:kTagAllowOthersYes]];
-//    }
-
-    if (isOK) {
-        // Read date fields and combine
-        NSString *dtFormat = @"%@ %@";
-        NSString *start_time = [NSString stringWithFormat:dtFormat, self.tfStartDate, self.tfStartTime];
-        NSString *end_time = [NSString stringWithFormat:dtFormat, self.tfEndDate, self.tfEndTime];
-        NSLog(@"start date = %@", start_time);
-        NSLog(@"end date = %@", end_time);
-        
-//        NSDate *date1 = [DateTimeUtils dateFromDBDateString:start_time];
-//        NSDate *date2 = [DateTimeUtils dateFromDBDateString:end_time];
-//        
-//        // TODO: Convert back to db format
-//        start_time = [DateTimeUtils dbDateStampFromDate:date1];
-//        end_time = [DateTimeUtils dbDateStampFromDate:date2];
-        
-        FormManager *formSvc = [[FormManager alloc] init];
-        FormVO *form = [[FormVO alloc] init];
-        
-        form.system_id = @"";
-        
-        form.name = self.subjectField.text;
-        form.location = self.whereField.text;
-        form.description = self.descriptionField.text;
-        form.start_time = start_time;
-        form.end_time = end_time;
-        
-        form.type = FormType_RSVP;
-        form.status = FormStatus_DRAFT;
-        
-        int formId = [formSvc saveForm:form];
-        if (formId > 0) {
-            NSLog(@"Form saved with form_id %i", formId);
-            
-//            for (FormOptionVO *formOption in formOptions) {
-//                formOption.form_id = formId;
-//                [formSvc saveOption:formOption];
-//            }
-            [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Survey created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-        }
-        
-    } else {
-        // Data not complete. 
-        [[[UIAlertView alloc] initWithTitle:@"Sorry" message:@"Please complete all fields." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-    }
-
-
 }
+- (IBAction)tapAttachButton {
+    NSLog(@"%s", __FUNCTION__);
+    
+}
+- (IBAction)tapSendButton {
+    NSLog(@"%s", __FUNCTION__);
+    bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
+    
+    NSBubbleData *sayBubble = [NSBubbleData dataWithText:self.inputField.text date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
+    [bubbleData addObject:sayBubble];
+    [bubbleTable reloadData];
+    
+    self.inputField.text = @"";
+    [self.inputField resignFirstResponder];
+    
+}
+
 - (IBAction)modalCameraButton {
     NSLog(@"%s", __FUNCTION__);
     [self hideModal];
@@ -607,139 +285,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self hideModal];
 }
 
-#pragma mark Keyboard Controls Delegate
-
-- (void)keyboardControlsBeforeMove:(BSKeyboardControls *)keyboardControls currentField:(UIView *)field inDirection:(BSKeyboardControlsDirection)direction {
-    NSLog(@"%s at field %i", __FUNCTION__, fieldIndex);
-    
-    NSDate *pickDate;
-    switch (fieldIndex) {
-            
-        case kTagStartDate:
-            pickDate = self.datePicker.date;
-            
-            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
-            break;
-            
-        case kTagStartTime:
-            pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
-            
-            break;
-            
-        case kTagEndDate:
-            pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
-            
-            break;
-            
-        case kTagEndTime:
-            
-            pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
-            break;
-    }
-    
-}
-
-
-- (void)keyboardControls:(BSKeyboardControls *)keyboardControls selectedField:(UIView *)field inDirection:(BSKeyboardControlsDirection)direction
-{
-    
-//    UIView *active = keyboardControls.activeField;
-////    CGRect aRect = self.view.frame;    
-////    aRect.size.height -= keyboardHeight;
-//
-//    CGRect targetFrame = active.frame;
-//    targetFrame.origin.y -= keyboardHeight;
-//    
-//    [self.scrollView scrollRectToVisible:targetFrame animated:YES];
-}
-
-
-- (void)keyboardControlsDonePressed:(BSKeyboardControls *)controls
-{
-    NSLog(@"%s at field %i", __FUNCTION__, fieldIndex);
-    
-    NSDate *pickDate;
-    switch (fieldIndex) {
-            
-        case kTagStartDate:
-            pickDate = self.datePicker.date;
-            
-            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
-            break;
-            
-        case kTagStartTime:
-            pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
-            
-            break;
-            
-        case kTagEndDate:
-            pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
-            
-            break;
-            
-        case kTagEndTime:
-            
-            pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
-            break;
-    }
-    
-    [_currentField resignFirstResponder];
-    
-//    [self.scrollView scrollRectToVisible:self.view.frame animated:YES];
-    
-}
-
-#pragma mark - picker actions
-
--(IBAction)dismissDatePicker:(id)sender {
-    NSDate *pickDate = self.datePicker.date;
-    switch (fieldIndex) {
-            
-        case kTagStartDate:
-            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
-            break;
-            
-        case kTagStartTime:
-            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
-            break;
-            
-        case kTagEndDate:
-            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
-            break;
-            
-        case kTagEndTime:
-            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
-            break;
-    }
-    [_currentField resignFirstResponder];
-}
-
-
-- (IBAction)tapPickPhoto {
-    NSLog(@"%s", __FUNCTION__);
-    
-    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification
-                                                            notificationWithName:@"showImagePickerNotification"
-                                                            object:nil]];
-    
-}
-- (void) setPhoto:(UIImage *)photo {
-    NSLog(@"%s", __FUNCTION__);
-    self.photoHolder.hidden = NO;
-    self.roundPic.image = photo;
-}
 
 #pragma mark - UIAlertView
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     
-    [_delegate gotoSlideWithName:@"FormsHome"];
+    [_delegate gotoSlideWithName:@"ChatHome"];
     
 }
 
@@ -767,7 +318,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSLog(@"%s", __FUNCTION__);
 	UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
     
-    [self setPhoto:tmpImage];
 //    currentOption.roundPic.image = tmpImage;
     
     // NSLog(@"downsizing image");

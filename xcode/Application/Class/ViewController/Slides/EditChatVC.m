@@ -32,6 +32,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    chatSvc = [[ChatManager alloc] init];
+    
     // Do any additional setup after loading the view from its nib.
     
     xpos = 3;
@@ -241,6 +244,11 @@
         isOK = NO;
     }
     if (isOK) {
+        ChatVO *chat = [[ChatVO alloc] init];
+        
+        
+        chat.name = @"Test Chat";
+        
         [_delegate gotoSlideWithName:@"Chat"];
     } else {
         [[[UIAlertView alloc] initWithTitle:@"Try again" message:@"Please add at least one contact" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
