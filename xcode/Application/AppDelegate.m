@@ -22,10 +22,15 @@
     
     [SQLiteDB installDatabase];
     sleep(2);
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        // code here
+        [DataModel shared].stageWidth = [[UIScreen mainScreen] bounds].size.width;
+        [DataModel shared].stageHeight = [[UIScreen mainScreen] bounds].size.height;
+    } else {
+        [DataModel shared].stageWidth = [[UIScreen mainScreen] applicationFrame].size.width;
+        [DataModel shared].stageHeight = [[UIScreen mainScreen] applicationFrame].size.height;
+    }
     
-    [DataModel shared].stageWidth = [[UIScreen mainScreen] applicationFrame].size.width;
-    [DataModel shared].stageHeight = [[UIScreen mainScreen] applicationFrame].size.height;
-
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     // Override point for customization after application launch.

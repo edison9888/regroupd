@@ -7,6 +7,7 @@
 //
 
 #import "ChatsHomeVC.h"
+#import "ChatVO.h"
 
 @interface ChatsHomeVC ()
 
@@ -111,10 +112,9 @@
             selectedIndex = indexPath.row;
             NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
             
-            [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
+            [DataModel shared].chat = [ChatVO readFromDictionary:rowdata];
             
-            [DataModel shared].action = kActionADD;
-            [_delegate gotoSlideWithName:@"EditChat"];
+            [_delegate gotoSlideWithName:@"Chat"];
             
             
         }

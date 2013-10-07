@@ -14,6 +14,7 @@
 @synthesize user;
 @synthesize contact;
 @synthesize form;
+@synthesize chat;
 
 @synthesize contactData;
 @synthesize timestampText;

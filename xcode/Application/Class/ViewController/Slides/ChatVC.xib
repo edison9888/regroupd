@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="attachButton" destination="Ddx-FC-uCy" id="eK8-jM-Fxg"/>
                 <outlet property="bubbleTable" destination="YhV-Zy-cDk" id="XsO-d0-GEO"/>
+                <outlet property="chatBar" destination="VL9-59-RBu" id="oCj-cg-eIn"/>
                 <outlet property="inputField" destination="5JB-Ai-Vv9" id="PXM-2z-8LL"/>
                 <outlet property="navTitle" destination="22" id="K7T-L0-xiK"/>
                 <outlet property="photoModal" destination="56" id="62"/>
@@ -22,7 +23,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="YhV-Zy-cDk" customClass="UIBubbleTableView">
-                    <rect key="frame" x="0.0" y="49" width="320" height="551"/>
+                    <rect key="frame" x="0.0" y="49" width="320" height="500"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>

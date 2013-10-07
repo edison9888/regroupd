@@ -13,6 +13,7 @@
 
 #import "BrandUITextField.h"
 #import "UIBubbleTableViewDataSource.h"
+//#import ""
 
 #import "ChatManager.h"
 #import "ChatVO.h"
@@ -45,6 +46,7 @@
 @property (nonatomic, retain) UIImagePickerController* imagePickerVC;
 
 @property (nonatomic, retain) IBOutlet BrandUILabel *navTitle;
+@property (nonatomic, strong) IBOutlet UIBubbleTableView *bubbleTable;
 
 @property (nonatomic, strong) IBOutlet UIView *chatBar;
 @property (nonatomic, strong) IBOutlet UIButton *attachButton;

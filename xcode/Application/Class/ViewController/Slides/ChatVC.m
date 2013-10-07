@@ -18,7 +18,7 @@
 
 @interface ChatVC ()
 {
-    IBOutlet UIBubbleTableView *bubbleTable;
+//    IBOutlet UIBubbleTableView *bubbleTable;
     
     NSMutableArray *bubbleData;
 }
@@ -28,8 +28,11 @@
 @implementation ChatVC
 
 @synthesize bubbleData;
+@synthesize bubbleTable;
 
 #define kFirstOptionId  1
+#define kScrollViewTop 50
+#define kChatBarHeight 50
 
 static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.3;
 static const CGFloat MINIMUM_SCROLL_FRACTION = 0.2;
@@ -52,6 +55,14 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
     chatSvc = [[ChatManager alloc] init];
 
+    CGRect scrollFrame = self.bubbleTable.frame;
+    scrollFrame.size.height = [DataModel shared].stageHeight - kScrollViewTop - kChatBarHeight;
+    self.bubbleTable.frame = scrollFrame;
+    
+    CGRect chatFrame = self.chatBar.frame;
+    chatFrame.origin.y = [DataModel shared].stageHeight - kChatBarHeight;
+    self.chatBar.frame = chatFrame;
+    
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
     
@@ -59,26 +70,27 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     NSBubbleData *heyBubble = [NSBubbleData dataWithText:@"Hey, halloween is soon" date:[NSDate dateWithTimeIntervalSinceNow:-300] type:BubbleTypeSomeoneElse];
     heyBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
-    
-    NSBubbleData *photoBubble = [NSBubbleData dataWithImage:[UIImage imageNamed:@"halloween.jpg"] date:[NSDate dateWithTimeIntervalSinceNow:-290] type:BubbleTypeSomeoneElse];
+
+    NSBubbleData *photoBubble = [NSBubbleData dataWithImage:[UIImage imageNamed:@"maserati.jpg"] date:[NSDate dateWithTimeIntervalSinceNow:-290] type:BubbleTypeSomeoneElse];
     photoBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
+    
     
     NSBubbleData *replyBubble = [NSBubbleData dataWithText:@"Wow.. Really cool picture out there. iPhone 5 has really nice camera, yeah?" date:[NSDate dateWithTimeIntervalSinceNow:-5] type:BubbleTypeMine];
     replyBubble.avatar = nil;
     
     bubbleData = [[NSMutableArray alloc] initWithObjects:heyBubble, photoBubble, replyBubble, nil];
-    bubbleTable.bubbleDataSource = self;
+    self.bubbleTable.bubbleDataSource = self;
     
     // The line below sets the snap interval in seconds. This defines how the bubbles will be grouped in time.
     // Interval of 120 means that if the next messages comes in 2 minutes since the last message, it will be added into the same group.
     // Groups are delimited with header which contains date and time for the first message in the group.
     
-    bubbleTable.snapInterval = 120;
+    self.bubbleTable.snapInterval = 120;
     
     // The line below enables avatar support. Avatar can be specified for each bubble with .avatar property of NSBubbleData.
     // Avatars are enabled for the whole table at once. If particular NSBubbleData misses the avatar, a default placeholder will be set (missingAvatar.png)
     
-    bubbleTable.showAvatars = YES;
+    self.bubbleTable.showAvatars = YES;
     
     // Uncomment the line below to add "Now typing" bubble
     // Possible values are
@@ -86,16 +98,28 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     //    - NSBubbleTypingTypeMe - shows "now typing" bubble on the right
     //    - NSBubbleTypingTypeNone - no "now typing" bubble
     
-    bubbleTable.typingBubble = NSBubbleTypingTypeSomebody;
+//    self.bubbleTable.typingBubble = NSBubbleTypingTypeSomebody;
     
-    [bubbleTable reloadData];
+    [self.bubbleTable reloadData];
     
     // Keyboard events
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
 
+    // Create and initialize a tap gesture
     
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
+                                             
+                                             initWithTarget:self action:@selector(singleTap:)];
+    
+    // Specify that the gesture must be a single tap
+    
+    tapRecognizer.numberOfTapsRequired = 1;
+    
+    [self.view addGestureRecognizer:tapRecognizer];
+    
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -121,8 +145,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
+    NSLog(@"%s", __FUNCTION__);
+    keyboardIsShown = YES;
     NSDictionary* info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+//    kbSize.height += kChatBarHeight;
+    NSLog(@"Keyboard height is %f", kbSize.height)
     
     [UIView animateWithDuration:0.2f animations:^{
         
@@ -130,16 +158,19 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         frame.origin.y -= kbSize.height;
         self.chatBar.frame = frame;
         
-        frame = bubbleTable.frame;
+        frame = self.bubbleTable.frame;
         frame.size.height -= kbSize.height;
-        bubbleTable.frame = frame;
+        self.bubbleTable.frame = frame;
     }];
 }
 
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
+    NSLog(@"%s", __FUNCTION__);
+    keyboardIsShown = NO;
     NSDictionary* info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+//    kbSize.height += kChatBarHeight;
     
     [UIView animateWithDuration:0.2f animations:^{
         
@@ -147,9 +178,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         frame.origin.y += kbSize.height;
         self.chatBar.frame = frame;
         
-        frame = bubbleTable.frame;
+        frame = self.bubbleTable.frame;
         frame.size.height += kbSize.height;
-        bubbleTable.frame = frame;
+        self.bubbleTable.frame = frame;
     }];
 }
 
@@ -224,7 +255,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 
 - (IBAction)tapCancelButton {
-    [_delegate gotoSlideWithName:@"ChatHome"];
+    [_delegate gotoSlideWithName:@"ChatsHome"];
+    
 }
 - (IBAction)tapClearButton {
     NSLog(@"%s", __FUNCTION__);
@@ -236,11 +268,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 - (IBAction)tapSendButton {
     NSLog(@"%s", __FUNCTION__);
-    bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
+    self.bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
     
     NSBubbleData *sayBubble = [NSBubbleData dataWithText:self.inputField.text date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
     [bubbleData addObject:sayBubble];
-    [bubbleTable reloadData];
+    [self.bubbleTable reloadData];
     
     self.inputField.text = @"";
     [self.inputField resignFirstResponder];
@@ -316,7 +348,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void)imagePickerController:(UIImagePickerController *)Picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     NSLog(@"%s", __FUNCTION__);
-	UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
+//	UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
     
 //    currentOption.roundPic.image = tmpImage;
     
@@ -336,5 +368,27 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
 }
 
+#pragma mark - Tap Gestures
+
+-(void)singleTap:(UITapGestureRecognizer*)sender
+{
+    NSLog(@"%s", __FUNCTION__);
+    if (UIGestureRecognizerStateEnded == sender.state)
+    {
+        if (keyboardIsShown) {
+            [self.inputField resignFirstResponder];
+            [self.inputField endEditing:YES];
+            
+        } else {
+            
+            UIView* view = sender.view;
+            CGPoint loc = [sender locationInView:view];
+            UIView* subview = [view hitTest:loc withEvent:nil];
+            NSLog(@"tag = %i", subview.tag);
+            
+            
+        }
+    }
+}
 
 @end
