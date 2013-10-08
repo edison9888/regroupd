@@ -11,6 +11,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIBubbleTableViewCell.h"
 #import "NSBubbleData.h"
+//#import "UIColor+ColorWithHex.h"
 
 @interface UIBubbleTableViewCell ()
 
@@ -66,7 +67,7 @@
 #endif
         [self addSubview:self.bubbleImage];
     }
-    
+    self.backgroundColor = [UIColor clearColor];
     NSBubbleType type = self.data.type;
     
     CGFloat width = self.data.view.frame.size.width;
@@ -84,7 +85,7 @@
 #else
         self.avatarImage = [[UIImageView alloc] initWithImage:(self.data.avatar ? self.data.avatar : [UIImage imageNamed:@"missingAvatar.png"])];
 #endif
-        self.avatarImage.layer.cornerRadius = 9.0;
+        self.avatarImage.layer.cornerRadius = 25.0;
         self.avatarImage.layer.masksToBounds = YES;
         self.avatarImage.layer.borderColor = [UIColor colorWithWhite:0.0 alpha:0.2].CGColor;
         self.avatarImage.layer.borderWidth = 1.0;

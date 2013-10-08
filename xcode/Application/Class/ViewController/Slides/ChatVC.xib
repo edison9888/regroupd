@@ -8,12 +8,28 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChatVC">
             <connections>
                 <outlet property="attachButton" destination="Ddx-FC-uCy" id="eK8-jM-Fxg"/>
+                <outlet property="attachModal" destination="56" id="GUd-0V-80t"/>
+                <outlet property="attachPhotoHotspot" destination="JeZ-d0-2pM" id="jae-4s-DkM"/>
+                <outlet property="attachPhotoIcon" destination="2df-GW-VLv" id="JUu-sp-M53"/>
+                <outlet property="attachPhotoLabel" destination="LLh-E2-jSx" id="Nfd-Go-2Sy"/>
+                <outlet property="attachPollHotspot" destination="saA-of-fEf" id="Twk-Th-9sP"/>
+                <outlet property="attachPollIcon" destination="gPo-8a-glM" id="wpf-FT-iDZ"/>
+                <outlet property="attachPollLabel" destination="3jA-FA-X8X" id="KnL-pb-x5a"/>
+                <outlet property="attachRSVPHotspot" destination="gzd-da-7gP" id="Qy2-U6-utt"/>
+                <outlet property="attachRSVPIcon" destination="P9J-Tq-VZ8" id="cgi-Y2-ibU"/>
+                <outlet property="attachRSVPLabel" destination="cbC-CX-Eso" id="uYW-Th-dnn"/>
+                <outlet property="attachRatingHotspot" destination="YKh-4K-r5w" id="QF6-xf-LGn"/>
+                <outlet property="attachRatingIcon" destination="HOt-ZL-Pdz" id="Gxk-YU-HtR"/>
+                <outlet property="attachRatingLabel" destination="WgT-Hx-7rs" id="WXa-jJ-FYK"/>
                 <outlet property="bubbleTable" destination="YhV-Zy-cDk" id="XsO-d0-GEO"/>
+                <outlet property="cancelHotspot" destination="60" id="IH5-Cg-dxn"/>
                 <outlet property="chatBar" destination="VL9-59-RBu" id="oCj-cg-eIn"/>
                 <outlet property="inputField" destination="5JB-Ai-Vv9" id="PXM-2z-8LL"/>
                 <outlet property="navTitle" destination="22" id="K7T-L0-xiK"/>
-                <outlet property="photoModal" destination="56" id="62"/>
+                <outlet property="photoModal" destination="lHV-BO-JO1" id="MBM-Nt-cLQ"/>
+                <outlet property="plusIconsView" destination="v9D-BJ-uId" id="ePy-76-ZQr"/>
                 <outlet property="sendButton" destination="2x0-BK-fQF" id="wJW-Q6-reg"/>
+                <outlet property="unattachButton" destination="aCq-zV-oCj" id="PcS-FR-mM7"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -123,15 +139,15 @@
             <color key="backgroundColor" red="0.90196078431372551" green="0.92156862745098034" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
         </view>
-        <view autoresizesSubviews="NO" contentMode="scaleToFill" id="56" userLabel="View - modal">
+        <view autoresizesSubviews="NO" contentMode="scaleToFill" id="lHV-BO-JO1" userLabel="View - photoModal">
             <rect key="frame" x="0.0" y="0.0" width="302" height="159"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="modal_add_photo.png" id="61">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="modal_add_photo.png" id="aXB-fH-2at">
                     <rect key="frame" x="0.0" y="0.0" width="302" height="159"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </imageView>
-                <button autoresizesSubviews="NO" opaque="NO" tag="201" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="60" userLabel="Button - photo">
+                <button autoresizesSubviews="NO" opaque="NO" tag="201" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" id="r5x-Eg-8PG" userLabel="Button - photo">
                     <rect key="frame" x="0.0" y="0.0" width="302" height="52"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -143,10 +159,10 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="modalCameraButton" destination="-1" eventType="touchUpInside" id="66"/>
+                        <action selector="modalCameraButton" destination="-1" eventType="touchUpInside" id="gjv-Jq-548"/>
                     </connections>
                 </button>
-                <button autoresizesSubviews="NO" opaque="NO" tag="202" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="59" userLabel="Button - choose">
+                <button autoresizesSubviews="NO" opaque="NO" tag="202" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" id="9MZ-Rl-2d9" userLabel="Button - choose">
                     <rect key="frame" x="0.0" y="52" width="302" height="51"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -158,10 +174,10 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="modalChooseButton" destination="-1" eventType="touchUpInside" id="67"/>
+                        <action selector="modalChooseButton" destination="-1" eventType="touchUpInside" id="zhI-MX-UNj"/>
                     </connections>
                 </button>
-                <button autoresizesSubviews="NO" opaque="NO" tag="203" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="58" userLabel="Button - cancel">
+                <button autoresizesSubviews="NO" opaque="NO" tag="203" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" id="YOm-MN-Hpu" userLabel="Button - cancel">
                     <rect key="frame" x="0.0" y="103" width="302" height="54"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -173,8 +189,179 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="modalCancelButton" destination="-1" eventType="touchUpInside" id="68"/>
+                        <action selector="modalCancelButton" destination="-1" eventType="touchUpInside" id="9WN-3f-hoH"/>
                     </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+        </view>
+        <view autoresizesSubviews="NO" tag="88" contentMode="scaleToFill" id="56" userLabel="View - attachModal">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="264"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="chat_attach_panel.png" id="61">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="264"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_attach_photo.png" id="2df-GW-VLv">
+                    <rect key="frame" x="20" y="16" width="25" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Attach Image" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LLh-E2-jSx" customClass="BrandUILabel">
+                    <rect key="frame" x="61" y="11" width="200" height="28"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="20"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_attach_poll.png" id="gPo-8a-glM">
+                    <rect key="frame" x="20" y="69" width="24" height="18"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Add Poll" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3jA-FA-X8X" customClass="BrandUILabel">
+                    <rect key="frame" x="61" y="64" width="200" height="28"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="20"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_attach_rating.png" id="HOt-ZL-Pdz">
+                    <rect key="frame" x="20" y="117" width="27" height="25"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Add Rating" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WgT-Hx-7rs" customClass="BrandUILabel">
+                    <rect key="frame" x="61" y="116" width="200" height="28"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="20"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_attach_rsvp.png" id="P9J-Tq-VZ8">
+                    <rect key="frame" x="20" y="170" width="23" height="24"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Add RSVP" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cbC-CX-Eso" customClass="BrandUILabel">
+                    <rect key="frame" x="61" y="168" width="200" height="28"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="20"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_attach_cancel.png" id="Eo6-B2-ufK">
+                    <rect key="frame" x="20" y="219" width="25" height="25"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Cancel" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RX5-I9-or8" customClass="BrandUILabel">
+                    <rect key="frame" x="61" y="218" width="200" height="28"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="20"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" id="v9D-BJ-uId" userLabel="View - plus icons">
+                    <rect key="frame" x="260" y="56" width="60" height="148"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_attach_plus.png" id="sIB-NV-ZfI">
+                            <rect key="frame" x="19" y="62" width="25" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_attach_plus.png" id="DoQ-FS-tvm">
+                            <rect key="frame" x="19" y="112" width="25" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="modal_vertical_divider.png" id="njh-96-iei">
+                            <rect key="frame" x="2" y="55" width="1" height="36"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="modal_vertical_divider.png" id="Qbr-Fb-dWa">
+                            <rect key="frame" x="2" y="3" width="1" height="36"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_attach_plus.png" id="Zob-81-2ad">
+                            <rect key="frame" x="19" y="8" width="25" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="modal_vertical_divider.png" id="ij0-8M-4va">
+                            <rect key="frame" x="2" y="107" width="1" height="36"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
+                <button autoresizesSubviews="NO" opaque="NO" tag="201" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" id="JeZ-d0-2pM" userLabel="Button - hotspot - image">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="52"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                    <state key="normal">
+                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="highlighted">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button autoresizesSubviews="NO" opaque="NO" tag="201" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" id="saA-of-fEf" userLabel="Button - hotspot - poll">
+                    <rect key="frame" x="0.0" y="52" width="320" height="52"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                    <state key="normal">
+                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="highlighted">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button autoresizesSubviews="NO" opaque="NO" tag="201" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" id="YKh-4K-r5w" userLabel="Button - hotspot - rating">
+                    <rect key="frame" x="0.0" y="104" width="320" height="52"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                    <state key="normal">
+                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="highlighted">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button autoresizesSubviews="NO" opaque="NO" tag="201" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" id="gzd-da-7gP" userLabel="Button - hotspot - rsvp">
+                    <rect key="frame" x="0.0" y="156" width="320" height="52"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                    <state key="normal">
+                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="highlighted">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button autoresizesSubviews="NO" opaque="NO" tag="201" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" id="60" userLabel="Button - hotspot - cancel">
+                    <rect key="frame" x="0.0" y="208" width="320" height="52"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                    <state key="normal">
+                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="highlighted">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button autoresizesSubviews="NO" opaque="NO" tag="201" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="aCq-zV-oCj" userLabel="Button - remove">
+                    <rect key="frame" x="279" y="212" width="40" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="0.15686274509803921" green="0.81176470588235294" blue="0.91764705882352937" alpha="1" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                    <state key="normal" image="icon_attach_remove_x.png">
+                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="highlighted">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -183,8 +370,23 @@
     </objects>
     <resources>
         <image name="btn_aqua_bg_small.png" width="55" height="28"/>
+        <image name="btn_aqua_bg_small.png" width="55" height="28"/>
+        <image name="btn_aqua_bg_small.png" width="55" height="28"/>
         <image name="btn_chat_add_grey.png" width="40" height="40"/>
+        <image name="chat_attach_panel.png" width="320" height="263"/>
+        <image name="icon_attach_cancel.png" width="25" height="25"/>
+        <image name="icon_attach_photo.png" width="25" height="17"/>
+        <image name="icon_attach_plus.png" width="19" height="19"/>
+        <image name="icon_attach_plus.png" width="19" height="19"/>
+        <image name="icon_attach_plus.png" width="19" height="19"/>
+        <image name="icon_attach_poll.png" width="24" height="18"/>
+        <image name="icon_attach_rating.png" width="26" height="24"/>
+        <image name="icon_attach_remove_x.png" width="16" height="16"/>
+        <image name="icon_attach_rsvp.png" width="23" height="23"/>
         <image name="modal_add_photo.png" width="302" height="159"/>
+        <image name="modal_vertical_divider.png" width="1" height="36"/>
+        <image name="modal_vertical_divider.png" width="1" height="36"/>
+        <image name="modal_vertical_divider.png" width="1" height="36"/>
         <image name="topnav_aqua_bg.png" width="320" height="50"/>
     </resources>
 </document>

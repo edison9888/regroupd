@@ -18,8 +18,9 @@
 #import "ChatManager.h"
 #import "ChatVO.h"
 #import "ChatMessageVO.h"
+#import "FormVO.h"
 
-@interface ChatVC : SlideViewController<UIBubbleTableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate> {
+@interface ChatVC : SlideViewController<UIBubbleTableViewDataSource, UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate> {
     int fieldIndex;
     
     CGPoint  offset; // unused
@@ -39,6 +40,10 @@
     
     ChatManager *chatSvc;
     
+    BOOL hasAttachment;
+    int attachmentType;
+    UIImage *attachedPhoto;
+    
 }
 
 @property (nonatomic, retain) NSMutableArray *bubbleData;
@@ -53,7 +58,28 @@
 @property (nonatomic, strong) IBOutlet UIButton *sendButton;
 @property (nonatomic, retain) IBOutlet FancyTextView *inputField;
 
+@property (nonatomic, strong) IBOutlet UIView *attachModal;
 @property (nonatomic, strong) IBOutlet UIView *photoModal;
+
+@property (nonatomic, strong) IBOutlet UIView *plusIconsView;
+@property (nonatomic, retain) IBOutlet BrandUILabel *attachPhotoLabel;
+@property (nonatomic, retain) IBOutlet BrandUILabel *attachPollLabel;
+@property (nonatomic, retain) IBOutlet BrandUILabel *attachRatingLabel;
+@property (nonatomic, retain) IBOutlet BrandUILabel *attachRSVPLabel;
+
+@property (nonatomic, retain) IBOutlet UIImageView *attachPhotoIcon;
+@property (nonatomic, retain) IBOutlet UIImageView *attachPollIcon;
+@property (nonatomic, retain) IBOutlet UIImageView *attachRatingIcon;
+@property (nonatomic, retain) IBOutlet UIImageView *attachRSVPIcon;
+
+@property (nonatomic, strong) IBOutlet UIButton *attachPhotoHotspot;
+@property (nonatomic, strong) IBOutlet UIButton *attachPollHotspot;
+@property (nonatomic, strong) IBOutlet UIButton *attachRatingHotspot;
+@property (nonatomic, strong) IBOutlet UIButton *attachRSVPHotspot;
+@property (nonatomic, strong) IBOutlet UIButton *cancelHotspot;
+
+@property (nonatomic, strong) IBOutlet UIButton *unattachButton;
+
 
 - (IBAction)tapCancelButton;
 - (IBAction)tapClearButton;
@@ -64,8 +90,9 @@
 - (IBAction)modalChooseButton;
 - (IBAction)modalCancelButton;
 
-- (void) showModal;
-- (void) hideModal;
+- (void) showAttachModal;
+- (void) hideAttachModal;
+- (void) setupModalHotspots;
 
 
 @end

@@ -14,6 +14,7 @@
 #import "UIBubbleTableView.h"
 #import "UIBubbleTableViewDataSource.h"
 #import "NSBubbleData.h"
+#import "UIColor+ColorWithHex.h"
 
 
 @interface ChatVC ()
@@ -34,6 +35,11 @@
 #define kScrollViewTop 50
 #define kChatBarHeight 50
 
+#define kTagAttachModalBG 666
+#define kTagPhotoModalBG  667
+
+#define kAlphaDisabled  0.8f
+
 static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.3;
 static const CGFloat MINIMUM_SCROLL_FRACTION = 0.2;
 static const CGFloat MAXIMUM_SCROLL_FRACTION = 0.8;
@@ -52,21 +58,25 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    self.inputField.delegate = self;
+    self.unattachButton.hidden = YES;
+    hasAttachment = NO;
+    attachmentType = FormType_POLL;
+    
+    
     chatSvc = [[ChatManager alloc] init];
-
+    
+    // Setup table view
+    
     CGRect scrollFrame = self.bubbleTable.frame;
-    scrollFrame.size.height = [DataModel shared].stageHeight - kScrollViewTop - kChatBarHeight;
+    scrollFrame.size.height = [DataModel shared].stageHeight - kChatBarHeight;
+    NSLog(@"Set scroll frame height to %f", scrollFrame.size.height);
     self.bubbleTable.frame = scrollFrame;
+    self.bubbleTable.backgroundColor = [UIColor colorWithHexValue:kChatBGGrey andAlpha:1.0];
     
     CGRect chatFrame = self.chatBar.frame;
     chatFrame.origin.y = [DataModel shared].stageHeight - kChatBarHeight;
     self.chatBar.frame = chatFrame;
-    
-    NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showImagePickerNotificationHandler:)     name:@"showImagePickerNotification"            object:nil];
     
     NSBubbleData *heyBubble = [NSBubbleData dataWithText:@"Hey, halloween is soon" date:[NSDate dateWithTimeIntervalSinceNow:-300] type:BubbleTypeSomeoneElse];
     heyBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
@@ -103,6 +113,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self.bubbleTable reloadData];
     
     // Keyboard events
+    // Setup notifications
+    
+    NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showImagePickerNotificationHandler:)     name:@"showImagePickerNotification"            object:nil];
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
@@ -141,25 +158,65 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     return [bubbleData objectAtIndex:row];
 }
 
+
+#pragma mark - UITextView delegate methods
+
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    NSLog(@"===== %s", __FUNCTION__);
+    
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    NSLog(@"===== %s", __FUNCTION__);
+    
+    [textView endEditing:YES];
+}
+
+- (void)textViewDidChange:(UITextView *)textView {
+    //    NSLog(@"%s tag=%i", __FUNCTION__, textView.tag);
+    
+    
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    
+    if( [text isEqualToString:[text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]]] ) {
+        return YES;
+    } else {
+//        NSLog(@"Return key event");
+        
+        if (textView.text.length > 0) {
+            NSBubbleData *sayBubble = [NSBubbleData dataWithText:self.inputField.text date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
+            [bubbleData addObject:sayBubble];
+            [self.bubbleTable reloadData];
+            [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+            
+            self.inputField.text = @"";
+        }
+        return NO;
+        
+    }
+}
 #pragma mark - Keyboard events
 
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     keyboardIsShown = YES;
     NSDictionary* info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
 //    kbSize.height += kChatBarHeight;
-    NSLog(@"Keyboard height is %f", kbSize.height)
+//    NSLog(@"Keyboard height is %f", kbSize.height)
     
-    [UIView animateWithDuration:0.2f animations:^{
+    [UIView animateWithDuration:0.1f animations:^{
         
         CGRect frame = self.chatBar.frame;
         frame.origin.y -= kbSize.height;
         self.chatBar.frame = frame;
         
         frame = self.bubbleTable.frame;
-        frame.size.height -= kbSize.height;
+        frame.size.height -= kbSize.height + kChatBarHeight;
+        
         self.bubbleTable.frame = frame;
     }];
 }
@@ -172,15 +229,16 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
 //    kbSize.height += kChatBarHeight;
     
-    [UIView animateWithDuration:0.2f animations:^{
+    [UIView animateWithDuration:0.1f animations:^{
         
-        CGRect frame = self.chatBar.frame;
+        CGRect frame = self.bubbleTable.frame;
+        frame.size.height += kbSize.height;
+        self.bubbleTable.frame = frame;
+
+        frame = self.chatBar.frame;
         frame.origin.y += kbSize.height;
         self.chatBar.frame = frame;
         
-        frame = self.bubbleTable.frame;
-        frame.size.height += kbSize.height;
-        self.bubbleTable.frame = frame;
     }];
 }
 
@@ -188,16 +246,88 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 #pragma mark - Modal
 
-- (void) showModal {
+- (void) showAttachModal {
+    [self becomeFirstResponder];
+    
+    CGRect fullscreen = CGRectMake(0, 0, [DataModel shared].stageWidth, [DataModel shared].stageHeight);
+    bgLayer = [[UIView alloc] initWithFrame:fullscreen];
+    bgLayer.backgroundColor = [UIColor grayColor];
+    bgLayer.alpha = 0.4;
+    bgLayer.tag = 1000;
+    bgLayer.layer.zPosition = 9;
+    bgLayer.tag = kTagAttachModalBG;
+    [self.view addSubview:bgLayer];
+    
+    // Setup modal state
+    [self setupModalHotspots];
+
+    // Setup attachModal
+    
+    CGRect modalFrame = self.attachModal.frame;
+    int ypos = [DataModel shared].stageHeight + 10;
+    int xpos = 0;
+    
+    modalFrame.origin.y = ypos;
+    modalFrame.origin.x = xpos;
+    
+    self.attachModal.layer.zPosition = 99;
+    self.attachModal.frame = modalFrame;
+    [self.view addSubview:self.attachModal];
+    
+
+    ypos = ([DataModel shared].stageHeight - modalFrame.size.height);
+    modalFrame.origin.y = ypos;
+    
+    [UIView animateWithDuration:0.5
+                          delay:0
+                        options:(UIViewAnimationCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction)
+                     animations:^{
+                         self.attachModal.frame = modalFrame;
+                     }
+                     completion:^(BOOL finished){
+                         NSLog(@"Done!");
+                     }];
+    
+    
+}
+
+- (void) hideAttachModal {
+    
+    if (bgLayer != nil) {
+        [bgLayer removeFromSuperview];
+        bgLayer = nil;
+    }
+    
+    CGRect modalFrame = self.attachModal.frame;
+    int ypos = [DataModel shared].stageHeight + 10;
+    modalFrame.origin.y = ypos;
+    
+    [UIView animateWithDuration:0.5
+                          delay:0
+                        options:(UIViewAnimationCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction)
+                     animations:^{
+                         self.attachModal.frame = modalFrame;
+                     }
+                     completion:^(BOOL finished){
+                         if (bgLayer != nil) {
+                             [bgLayer removeFromSuperview];
+                             bgLayer = nil;
+                         }
+                                                  
+                     }];
+    
+    
+}
+
+- (void) showPhotoModal {
     [self becomeFirstResponder];
     
     CGRect fullscreen = CGRectMake(0, 0, [DataModel shared].stageWidth, [DataModel shared].stageHeight);
     bgLayer = [[UIView alloc] initWithFrame:fullscreen];
     bgLayer.backgroundColor = [UIColor grayColor];
     bgLayer.alpha = 0.8;
-    bgLayer.tag = 1000;
     bgLayer.layer.zPosition = 9;
-    bgLayer.tag = 666;
+    bgLayer.tag = kTagPhotoModalBG;
     [self.view addSubview:bgLayer];
     
     
@@ -214,7 +344,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     self.photoModal.frame = modalFrame;
     [self.view addSubview:self.photoModal];
     
-
+    
     ypos = ([DataModel shared].stageHeight - modalFrame.size.height) / 2;
     modalFrame.origin.y = ypos;
     
@@ -230,8 +360,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
 }
 
-- (void) hideModal {
+- (void) hidePhotoModal {
     
+    if (bgLayer != nil) {
+        [bgLayer removeFromSuperview];
+        bgLayer = nil;
+    }
+
     CGRect modalFrame = self.photoModal.frame;
     float ypos = -modalFrame.size.height - 40;
     modalFrame.origin.y = ypos;
@@ -248,12 +383,14 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                              [bgLayer removeFromSuperview];
                              bgLayer = nil;
                          }
-                                                  
+                         
                      }];
     
     
 }
 
+
+#pragma mark IBActions
 - (IBAction)tapCancelButton {
     [_delegate gotoSlideWithName:@"ChatsHome"];
     
@@ -264,24 +401,26 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 - (IBAction)tapAttachButton {
     NSLog(@"%s", __FUNCTION__);
+    [self showAttachModal];
     
 }
 - (IBAction)tapSendButton {
     NSLog(@"%s", __FUNCTION__);
-    self.bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
-    
-    NSBubbleData *sayBubble = [NSBubbleData dataWithText:self.inputField.text date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
-    [bubbleData addObject:sayBubble];
-    [self.bubbleTable reloadData];
-    
-    self.inputField.text = @"";
-    [self.inputField resignFirstResponder];
-    
+    if (self.inputField.text.length > 0) {
+        self.bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
+        
+        NSBubbleData *sayBubble = [NSBubbleData dataWithText:self.inputField.text date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
+        [bubbleData addObject:sayBubble];
+        [self.bubbleTable reloadData];
+        [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+        
+        self.inputField.text = @"";
+    }
 }
 
 - (IBAction)modalCameraButton {
     NSLog(@"%s", __FUNCTION__);
-    [self hideModal];
+    [self hideAttachModal];
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
     {
         if (self.imagePickerVC == nil) {
@@ -304,7 +443,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 - (IBAction)modalChooseButton {
     NSLog(@"%s", __FUNCTION__);
-    [self hideModal];
+    [self hideAttachModal];
     if (self.imagePickerVC == nil) {
         self.imagePickerVC = [[UIImagePickerController alloc] init];
         self.imagePickerVC.delegate = self;
@@ -314,7 +453,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
 }
 - (IBAction)modalCancelButton {
-    [self hideModal];
+    [self hidePhotoModal];
 }
 
 
@@ -335,7 +474,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     fieldIndex = index.intValue;
     
     NSLog(@"%s for index %i", __FUNCTION__, fieldIndex);
-    [self showModal];
+    [self showAttachModal];
     
 }
 
@@ -344,27 +483,23 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 	[self dismissViewControllerAnimated:YES completion:nil];
     
     self.imagePickerVC = nil;
+    attachedPhoto = nil;
+    
 }
 
 - (void)imagePickerController:(UIImagePickerController *)Picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     NSLog(@"%s", __FUNCTION__);
-//	UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
-    
-//    currentOption.roundPic.image = tmpImage;
-    
-    // NSLog(@"downsizing image");
-//    if (photoView == nil) {
-//        photoView = [[UIImageView alloc] initWithFrame:previewFrame];
-//        photoView.clipsToBounds = YES;
-//        photoView.contentMode = UIViewContentModeScaleAspectFill;
-//        
-//        [self.view addSubview:photoView];
-//    }
-//    photoView.image = tmpImage;
-    
+	attachedPhoto = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
+    attachmentType = 0;
+    hasAttachment = YES;
+        
 	[self dismissViewControllerAnimated:YES completion:nil];
     self.imagePickerVC = nil;
-//    [self setupButtonsForEdit];
+
+    [self hidePhotoModal];
+    [self showAttachModal];
+
+    //    [self setupButtonsForEdit];
     
 }
 
@@ -384,11 +519,93 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             UIView* view = sender.view;
             CGPoint loc = [sender locationInView:view];
             UIView* subview = [view hitTest:loc withEvent:nil];
-            NSLog(@"tag = %i", subview.tag);
+            CGPoint subloc = [sender locationInView:subview];
+            NSLog(@"hit tag = %i at point %f / %f", subview.tag, subloc.x, subloc.y);
             
-            
+            switch (subview.tag) {
+                case kTagAttachModalBG:
+                    [self hideAttachModal];
+                    break;
+                case kTagPhotoModalBG:
+                    [self hidePhotoModal];
+                    break;
+                    
+                    
+            }
         }
     }
 }
+
+#pragma mark - Hotspot Actions
+
+- (void) setupModalHotspots {
+    
+    if (hasAttachment) {
+        [self.attachPhotoHotspot removeTarget:self action:@selector(tapPhotoHotspot:) forControlEvents:UIControlEventTouchUpInside];
+        [self.attachPollHotspot removeTarget:self action:@selector(tapPollHotspot:) forControlEvents:UIControlEventTouchUpInside];
+        [self.attachRatingHotspot removeTarget:self action:@selector(tapRatingHotspot:) forControlEvents:UIControlEventTouchUpInside];
+        [self.attachRSVPHotspot removeTarget:self action:@selector(tapRSVPHotspot:) forControlEvents:UIControlEventTouchUpInside];
+
+        switch (attachmentType) {
+            case 0:
+                self.attachPhotoLabel.text = @"Image Attached";
+                self.attachPhotoLabel.alpha = kAlphaDisabled;
+                self.attachPhotoIcon.alpha = kAlphaDisabled;
+                
+                break;
+            case FormType_POLL:
+                self.attachPollLabel.text = @"Poll Attached";
+                self.attachPollLabel.alpha = kAlphaDisabled;
+                self.attachPollIcon.alpha = kAlphaDisabled;
+                
+                break;
+            case FormType_RATING:
+                self.attachPhotoLabel.text = @"Rating Attached";
+                
+                break;
+                
+            case FormType_RSVP:
+                self.attachPhotoLabel.text = @"RSVP Attached";
+
+                break;
+            default:
+                break;
+        }
+    } else {
+        [self.attachPhotoHotspot addTarget:self action:@selector(tapPhotoHotspot:) forControlEvents:UIControlEventTouchUpInside];
+        [self.attachPollHotspot addTarget:self action:@selector(tapPollHotspot:) forControlEvents:UIControlEventTouchUpInside];
+        [self.attachRatingHotspot addTarget:self action:@selector(tapRatingHotspot:) forControlEvents:UIControlEventTouchUpInside];
+        [self.attachRSVPHotspot addTarget:self action:@selector(tapRSVPHotspot:) forControlEvents:UIControlEventTouchUpInside];
+        [self.cancelHotspot addTarget:self action:@selector(tapCancelHotspot:) forControlEvents:UIControlEventTouchUpInside];
+        
+    }
+    
+}
+
+
+- (void) tapPhotoHotspot:(id)sender {
+    [self hideAttachModal];
+    [self showPhotoModal];
+}
+- (void) tapPollHotspot:(id)sender {
+    [self hideAttachModal];
+}
+- (void) tapRatingHotspot:(id)sender {
+    [self hideAttachModal];
+}
+- (void) tapRSVPHotspot:(id)sender {
+    [self hideAttachModal];
+}
+- (void) tapCancelHotspot:(id)sender {
+    self.cancelHotspot.highlighted = YES;
+    self.cancelHotspot.backgroundColor = [UIColor grayColor];
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        self.cancelHotspot.highlighted = NO;
+        self.cancelHotspot.backgroundColor = [UIColor clearColor];
+    });
+    [self hideAttachModal];
+}
+
 
 @end

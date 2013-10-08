@@ -19,6 +19,14 @@
 @synthesize label = _label;
 @synthesize date = _date;
 
+- (id)init {
+    if ((self = [super init])) {
+        
+        self.backgroundColor = [UIColor clearColor];
+    }
+    return self;
+}
+
 + (CGFloat)height
 {
     return 28.0;
