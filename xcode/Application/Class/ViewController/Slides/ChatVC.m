@@ -40,6 +40,12 @@
 
 #define kAlphaDisabled  0.8f
 
+#define kAttachPhotoIcon    @"icon_attach_photo"
+#define kAttachPollIcon     @"icon_attach_poll"
+#define kAttachRatingIcon   @"icon_attach_rating"
+#define kAttachRSVPIcon     @"icon_attach_rsvp"
+#define kAttachPlusIcon     @"chat_attach_plus"
+
 static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.3;
 static const CGFloat MINIMUM_SCROLL_FRACTION = 0.2;
 static const CGFloat MAXIMUM_SCROLL_FRACTION = 0.8;
@@ -59,7 +65,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 {
     [super viewDidLoad];
     self.inputField.delegate = self;
-    self.unattachButton.hidden = YES;
+    self.detachButton.hidden = YES;
     hasAttachment = NO;
     attachmentType = FormType_POLL;
     
@@ -401,6 +407,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 - (IBAction)tapAttachButton {
     NSLog(@"%s", __FUNCTION__);
+    
+    [self.inputField resignFirstResponder];
     [self showAttachModal];
     
 }
@@ -417,6 +425,18 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         self.inputField.text = @"";
     }
 }
+- (IBAction)tapDetachButton {
+    // ADD WARNING ALERT
+    hasAttachment = NO;
+    attachmentType = -1;
+    attachedPhoto = nil;
+    
+    [self hideAttachModal];
+    [self.attachButton setImage:[UIImage imageNamed:kAttachPlusIcon] forState:UIControlStateNormal];
+    [self.attachButton setImage:[UIImage imageNamed:kAttachPlusIcon] forState:UIControlStateSelected];
+    
+}
+
 
 - (IBAction)modalCameraButton {
     NSLog(@"%s", __FUNCTION__);
@@ -492,13 +512,17 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 	attachedPhoto = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
     attachmentType = 0;
     hasAttachment = YES;
-        
+    
 	[self dismissViewControllerAnimated:YES completion:nil];
     self.imagePickerVC = nil;
 
     [self hidePhotoModal];
-    [self showAttachModal];
-
+    
+    self.attachButton.imageView.image = [UIImage imageNamed:kAttachPhotoIcon];
+    self.attachButton.selected = YES;
+    [self.attachButton setImage:[UIImage imageNamed:kAttachPhotoIcon] forState:UIControlStateNormal];
+    [self.attachButton setImage:[UIImage imageNamed:kAttachPhotoIcon] forState:UIControlStateSelected];
+    
     //    [self setupButtonsForEdit];
     
 }
@@ -541,22 +565,31 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void) setupModalHotspots {
     
     if (hasAttachment) {
+        self.plusIconsView.hidden = YES;
         [self.attachPhotoHotspot removeTarget:self action:@selector(tapPhotoHotspot:) forControlEvents:UIControlEventTouchUpInside];
         [self.attachPollHotspot removeTarget:self action:@selector(tapPollHotspot:) forControlEvents:UIControlEventTouchUpInside];
         [self.attachRatingHotspot removeTarget:self action:@selector(tapRatingHotspot:) forControlEvents:UIControlEventTouchUpInside];
         [self.attachRSVPHotspot removeTarget:self action:@selector(tapRSVPHotspot:) forControlEvents:UIControlEventTouchUpInside];
 
+        CGRect xframe = self.detachButton.frame;
+        
         switch (attachmentType) {
             case 0:
                 self.attachPhotoLabel.text = @"Image Attached";
                 self.attachPhotoLabel.alpha = kAlphaDisabled;
                 self.attachPhotoIcon.alpha = kAlphaDisabled;
                 
+                xframe.origin.y = self.attachPhotoLabel.frame.origin.y;
+                self.detachButton.frame = xframe;
+                self.detachButton.hidden = NO;
+                
+                
                 break;
             case FormType_POLL:
                 self.attachPollLabel.text = @"Poll Attached";
                 self.attachPollLabel.alpha = kAlphaDisabled;
                 self.attachPollIcon.alpha = kAlphaDisabled;
+                
                 
                 break;
             case FormType_RATING:
@@ -572,6 +605,23 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 break;
         }
     } else {
+        self.plusIconsView.hidden = NO;
+        self.detachButton.hidden = YES;
+        
+        self.attachPhotoLabel.text = @"Attach Image";
+        self.attachPollLabel.text = @"Add Poll";
+        self.attachRatingLabel.text = @"Add Label";
+        self.attachRSVPLabel.text = @"Add RSVP";
+        
+        self.attachPhotoLabel.alpha = 1.0;
+        self.attachPhotoIcon.alpha = 1.0;
+        self.attachPollLabel.alpha = 1.0;
+        self.attachPollIcon.alpha = 1.0;
+        self.attachRatingLabel.alpha = 1.0;
+        self.attachRatingIcon.alpha = 1.0;
+        self.attachRSVPLabel.alpha = 1.0;
+        self.attachRSVPIcon.alpha = 1.0;
+
         [self.attachPhotoHotspot addTarget:self action:@selector(tapPhotoHotspot:) forControlEvents:UIControlEventTouchUpInside];
         [self.attachPollHotspot addTarget:self action:@selector(tapPollHotspot:) forControlEvents:UIControlEventTouchUpInside];
         [self.attachRatingHotspot addTarget:self action:@selector(tapRatingHotspot:) forControlEvents:UIControlEventTouchUpInside];
@@ -598,11 +648,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 - (void) tapCancelHotspot:(id)sender {
     self.cancelHotspot.highlighted = YES;
-    self.cancelHotspot.backgroundColor = [UIColor grayColor];
+//    self.cancelHotspot.backgroundColor = [UIColor grayColor];
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         self.cancelHotspot.highlighted = NO;
-        self.cancelHotspot.backgroundColor = [UIColor clearColor];
+//        self.cancelHotspot.backgroundColor = [UIColor clearColor];
     });
     [self hideAttachModal];
 }

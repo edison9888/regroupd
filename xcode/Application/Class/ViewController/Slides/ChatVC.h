@@ -78,13 +78,14 @@
 @property (nonatomic, strong) IBOutlet UIButton *attachRSVPHotspot;
 @property (nonatomic, strong) IBOutlet UIButton *cancelHotspot;
 
-@property (nonatomic, strong) IBOutlet UIButton *unattachButton;
+@property (nonatomic, strong) IBOutlet UIButton *detachButton;
 
 
 - (IBAction)tapCancelButton;
 - (IBAction)tapClearButton;
 - (IBAction)tapAttachButton;
 - (IBAction)tapSendButton;
+- (IBAction)tapDetachButton;
 
 - (IBAction)modalCameraButton;
 - (IBAction)modalChooseButton;
