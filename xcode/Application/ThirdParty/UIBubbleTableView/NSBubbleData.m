@@ -53,7 +53,10 @@ const UIEdgeInsets textInsetsSomeone = {5, 15, 11, 10};
 
 - (id)initWithText:(NSString *)text date:(NSDate *)date type:(NSBubbleType)type
 {
-    UIFont *font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+//    [self setFont:[UIFont fontWithName:@"Raleway-Regular" size:self.font.pointSize]];
+//    self.textColor = [UIColor colorWithHexValue:0x333333];
+    UIFont *font = [UIFont fontWithName:@"Raleway-Regular" size:13];
+//    [UIFont systemFontOfSize:[UIFont systemFontSize]];
     CGSize size = [(text ? text : @"") sizeWithFont:font constrainedToSize:CGSizeMake(220, 9999) lineBreakMode:NSLineBreakByWordWrapping];
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
@@ -61,6 +64,7 @@ const UIEdgeInsets textInsetsSomeone = {5, 15, 11, 10};
     label.lineBreakMode = NSLineBreakByWordWrapping;
     label.text = (text ? text : @"");
     label.font = font;
+    label.textColor = (type == BubbleTypeMine ? [UIColor whiteColor] : [UIColor blackColor]);
     label.backgroundColor = [UIColor clearColor];
     
 #if !__has_feature(objc_arc)

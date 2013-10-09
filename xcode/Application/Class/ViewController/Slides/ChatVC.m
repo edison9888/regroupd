@@ -237,14 +237,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 {
     NSLog(@"%s", __FUNCTION__);
     keyboardIsShown = NO;
-    NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-//    kbSize.height += kChatBarHeight;
     
     [UIView animateWithDuration:0.1f animations:^{
-        
+
         CGRect frame = self.bubbleTable.frame;
-        frame.size.height += kbSize.height + kChatBarHeight;
+        frame.size.height = [DataModel shared].stageHeight - kChatBarHeight - kScrollViewTop;
+//        frame.size.height += kbSize.height + kChatBarHeight;
         self.bubbleTable.frame = frame;
 
         frame = self.chatBar.frame;
@@ -802,17 +800,19 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             
             //        UIView *embedForm;
             NSBubbleData *formBubble;
-            CGRect embedFrame = CGRectMake(0, 0, 230, 400);
+            CGRect embedFrame = CGRectMake(0, 0, 240, 300);
             
             switch (attachmentType) {
                 case FormType_POLL:
                 {
-                    EmbedPollWidget *embedWidget = [[EmbedPollWidget alloc] initWithFrame:embedFrame andOptions:formOptions isOwner:YES];
+                    EmbedPollWidget *embedWidget = [[EmbedPollWidget alloc] initWithFrame:embedFrame andOptions:formOptions isOwner:NO];
                     embedWidget.subjectLabel.text = attachedForm.name;
                     embedWidget.userInteractionEnabled = YES;
                     embedWidget.tag = 199;
                     
                     NSLog(@"widget height = %f", embedWidget.dynamicHeight);
+                    embedFrame.size.height = embedWidget.dynamicHeight;
+                    embedWidget.frame = embedFrame;
                     
                     formBubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine insets:UIEdgeInsetsMake(5, 5, 5, 5)];
                     
@@ -842,6 +842,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
             
         }
+        CGRect scrollFrame = self.bubbleTable.frame;
+        scrollFrame.size.height = [DataModel shared].stageHeight - kChatBarHeight - kScrollViewTop;
+        NSLog(@"Set scroll frame height to %f", scrollFrame.size.height);
+        
+        self.bubbleTable.frame = scrollFrame;
+
         hasAttachment = NO;
         attachedPhoto = nil;
         attachedForm = nil;

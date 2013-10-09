@@ -13,7 +13,7 @@
 @interface EmbedPollWidget : UIView {
     UIView *_theView;
     NSMutableArray *options;
-    
+    BOOL formLocked;
 }
 
 

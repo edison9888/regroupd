@@ -31,7 +31,7 @@
         
         _theView = [[[NSBundle mainBundle] loadNibNamed:@"EmbedPollWidget" owner:self options:nil] objectAtIndex:0];
         _theView.backgroundColor = [UIColor clearColor];
-        
+        self.doneButton.enabled = NO;
         
         float xpos = 0;
         float ypos = kInitialY;
@@ -51,27 +51,29 @@
             
             if (index == formOptions.count) {
                 embedOption.divider.hidden = YES;
+                ypos += kEmbedOptionHeight;
+                
+            } else {
+                ypos += kEmbedOptionHeight;
             }
             
             [self addSubview:embedOption];
             [options addObject:embedOption];
             
-            ypos += kEmbedOptionHeight;
         }
-        owner = NO;
         if (owner) {
             self.doneButton.hidden = YES;
+            formLocked = YES;
         } else {
+            formLocked = NO;
+            
             itemFrame = self.doneButton.frame;
             itemFrame.origin.y = ypos;
             self.doneButton.frame = itemFrame;
             ypos += self.doneButton.frame.size.height;
         }
         
-        NSLog(@"ypos ends at %f", ypos);
-//        frame.size.height = ypos + 40;
-//        _theView.frame = frame;
-        self.dynamicHeight = ypos;
+        self.dynamicHeight = ypos + 10;
         
         [self addSubview:_theView];
         
@@ -83,7 +85,6 @@
     
 //    [super touchesBegan:touches withEvent:event];
 //    [self.nextResponder touchesBegan:touches withEvent:event];
-    
     CGPoint locationPoint = [[touches anyObject] locationInView:self];
 
     float hitY = locationPoint.y;
@@ -91,22 +92,28 @@
     NSLog(@"y = %f", hitNum);
     
     if (hitNum > 0 && hitNum < options.count) {
-        int optionIndex = ((int) hitNum);
-        NSLog(@"option index = %i", optionIndex);
-        
-        int i = 0;
-        for (EmbedPollOption* opt in options) {
-            if (i == optionIndex) {
-                [opt selected];
-            } else {
-                [opt unselected];
+        if (!formLocked) {
+            self.doneButton.enabled = YES;
+            
+            int optionIndex = ((int) hitNum);
+            NSLog(@"option index = %i", optionIndex);
+            
+            int i = 0;
+            for (EmbedPollOption* opt in options) {
+                if (i == optionIndex) {
+                    [opt selected];
+                } else {
+                    [opt unselected];
+                }
+                i++;
             }
-            i++;
         }
     }
 
 }
 - (IBAction)tapDoneButton {
-    
+    self.dynamicHeight -= self.doneButton.frame.size.height;
+    self.doneButton.enabled = NO;
+    formLocked = YES;
 }
 @end
