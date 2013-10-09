@@ -20,7 +20,9 @@
 @synthesize timestampText;
 @synthesize needsLookup, needsRefresh;
 @synthesize stageHeight, stageWidth;
+
 @synthesize navIndex;
+@synthesize formType;
 @synthesize action;
 
 static DataModel *instance = nil;

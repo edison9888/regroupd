@@ -9,6 +9,8 @@
 #import "ChatVC.h"
 #import "UIAlertView+Helper.h"
 #import "DateTimeUtils.h"
+#import "EmbedPollWidget.h"
+#import "FormManager.h"
 //#import "NSDate+Extensions.h"
 
 #import "UIBubbleTableView.h"
@@ -37,6 +39,7 @@
 
 #define kTagAttachModalBG 666
 #define kTagPhotoModalBG  667
+#define kTagFormModalBG  668
 
 #define kAlphaDisabled  0.8f
 
@@ -124,11 +127,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showImagePickerNotificationHandler:)     name:@"showImagePickerNotification"            object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideFormSelectorNotificationHandler:)     name:@"hideFormSelectorNotification"            object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showImagePickerNotificationHandler:)     name:@"showImagePickerNotification"            object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
+
 
     // Create and initialize a tap gesture
     
@@ -139,9 +144,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     // Specify that the gesture must be a single tap
     
     tapRecognizer.numberOfTapsRequired = 1;
-    
+    tapRecognizer.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tapRecognizer];
-    
 
 }
 
@@ -314,12 +318,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                      animations:^{
                          self.attachModal.frame = modalFrame;
                      }
-                     completion:^(BOOL finished){
-                         if (bgLayer != nil) {
-                             [bgLayer removeFromSuperview];
-                             bgLayer = nil;
-                         }
-                                                  
+                     completion:^(BOOL finished){                                                  
                      }];
     
     
@@ -394,6 +393,72 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     
 }
+
+- (void) showFormSelector {
+    
+    
+//    CGRect fullscreen = CGRectMake(0, 0, [DataModel shared].stageWidth, [DataModel shared].stageHeight);
+//    bgLayer = [[UIView alloc] initWithFrame:fullscreen];
+//    bgLayer.backgroundColor = [UIColor grayColor];
+//    bgLayer.alpha = 0.8;
+//    bgLayer.layer.zPosition = 8;
+//    bgLayer.tag = kTagFormModalBG;
+//    [self.view addSubview:bgLayer];
+
+    
+    self.formSelectorVC = [[FormSelectorVC alloc] initWithNibName:@"FormSelectorVC" bundle:nil];
+    CGRect panelFrame = self.formSelectorVC.view.frame;
+    panelFrame.origin.y = [DataModel shared].stageHeight + 10;
+    
+    self.formSelectorVC.view.frame = panelFrame;
+    self.formSelectorVC.view.layer.zPosition = 99;
+    
+    [self.view addSubview:self.formSelectorVC.view];
+    
+    self.formSelectorVC.titleLabel.text = formTitle;
+//    [self.view bringSubviewToFront:self.formSelectorVC.view];
+    
+    float ypos = ([DataModel shared].stageHeight - panelFrame.size.height);
+    panelFrame.origin.y = ypos;
+    [self.formSelectorVC becomeFirstResponder];
+    
+    [UIView animateWithDuration:0.5
+                          delay:0
+                        options:(UIViewAnimationCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction)
+                     animations:^{
+                         self.formSelectorVC.view.frame = panelFrame;
+                     }
+                     completion:^(BOOL finished){
+                         // nothing
+                     }];
+
+//    self.view.userInteractionEnabled = YES;
+}
+- (void) hideFormSelector {
+    if (bgLayer != nil) {
+        [bgLayer removeFromSuperview];
+        bgLayer = nil;
+    }
+    
+    CGRect modalFrame = self.formSelectorVC.view.frame;
+    int ypos = [DataModel shared].stageHeight + 10;
+    modalFrame.origin.y = ypos;
+    
+    [UIView animateWithDuration:0.5
+                          delay:0
+                        options:(UIViewAnimationCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction)
+                     animations:^{
+                         self.formSelectorVC.view.frame = modalFrame;
+                     }
+                     completion:^(BOOL finished){
+                         
+                     }];
+
+//    self.view.userInteractionEnabled = YES;
+
+}
+
+
 
 
 #pragma mark IBActions
@@ -523,6 +588,15 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self.attachButton setImage:[UIImage imageNamed:kAttachPhotoIcon] forState:UIControlStateNormal];
     [self.attachButton setImage:[UIImage imageNamed:kAttachPhotoIcon] forState:UIControlStateSelected];
     
+    NSBubbleData *photoBubble = [NSBubbleData dataWithImage:attachedPhoto date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
+    
+    // FIXME: use user avatar image
+    photoBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
+    
+    [bubbleData addObject:photoBubble];
+    [self.bubbleTable reloadData];
+    [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+ 
     //    [self setupButtonsForEdit];
     
 }
@@ -553,7 +627,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 case kTagPhotoModalBG:
                     [self hidePhotoModal];
                     break;
-                    
+                case kTagFormModalBG:
+                    [self hideFormSelector];
+                    break;
                     
             }
         }
@@ -610,7 +686,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         
         self.attachPhotoLabel.text = @"Attach Image";
         self.attachPollLabel.text = @"Add Poll";
-        self.attachRatingLabel.text = @"Add Label";
+        self.attachRatingLabel.text = @"Add Rating";
         self.attachRSVPLabel.text = @"Add RSVP";
         
         self.attachPhotoLabel.alpha = 1.0;
@@ -638,13 +714,30 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self showPhotoModal];
 }
 - (void) tapPollHotspot:(id)sender {
+    [DataModel shared].formType = FormType_POLL;
+    formTitle = self.attachPollLabel.text;
     [self hideAttachModal];
+    
+    [self showFormSelector];
+    
 }
 - (void) tapRatingHotspot:(id)sender {
+    [DataModel shared].formType = FormType_RATING;
+    formTitle = self.attachRatingLabel.text;
+    
     [self hideAttachModal];
+
+    [self showFormSelector];
+
 }
 - (void) tapRSVPHotspot:(id)sender {
+    [DataModel shared].formType = FormType_RSVP;
+    formTitle = self.attachRSVPLabel.text;
+    
     [self hideAttachModal];
+
+    [self showFormSelector];
+
 }
 - (void) tapCancelHotspot:(id)sender {
     self.cancelHotspot.highlighted = YES;
@@ -656,6 +749,57 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     });
     [self hideAttachModal];
 }
+
+#pragma mark - Notifications
+
+- (void)hideFormSelectorNotificationHandler:(NSNotification*)notification
+{
+    if (notification.object != nil) {
+        
+        FormVO* form = (FormVO *) notification.object;
+        FormManager *formSvc = [[FormManager alloc] init];
+        
+        NSMutableArray *formOptions = [formSvc listFormOptions:form.form_id];
+        
+        attachmentType = form.type;
+        hasAttachment = YES;
+//        UIView *embedForm;
+        NSBubbleData *formBubble;
+        
+        switch (attachmentType) {
+            case FormType_POLL:
+            {
+                [self.attachButton setImage:[UIImage imageNamed:kAttachPollIcon] forState:UIControlStateNormal];
+                [self.attachButton setImage:[UIImage imageNamed:kAttachPollIcon] forState:UIControlStateSelected];
+                EmbedPollWidget *embedWidget = [[EmbedPollWidget alloc] initWithOptions:formOptions];
+                
+                formBubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine insets:UIEdgeInsetsZero];
+                
+                // FIXME: use user avatar image
+                formBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
+                break;
+            }
+            case FormType_RATING:
+                [self.attachButton setImage:[UIImage imageNamed:kAttachRatingIcon] forState:UIControlStateNormal];
+                [self.attachButton setImage:[UIImage imageNamed:kAttachRatingIcon] forState:UIControlStateSelected];
+                break;
+            case FormType_RSVP:
+                [self.attachButton setImage:[UIImage imageNamed:kAttachRSVPIcon] forState:UIControlStateNormal];
+                [self.attachButton setImage:[UIImage imageNamed:kAttachRSVPIcon] forState:UIControlStateSelected];
+                break;
+        }
+        
+        [bubbleData addObject:formBubble];
+        [self.bubbleTable reloadData];
+        [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+        
+        
+    }
+//    self.view.userInteractionEnabled = YES;
+    
+    [self hideFormSelector];
+}
+
 
 
 @end

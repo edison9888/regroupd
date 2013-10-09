@@ -13,6 +13,7 @@
 
 #import "BrandUITextField.h"
 #import "UIBubbleTableViewDataSource.h"
+#import "FormSelectorVC.h"
 //#import ""
 
 #import "ChatManager.h"
@@ -43,12 +44,13 @@
     BOOL hasAttachment;
     int attachmentType;
     UIImage *attachedPhoto;
-    
+    NSString *formTitle;
 }
 
 @property (nonatomic, retain) NSMutableArray *bubbleData;
 
 @property (nonatomic, retain) UIImagePickerController* imagePickerVC;
+@property (nonatomic, retain) FormSelectorVC* formSelectorVC;
 
 @property (nonatomic, retain) IBOutlet BrandUILabel *navTitle;
 @property (nonatomic, strong) IBOutlet UIBubbleTableView *bubbleTable;
@@ -93,6 +95,10 @@
 
 - (void) showAttachModal;
 - (void) hideAttachModal;
+
+- (void) showFormSelector;
+- (void) hideFormSelector;
+
 - (void) setupModalHotspots;
 
 

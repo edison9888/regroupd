@@ -1,0 +1,31 @@
+//
+//  EmbedPollWidget.h
+//  Regroupd
+//
+//  Created by Hugh Lang on 9/25/13.
+//
+//
+
+#import <UIKit/UIKit.h>
+#import "BrandUILabel.h"
+#import "EmbedPollOption.h"
+
+@interface EmbedPollWidget : UIView {
+    UIView *_theView;
+    NSMutableArray *options;
+    
+}
+
+
+- (id)initWithOptions:(NSMutableArray *)formOptions;
+
+@property (nonatomic, strong) IBOutlet BrandUILabel *typeLabel;
+@property (nonatomic, strong) IBOutlet BrandUILabel *subjectLabel;
+@property (nonatomic, strong) IBOutlet UIButton *doneButton;
+
+@property (nonatomic, strong) IBOutlet UIView *inputHolder;
+
+- (IBAction)tapDoneButton;
+
+
+@end

@@ -209,7 +209,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Attach Image" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LLh-E2-jSx" customClass="BrandUILabel">
-                    <rect key="frame" x="61" y="6" width="200" height="40"/>
+                    <rect key="frame" x="70" y="6" width="200" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="20"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -220,7 +220,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Add Poll" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3jA-FA-X8X" customClass="BrandUILabel">
-                    <rect key="frame" x="61" y="59" width="200" height="40"/>
+                    <rect key="frame" x="70" y="59" width="200" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="20"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -231,7 +231,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Add Rating" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WgT-Hx-7rs" customClass="BrandUILabel">
-                    <rect key="frame" x="61" y="111" width="200" height="40"/>
+                    <rect key="frame" x="70" y="111" width="200" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="20"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -242,7 +242,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Add RSVP" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cbC-CX-Eso" customClass="BrandUILabel">
-                    <rect key="frame" x="61" y="163" width="200" height="40"/>
+                    <rect key="frame" x="70" y="163" width="200" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="20"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -253,7 +253,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Cancel" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RX5-I9-or8" customClass="BrandUILabel">
-                    <rect key="frame" x="61" y="213" width="200" height="40"/>
+                    <rect key="frame" x="70" y="213" width="200" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="20"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -373,22 +373,16 @@
     </objects>
     <resources>
         <image name="btn_aqua_bg_small.png" width="55" height="28"/>
-        <image name="btn_aqua_bg_small.png" width="55" height="28"/>
-        <image name="btn_aqua_bg_small.png" width="55" height="28"/>
         <image name="chat_attach_panel.png" width="320" height="263"/>
         <image name="chat_attach_plus.png" width="27" height="27"/>
         <image name="icon_attach_cancel.png" width="25" height="25"/>
         <image name="icon_attach_photo.png" width="27" height="27"/>
-        <image name="icon_attach_plus.png" width="19" height="19"/>
-        <image name="icon_attach_plus.png" width="19" height="19"/>
         <image name="icon_attach_plus.png" width="19" height="19"/>
         <image name="icon_attach_poll.png" width="27" height="27"/>
         <image name="icon_attach_rating.png" width="27" height="27"/>
         <image name="icon_attach_remove_x.png" width="16" height="16"/>
         <image name="icon_attach_rsvp.png" width="27" height="27"/>
         <image name="modal_add_photo.png" width="302" height="159"/>
-        <image name="modal_vertical_divider.png" width="1" height="36"/>
-        <image name="modal_vertical_divider.png" width="1" height="36"/>
         <image name="modal_vertical_divider.png" width="1" height="36"/>
         <image name="topnav_aqua_bg.png" width="320" height="50"/>
     </resources>

@@ -44,6 +44,7 @@
 @property int stageHeight;
 @property int stageWidth;
 @property int navIndex;
+@property int formType;
 
 @property BOOL needsLookup;
 @property BOOL needsRefresh;
