@@ -69,8 +69,9 @@
         }
         
         NSLog(@"ypos ends at %f", ypos);
-        frame.size.height = ypos + 40;
-        _theView.frame = frame;
+//        frame.size.height = ypos + 40;
+//        _theView.frame = frame;
+        self.dynamicHeight = ypos;
         
         [self addSubview:_theView];
         

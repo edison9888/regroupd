@@ -812,6 +812,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                     embedWidget.userInteractionEnabled = YES;
                     embedWidget.tag = 199;
                     
+                    NSLog(@"widget height = %f", embedWidget.dynamicHeight);
+                    
                     formBubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine insets:UIEdgeInsetsMake(5, 5, 5, 5)];
                     
                     // FIXME: use user avatar image

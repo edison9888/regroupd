@@ -19,6 +19,8 @@
 
 - (id)initWithFrame:(CGRect)frame andOptions:(NSMutableArray *)formOptions isOwner:(BOOL)owner;
 
+@property float dynamicHeight;
+
 @property (nonatomic, strong) IBOutlet BrandUILabel *typeLabel;
 @property (nonatomic, strong) IBOutlet BrandUILabel *subjectLabel;
 @property (nonatomic, strong) IBOutlet UIButton *doneButton;
