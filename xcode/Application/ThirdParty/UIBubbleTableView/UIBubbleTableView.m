@@ -230,6 +230,7 @@
     return cell;
 }
 
+
 #pragma mark - Public interface
 
 - (void) scrollBubbleViewToBottomAnimated:(BOOL)animated

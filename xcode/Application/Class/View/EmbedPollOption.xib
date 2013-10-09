@@ -9,13 +9,13 @@
             <connections>
                 <outlet property="checkbox" destination="CHJ-Aa-gqK" id="T1p-85-Va8"/>
                 <outlet property="divider" destination="ER1-Pw-KnP" id="ndy-WI-KDQ"/>
-                <outlet property="fieldLabel" destination="n8e-qd-onW" id="Z98-se-p45"/>
+                <outlet property="fieldLabel" destination="n8e-qd-onW" id="39A-0A-bi0"/>
                 <outlet property="inputHolder" destination="Kg0-Jm-mkY" id="ybT-Yl-2gi"/>
                 <outlet property="roundPic" destination="25" id="37"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view autoresizesSubviews="NO" opaque="NO" contentMode="TopLeft" id="18">
+        <view autoresizesSubviews="NO" opaque="NO" tag="77" contentMode="TopLeft" id="18">
             <rect key="frame" x="0.0" y="0.0" width="230" height="80"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>

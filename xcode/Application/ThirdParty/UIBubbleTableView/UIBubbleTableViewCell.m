@@ -67,6 +67,7 @@
 #endif
         [self addSubview:self.bubbleImage];
     }
+    self.userInteractionEnabled = YES;
     self.backgroundColor = [UIColor clearColor];
     NSBubbleType type = self.data.type;
     
@@ -104,6 +105,9 @@
     }
 
     [self.customView removeFromSuperview];
+    
+    self.customView.userInteractionEnabled = YES;
+    
     self.customView = self.data.view;
     self.customView.frame = CGRectMake(x + self.data.insets.left, y + self.data.insets.top, width, height);
     [self.contentView addSubview:self.customView];

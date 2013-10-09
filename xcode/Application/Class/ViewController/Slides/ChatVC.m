@@ -47,6 +47,12 @@
 #define kAttachPollIcon     @"icon_attach_poll"
 #define kAttachRatingIcon   @"icon_attach_rating"
 #define kAttachRSVPIcon     @"icon_attach_rsvp"
+
+#define kAttachPhotoIconAqua    @"icon_attach_photo_aqua"
+#define kAttachPollIconAqua     @"icon_attach_poll_aqua"
+#define kAttachRatingIconAqua   @"icon_attach_rating_aqua"
+#define kAttachRSVPIconAqua     @"icon_attach_rsvp_aqua"
+
 #define kAttachPlusIcon     @"chat_attach_plus"
 
 static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.3;
@@ -72,16 +78,18 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     hasAttachment = NO;
     attachmentType = FormType_POLL;
     
-    
     chatSvc = [[ChatManager alloc] init];
+    
     
     // Setup table view
     
     CGRect scrollFrame = self.bubbleTable.frame;
     scrollFrame.size.height = [DataModel shared].stageHeight - kChatBarHeight;
     NSLog(@"Set scroll frame height to %f", scrollFrame.size.height);
+    
     self.bubbleTable.frame = scrollFrame;
     self.bubbleTable.backgroundColor = [UIColor colorWithHexValue:kChatBGGrey andAlpha:1.0];
+    self.bubbleTable.userInteractionEnabled = YES;
     
     CGRect chatFrame = self.chatBar.frame;
     chatFrame.origin.y = [DataModel shared].stageHeight - kChatBarHeight;
@@ -192,17 +200,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     if( [text isEqualToString:[text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]]] ) {
         return YES;
+
     } else {
-//        NSLog(@"Return key event");
+        NSLog(@"Return key event");
+        [self insertMessageInChat];
         
-        if (textView.text.length > 0) {
-            NSBubbleData *sayBubble = [NSBubbleData dataWithText:self.inputField.text date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
-            [bubbleData addObject:sayBubble];
-            [self.bubbleTable reloadData];
-            [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
-            
-            self.inputField.text = @"";
-        }
         return NO;
         
     }
@@ -242,11 +244,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [UIView animateWithDuration:0.1f animations:^{
         
         CGRect frame = self.bubbleTable.frame;
-        frame.size.height += kbSize.height;
+        frame.size.height += kbSize.height + kChatBarHeight;
         self.bubbleTable.frame = frame;
 
         frame = self.chatBar.frame;
-        frame.origin.y += kbSize.height;
+        frame.origin.y = [DataModel shared].stageHeight - kChatBarHeight;
         self.chatBar.frame = frame;
         
     }];
@@ -432,7 +434,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                          // nothing
                      }];
 
-//    self.view.userInteractionEnabled = YES;
 }
 - (void) hideFormSelector {
     if (bgLayer != nil) {
@@ -454,7 +455,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                          
                      }];
 
-//    self.view.userInteractionEnabled = YES;
 
 }
 
@@ -479,16 +479,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 - (IBAction)tapSendButton {
     NSLog(@"%s", __FUNCTION__);
-    if (self.inputField.text.length > 0) {
-        self.bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
-        
-        NSBubbleData *sayBubble = [NSBubbleData dataWithText:self.inputField.text date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
-        [bubbleData addObject:sayBubble];
-        [self.bubbleTable reloadData];
-        [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
-        
-        self.inputField.text = @"";
-    }
+    [self insertMessageInChat];
 }
 - (IBAction)tapDetachButton {
     // ADD WARNING ALERT
@@ -498,7 +489,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     [self hideAttachModal];
     [self.attachButton setImage:[UIImage imageNamed:kAttachPlusIcon] forState:UIControlStateNormal];
-    [self.attachButton setImage:[UIImage imageNamed:kAttachPlusIcon] forState:UIControlStateSelected];
+    [self.attachButton setSelected:NO];
     
 }
 
@@ -583,19 +574,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
     [self hidePhotoModal];
     
-    self.attachButton.imageView.image = [UIImage imageNamed:kAttachPhotoIcon];
-    self.attachButton.selected = YES;
-    [self.attachButton setImage:[UIImage imageNamed:kAttachPhotoIcon] forState:UIControlStateNormal];
-    [self.attachButton setImage:[UIImage imageNamed:kAttachPhotoIcon] forState:UIControlStateSelected];
+//    self.attachButton.imageView.image = [UIImage imageNamed:kAttachPhotoIcon];
+    [self.attachButton setImage:[UIImage imageNamed:kAttachPhotoIconAqua] forState:UIControlStateNormal];
+//    [self.attachButton setImage:[UIImage imageNamed:kAttachPhotoIconAqua] forState:UIControlStateSelected];
     
-    NSBubbleData *photoBubble = [NSBubbleData dataWithImage:attachedPhoto date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
-    
-    // FIXME: use user avatar image
-    photoBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
-    
-    [bubbleData addObject:photoBubble];
-    [self.bubbleTable reloadData];
-    [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
  
     //    [self setupButtonsForEdit];
     
@@ -666,15 +648,31 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 self.attachPollLabel.alpha = kAlphaDisabled;
                 self.attachPollIcon.alpha = kAlphaDisabled;
                 
+                xframe.origin.y = self.attachPollLabel.frame.origin.y;
+                self.detachButton.frame = xframe;
+                self.detachButton.hidden = NO;
                 
                 break;
             case FormType_RATING:
-                self.attachPhotoLabel.text = @"Rating Attached";
+                self.attachRatingLabel.text = @"Rating Attached";
+
+                self.attachRatingLabel.alpha = kAlphaDisabled;
+                self.attachRatingLabel.alpha = kAlphaDisabled;
+                
+                xframe.origin.y = self.attachRatingLabel.frame.origin.y;
+                self.detachButton.frame = xframe;
+                self.detachButton.hidden = NO;
                 
                 break;
                 
             case FormType_RSVP:
-                self.attachPhotoLabel.text = @"RSVP Attached";
+                self.attachRSVPLabel.text = @"RSVP Attached";
+                self.attachRSVPLabel.alpha = kAlphaDisabled;
+                self.attachRSVPIcon.alpha = kAlphaDisabled;
+                
+                xframe.origin.y = self.attachRSVPLabel.frame.origin.y;
+                self.detachButton.frame = xframe;
+                self.detachButton.hidden = NO;
 
                 break;
             default:
@@ -755,51 +753,101 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)hideFormSelectorNotificationHandler:(NSNotification*)notification
 {
     if (notification.object != nil) {
-        
-        FormVO* form = (FormVO *) notification.object;
-        FormManager *formSvc = [[FormManager alloc] init];
-        
-        NSMutableArray *formOptions = [formSvc listFormOptions:form.form_id];
-        
-        attachmentType = form.type;
+        attachedForm = (FormVO *) notification.object;
+        attachmentType = attachedForm.type;
         hasAttachment = YES;
-//        UIView *embedForm;
-        NSBubbleData *formBubble;
-        
+        NSLog(@"Form pick: %@", attachedForm.name);
+
+
         switch (attachmentType) {
             case FormType_POLL:
             {
-                [self.attachButton setImage:[UIImage imageNamed:kAttachPollIcon] forState:UIControlStateNormal];
-                [self.attachButton setImage:[UIImage imageNamed:kAttachPollIcon] forState:UIControlStateSelected];
-                EmbedPollWidget *embedWidget = [[EmbedPollWidget alloc] initWithOptions:formOptions];
-                
-                formBubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine insets:UIEdgeInsetsZero];
-                
-                // FIXME: use user avatar image
-                formBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
+                [self.attachButton setImage:[UIImage imageNamed:kAttachPollIconAqua] forState:UIControlStateNormal];
                 break;
             }
             case FormType_RATING:
-                [self.attachButton setImage:[UIImage imageNamed:kAttachRatingIcon] forState:UIControlStateNormal];
-                [self.attachButton setImage:[UIImage imageNamed:kAttachRatingIcon] forState:UIControlStateSelected];
+                [self.attachButton setImage:[UIImage imageNamed:kAttachRatingIconAqua] forState:UIControlStateNormal];
                 break;
             case FormType_RSVP:
-                [self.attachButton setImage:[UIImage imageNamed:kAttachRSVPIcon] forState:UIControlStateNormal];
-                [self.attachButton setImage:[UIImage imageNamed:kAttachRSVPIcon] forState:UIControlStateSelected];
+                [self.attachButton setImage:[UIImage imageNamed:kAttachRSVPIconAqua] forState:UIControlStateNormal];
                 break;
         }
         
-        [bubbleData addObject:formBubble];
-        [self.bubbleTable reloadData];
-        [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
-        
         
     }
-//    self.view.userInteractionEnabled = YES;
     
     [self hideFormSelector];
 }
 
+- (void) insertMessageInChat {
+//    [self.bubbleTable becomeFirstResponder];
+    
+    if (self.inputField.text.length > 0) {
+        self.bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
+        
+        NSBubbleData *sayBubble = [NSBubbleData dataWithText:self.inputField.text date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
+        [bubbleData addObject:sayBubble];
+        [self.bubbleTable reloadData];
+        [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+        
+        self.inputField.text = @"";
+    }
+    // Insert attachment if present. Reset inputs when done
+    if (hasAttachment) {
 
+        if (attachedForm != nil) {
+            FormManager *formSvc = [[FormManager alloc] init];
+            
+            NSMutableArray *formOptions = [formSvc listFormOptions:attachedForm.form_id];
+            
+            //        UIView *embedForm;
+            NSBubbleData *formBubble;
+            CGRect embedFrame = CGRectMake(0, 0, 230, 400);
+            
+            switch (attachmentType) {
+                case FormType_POLL:
+                {
+                    EmbedPollWidget *embedWidget = [[EmbedPollWidget alloc] initWithFrame:embedFrame andOptions:formOptions isOwner:YES];
+                    embedWidget.subjectLabel.text = attachedForm.name;
+                    embedWidget.userInteractionEnabled = YES;
+                    embedWidget.tag = 199;
+                    
+                    formBubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine insets:UIEdgeInsetsMake(5, 5, 5, 5)];
+                    
+                    // FIXME: use user avatar image
+                    formBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
+                    break;
+                }
+                case FormType_RATING:
+                    break;
+                case FormType_RSVP:
+                    break;
+            }
+            
+            [bubbleData addObject:formBubble];
+            [self.bubbleTable reloadData];
+            [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+            
+            
+        } else if (attachedPhoto != nil && attachmentType == 0) {
+            NSBubbleData *photoBubble = [NSBubbleData dataWithImage:attachedPhoto date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
+            
+            // FIXME: use user avatar image
+            photoBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
+            
+            [bubbleData addObject:photoBubble];
+            [self.bubbleTable reloadData];
+            [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+            
+        }
+        hasAttachment = NO;
+        attachedPhoto = nil;
+        attachedForm = nil;
+        [self.attachButton setImage:[UIImage imageNamed:kAttachPlusIcon] forState:UIControlStateNormal];
+    }
+}
+- (void) resetChatUI {
+    
+}
 
 @end

@@ -118,6 +118,10 @@
 		1E3ACA4F1804E5B200A6E6B2 /* EmbedPollOption.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E3ACA4D1804E5B200A6E6B2 /* EmbedPollOption.xib */; };
 		1E3ACA5D1804E93200A6E6B2 /* embed_form_done_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3ACA501804E93200A6E6B2 /* embed_form_done_btn@2x.png */; };
 		1E3ACA5E1804E93200A6E6B2 /* embed_poll_divider@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3ACA511804E93200A6E6B2 /* embed_poll_divider@2x.png */; };
+		1E3ACA6D1805A94400A6E6B2 /* icon_attach_rsvp_aqua@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3ACA691805A94300A6E6B2 /* icon_attach_rsvp_aqua@2x.png */; };
+		1E3ACA6E1805A94400A6E6B2 /* icon_attach_rating_aqua@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3ACA6A1805A94400A6E6B2 /* icon_attach_rating_aqua@2x.png */; };
+		1E3ACA6F1805A94400A6E6B2 /* icon_attach_poll_aqua@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3ACA6B1805A94400A6E6B2 /* icon_attach_poll_aqua@2x.png */; };
+		1E3ACA701805A94400A6E6B2 /* icon_attach_photo_aqua@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3ACA6C1805A94400A6E6B2 /* icon_attach_photo_aqua@2x.png */; };
 		1E4B78491803535900A8812D /* modal_vertical_divider@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E4B783A1803535800A8812D /* modal_vertical_divider@2x.png */; };
 		1E4B784A1803535900A8812D /* icon_attach_plus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E4B783B1803535800A8812D /* icon_attach_plus@2x.png */; };
 		1E4B784C1803535900A8812D /* icon_attach_rsvp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E4B783D1803535800A8812D /* icon_attach_rsvp@2x.png */; };
@@ -573,6 +577,10 @@
 		1E3ACA4D1804E5B200A6E6B2 /* EmbedPollOption.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EmbedPollOption.xib; sourceTree = "<group>"; };
 		1E3ACA501804E93200A6E6B2 /* embed_form_done_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "embed_form_done_btn@2x.png"; sourceTree = "<group>"; };
 		1E3ACA511804E93200A6E6B2 /* embed_poll_divider@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "embed_poll_divider@2x.png"; sourceTree = "<group>"; };
+		1E3ACA691805A94300A6E6B2 /* icon_attach_rsvp_aqua@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_attach_rsvp_aqua@2x.png"; sourceTree = "<group>"; };
+		1E3ACA6A1805A94400A6E6B2 /* icon_attach_rating_aqua@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_attach_rating_aqua@2x.png"; sourceTree = "<group>"; };
+		1E3ACA6B1805A94400A6E6B2 /* icon_attach_poll_aqua@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_attach_poll_aqua@2x.png"; sourceTree = "<group>"; };
+		1E3ACA6C1805A94400A6E6B2 /* icon_attach_photo_aqua@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_attach_photo_aqua@2x.png"; sourceTree = "<group>"; };
 		1E4B783A1803535800A8812D /* modal_vertical_divider@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "modal_vertical_divider@2x.png"; sourceTree = "<group>"; };
 		1E4B783B1803535800A8812D /* icon_attach_plus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_attach_plus@2x.png"; sourceTree = "<group>"; };
 		1E4B783D1803535800A8812D /* icon_attach_rsvp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_attach_rsvp@2x.png"; sourceTree = "<group>"; };
@@ -1363,6 +1371,10 @@
 		1E9280E9177FB68F008A583C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1E3ACA691805A94300A6E6B2 /* icon_attach_rsvp_aqua@2x.png */,
+				1E3ACA6A1805A94400A6E6B2 /* icon_attach_rating_aqua@2x.png */,
+				1E3ACA6B1805A94400A6E6B2 /* icon_attach_poll_aqua@2x.png */,
+				1E3ACA6C1805A94400A6E6B2 /* icon_attach_photo_aqua@2x.png */,
 				1E3ACA501804E93200A6E6B2 /* embed_form_done_btn@2x.png */,
 				1E3ACA511804E93200A6E6B2 /* embed_poll_divider@2x.png */,
 				1E3ACA441804E24C00A6E6B2 /* splash-568@2x.png */,
@@ -2095,6 +2107,7 @@
 				1E92822E177FB690008A583C /* key_delete.png in Resources */,
 				1E92822F177FB690008A583C /* key_delete@2x.png in Resources */,
 				1E928230177FB690008A583C /* key_enter.png in Resources */,
+				1E3ACA6F1805A94400A6E6B2 /* icon_attach_poll_aqua@2x.png in Resources */,
 				1EAD6A7E180300EC0010AFAD /* typingSomeone@2x.png in Resources */,
 				1E928231177FB690008A583C /* key_enter@2x.png in Resources */,
 				1E928232177FB690008A583C /* keypad_bg.png in Resources */,
@@ -2105,6 +2118,7 @@
 				1E928237177FB690008A583C /* legend_dot_ltblue.png in Resources */,
 				1E928238177FB690008A583C /* loading-icon.png in Resources */,
 				1E928239177FB690008A583C /* loading-icon@2x.png in Resources */,
+				1E3ACA6D1805A94400A6E6B2 /* icon_attach_rsvp_aqua@2x.png in Resources */,
 				1E92823C177FB690008A583C /* popup_volume_rebate.png in Resources */,
 				1E92823D177FB690008A583C /* popup_volume_rebate@2x.png in Resources */,
 				1E92823E177FB690008A583C /* purple_alert_overlay.png in Resources */,
@@ -2222,6 +2236,7 @@
 				1E2C7E6717E4FAE60043E28D /* Default@2x.png in Resources */,
 				1E2C7E8917E4FFCB0043E28D /* tabnav_contacts_icon@2x.png in Resources */,
 				1E2C7E8A17E4FFCB0043E28D /* tabnav_contacts_icon+title@2x.png in Resources */,
+				1E3ACA701805A94400A6E6B2 /* icon_attach_photo_aqua@2x.png in Resources */,
 				1E2C7E8B17E4FFCB0043E28D /* tabnav_groups_icon+title@2x.png in Resources */,
 				1E2C7E8C17E4FFCB0043E28D /* tabnav_chats_icon+title@2x.png in Resources */,
 				1E2C7E8D17E4FFCB0043E28D /* tabnav_settings_icon@2x.png in Resources */,
@@ -2275,6 +2290,7 @@
 				1EBA5DD017E9425800E46FFF /* blank_btn_aqua_grad@2x.png in Resources */,
 				1EBA5DD117E9425800E46FFF /* poll_separator_bar@2x.png in Resources */,
 				1EBA5DD217E9425800E46FFF /* poll_checkbox_on@2x.png in Resources */,
+				1E3ACA6E1805A94400A6E6B2 /* icon_attach_rating_aqua@2x.png in Resources */,
 				1EBA5DD317E9425800E46FFF /* poll_checkbox@2x.png in Resources */,
 				1EBA5DD417E9425800E46FFF /* chat_survey_header_right@2px.png in Resources */,
 				1EBA5DD517E9425800E46FFF /* icon_refresh_purple@2x.png in Resources */,

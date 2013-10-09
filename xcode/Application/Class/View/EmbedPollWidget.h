@@ -17,7 +17,7 @@
 }
 
 
-- (id)initWithOptions:(NSMutableArray *)formOptions;
+- (id)initWithFrame:(CGRect)frame andOptions:(NSMutableArray *)formOptions isOwner:(BOOL)owner;
 
 @property (nonatomic, strong) IBOutlet BrandUILabel *typeLabel;
 @property (nonatomic, strong) IBOutlet BrandUILabel *subjectLabel;

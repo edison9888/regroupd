@@ -7,9 +7,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EmbedPollWidget">
             <connections>
-                <outlet property="fieldLabel" destination="38" id="39"/>
-                <outlet property="photoHolder" destination="26" id="36"/>
-                <outlet property="pickPhoto" destination="30" id="35"/>
+                <outlet property="doneButton" destination="30" id="rBT-Sg-C88"/>
+                <outlet property="subjectLabel" destination="kkn-bL-MMu" id="bg4-rv-dPN"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -33,11 +32,6 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <view autoresizesSubviews="NO" contentMode="scaleToFill" id="26" userLabel="View - poll option" customClass="EmbedPollOption">
-                    <rect key="frame" x="0.0" y="60" width="230" height="80"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="0.9847399497825261" green="1" blue="0.79603148435957927" alpha="1" colorSpace="calibratedRGB"/>
-                </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="30" userLabel="Button - done button">
                     <rect key="frame" x="7" y="150" width="217" height="31"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -51,7 +45,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="tapPickPhoto" destination="-1" eventType="touchUpInside" id="34"/>
+                        <action selector="tapDoneButton" destination="-1" eventType="touchUpInside" id="UcX-9q-b8S"/>
                     </connections>
                 </button>
             </subviews>

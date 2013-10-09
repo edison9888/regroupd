@@ -26,7 +26,7 @@
         
         _theView = [[[NSBundle mainBundle] loadNibNamed:@"EmbedPollOption" owner:self options:nil] objectAtIndex:0];
         _theView.backgroundColor = [UIColor clearColor];
-        
+        _theView.userInteractionEnabled = YES;
 //        [self.inputHolder.layer setb
                 
         [self.roundPic.layer setCornerRadius:32.0f];
@@ -48,16 +48,24 @@
     
     return self;
 }
+
+- (void) setIndex:(int)index {
+    _index = index;
+    self.tag = k_CHAT_OPTION_BASETAG + index;
+    
+    
+}
+
 - (void) selected {
     self.inputHolder.backgroundColor = [UIColor colorWithHexValue:kSelectedColor];
     self.checkbox.image = [UIImage imageNamed:kCheckboxOnImage];
-    self.fieldLabel.alpha = kFadedAlpha;
+    self.fieldLabel.alpha = 1.0;
     
 }
 - (void) unselected {
     self.inputHolder.backgroundColor = [UIColor colorWithHexValue:kUnselectedColor];
     self.checkbox.image = [UIImage imageNamed:kCheckboxOffImage];
-    self.fieldLabel.alpha = 1.0;
+    self.fieldLabel.alpha = kFadedAlpha;
 }
 
 - (void) resizeHeight:(float)height {

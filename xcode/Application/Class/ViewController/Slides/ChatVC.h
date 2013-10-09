@@ -44,6 +44,7 @@
     BOOL hasAttachment;
     int attachmentType;
     UIImage *attachedPhoto;
+    FormVO *attachedForm;
     NSString *formTitle;
 }
 
@@ -100,6 +101,9 @@
 - (void) hideFormSelector;
 
 - (void) setupModalHotspots;
+
+- (void) resetChatUI;
+- (void) insertMessageInChat;
 
 
 @end
