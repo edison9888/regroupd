@@ -10,7 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "FormOptionVO.h"
 
-#define kInitialY   50
+#define kInitialY   55
 #define kEmbedOptionWidth   230
 #define kEmbedOptionHeight  80
 
@@ -67,10 +67,10 @@
         } else {
             formLocked = NO;
             
-            itemFrame = self.doneButton.frame;
+            itemFrame = self.doneView.frame;
             itemFrame.origin.y = ypos;
-            self.doneButton.frame = itemFrame;
-            ypos += self.doneButton.frame.size.height;
+            self.doneView.frame = itemFrame;
+            ypos += self.doneView.frame.size.height;
         }
         
         self.dynamicHeight = ypos + 10;

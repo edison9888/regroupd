@@ -151,6 +151,8 @@
 		1E4B78761803982400A8812D /* FormSelectorVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E4B78741803982400A8812D /* FormSelectorVC.m */; };
 		1E4B78771803982400A8812D /* FormSelectorVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E4B78751803982400A8812D /* FormSelectorVC.xib */; };
 		1E4B787A18039F3C00A8812D /* AquaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E4B787918039F3C00A8812D /* AquaTableViewCell.m */; };
+		1E4B814C180842480017F75B /* chat_callout_row_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E4B814A180842480017F75B /* chat_callout_row_right@2x.png */; };
+		1E4B814D180842480017F75B /* chat_callout_row_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E4B814B180842480017F75B /* chat_callout_row_left@2x.png */; };
 		1E513A6317C9A29A00DC2566 /* cell_delete_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6117C9A29A00DC2566 /* cell_delete_icon.png */; };
 		1E513A6417C9A29A00DC2566 /* cell_delete_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6217C9A29A00DC2566 /* cell_delete_icon@2x.png */; };
 		1E513A6617CBAF8E00DC2566 /* checkbox_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6517CBAF8E00DC2566 /* checkbox_on@2x.png */; };
@@ -180,8 +182,6 @@
 		1E76F4A417960BE1007EF5B0 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA4B1782638200A294C0 /* Default-568h@2x.png */; };
 		1E76F4A617961169007EF5B0 /* CCTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E76F4A517961169007EF5B0 /* CCTableViewCell.xib */; };
 		1E76F4A917961283007EF5B0 /* ContactVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E76F4A817961283007EF5B0 /* ContactVO.m */; };
-		1E7A6E191806EA21004B62CE /* EmbedRSVPOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7A6E0E1806EA21004B62CE /* EmbedRSVPOption.m */; };
-		1E7A6E1A1806EA21004B62CE /* EmbedRSVPOption.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E7A6E0F1806EA21004B62CE /* EmbedRSVPOption.xib */; };
 		1E7A6E1B1806EA21004B62CE /* EmbedRSVPWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7A6E111806EA21004B62CE /* EmbedRSVPWidget.m */; };
 		1E7A6E1C1806EA21004B62CE /* EmbedRSVPWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E7A6E121806EA21004B62CE /* EmbedRSVPWidget.xib */; };
 		1E7A6E1D1806EA21004B62CE /* EmbedRatingOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7A6E141806EA21004B62CE /* EmbedRatingOption.m */; };
@@ -629,6 +629,8 @@
 		1E4B78751803982400A8812D /* FormSelectorVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FormSelectorVC.xib; path = Application/Class/ViewController/iPhone/FormSelectorVC.xib; sourceTree = SOURCE_ROOT; };
 		1E4B787818039F3C00A8812D /* AquaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AquaTableViewCell.h; sourceTree = "<group>"; };
 		1E4B787918039F3C00A8812D /* AquaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AquaTableViewCell.m; sourceTree = "<group>"; };
+		1E4B814A180842480017F75B /* chat_callout_row_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_callout_row_right@2x.png"; sourceTree = "<group>"; };
+		1E4B814B180842480017F75B /* chat_callout_row_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_callout_row_left@2x.png"; sourceTree = "<group>"; };
 		1E513A6117C9A29A00DC2566 /* cell_delete_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cell_delete_icon.png; sourceTree = "<group>"; };
 		1E513A6217C9A29A00DC2566 /* cell_delete_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell_delete_icon@2x.png"; sourceTree = "<group>"; };
 		1E513A6517CBAF8E00DC2566 /* checkbox_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox_on@2x.png"; sourceTree = "<group>"; };
@@ -669,9 +671,6 @@
 		1E76F4A517961169007EF5B0 /* CCTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CCTableViewCell.xib; sourceTree = "<group>"; };
 		1E76F4A717961283007EF5B0 /* ContactVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactVO.h; sourceTree = "<group>"; };
 		1E76F4A817961283007EF5B0 /* ContactVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactVO.m; sourceTree = "<group>"; };
-		1E7A6E0D1806EA21004B62CE /* EmbedRSVPOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmbedRSVPOption.h; sourceTree = "<group>"; };
-		1E7A6E0E1806EA21004B62CE /* EmbedRSVPOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmbedRSVPOption.m; sourceTree = "<group>"; };
-		1E7A6E0F1806EA21004B62CE /* EmbedRSVPOption.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EmbedRSVPOption.xib; sourceTree = "<group>"; };
 		1E7A6E101806EA21004B62CE /* EmbedRSVPWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmbedRSVPWidget.h; sourceTree = "<group>"; };
 		1E7A6E111806EA21004B62CE /* EmbedRSVPWidget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmbedRSVPWidget.m; sourceTree = "<group>"; };
 		1E7A6E121806EA21004B62CE /* EmbedRSVPWidget.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EmbedRSVPWidget.xib; sourceTree = "<group>"; };
@@ -1197,9 +1196,6 @@
 				1E7A6E161806EA21004B62CE /* EmbedRatingWidget.h */,
 				1E7A6E171806EA21004B62CE /* EmbedRatingWidget.m */,
 				1E7A6E181806EA21004B62CE /* EmbedRatingWidget.xib */,
-				1E7A6E0D1806EA21004B62CE /* EmbedRSVPOption.h */,
-				1E7A6E0E1806EA21004B62CE /* EmbedRSVPOption.m */,
-				1E7A6E0F1806EA21004B62CE /* EmbedRSVPOption.xib */,
 				1E7A6E101806EA21004B62CE /* EmbedRSVPWidget.h */,
 				1E7A6E111806EA21004B62CE /* EmbedRSVPWidget.m */,
 				1E7A6E121806EA21004B62CE /* EmbedRSVPWidget.xib */,
@@ -1424,6 +1420,8 @@
 		1E9280E9177FB68F008A583C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1E4B814A180842480017F75B /* chat_callout_row_right@2x.png */,
+				1E4B814B180842480017F75B /* chat_callout_row_left@2x.png */,
 				1E7A6E32180758FE004B62CE /* see_details@2x.png */,
 				1E7A6E211806EDEC004B62CE /* rating_circle_bg_aqua@2x.png */,
 				1E7A6E221806EDEC004B62CE /* rating_meter_dot_aqua@2x.png */,
@@ -2329,6 +2327,7 @@
 				1E2C7EA517E4FFCB0043E28D /* ltblue_gradient_pattern@2x.png in Resources */,
 				1E2C7EA617E4FFCB0043E28D /* S1.2_phone_field_bg@2x.png in Resources */,
 				1E2C7EA717E4FFCB0043E28D /* S1.2_btn_enter_code@2x.png in Resources */,
+				1E4B814C180842480017F75B /* chat_callout_row_right@2x.png in Resources */,
 				1E2C7EA817E4FFCB0043E28D /* S1.1_button_enter@2x.png in Resources */,
 				1E2C7EA917E4FFCB0043E28D /* full_bg_aqua@2x.png in Resources */,
 				1E59F11817FB100F00EE2902 /* tabnav_selected_bar@2x.png in Resources */,
@@ -2370,10 +2369,10 @@
 				1E1E25D517F395EF0079416C /* icon_pick_photo@2x.png in Resources */,
 				1E1E25D617F395EF0079416C /* icon_pick_camera@2x.png in Resources */,
 				1E88805A17F4E9A10070116C /* FormsHomeVC.xib in Resources */,
-				1E7A6E1A1806EA21004B62CE /* EmbedRSVPOption.xib in Resources */,
 				1E88805C17F4E9A10070116C /* EditRatingVC.xib in Resources */,
 				1E59F11417FA6BF100EE2902 /* RatingDetailVC.xib in Resources */,
 				1E88805E17F4E9A10070116C /* EditPollVC.xib in Resources */,
+				1E4B814D180842480017F75B /* chat_callout_row_left@2x.png in Resources */,
 				1E4B78521803535900A8812D /* splash-480.png in Resources */,
 				1E88806517F4FC340070116C /* SurveyOptionWidget.xib in Resources */,
 				1E7A6E2D1806EDED004B62CE /* icon_star_purple_embed@2x.png in Resources */,
@@ -2501,7 +2500,6 @@
 				1E928297177FB690008A583C /* UIView+Helper.m in Sources */,
 				1E928298177FB690008A583C /* AnimationModel.m in Sources */,
 				1E928299177FB690008A583C /* PresentationModel.m in Sources */,
-				1E7A6E191806EA21004B62CE /* EmbedRSVPOption.m in Sources */,
 				1E92829A177FB690008A583C /* SlideModel.m in Sources */,
 				1E92829B177FB690008A583C /* BaseComponentView.m in Sources */,
 				1E92829C177FB690008A583C /* FoundationMovieView.m in Sources */,

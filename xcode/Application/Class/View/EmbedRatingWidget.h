@@ -23,6 +23,7 @@
 
 @property (nonatomic, strong) IBOutlet BrandUILabel *typeLabel;
 @property (nonatomic, strong) IBOutlet BrandUILabel *subjectLabel;
+@property (nonatomic, strong) IBOutlet UIView *doneView;
 @property (nonatomic, strong) IBOutlet UIButton *doneButton;
 
 @property (nonatomic, strong) IBOutlet UIView *inputHolder;

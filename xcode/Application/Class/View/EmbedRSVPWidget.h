@@ -8,12 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "BrandUILabel.h"
-#import "EmbedRSVPOption.h"
 
 @interface EmbedRSVPWidget : UIView {
     UIView *_theView;
     NSMutableArray *options;
     BOOL formLocked;
+    UIFont *offFont;
+    UIFont *onFont;
+    UIImage *offCheckbox;
+    UIImage *onCheckbox;
+    
 }
 
 
@@ -28,6 +32,11 @@
 
 
 @property (nonatomic, strong) IBOutlet UIView *lowerForm;
+
+@property (nonatomic, strong) IBOutlet UIView *hotspot1;
+@property (nonatomic, strong) IBOutlet UIView *hotspot2;
+@property (nonatomic, strong) IBOutlet UIView *hotspot3;
+
 @property (nonatomic, strong) IBOutlet UIImageView *checkbox1;
 @property (nonatomic, strong) IBOutlet UIImageView *checkbox2;
 @property (nonatomic, strong) IBOutlet UIImageView *checkbox3;

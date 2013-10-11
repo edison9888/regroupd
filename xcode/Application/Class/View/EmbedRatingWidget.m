@@ -10,7 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "FormOptionVO.h"
 
-#define kInitialY   50
+#define kInitialY   55
 #define kEmbedOptionWidth   230
 #define kEmbedOptionHeight  90
 
@@ -31,7 +31,6 @@
         
         _theView = [[[NSBundle mainBundle] loadNibNamed:@"EmbedRatingWidget" owner:self options:nil] objectAtIndex:0];
         _theView.backgroundColor = [UIColor clearColor];
-        self.doneButton.enabled = NO;
         
         float xpos = 0;
         float ypos = kInitialY;
@@ -67,11 +66,12 @@
             formLocked = YES;
         } else {
             formLocked = NO;
+            self.doneButton.enabled = YES;
             
-            itemFrame = self.doneButton.frame;
+            itemFrame = self.doneView.frame;
             itemFrame.origin.y = ypos;
-            self.doneButton.frame = itemFrame;
-            ypos += self.doneButton.frame.size.height;
+            self.doneView.frame = itemFrame;
+            ypos += self.doneView.frame.size.height;
         }
         
         self.dynamicHeight = ypos + 10;
