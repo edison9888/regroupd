@@ -83,6 +83,8 @@
         self.whenField.hidden = NO;
         self.whereLabel.hidden = NO;
         self.whereField.hidden = NO;
+        self.whenField.text = form.start_time;
+        self.whereField.text = form.location;
         
     }
     

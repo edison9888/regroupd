@@ -90,6 +90,15 @@ static NSDateFormatter *shortDateFormatter;
     return [dateFormatter stringFromDate:date];
 }
 
+//2013-10-11 3:30 PM
++ (NSDate *) readDateFromFriendlyDateTime:(NSString *)dbDate {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd h:mm a"];
+    
+    return [dateFormatter dateFromString:dbDate];
+}
+
+
 + (NSString *) printTimePartFromDate:(NSDate *)date {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:simpleTimeFormat];

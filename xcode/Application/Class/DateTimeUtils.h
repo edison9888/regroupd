@@ -27,6 +27,7 @@
 
 + (NSString *) dbTimeStampFromDateNoOffset:(NSDate *)date;
 
++ (NSDate *) readDateFromFriendlyDateTime:(NSString *)dbDate;
 + (NSString *) printTimePartFromDate:(NSDate *)date;
 + (NSString *) printDatePartFromDate:(NSDate *)date;
 

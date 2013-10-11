@@ -852,8 +852,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                     embedWidget.whatText.text = attachedForm.description;
                     embedWidget.whereText.text = attachedForm.location;
                     
-                    NSDate *dt = [DateTimeUtils dateFromDBDateString:attachedForm.start_time];
-                    
+                    NSDate *dt = [DateTimeUtils readDateFromFriendlyDateTime:attachedForm.start_time];
+                
                     embedWidget.dateLabel.text = [DateTimeUtils printDatePartFromDate:dt];
                     embedWidget.timeLabel.text = [DateTimeUtils printTimePartFromDate:dt];
                     embedWidget.whatText.text = attachedForm.description;

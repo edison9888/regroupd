@@ -33,8 +33,11 @@
 {
     [super viewDidLoad];
     
-    CGRect scrollFrame = CGRectMake(0, 0, [DataModel shared].stageWidth, [DataModel shared].stageHeight);
-
+    CGRect scrollFrame = self.scrollView.frame;
+    
+    scrollFrame.size.height = [DataModel shared].stageHeight - 30;
+    
+    
     self.scrollView.frame = scrollFrame;
     self.scrollView.delegate = self;
     self.theTableView.delegate = self;
@@ -46,10 +49,11 @@
     formSvc = [[FormManager alloc] init];
 
     FormVO *form =[DataModel shared].form;
+    NSLog(@"start_time is %@", form.start_time);
     
-    self.subjectLabel.text = [DataModel shared].form.name;
+    self.subjectLabel.text = form.name;
     
-    NSDate *dt = [DateTimeUtils dateFromDBDateString:form.start_time];
+    NSDate *dt = [DateTimeUtils readDateFromFriendlyDateTime:form.start_time];
     
     self.dateLabel.text = [DateTimeUtils printDatePartFromDate:dt];
     self.timeLabel.text = [DateTimeUtils printTimePartFromDate:dt];
