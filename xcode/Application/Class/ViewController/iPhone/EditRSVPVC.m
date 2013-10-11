@@ -521,12 +521,25 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 //        isOK = NO;
 //        [errorIds addObject:[NSNumber numberWithInt:kTagAllowOthersYes]];
 //    }
-
     if (isOK) {
+        FormManager *formSvc = [[FormManager alloc] init];
+        
+        NSString *filename_fmt = @"form_%i_photo.png";
+        NSString *imagefile;
+        
+        int lastId = 0;
+        if (formImage != nil) {
+            lastId = [formSvc fetchLastFormID];
+            lastId += 1;
+            imagefile = [NSString stringWithFormat:filename_fmt, lastId];
+            
+            [formSvc saveFormImage:formImage withName:imagefile];
+        }
+
         // Read date fields and combine
         NSString *dtFormat = @"%@ %@";
-        NSString *start_time = [NSString stringWithFormat:dtFormat, self.tfStartDate, self.tfStartTime];
-        NSString *end_time = [NSString stringWithFormat:dtFormat, self.tfEndDate, self.tfEndTime];
+        NSString *start_time = [NSString stringWithFormat:dtFormat, self.tfStartDate.text, self.tfStartTime.text];
+        NSString *end_time = [NSString stringWithFormat:dtFormat, self.tfEndDate.text, self.tfEndTime.text];
         NSLog(@"start date = %@", start_time);
         NSLog(@"end date = %@", end_time);
         
@@ -537,7 +550,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 //        start_time = [DateTimeUtils dbDateStampFromDate:date1];
 //        end_time = [DateTimeUtils dbDateStampFromDate:date2];
         
-        FormManager *formSvc = [[FormManager alloc] init];
         FormVO *form = [[FormVO alloc] init];
         
         form.system_id = @"";
@@ -547,7 +559,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         form.description = self.descriptionField.text;
         form.start_time = start_time;
         form.end_time = end_time;
-        
+        form.imagefile = imagefile;
         form.type = FormType_RSVP;
         form.status = FormStatus_DRAFT;
         
@@ -765,9 +777,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void)imagePickerController:(UIImagePickerController *)Picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     NSLog(@"%s", __FUNCTION__);
-	UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
+	formImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
     
-    [self setPhoto:tmpImage];
+    [self setPhoto:formImage];
+    
 //    currentOption.roundPic.image = tmpImage;
     
     // NSLog(@"downsizing image");

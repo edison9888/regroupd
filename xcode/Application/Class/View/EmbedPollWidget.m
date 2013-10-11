@@ -9,6 +9,7 @@
 #import "EmbedPollWidget.h"
 #import <QuartzCore/QuartzCore.h>
 #import "FormOptionVO.h"
+#import "FormManager.h"
 
 #define kInitialY   55
 #define kEmbedOptionWidth   230
@@ -38,6 +39,7 @@
         EmbedPollOption *embedOption = nil;
         CGRect itemFrame;
         int index=0;
+        FormManager *formSvc = [[FormManager alloc]init];
         
         for (FormOptionVO* opt in formOptions) {
             index++;
@@ -46,6 +48,12 @@
             [embedOption setIndex:index];
             embedOption.tag = k_CHAT_OPTION_BASETAG + index;
             embedOption.userInteractionEnabled = YES;
+            
+            if (opt.imagefile != nil && opt.imagefile.length > 0) {
+                UIImage *img = nil;
+                img = [formSvc loadFormImage:opt.imagefile];
+                embedOption.roundPic.image =img;
+            }
 
             embedOption.fieldLabel.text = opt.name;
             

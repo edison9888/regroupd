@@ -9,6 +9,7 @@
 #import "EmbedRatingWidget.h"
 #import <QuartzCore/QuartzCore.h>
 #import "FormOptionVO.h"
+#import "FormManager.h"
 
 #define kInitialY   55
 #define kEmbedOptionWidth   230
@@ -37,7 +38,8 @@
         EmbedRatingOption *embedOption = nil;
         CGRect itemFrame;
         int index=0;
-        
+        FormManager *formSvc = [[FormManager alloc]init];
+
         for (FormOptionVO* opt in formOptions) {
             index++;
             itemFrame = CGRectMake(xpos, ypos, kEmbedOptionWidth, kEmbedOptionHeight);
@@ -48,6 +50,12 @@
 
             embedOption.fieldLabel.text = opt.name;
             [embedOption setRating:5];
+
+            if (opt.imagefile != nil && opt.imagefile.length > 0) {
+                UIImage *img = nil;
+                img = [formSvc loadFormImage:opt.imagefile];
+                embedOption.roundPic.image =img;
+            }
             
             if (index == formOptions.count) {
                 embedOption.divider.hidden = YES;

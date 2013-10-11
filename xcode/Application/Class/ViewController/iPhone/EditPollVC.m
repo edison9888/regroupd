@@ -450,23 +450,23 @@
         isOK = NO;
     }
 
-    NSMutableArray *formOptions = [[NSMutableArray alloc] init];
     FormOptionVO *option;
     for (SurveyOptionWithPic* surveyOption in surveyOptions) {
         if (surveyOption.input.text.length == 0) {
             NSLog(@"Empty field: %i", surveyOption.index);
             isOK = NO;
-        } else {
-            option = [[FormOptionVO alloc] init];
-            option.name = surveyOption.input.text;
-            option.type = OptionType_TEXT;
-            option.status = OptionStatus_DRAFT;
-            [formOptions addObject:option];
         }
     }
 
     if (isOK) {
         FormManager *formSvc = [[FormManager alloc] init];
+        
+        NSString *filename_fmt = @"option_%i-%i_photo.png";
+        NSString *imagefile;
+        
+        int lastId = 0;
+        lastId = [formSvc fetchLastOptionID];
+
         FormVO *form = [[FormVO alloc] init];
         
         form.system_id = @"";
@@ -478,11 +478,27 @@
         int formId = [formSvc saveForm:form];
         if (formId > 0) {
             NSLog(@"Form saved with form_id %i", formId);
-            
-            for (FormOptionVO *formOption in formOptions) {
-                formOption.form_id = formId;
-                [formSvc saveOption:formOption];
+
+            for (SurveyOptionWithPic* surveyOption in surveyOptions) {
+                
+                lastId += 1;
+                if (surveyOption.roundPic.image != nil) {
+                    imagefile = [NSString stringWithFormat:filename_fmt, formId, lastId];
+                    [formSvc saveFormImage:surveyOption.roundPic.image withName:imagefile];
+                } else {
+                    imagefile = nil;
+                }
+                
+                option = [[FormOptionVO alloc] init];
+                option.name = surveyOption.input.text;
+                option.form_id = formId;
+                option.type = OptionType_TEXT;
+                option.status = OptionStatus_DRAFT;
+                option.imagefile = imagefile;
+                [formSvc saveOption:option];
+                
             }
+
             [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Survey created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         }
         

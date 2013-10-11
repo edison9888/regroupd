@@ -87,7 +87,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     // Setup table view
     
     CGRect scrollFrame = self.bubbleTable.frame;
-    scrollFrame.size.height = [DataModel shared].stageHeight - kChatBarHeight;
+    scrollFrame.size.height -= kChatBarHeight;
     NSLog(@"Set scroll frame height to %f", scrollFrame.size.height);
     
     self.bubbleTable.frame = scrollFrame;

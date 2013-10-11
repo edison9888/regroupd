@@ -8,6 +8,7 @@
 
 #import "ScrollOptionView.h"
 #import <QuartzCore/QuartzCore.h>
+#import "FormManager.h"
 
 @implementation ScrollOptionView
 
@@ -18,12 +19,18 @@
 		isInScrollWindow = NO;
         self.data = pageData;
 
+        FormManager *formSvc = [[FormManager alloc] init];
         
         _theView = [[[NSBundle mainBundle] loadNibNamed:@"ScrollOptionView" owner:self options:nil] objectAtIndex:0];
         _theView.backgroundColor = [UIColor clearColor];
         
         NSString *imagefile = (NSString *) [self.data objectForKey:@"imagefile"];
-        UIImage *img = [UIImage imageNamed:imagefile];
+        UIImage *img;
+        if (![imagefile isEqualToString:@"tesla.jpg"]) {
+            img = [formSvc loadFormImage:imagefile];
+        } else {
+            img = [UIImage imageNamed:imagefile];
+        }
         self.roundPic.image = img;
         
         [self.roundPic.layer setCornerRadius:96.0f];

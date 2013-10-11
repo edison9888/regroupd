@@ -23,7 +23,6 @@
     float navbarHeight;
     NSMutableArray *surveyOptions;
     UIView *bgLayer;
-    
 }
 
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;

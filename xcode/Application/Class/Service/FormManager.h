@@ -20,6 +20,7 @@
 - (void) deleteForm:(FormVO *) form;
 - (void) updateForm:(FormVO *) form;
 - (NSMutableArray *) listForms:(int)type;
+- (int) fetchLastFormID;
 
 - (FormOptionVO *) loadOption:(int)_optionId;
 - (int) saveOption:(FormOptionVO *) option;
@@ -29,5 +30,6 @@
 
 - (NSString *)saveFormImage:(UIImage *)saveImage withName:(NSString *)filename;
 - (UIImage *)loadFormImage:(NSString *)filename;
+- (int) fetchLastOptionID;
 
 @end

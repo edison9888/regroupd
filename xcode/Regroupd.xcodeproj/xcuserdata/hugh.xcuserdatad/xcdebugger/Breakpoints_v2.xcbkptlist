@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Application/Class/View/EmbedPollWidget.m"
-            timestampString = "403030686.814917"
+            timestampString = "403201421.18157"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "28"
-            endingLineNumber = "28"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
             landmarkName = "-initWithFrame:andOptions:isOwner:"
             landmarkType = "5">
          </BreakpointContent>

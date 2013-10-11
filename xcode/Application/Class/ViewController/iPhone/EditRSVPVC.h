@@ -30,6 +30,7 @@
     
 //    NEW SCROLLER
     CGFloat animatedDistance;
+    UIImage *formImage;
     
 }
 

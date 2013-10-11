@@ -37,9 +37,15 @@
     
     typeFilter = 0;
     
+    CGRect scrollFrame = self.theTableView.frame;
+    scrollFrame.size.height -= 50;
+    NSLog(@"Set scroll frame height to %f", scrollFrame.size.height);
+
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
     self.theTableView.backgroundColor = [UIColor colorWithHexValue:0xEFEFEF];
+    self.theTableView.frame = scrollFrame;
+    
 //    self.theTableView.separatorColor = [UIColor grayColor];
     self.tableData =[[NSMutableArray alloc]init];
     
@@ -135,18 +141,21 @@
             
             NSLog(@"Selected row %i with type %i", indexPath.row, form.type);
             
-            if (form.type == FormType_POLL) {
-                [DataModel shared].form = form;
-                [_delegate gotoSlideWithName:@"PollDetail"];
-                
-            } else {
-                
+            switch (form.type) {
+                    
+                    
+                case FormType_POLL:
+                    [DataModel shared].form = form;
+                    [_delegate gotoSlideWithName:@"PollDetail"];
+                    break;
+                case FormType_RATING:
+                    [DataModel shared].form = form;
+                    [_delegate gotoSlideWithName:@"RatingDetail"];
+                    break;
+                    
+                default:
+                    break;
             }
-            
-//            [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
-//            
-//            [DataModel shared].action = kActionEDIT;
-//            [_delegate gotoNextSlide];
             
         }
     } @catch (NSException * e) {

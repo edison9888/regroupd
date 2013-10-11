@@ -13,6 +13,22 @@
 
 @implementation FormManager
 
+
+- (int) fetchLastFormID{
+    NSLog(@"%s", __FUNCTION__);
+    
+    NSString *sql = nil;
+    sql = @"SELECT MAX(form_id) AS max_id FROM form";
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+    int maxId = 0;
+
+    if ([rs next]) {
+        maxId = [rs intForColumnIndex:0];
+    }
+    
+    return maxId;
+}
 - (FormVO *) loadForm:(int)_formId {
     return [self loadForm:_formId fetchAll:NO];
 }
@@ -275,16 +291,37 @@
     return results;
 }
 
+- (int) fetchLastOptionID{
+    NSLog(@"%s", __FUNCTION__);
+    
+    NSString *sql = nil;
+    sql = @"SELECT MAX(option_id) AS max_id FROM form_option";
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+    int maxId = 0;
+    
+    if ([rs next]) {
+        maxId = [rs intForColumnIndex:0];
+    }
+    
+    return maxId;
+}
+
+#pragma mark - image handling
 /*
  Create a temporary filename and save image data to file in Documents or temp dir
  */
 - (NSString *)saveFormImage:(UIImage *)saveImage withName:(NSString *)filename
 {
+    
+    
     NSArray *pathsToDocuments = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     
     NSString *documentsDirectory = [pathsToDocuments objectAtIndex:0];
     
     NSString *savePath = [documentsDirectory stringByAppendingPathComponent:filename];
+    
+    NSLog(@"Saving image to: %@", savePath);
     
     NSData *imageData = UIImagePNGRepresentation(saveImage);
     

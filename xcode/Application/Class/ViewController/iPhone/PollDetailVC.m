@@ -75,10 +75,14 @@
                            [NSNumber numberWithInt:[DataModel shared].form.form_id]];
         
         NSDictionary *dict;
+        NSString *filename;
         
         while ([rs next]) {
             dict = [rs resultDictionary];
-            [dict setValue:@"tesla.jpg" forKey:@"imagefile"];
+            filename = (NSString *) [dict valueForKey:@"imagefile"];
+            if (filename == nil || filename.length == 0) {
+                [dict setValue:@"tesla.jpg" forKey:@"imagefile"];
+            }
             [results addObject:dict];
         }
         
