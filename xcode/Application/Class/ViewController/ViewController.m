@@ -53,6 +53,7 @@
 //    _selectedButton = [_navigationButtons objectAtIndex:0];
     
     [super viewDidLoad];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     
     UserManager *userSvc = [[UserManager alloc] init];
     UserVO *user = [userSvc lookupDefaultUser];

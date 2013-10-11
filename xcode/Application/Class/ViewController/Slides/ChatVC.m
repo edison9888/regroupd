@@ -1,5 +1,5 @@
 //
-//  NewPollVC.m
+//  ChatVC
 //  Regroupd
 //
 //  Created by Hugh Lang on 9/21/13.
@@ -10,6 +10,9 @@
 #import "UIAlertView+Helper.h"
 #import "DateTimeUtils.h"
 #import "EmbedPollWidget.h"
+#import "EmbedRatingWidget.h"
+#import "EmbedRSVPWidget.h"
+
 #import "FormManager.h"
 //#import "NSDate+Extensions.h"
 
@@ -821,9 +824,50 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                     break;
                 }
                 case FormType_RATING:
+                {
+                    EmbedRatingWidget *embedWidget = [[EmbedRatingWidget alloc] initWithFrame:embedFrame andOptions:formOptions isOwner:NO];
+                    embedWidget.subjectLabel.text = attachedForm.name;
+                    embedWidget.userInteractionEnabled = YES;
+                    embedWidget.tag = 299;
+                    
+                    NSLog(@"widget height = %f", embedWidget.dynamicHeight);
+                    embedFrame.size.height = embedWidget.dynamicHeight;
+                    embedWidget.frame = embedFrame;
+                    
+                    formBubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine insets:UIEdgeInsetsMake(5, 3, 5, 5)];
+                    
+                    // FIXME: use user avatar image
+                    formBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
+                    
                     break;
+                    
+                }
                 case FormType_RSVP:
+                {
+                    EmbedRSVPWidget *embedWidget = [[EmbedRSVPWidget alloc] initWithFrame:embedFrame andOptions:formOptions isOwner:NO];
+//                    embedWidget.subjectLabel.text = attachedForm.name;
+                    embedWidget.whatText.text = attachedForm.description;
+                    embedWidget.whereText.text = attachedForm.location;
+                    embedWidget.dateLabel.text = @"Oct 31, 2013";
+                    embedWidget.timeLabel.text = @"7:00pm";
+                    NSString *imagefile;
+                    embedWidget.roundPic.image = [UIImage imageNamed:imagefile];
+                    
+                    embedWidget.userInteractionEnabled = YES;
+                    embedWidget.tag = 399;
+                    
+                    NSLog(@"widget height = %f", embedWidget.dynamicHeight);
+                    embedFrame.size.height = embedWidget.dynamicHeight;
+                    embedWidget.frame = embedFrame;
+                    
+                    formBubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine insets:UIEdgeInsetsMake(5, 3, 5, 5)];
+                    
+                    // FIXME: use user avatar image
+                    formBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
+                    
+
                     break;
+                }
             }
             
             [bubbleData addObject:formBubble];

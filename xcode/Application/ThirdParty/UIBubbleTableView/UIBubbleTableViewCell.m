@@ -88,7 +88,7 @@
 #endif
         self.avatarImage.layer.cornerRadius = 25.0;
         self.avatarImage.layer.masksToBounds = YES;
-        self.avatarImage.layer.borderColor = [UIColor colorWithWhite:0.0 alpha:0.2].CGColor;
+        self.avatarImage.layer.borderColor = [UIColor whiteColor].CGColor;
         self.avatarImage.layer.borderWidth = 1.0;
         
         CGFloat avatarX = (type == BubbleTypeSomeoneElse) ? 2 : self.frame.size.width - 52;
