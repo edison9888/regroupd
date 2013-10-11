@@ -81,7 +81,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                     </subviews>
-                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
                 <view alpha="0.80000001192092896" contentMode="scaleToFill" id="wde-xe-pBx" userLabel="View - not going view">
                     <rect key="frame" x="142" y="33" width="88" height="20"/>
@@ -100,7 +100,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                     </subviews>
-                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
                 <view alpha="0.80000001192092896" contentMode="scaleToFill" id="RAx-IH-tq3" userLabel="View - maybe view">
                     <rect key="frame" x="72" y="33" width="63" height="20"/>
@@ -119,7 +119,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                     </subviews>
-                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" id="dTf-WB-Mvu" userLabel="View - lower form">
                     <rect key="frame" x="5" y="162" width="220" height="145"/>
@@ -185,6 +185,8 @@
     </objects>
     <resources>
         <image name="embed_form_done_btn.png" width="217" height="31"/>
+        <image name="poll_checkbox.png" width="13" height="13"/>
+        <image name="poll_checkbox.png" width="13" height="13"/>
         <image name="poll_checkbox.png" width="13" height="13"/>
     </resources>
 </document>
