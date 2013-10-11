@@ -1,5 +1,5 @@
 //
-//  NewPollVC.m
+//  ChatVC
 //  Regroupd
 //
 //  Created by Hugh Lang on 9/21/13.
@@ -7,32 +7,59 @@
 //
 
 #import "ChatVC.h"
-#import "FormManager.h"
-#import "FormVO.h"
-#import "FormOptionVO.h"
+#import "DataModel.h"
+#import "Constants.h"
+
 #import "UIAlertView+Helper.h"
 #import "DateTimeUtils.h"
+#import "EmbedPollWidget.h"
+#import "EmbedRatingWidget.h"
+#import "EmbedRSVPWidget.h"
+
+#import "FormManager.h"
 //#import "NSDate+Extensions.h"
 
+#import "UIBubbleTableView.h"
+#import "UIBubbleTableViewDataSource.h"
+#import "NSBubbleData.h"
+#import "UIColor+ColorWithHex.h"
+
+
 @interface ChatVC ()
+{
+//    IBOutlet UIBubbleTableView *bubbleTable;
+    
+    NSMutableArray *bubbleData;
+}
 
 @end
 
 @implementation ChatVC
 
-#define kTagSubject     11
-#define kTagLocation    12
-#define kTagDescription 13
-
-#define kTagStartDate       101
-#define kTagStartTime       102
-#define kTagEndDate         103
-#define kTagEndTime         104
-
-#define kTagAllowOthersYes   201
-#define kTagAllowOthersNo    202
+@synthesize bubbleData;
+@synthesize bubbleTable;
 
 #define kFirstOptionId  1
+#define kScrollViewTop 50
+#define kChatBarHeight 50
+
+#define kTagAttachModalBG 666
+#define kTagPhotoModalBG  667
+#define kTagFormModalBG  668
+
+#define kAlphaDisabled  0.8f
+
+#define kAttachPhotoIcon    @"icon_attach_photo"
+#define kAttachPollIcon     @"icon_attach_poll"
+#define kAttachRatingIcon   @"icon_attach_rating"
+#define kAttachRSVPIcon     @"icon_attach_rsvp"
+
+#define kAttachPhotoIconAqua    @"icon_attach_photo_aqua"
+#define kAttachPollIconAqua     @"icon_attach_poll_aqua"
+#define kAttachRatingIconAqua   @"icon_attach_rating_aqua"
+#define kAttachRSVPIconAqua     @"icon_attach_rsvp_aqua"
+
+#define kAttachPlusIcon     @"chat_attach_plus"
 
 static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.3;
 static const CGFloat MINIMUM_SCROLL_FRACTION = 0.2;
@@ -52,104 +79,76 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.inputField.delegate = self;
+    self.detachButton.hidden = YES;
+    hasAttachment = NO;
+    attachmentType = FormType_POLL;
+    
+    chatSvc = [[ChatManager alloc] init];
+    
+    
+    // Setup table view
+    
+    CGRect scrollFrame = self.bubbleTable.frame;
+    scrollFrame.size.height -= kChatBarHeight;
+    NSLog(@"Set scroll frame height to %f", scrollFrame.size.height);
+    
+    self.bubbleTable.frame = scrollFrame;
+    self.bubbleTable.backgroundColor = [UIColor colorWithHexValue:kChatBGGrey andAlpha:1.0];
+    self.bubbleTable.userInteractionEnabled = YES;
+    
+    CGRect chatFrame = self.chatBar.frame;
+    chatFrame.origin.y = [DataModel shared].stageHeight - kChatBarHeight;
+    self.chatBar.frame = chatFrame;
+    
+    NSBubbleData *heyBubble = [NSBubbleData dataWithText:@"Hey, halloween is soon" date:[NSDate dateWithTimeIntervalSinceNow:-300] type:BubbleTypeSomeoneElse];
+    heyBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
 
+    NSBubbleData *photoBubble = [NSBubbleData dataWithImage:[UIImage imageNamed:@"maserati.jpg"] date:[NSDate dateWithTimeIntervalSinceNow:-290] type:BubbleTypeSomeoneElse];
+    photoBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
+    
+    
+    NSBubbleData *replyBubble = [NSBubbleData dataWithText:@"Wow.. Really cool picture out there. iPhone 5 has really nice camera, yeah?" date:[NSDate dateWithTimeIntervalSinceNow:-5] type:BubbleTypeMine];
+    replyBubble.avatar = nil;
+    
+    bubbleData = [[NSMutableArray alloc] initWithObjects:heyBubble, photoBubble, replyBubble, nil];
+    self.bubbleTable.bubbleDataSource = self;
+    
+    // The line below sets the snap interval in seconds. This defines how the bubbles will be grouped in time.
+    // Interval of 120 means that if the next messages comes in 2 minutes since the last message, it will be added into the same group.
+    // Groups are delimited with header which contains date and time for the first message in the group.
+    
+    self.bubbleTable.snapInterval = 120;
+    
+    // The line below enables avatar support. Avatar can be specified for each bubble with .avatar property of NSBubbleData.
+    // Avatars are enabled for the whole table at once. If particular NSBubbleData misses the avatar, a default placeholder will be set (missingAvatar.png)
+    
+    self.bubbleTable.showAvatars = YES;
+    
+    // Uncomment the line below to add "Now typing" bubble
+    // Possible values are
+    //    - NSBubbleTypingTypeSomebody - shows "now typing" bubble on the left
+    //    - NSBubbleTypingTypeMe - shows "now typing" bubble on the right
+    //    - NSBubbleTypingTypeNone - no "now typing" bubble
+    
+//    self.bubbleTable.typingBubble = NSBubbleTypingTypeSomebody;
+    
+    [self.bubbleTable reloadData];
+    
+    // Keyboard events
+    // Setup notifications
+    
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
-
-    // photo thumbnail setup
-    [self.roundPic.layer setCornerRadius:30.0f];
-    [self.roundPic.layer setMasksToBounds:YES];
-    [self.roundPic.layer setBorderWidth:1.0f];
-    [self.roundPic.layer setBorderColor:[UIColor whiteColor].CGColor];
-    self.roundPic.clipsToBounds = YES;
-    self.roundPic.contentMode = UIViewContentModeScaleAspectFill;
-    self.photoHolder.hidden = YES;
-
-    // scrollview setup
-    navbarHeight = 50;
     
-    CGRect scrollFrame = CGRectMake(0, navbarHeight,[DataModel shared].stageWidth, [DataModel shared].stageHeight - navbarHeight);
-    self.scrollView.frame = scrollFrame;
-    CGSize scrollContentSize = CGSizeMake([DataModel shared].stageWidth, 600);
-    self.scrollView.contentSize = scrollContentSize;
-    self.scrollView.delegate = self;
-    
-    
-    // Setup text fields
-    
-    self.subjectField.delegate = self;
-    self.whereField.delegate = self;
-    self.descriptionField.delegate = self;
-    
-    // Add survey options
-
-    self.datePicker = [[UIDatePicker alloc] init];
-    self.datePicker.datePickerMode = UIDatePickerModeDate;
-    
-    self.timePicker = [[UIDatePicker alloc] init];
-    self.timePicker.datePickerMode = UIDatePickerModeTime;
-    
-    UIImage *icon_calendar = [UIImage imageNamed:@"icon_calendar_aqua"];
-    UIImage *icon_clock = [UIImage imageNamed:@"icon_clock_aqua"];
-            
-    self.tfStartDate.tag = kTagStartDate;
-    self.tfStartDate.text = @"";
-    self.tfStartDate.inputView = self.datePicker;
-    self.tfStartDate.delegate = self;
-    [self.tfStartDate setIcon:icon_calendar];
-
-    self.tfStartTime.tag = kTagStartTime;
-    self.tfStartTime.text = @"";
-    self.tfStartTime.inputView = self.timePicker;
-    self.tfStartTime.delegate = self;
-    [self.tfStartTime setIcon:icon_clock];
-
-    self.tfEndDate.tag = kTagEndDate;
-    self.tfEndDate.text = @"";
-    self.tfEndDate.inputView = self.datePicker;
-    self.tfEndDate.delegate = self;
-    [self.tfEndDate setIcon:icon_calendar];
-    
-    self.tfEndTime.tag = kTagEndTime;
-    self.tfEndTime.text = @"";
-    self.tfEndTime.inputView = self.timePicker;
-    self.tfEndTime.delegate = self;
-    [self.tfEndTime setIcon:icon_clock];
-
-    allow_public = -1;
-    self.ckAllowOthersYes.ckLabel.text = @"Yes";
-    self.ckAllowOthersYes.tag = kTagAllowOthersYes;
-    [self.ckAllowOthersYes unselected];
-    
-    self.ckAllowOthersNo.ckLabel.text = @"No";
-    self.ckAllowOthersNo.tag = kTagAllowOthersNo;
-    [self.ckAllowOthersNo unselected];
-    
-    NSArray *fields = @[ self.subjectField,
-                         self.tfStartDate,
-                         self.tfStartTime,
-                         self.tfEndDate,
-                         self.tfEndTime,
-                         self.whereField,
-                         self.descriptionField ];
-    
-    [self setKeyboardControls:[[BSKeyboardControls alloc] initWithFields:fields]];
-    [self.keyboardControls setDelegate:self];
-
-    
-    // register for keyboard notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:self.view.window];
-    // register for keyboard notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:self.view.window];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideFormSelectorNotificationHandler:)     name:@"hideFormSelectorNotification"            object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showImagePickerNotificationHandler:)     name:@"showImagePickerNotification"            object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
+
+
     // Create and initialize a tap gesture
     
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
@@ -159,10 +158,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     // Specify that the gesture must be a single tap
     
     tapRecognizer.numberOfTapsRequired = 1;
-    
+    tapRecognizer.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tapRecognizer];
-    
-    
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -172,258 +170,175 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 
 
-#pragma mark - Keyboard event handlers
+#pragma mark - UIBubbleTableViewDataSource implementation
 
-/*
- SEE: http://stackoverflow.com/questions/1126726/how-to-make-a-uitextfield-move-up-when-keyboard-is-present/2703756#2703756
- */
-- (void)keyboardWillHide:(NSNotification *)n
+- (NSInteger)rowsForBubbleTable:(UIBubbleTableView *)tableView
 {
-#ifdef kDEBUG
+    return [bubbleData count];
+}
+
+- (NSBubbleData *)bubbleTableView:(UIBubbleTableView *)tableView dataForRow:(NSInteger)row
+{
+    return [bubbleData objectAtIndex:row];
+}
+
+
+#pragma mark - UITextView delegate methods
+
+- (void)textViewDidBeginEditing:(UITextView *)textView {
     NSLog(@"===== %s", __FUNCTION__);
-#endif
-    NSDictionary* userInfo = [n userInfo];
     
-    // get the size of the keyboard
-    CGSize keyboardSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    
-    [self hideKeyboard:keyboardSize];
 }
 
-- (void)keyboardWillShow:(NSNotification *)n
-{
-#ifdef kDEBUG
+- (void)textViewDidEndEditing:(UITextView *)textView {
     NSLog(@"===== %s", __FUNCTION__);
-#endif
-    // This is an ivar I'm using to ensure that we do not do the frame size adjustment on the UIScrollView if the keyboard is already shown.  This can happen if the user, after fixing editing a UITextField, scrolls the resized UIScrollView to another UITextField and attempts to edit the next UITextField.  If we were to resize the UIScrollView again, it would be disastrous.  NOTE: The keyboard notification will fire even when the keyboard is already shown.
-    if (keyboardIsShown) {
-        return;
-    }
     
-    NSDictionary* userInfo = [n userInfo];
-    
-    // get the size of the keyboard
-    CGSize keyboardSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    keyboardHeight = keyboardSize.height;
-    
-    [self showKeyboard:keyboardSize];
-    
+    [textView endEditing:YES];
 }
-- (void) showKeyboard:(CGSize)keyboardSize
-{
-    // resize the noteView
-    CGRect viewFrame = self.scrollView.frame;
-    // I'm also subtracting a constant kTabBarHeight because my UIScrollView was offset by the UITabBar so really only the portion of the keyboard that is leftover pass the UITabBar is obscuring my UIScrollView.
-    viewFrame.size.height -= (keyboardSize.height - navbarHeight);
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    // The kKeyboardAnimationDuration I am using is 0.3
-    [UIView setAnimationDuration:0.3];
-    [self.scrollView setFrame:viewFrame];
-    [UIView commitAnimations];
-    
-    keyboardIsShown = YES;
-    
-}
-- (void) hideKeyboard:(CGSize)keyboardSize
-{
-    // resize the scrollview
-    CGRect viewFrame = self.scrollView.frame;
-    // I'm also subtracting a constant kTabBarHeight because my UIScrollView was offset by the UITabBar so really only the portion of the keyboard that is leftover pass the UITabBar is obscuring my UIScrollView.
-    viewFrame.size.height += (keyboardSize.height - navbarHeight - 44);
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    // The kKeyboardAnimationDuration I am using is 0.3
-    [UIView setAnimationDuration:0.3];
-    [self.scrollView setFrame:viewFrame];
-    [UIView commitAnimations];
-    
-    keyboardIsShown = NO;
-    
-}
-//- (void) updateScrollView {
-//    NSLog(@"%s tag=%i", __FUNCTION__, fieldIndex);
-//    
-//    CGRect aRect = self.view.frame;
-//    
-//    aRect.size.height -= keyboardHeight;
-//    CGRect targetFrame = _currentField.frame;
-//    
-//    targetFrame.origin.y += 40;
-//    
-////        [self.scrollView setContentOffset:CGPointMake(0.0, currentOption.frame.origin.y-keyboardHeight) animated:YES];
-//    if (!CGRectContainsPoint(aRect, targetFrame.origin) ) {
-//        [self.scrollView scrollRectToVisible:targetFrame animated:YES];
-//    }
-//    
-//}
 
-#pragma mark - UITextField methods
+- (void)textViewDidChange:(UITextView *)textView {
+    //    NSLog(@"%s tag=%i", __FUNCTION__, textView.tag);
+    
+    
+}
 
--(BOOL) textFieldShouldBeginEditing:(UITextField*)textField {
-    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
-    keyboardIsShown = YES;
-    fieldIndex = textField.tag;
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    
+    if( [text isEqualToString:[text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]]] ) {
+        return YES;
+
+    } else {
+        NSLog(@"Return key event");
+        [self insertMessageInChat];
         
-    _currentField = textField;
-
-    return YES;
-
+        return NO;
+        
+    }
 }
+#pragma mark - Keyboard events
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
+- (void)keyboardWasShown:(NSNotification*)aNotification
 {
-    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
-
-    [textField resignFirstResponder];
-
-    return YES;
+//    NSLog(@"%s", __FUNCTION__);
+    keyboardIsShown = YES;
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+//    kbSize.height += kChatBarHeight;
+//    NSLog(@"Keyboard height is %f", kbSize.height)
+    
+    [UIView animateWithDuration:0.1f animations:^{
+        
+        CGRect frame = self.chatBar.frame;
+        frame.origin.y -= kbSize.height;
+        self.chatBar.frame = frame;
+        
+        frame = self.bubbleTable.frame;
+        frame.size.height -= kbSize.height + kChatBarHeight;
+        
+        self.bubbleTable.frame = frame;
+    }];
 }
 
-
-// SEE: http://www.cocoawithlove.com/2008/10/sliding-uitextfields-around-to-avoid.html
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
-    
-    CGRect textFieldRect = [self.view.window convertRect:textField.bounds fromView:textField];
-    CGRect viewRect = [self.view.window convertRect:self.view.bounds fromView:self.view];
-    
-    CGFloat midline = textFieldRect.origin.y + 0.5 * textFieldRect.size.height;
-    CGFloat numerator = midline - viewRect.origin.y - MINIMUM_SCROLL_FRACTION * viewRect.size.height;
-    CGFloat denominator = (MAXIMUM_SCROLL_FRACTION - MINIMUM_SCROLL_FRACTION) * viewRect.size.height;
-    CGFloat heightFraction = numerator / denominator;
-    
-    if (heightFraction < 0.0)
-    {
-        heightFraction = 0.0;
-    }
-    else if (heightFraction > 1.0)
-    {
-        heightFraction = 1.0;
-    }
-    
-    animatedDistance = floor(PORTRAIT_KEYBOARD_HEIGHT * heightFraction);
-    
-    CGRect viewFrame = self.view.frame;
-    viewFrame.origin.y -= animatedDistance;
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
-    
-    [self.view setFrame:viewFrame];
-    
-    [UIView commitAnimations];
-    
-    fieldIndex = textField.tag;
-    [self.keyboardControls setActiveField:textField];
-
-//    [self updateScrollView];
-    
-    
-}
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    CGRect viewFrame = self.view.frame;
-    viewFrame.origin.y += animatedDistance;
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
-    
-    [self.view setFrame:viewFrame];
-    
-    [UIView commitAnimations];
-    
-    [self.keyboardControls.activeField resignFirstResponder];
-//    [textField resignFirstResponder];
-//    [textField endEditing:YES];
-    
-}
-
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-    return YES;
-}
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    //    NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
-    return YES;
-}
-
-#pragma mark - Tap Gestures 
-
--(void)singleTap:(UITapGestureRecognizer*)sender
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
     NSLog(@"%s", __FUNCTION__);
-    if (UIGestureRecognizerStateEnded == sender.state)
-    {
-        if (keyboardIsShown) {
-            [_currentField resignFirstResponder];
-//            [_currentField endEditing:YES];
-        } else {
-            
-            UIView* view = sender.view;
-            CGPoint loc = [sender locationInView:view];
-            UIView* subview = [view hitTest:loc withEvent:nil];
-            NSLog(@"tag = %i", subview.tag);
-            
-            
-            switch (subview.tag) {
-                case kTagStartDate:
-                    
-                    break;
-                    
-                case kTagStartTime:
+    keyboardIsShown = NO;
+    
+    [UIView animateWithDuration:0.1f animations:^{
 
-                    break;
-                    
-                case kTagEndDate:
-                    
-                    break;
-                    
-                case kTagEndTime:
-                    
-                    break;
-                    
-                case kTagAllowOthersYes:
-                    allow_public = 1;
-                    [self.ckAllowOthersYes selected];
-                    [self.ckAllowOthersNo unselected];
-                    break;
-                    
-                case kTagAllowOthersNo:
-                    allow_public = 0;
-                    [self.ckAllowOthersYes unselected];
-                    [self.ckAllowOthersNo selected];
-                    
-                    break;
-                    
-                case 666:
-                    [self hideModal];
-                    break;
-                    
-            }
-            
-            
-            
-        }
-    }
+        CGRect frame = self.bubbleTable.frame;
+        frame.size.height = [DataModel shared].stageHeight - kChatBarHeight - kScrollViewTop;
+//        frame.size.height += kbSize.height + kChatBarHeight;
+        self.bubbleTable.frame = frame;
+
+        frame = self.chatBar.frame;
+        frame.origin.y = [DataModel shared].stageHeight - kChatBarHeight;
+        self.chatBar.frame = frame;
+        
+    }];
 }
+
+#pragma mark - Actions
 
 #pragma mark - Modal
 
-- (void) showModal {
+- (void) showAttachModal {
+    [self becomeFirstResponder];
+    
+    CGRect fullscreen = CGRectMake(0, 0, [DataModel shared].stageWidth, [DataModel shared].stageHeight);
+    bgLayer = [[UIView alloc] initWithFrame:fullscreen];
+    bgLayer.backgroundColor = [UIColor grayColor];
+    bgLayer.alpha = 0.4;
+    bgLayer.tag = 1000;
+    bgLayer.layer.zPosition = 9;
+    bgLayer.tag = kTagAttachModalBG;
+    [self.view addSubview:bgLayer];
+    
+    // Setup modal state
+    [self setupModalHotspots];
+
+    // Setup attachModal
+    
+    CGRect modalFrame = self.attachModal.frame;
+    int ypos = [DataModel shared].stageHeight + 10;
+    int xpos = 0;
+    
+    modalFrame.origin.y = ypos;
+    modalFrame.origin.x = xpos;
+    
+    self.attachModal.layer.zPosition = 99;
+    self.attachModal.frame = modalFrame;
+    [self.view addSubview:self.attachModal];
+    
+
+    ypos = ([DataModel shared].stageHeight - modalFrame.size.height);
+    modalFrame.origin.y = ypos;
+    
+    [UIView animateWithDuration:0.5
+                          delay:0
+                        options:(UIViewAnimationCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction)
+                     animations:^{
+                         self.attachModal.frame = modalFrame;
+                     }
+                     completion:^(BOOL finished){
+                         NSLog(@"Done!");
+                     }];
+    
+    
+}
+
+- (void) hideAttachModal {
+    
+    if (bgLayer != nil) {
+        [bgLayer removeFromSuperview];
+        bgLayer = nil;
+    }
+    
+    CGRect modalFrame = self.attachModal.frame;
+    int ypos = [DataModel shared].stageHeight + 10;
+    modalFrame.origin.y = ypos;
+    
+    [UIView animateWithDuration:0.5
+                          delay:0
+                        options:(UIViewAnimationCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction)
+                     animations:^{
+                         self.attachModal.frame = modalFrame;
+                     }
+                     completion:^(BOOL finished){                                                  
+                     }];
+    
+    
+}
+
+- (void) showPhotoModal {
     [self becomeFirstResponder];
     
     CGRect fullscreen = CGRectMake(0, 0, [DataModel shared].stageWidth, [DataModel shared].stageHeight);
     bgLayer = [[UIView alloc] initWithFrame:fullscreen];
     bgLayer.backgroundColor = [UIColor grayColor];
     bgLayer.alpha = 0.8;
-    bgLayer.tag = 1000;
     bgLayer.layer.zPosition = 9;
-    bgLayer.tag = 666;
+    bgLayer.tag = kTagPhotoModalBG;
     [self.view addSubview:bgLayer];
     
     
@@ -440,7 +355,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     self.photoModal.frame = modalFrame;
     [self.view addSubview:self.photoModal];
     
-
+    
     ypos = ([DataModel shared].stageHeight - modalFrame.size.height) / 2;
     modalFrame.origin.y = ypos;
     
@@ -456,8 +371,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
 }
 
-- (void) hideModal {
+- (void) hidePhotoModal {
     
+    if (bgLayer != nil) {
+        [bgLayer removeFromSuperview];
+        bgLayer = nil;
+    }
+
     CGRect modalFrame = self.photoModal.frame;
     float ypos = -modalFrame.size.height - 40;
     modalFrame.origin.y = ypos;
@@ -474,104 +394,113 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                              [bgLayer removeFromSuperview];
                              bgLayer = nil;
                          }
-                                                  
+                         
                      }];
     
     
 }
 
-- (IBAction)tapCancelButton {
-    [_delegate gotoSlideWithName:@"FormsHome"];
-}
-- (IBAction)tapDoneButton {
-    NSLog(@"%s", __FUNCTION__);
-
-    BOOL isOK = YES;
-    NSMutableArray *errorIds = [[NSMutableArray alloc] init];
+- (void) showFormSelector {
     
-    if (self.subjectField.text.length == 0) {
-        isOK = NO;
-        [errorIds addObject:[NSNumber numberWithInt:kTagSubject]];
-    }
-    if (self.whereField.text.length == 0) {
-        isOK = NO;
-        [errorIds addObject:[NSNumber numberWithInt:kTagLocation]];
-    }
-    if (self.descriptionField.text.length == 0) {
-        [errorIds addObject:[NSNumber numberWithInt:kTagDescription]];
-        isOK = NO;
-    }
-    if (self.tfStartDate.text.length == 0) {
-        isOK = NO;
-        [errorIds addObject:[NSNumber numberWithInt:kTagStartDate]];
-    }
-    if (self.tfStartTime.text.length == 0) {
-        isOK = NO;
-        [errorIds addObject:[NSNumber numberWithInt:kTagStartTime]];
-    }
-    if (self.tfEndDate.text.length == 0) {
-        isOK = NO;
-        [errorIds addObject:[NSNumber numberWithInt:kTagEndDate]];
-    }
-    if (self.tfEndTime.text.length == 0) {
-        isOK = NO;
-        [errorIds addObject:[NSNumber numberWithInt:kTagEndTime]];
-    }
-//    if (allow_public < 0) {
-//        isOK = NO;
-//        [errorIds addObject:[NSNumber numberWithInt:kTagAllowOthersYes]];
-//    }
+    
+//    CGRect fullscreen = CGRectMake(0, 0, [DataModel shared].stageWidth, [DataModel shared].stageHeight);
+//    bgLayer = [[UIView alloc] initWithFrame:fullscreen];
+//    bgLayer.backgroundColor = [UIColor grayColor];
+//    bgLayer.alpha = 0.8;
+//    bgLayer.layer.zPosition = 8;
+//    bgLayer.tag = kTagFormModalBG;
+//    [self.view addSubview:bgLayer];
 
-    if (isOK) {
-        // Read date fields and combine
-        NSString *dtFormat = @"%@ %@";
-        NSString *start_time = [NSString stringWithFormat:dtFormat, self.tfStartDate, self.tfStartTime];
-        NSString *end_time = [NSString stringWithFormat:dtFormat, self.tfEndDate, self.tfEndTime];
-        NSLog(@"start date = %@", start_time);
-        NSLog(@"end date = %@", end_time);
-        
-//        NSDate *date1 = [DateTimeUtils dateFromDBDateString:start_time];
-//        NSDate *date2 = [DateTimeUtils dateFromDBDateString:end_time];
-//        
-//        // TODO: Convert back to db format
-//        start_time = [DateTimeUtils dbDateStampFromDate:date1];
-//        end_time = [DateTimeUtils dbDateStampFromDate:date2];
-        
-        FormManager *formSvc = [[FormManager alloc] init];
-        FormVO *form = [[FormVO alloc] init];
-        
-        form.system_id = @"";
-        
-        form.name = self.subjectField.text;
-        form.location = self.whereField.text;
-        form.description = self.descriptionField.text;
-        form.start_time = start_time;
-        form.end_time = end_time;
-        
-        form.type = FormType_RSVP;
-        form.status = FormStatus_DRAFT;
-        
-        int formId = [formSvc saveForm:form];
-        if (formId > 0) {
-            NSLog(@"Form saved with form_id %i", formId);
-            
-//            for (FormOptionVO *formOption in formOptions) {
-//                formOption.form_id = formId;
-//                [formSvc saveOption:formOption];
-//            }
-            [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Survey created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-        }
-        
-    } else {
-        // Data not complete. 
-        [[[UIAlertView alloc] initWithTitle:@"Sorry" message:@"Please complete all fields." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    
+    self.formSelectorVC = [[FormSelectorVC alloc] initWithNibName:@"FormSelectorVC" bundle:nil];
+    CGRect panelFrame = self.formSelectorVC.view.frame;
+    panelFrame.origin.y = [DataModel shared].stageHeight + 10;
+    
+    self.formSelectorVC.view.frame = panelFrame;
+    self.formSelectorVC.view.layer.zPosition = 99;
+    
+    [self.view addSubview:self.formSelectorVC.view];
+    
+    self.formSelectorVC.titleLabel.text = formTitle;
+//    [self.view bringSubviewToFront:self.formSelectorVC.view];
+    
+    float ypos = ([DataModel shared].stageHeight - panelFrame.size.height);
+    panelFrame.origin.y = ypos;
+    [self.formSelectorVC becomeFirstResponder];
+    
+    [UIView animateWithDuration:0.5
+                          delay:0
+                        options:(UIViewAnimationCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction)
+                     animations:^{
+                         self.formSelectorVC.view.frame = panelFrame;
+                     }
+                     completion:^(BOOL finished){
+                         // nothing
+                     }];
+
+}
+- (void) hideFormSelector {
+    if (bgLayer != nil) {
+        [bgLayer removeFromSuperview];
+        bgLayer = nil;
     }
+    
+    CGRect modalFrame = self.formSelectorVC.view.frame;
+    int ypos = [DataModel shared].stageHeight + 10;
+    modalFrame.origin.y = ypos;
+    
+    [UIView animateWithDuration:0.5
+                          delay:0
+                        options:(UIViewAnimationCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction)
+                     animations:^{
+                         self.formSelectorVC.view.frame = modalFrame;
+                     }
+                     completion:^(BOOL finished){
+                         
+                     }];
 
 
 }
+
+
+
+
+#pragma mark IBActions
+- (IBAction)tapCancelButton {
+    [_delegate gotoSlideWithName:@"ChatsHome"];
+    
+}
+- (IBAction)tapClearButton {
+    NSLog(@"%s", __FUNCTION__);
+    
+}
+- (IBAction)tapAttachButton {
+    NSLog(@"%s", __FUNCTION__);
+    
+    [self.inputField resignFirstResponder];
+    [self showAttachModal];
+    
+}
+- (IBAction)tapSendButton {
+    NSLog(@"%s", __FUNCTION__);
+    [self insertMessageInChat];
+}
+- (IBAction)tapDetachButton {
+    // ADD WARNING ALERT
+    hasAttachment = NO;
+    attachmentType = -1;
+    attachedPhoto = nil;
+    
+    [self hideAttachModal];
+    [self.attachButton setImage:[UIImage imageNamed:kAttachPlusIcon] forState:UIControlStateNormal];
+    [self.attachButton setSelected:NO];
+    
+}
+
+
 - (IBAction)modalCameraButton {
     NSLog(@"%s", __FUNCTION__);
-    [self hideModal];
+    [self hideAttachModal];
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
     {
         if (self.imagePickerVC == nil) {
@@ -594,7 +523,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 - (IBAction)modalChooseButton {
     NSLog(@"%s", __FUNCTION__);
-    [self hideModal];
+    [self hideAttachModal];
     if (self.imagePickerVC == nil) {
         self.imagePickerVC = [[UIImagePickerController alloc] init];
         self.imagePickerVC.delegate = self;
@@ -604,142 +533,15 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
 }
 - (IBAction)modalCancelButton {
-    [self hideModal];
+    [self hidePhotoModal];
 }
 
-#pragma mark Keyboard Controls Delegate
-
-- (void)keyboardControlsBeforeMove:(BSKeyboardControls *)keyboardControls currentField:(UIView *)field inDirection:(BSKeyboardControlsDirection)direction {
-    NSLog(@"%s at field %i", __FUNCTION__, fieldIndex);
-    
-    NSDate *pickDate;
-    switch (fieldIndex) {
-            
-        case kTagStartDate:
-            pickDate = self.datePicker.date;
-            
-            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
-            break;
-            
-        case kTagStartTime:
-            pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
-            
-            break;
-            
-        case kTagEndDate:
-            pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
-            
-            break;
-            
-        case kTagEndTime:
-            
-            pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
-            break;
-    }
-    
-}
-
-
-- (void)keyboardControls:(BSKeyboardControls *)keyboardControls selectedField:(UIView *)field inDirection:(BSKeyboardControlsDirection)direction
-{
-    
-//    UIView *active = keyboardControls.activeField;
-////    CGRect aRect = self.view.frame;    
-////    aRect.size.height -= keyboardHeight;
-//
-//    CGRect targetFrame = active.frame;
-//    targetFrame.origin.y -= keyboardHeight;
-//    
-//    [self.scrollView scrollRectToVisible:targetFrame animated:YES];
-}
-
-
-- (void)keyboardControlsDonePressed:(BSKeyboardControls *)controls
-{
-    NSLog(@"%s at field %i", __FUNCTION__, fieldIndex);
-    
-    NSDate *pickDate;
-    switch (fieldIndex) {
-            
-        case kTagStartDate:
-            pickDate = self.datePicker.date;
-            
-            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
-            break;
-            
-        case kTagStartTime:
-            pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
-            
-            break;
-            
-        case kTagEndDate:
-            pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
-            
-            break;
-            
-        case kTagEndTime:
-            
-            pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
-            break;
-    }
-    
-    [_currentField resignFirstResponder];
-    
-//    [self.scrollView scrollRectToVisible:self.view.frame animated:YES];
-    
-}
-
-#pragma mark - picker actions
-
--(IBAction)dismissDatePicker:(id)sender {
-    NSDate *pickDate = self.datePicker.date;
-    switch (fieldIndex) {
-            
-        case kTagStartDate:
-            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
-            break;
-            
-        case kTagStartTime:
-            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
-            break;
-            
-        case kTagEndDate:
-            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
-            break;
-            
-        case kTagEndTime:
-            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
-            break;
-    }
-    [_currentField resignFirstResponder];
-}
-
-
-- (IBAction)tapPickPhoto {
-    NSLog(@"%s", __FUNCTION__);
-    
-    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification
-                                                            notificationWithName:@"showImagePickerNotification"
-                                                            object:nil]];
-    
-}
-- (void) setPhoto:(UIImage *)photo {
-    NSLog(@"%s", __FUNCTION__);
-    self.photoHolder.hidden = NO;
-    self.roundPic.image = photo;
-}
 
 #pragma mark - UIAlertView
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     
-    [_delegate gotoSlideWithName:@"FormsHome"];
+    [_delegate gotoSlideWithName:@"ChatHome"];
     
 }
 
@@ -752,7 +554,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     fieldIndex = index.intValue;
     
     NSLog(@"%s for index %i", __FUNCTION__, fieldIndex);
-    [self showModal];
+    [self showAttachModal];
     
 }
 
@@ -761,30 +563,355 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 	[self dismissViewControllerAnimated:YES completion:nil];
     
     self.imagePickerVC = nil;
+    attachedPhoto = nil;
+    
 }
 
 - (void)imagePickerController:(UIImagePickerController *)Picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     NSLog(@"%s", __FUNCTION__);
-	UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
-    
-    [self setPhoto:tmpImage];
-//    currentOption.roundPic.image = tmpImage;
-    
-    // NSLog(@"downsizing image");
-//    if (photoView == nil) {
-//        photoView = [[UIImageView alloc] initWithFrame:previewFrame];
-//        photoView.clipsToBounds = YES;
-//        photoView.contentMode = UIViewContentModeScaleAspectFill;
-//        
-//        [self.view addSubview:photoView];
-//    }
-//    photoView.image = tmpImage;
+	attachedPhoto = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
+    attachmentType = 0;
+    hasAttachment = YES;
     
 	[self dismissViewControllerAnimated:YES completion:nil];
     self.imagePickerVC = nil;
-//    [self setupButtonsForEdit];
+
+    [self hidePhotoModal];
+    
+//    self.attachButton.imageView.image = [UIImage imageNamed:kAttachPhotoIcon];
+    [self.attachButton setImage:[UIImage imageNamed:kAttachPhotoIconAqua] forState:UIControlStateNormal];
+//    [self.attachButton setImage:[UIImage imageNamed:kAttachPhotoIconAqua] forState:UIControlStateSelected];
+    
+ 
+    //    [self setupButtonsForEdit];
     
 }
 
+#pragma mark - Tap Gestures
+
+-(void)singleTap:(UITapGestureRecognizer*)sender
+{
+    NSLog(@"%s", __FUNCTION__);
+    if (UIGestureRecognizerStateEnded == sender.state)
+    {
+        if (keyboardIsShown) {
+            [self.inputField resignFirstResponder];
+            [self.inputField endEditing:YES];
+            
+        } else {
+            
+            UIView* view = sender.view;
+            CGPoint loc = [sender locationInView:view];
+            UIView* subview = [view hitTest:loc withEvent:nil];
+            CGPoint subloc = [sender locationInView:subview];
+            NSLog(@"hit tag = %i at point %f / %f", subview.tag, subloc.x, subloc.y);
+            
+            switch (subview.tag) {
+                case kTagAttachModalBG:
+                    [self hideAttachModal];
+                    break;
+                case kTagPhotoModalBG:
+                    [self hidePhotoModal];
+                    break;
+                case kTagFormModalBG:
+                    [self hideFormSelector];
+                    break;
+                    
+            }
+        }
+    }
+}
+
+#pragma mark - Hotspot Actions
+
+- (void) setupModalHotspots {
+    
+    if (hasAttachment) {
+        self.plusIconsView.hidden = YES;
+        [self.attachPhotoHotspot removeTarget:self action:@selector(tapPhotoHotspot:) forControlEvents:UIControlEventTouchUpInside];
+        [self.attachPollHotspot removeTarget:self action:@selector(tapPollHotspot:) forControlEvents:UIControlEventTouchUpInside];
+        [self.attachRatingHotspot removeTarget:self action:@selector(tapRatingHotspot:) forControlEvents:UIControlEventTouchUpInside];
+        [self.attachRSVPHotspot removeTarget:self action:@selector(tapRSVPHotspot:) forControlEvents:UIControlEventTouchUpInside];
+
+        CGRect xframe = self.detachButton.frame;
+        
+        switch (attachmentType) {
+            case 0:
+                self.attachPhotoLabel.text = @"Image Attached";
+                self.attachPhotoLabel.alpha = kAlphaDisabled;
+                self.attachPhotoIcon.alpha = kAlphaDisabled;
+                
+                xframe.origin.y = self.attachPhotoLabel.frame.origin.y;
+                self.detachButton.frame = xframe;
+                self.detachButton.hidden = NO;
+                
+                
+                break;
+            case FormType_POLL:
+                self.attachPollLabel.text = @"Poll Attached";
+                self.attachPollLabel.alpha = kAlphaDisabled;
+                self.attachPollIcon.alpha = kAlphaDisabled;
+                
+                xframe.origin.y = self.attachPollLabel.frame.origin.y;
+                self.detachButton.frame = xframe;
+                self.detachButton.hidden = NO;
+                
+                break;
+            case FormType_RATING:
+                self.attachRatingLabel.text = @"Rating Attached";
+
+                self.attachRatingLabel.alpha = kAlphaDisabled;
+                self.attachRatingLabel.alpha = kAlphaDisabled;
+                
+                xframe.origin.y = self.attachRatingLabel.frame.origin.y;
+                self.detachButton.frame = xframe;
+                self.detachButton.hidden = NO;
+                
+                break;
+                
+            case FormType_RSVP:
+                self.attachRSVPLabel.text = @"RSVP Attached";
+                self.attachRSVPLabel.alpha = kAlphaDisabled;
+                self.attachRSVPIcon.alpha = kAlphaDisabled;
+                
+                xframe.origin.y = self.attachRSVPLabel.frame.origin.y;
+                self.detachButton.frame = xframe;
+                self.detachButton.hidden = NO;
+
+                break;
+            default:
+                break;
+        }
+    } else {
+        self.plusIconsView.hidden = NO;
+        self.detachButton.hidden = YES;
+        
+        self.attachPhotoLabel.text = @"Attach Image";
+        self.attachPollLabel.text = @"Add Poll";
+        self.attachRatingLabel.text = @"Add Rating";
+        self.attachRSVPLabel.text = @"Add RSVP";
+        
+        self.attachPhotoLabel.alpha = 1.0;
+        self.attachPhotoIcon.alpha = 1.0;
+        self.attachPollLabel.alpha = 1.0;
+        self.attachPollIcon.alpha = 1.0;
+        self.attachRatingLabel.alpha = 1.0;
+        self.attachRatingIcon.alpha = 1.0;
+        self.attachRSVPLabel.alpha = 1.0;
+        self.attachRSVPIcon.alpha = 1.0;
+
+        [self.attachPhotoHotspot addTarget:self action:@selector(tapPhotoHotspot:) forControlEvents:UIControlEventTouchUpInside];
+        [self.attachPollHotspot addTarget:self action:@selector(tapPollHotspot:) forControlEvents:UIControlEventTouchUpInside];
+        [self.attachRatingHotspot addTarget:self action:@selector(tapRatingHotspot:) forControlEvents:UIControlEventTouchUpInside];
+        [self.attachRSVPHotspot addTarget:self action:@selector(tapRSVPHotspot:) forControlEvents:UIControlEventTouchUpInside];
+        [self.cancelHotspot addTarget:self action:@selector(tapCancelHotspot:) forControlEvents:UIControlEventTouchUpInside];
+        
+    }
+    
+}
+
+
+- (void) tapPhotoHotspot:(id)sender {
+    [self hideAttachModal];
+    [self showPhotoModal];
+}
+- (void) tapPollHotspot:(id)sender {
+    [DataModel shared].formType = FormType_POLL;
+    formTitle = self.attachPollLabel.text;
+    [self hideAttachModal];
+    
+    [self showFormSelector];
+    
+}
+- (void) tapRatingHotspot:(id)sender {
+    [DataModel shared].formType = FormType_RATING;
+    formTitle = self.attachRatingLabel.text;
+    
+    [self hideAttachModal];
+
+    [self showFormSelector];
+
+}
+- (void) tapRSVPHotspot:(id)sender {
+    [DataModel shared].formType = FormType_RSVP;
+    formTitle = self.attachRSVPLabel.text;
+    
+    [self hideAttachModal];
+
+    [self showFormSelector];
+
+}
+- (void) tapCancelHotspot:(id)sender {
+    self.cancelHotspot.highlighted = YES;
+//    self.cancelHotspot.backgroundColor = [UIColor grayColor];
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        self.cancelHotspot.highlighted = NO;
+//        self.cancelHotspot.backgroundColor = [UIColor clearColor];
+    });
+    [self hideAttachModal];
+}
+
+#pragma mark - Notifications
+
+- (void)hideFormSelectorNotificationHandler:(NSNotification*)notification
+{
+    if (notification.object != nil) {
+        attachedForm = (FormVO *) notification.object;
+        attachmentType = attachedForm.type;
+        hasAttachment = YES;
+        NSLog(@"Form pick: %@", attachedForm.name);
+
+
+        switch (attachmentType) {
+            case FormType_POLL:
+            {
+                [self.attachButton setImage:[UIImage imageNamed:kAttachPollIconAqua] forState:UIControlStateNormal];
+                break;
+            }
+            case FormType_RATING:
+                [self.attachButton setImage:[UIImage imageNamed:kAttachRatingIconAqua] forState:UIControlStateNormal];
+                break;
+            case FormType_RSVP:
+                [self.attachButton setImage:[UIImage imageNamed:kAttachRSVPIconAqua] forState:UIControlStateNormal];
+                break;
+        }
+        
+        
+    }
+    
+    [self hideFormSelector];
+}
+
+- (void) insertMessageInChat {
+//    [self.bubbleTable becomeFirstResponder];
+    
+    if (self.inputField.text.length > 0) {
+        self.bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
+        
+        NSBubbleData *sayBubble = [NSBubbleData dataWithText:self.inputField.text date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
+        [bubbleData addObject:sayBubble];
+        [self.bubbleTable reloadData];
+        [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+        
+        self.inputField.text = @"";
+    }
+    // Insert attachment if present. Reset inputs when done
+    if (hasAttachment) {
+
+        if (attachedForm != nil) {
+            FormManager *formSvc = [[FormManager alloc] init];
+            
+            NSMutableArray *formOptions = [formSvc listFormOptions:attachedForm.form_id];
+            
+            //        UIView *embedForm;
+            NSBubbleData *formBubble;
+            CGRect embedFrame = CGRectMake(0, 0, 240, 300);
+            
+            switch (attachmentType) {
+                case FormType_POLL:
+                {
+                    EmbedPollWidget *embedWidget = [[EmbedPollWidget alloc] initWithFrame:embedFrame andOptions:formOptions isOwner:NO];
+                    embedWidget.subjectLabel.text = attachedForm.name;
+                    embedWidget.userInteractionEnabled = YES;
+                    embedWidget.tag = 199;
+                    
+                    NSLog(@"widget height = %f", embedWidget.dynamicHeight);
+                    embedFrame.size.height = embedWidget.dynamicHeight;
+                    embedWidget.frame = embedFrame;
+                    
+                    formBubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine insets:UIEdgeInsetsMake(5, 5, 5, 5)];
+                    
+                    // FIXME: use user avatar image
+                    formBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
+                    break;
+                }
+                case FormType_RATING:
+                {
+                    EmbedRatingWidget *embedWidget = [[EmbedRatingWidget alloc] initWithFrame:embedFrame andOptions:formOptions isOwner:NO];
+                    embedWidget.subjectLabel.text = attachedForm.name;
+                    embedWidget.userInteractionEnabled = YES;
+                    embedWidget.tag = 299;
+                    
+                    NSLog(@"widget height = %f", embedWidget.dynamicHeight);
+                    embedFrame.size.height = embedWidget.dynamicHeight;
+                    embedWidget.frame = embedFrame;
+                    
+                    formBubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine insets:UIEdgeInsetsMake(5, 3, 5, 5)];
+                    
+                    // FIXME: use user avatar image
+                    formBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
+                    
+                    break;
+                    
+                }
+                case FormType_RSVP:
+                {
+                    EmbedRSVPWidget *embedWidget = [[EmbedRSVPWidget alloc] initWithFrame:embedFrame andOptions:formOptions isOwner:NO];
+//                    embedWidget.subjectLabel.text = attachedForm.name;
+                    embedWidget.whatText.text = attachedForm.description;
+                    embedWidget.whereText.text = attachedForm.location;
+                    
+                    NSDate *dt = [DateTimeUtils dateFromDBDateString:attachedForm.start_time];
+                    
+                    embedWidget.dateLabel.text = [DateTimeUtils printDatePartFromDate:dt];
+                    embedWidget.timeLabel.text = [DateTimeUtils printTimePartFromDate:dt];
+                    embedWidget.whatText.text = attachedForm.description;
+                    embedWidget.whereText.text = attachedForm.location;
+                    
+                    UIImage *img;
+                    if (attachedForm.imagefile != nil) {
+                        img = [formSvc loadFormImage:attachedForm.imagefile];
+                        embedWidget.roundPic.image = img;
+                    }
+                    
+                    embedWidget.userInteractionEnabled = YES;
+                    embedWidget.tag = 399;
+                    
+                    NSLog(@"widget height = %f", embedWidget.dynamicHeight);
+                    embedFrame.size.height = embedWidget.dynamicHeight;
+                    embedWidget.frame = embedFrame;
+                    
+                    formBubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine insets:UIEdgeInsetsMake(5, 3, 5, 5)];
+                    
+                    // FIXME: use user avatar image
+                    formBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
+                    
+
+                    break;
+                }
+            }
+            
+            [bubbleData addObject:formBubble];
+            [self.bubbleTable reloadData];
+            [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+            
+            
+        } else if (attachedPhoto != nil && attachmentType == 0) {
+            NSBubbleData *photoBubble = [NSBubbleData dataWithImage:attachedPhoto date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
+            
+            // FIXME: use user avatar image
+            photoBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
+            
+            [bubbleData addObject:photoBubble];
+            [self.bubbleTable reloadData];
+            [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+            
+        }
+        CGRect scrollFrame = self.bubbleTable.frame;
+        scrollFrame.size.height = [DataModel shared].stageHeight - kChatBarHeight - kScrollViewTop;
+        NSLog(@"Set scroll frame height to %f", scrollFrame.size.height);
+        
+        self.bubbleTable.frame = scrollFrame;
+
+        hasAttachment = NO;
+        attachedPhoto = nil;
+        attachedForm = nil;
+        [self.attachButton setImage:[UIImage imageNamed:kAttachPlusIcon] forState:UIControlStateNormal];
+    }
+}
+- (void) resetChatUI {
+    
+}
 
 @end

@@ -10,27 +10,36 @@
 #import "SQLiteDB.h"
 #import "CCSearchBar.h"
 #import "CCTableViewCell.h"
+#import "ChatManager.h"
+#import "ChatVO.h"
 #import "ContactVO.h"
+#import "SelectedItemWidget.h"
 
 @interface EditChatVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *tableData;
+    CCSearchBar *ccSearchBar;
+    NSMutableDictionary *contactsMap;
+    NSMutableArray *contactIds;
+    float ypos;
+    float xpos;
+    ChatManager *chatSvc;
+    
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
+@property (nonatomic, retain) IBOutlet UIView *selectionsView;
+
+@property (nonatomic, retain) CCSearchBar *ccSearchBar;
+
 @property(retain) NSMutableArray *tableData;
 - (void)performSearch:(NSString *)searchText;
 
 @property (nonatomic, strong) IBOutlet UILabel *navTitle;
-@property (nonatomic, strong) IBOutlet UILabel *navCaption;
 
-@property (nonatomic, strong) IBOutlet UIButton *editButton;
-@property (nonatomic, strong) IBOutlet UIButton *addButton;
+- (IBAction)tapDoneButton;
 
-
-- (IBAction)tapAddButton;
-
-- (IBAction)tapEditButton;
+- (IBAction)tapCancelButton;
 
 @end

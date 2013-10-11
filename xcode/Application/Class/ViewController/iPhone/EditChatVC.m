@@ -7,6 +7,7 @@
 //
 
 #import "EditChatVC.h"
+#import "DataModel.h"
 
 @interface EditChatVC ()
 
@@ -15,6 +16,7 @@
 @implementation EditChatVC
 
 @synthesize tableData;
+@synthesize ccSearchBar;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -30,16 +32,30 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    chatSvc = [[ChatManager alloc] init];
+    
     // Do any additional setup after loading the view from its nib.
     
+    xpos = 3;
+    ypos = 3;
+    
+    contactsMap = [[NSMutableDictionary alloc] init];
+    contactIds = [[NSMutableArray alloc] init];
+    
+    CGRect searchFrame = CGRectMake(5, 150, 310, 32);
+    ccSearchBar = [[CCSearchBar alloc] initWithFrame:searchFrame];
+    ccSearchBar.delegate = self;
+    [self.view addSubview:ccSearchBar];
+
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
     self.theTableView.backgroundColor = [UIColor clearColor];
     
     self.tableData =[[NSMutableArray alloc]init];
     
-    NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
+    NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
     
     [self performSearch:@""];
     
@@ -51,6 +67,44 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+#pragma mark - UISearchBar
+/*
+ SOURCE: http://jduff.github.com/2010/03/01/building-a-searchview-with-uisearchbar-and-uitableview/
+ */
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    [ccSearchBar setShowsCancelButton:NO animated:YES];
+    
+    self.theTableView.allowsSelection = YES;
+    self.theTableView.scrollEnabled = YES;
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    
+    self.theTableView.hidden = NO;
+    [self performSearch:searchText];
+    
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    NSLog(@"%s", __FUNCTION__);
+    ccSearchBar.text=@"";
+    
+    //    self.theTableView.hidden = YES;
+    selectedIndex = -1;
+    
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)_searchBar {
+    // You'll probably want to do this on another thread
+    // SomeService is just a dummy class representing some
+    // api that you are using to do the search
+    NSLog(@"search text=%@", _searchBar.text);
+    
+    [self performSearch:_searchBar.text];
+    
+}
+
 
 #pragma mark - UITableViewDataSource
 
@@ -100,9 +154,6 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-#ifdef DEBUGX
-    NSLog(@"%s", __FUNCTION__);
-#endif
     
     @try {
         if (indexPath != nil) {
@@ -110,11 +161,22 @@
             
             selectedIndex = indexPath.row;
             NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
+            ContactVO *contact;
+            contact = [ContactVO readFromDictionary:rowdata];
+            [DataModel shared].contact = contact;
             
-            [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
+            [contactsMap setObject:contact forKey:[NSNumber numberWithInt:contact.contact_id]];
             
-            [DataModel shared].action = kActionEDIT;
-            [_delegate gotoNextSlide];
+            [contactIds addObject:[NSNumber numberWithInt:contact.contact_id]];
+            
+            CGRect itemFrame = CGRectMake(xpos, ypos, 100, 24);
+            SelectedItemWidget *item = [[SelectedItemWidget alloc] initWithFrame:itemFrame];
+
+            [item setFieldLabel:@"Hugh Lang"];
+            
+            
+            [self.selectionsView addSubview:item];
+            
             
         }
     } @catch (NSException * e) {
@@ -172,15 +234,31 @@
 
 #pragma mark - Action handlers
 
-- (IBAction)tapAddButton
+- (IBAction)tapDoneButton
 {
     //    BOOL isOk = YES;
-    [DataModel shared].action = kActionADD;
-    [_delegate gotoNextSlide];
+    
+    BOOL isOK = YES;
+    
+    if (contactIds.count == 0) {
+        isOK = NO;
+    }
+    if (isOK) {
+        ChatVO *chat = [[ChatVO alloc] init];
+        
+        
+        chat.name = @"Test Chat";
+        
+        [_delegate gotoSlideWithName:@"Chat"];
+    } else {
+        [[[UIAlertView alloc] initWithTitle:@"Try again" message:@"Please add at least one contact" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+
+    }
+    
     
 }
 
-- (IBAction)tapEditButton
+- (IBAction)tapCancelButton
 {
     
 }

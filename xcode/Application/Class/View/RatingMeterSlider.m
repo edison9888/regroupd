@@ -62,13 +62,14 @@
         [self addSubview:self.meterBar];
     } else {
         self.meterBar.frame = barFrame;
+        [self setMaskTo:self.meterBar byRoundingCorners:UIRectCornerTopLeft|UIRectCornerBottomLeft|UIRectCornerTopRight|UIRectCornerBottomRight radius:barFrame.size.height / 2];
     }
 
-    CGRect dotFrame = barFrame;
-    dotFrame.size.height -= 2;
+    CGRect dotFrame = self.sliderBG.frame;
+    dotFrame.size.height -= 4;
     dotFrame.size.width = dotFrame.size.height;
-    dotFrame.origin.x = barFrame.origin.x + barFrame.size.width - barFrame.size.height + 2;
-    dotFrame.origin.y += 1;
+    dotFrame.origin.x = self.sliderBG.frame.origin.x + barFrame.size.width - dotFrame.size.width - 2;
+    dotFrame.origin.y += 2;
     
     if (self.ratingDot == nil) {
         self.ratingDot = [[UIView alloc] initWithFrame:dotFrame];
@@ -78,6 +79,7 @@
         [self addSubview:self.ratingDot];
         
     } else {
+        [self setMaskTo:self.ratingDot byRoundingCorners:UIRectCornerTopLeft|UIRectCornerBottomLeft|UIRectCornerTopRight|UIRectCornerBottomRight radius:dotFrame.size.height / 2];
         self.ratingDot.frame = dotFrame;
     }
     

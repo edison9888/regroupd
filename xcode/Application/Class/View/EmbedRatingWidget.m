@@ -15,6 +15,13 @@
 #define kEmbedOptionWidth   230
 #define kEmbedOptionHeight  90
 
+#define kSliderRelativeOriginX  78
+#define kSliderRelativeOriginY  60
+#define kSliderWidth    144
+#define kSliderHeight   14
+#define kSliderMargin   10
+
+
 @implementation EmbedRatingWidget
 
 
@@ -97,26 +104,41 @@
     CGPoint locationPoint = [[touches anyObject] locationInView:self];
 
     float hitY = locationPoint.y;
-    float hitNum = (hitY - kInitialY) / kEmbedOptionHeight;
-    NSLog(@"y = %f", hitNum);
+    float hitX = locationPoint.x;
+    float yOffset = 0;
     
-    if (hitNum > 0 && hitNum < options.count) {
-        if (!formLocked) {
-            self.doneButton.enabled = YES;
+    // Offset by inital Y
+    hitY = (hitY - kInitialY);
+    NSLog(@"hit point = %f / %f", hitX, hitY);
+    
+    float leftEdge = kSliderRelativeOriginX - kSliderMargin;
+    float rightEdge = kSliderRelativeOriginX + kSliderWidth + kSliderMargin;
+
+    float topEdge = 0;
+    float bottomEdge = 0;
+    
+    
+    if (hitX >= leftEdge && hitX <= rightEdge) {
+        int i=0;
+
+        for (EmbedRatingOption* opt in options) {
+            topEdge = yOffset + kSliderRelativeOriginY - kSliderMargin;
+            bottomEdge = yOffset + kSliderRelativeOriginY + kSliderHeight + kSliderMargin;
+//            NSLog(@"hit zone with left %f, top %f, right %f, bottom %f", leftEdge, topEdge, rightEdge, bottomEdge);
             
-            int optionIndex = ((int) hitNum);
-            NSLog(@"option index = %i", optionIndex);
-            
-            int i = 0;
-            for (EmbedRatingOption* opt in options) {
-//                if (i == optionIndex) {
-//                    [opt selected];
-//                } else {
-//                    [opt unselected];
-//                }
-                i++;
+            if (hitY >= topEdge && hitY <= bottomEdge) {
+                
+                float hitPercent = (hitX - leftEdge) / (rightEdge - leftEdge);
+                NSLog(@"hit success at %f / %f with est. percent %f", hitX, hitY, hitPercent);
+                
+                [opt setRating:(hitPercent * 10)];
+                
             }
+            yOffset += kEmbedOptionHeight;
+            i++;
         }
+    } else {
+        
     }
 
 }

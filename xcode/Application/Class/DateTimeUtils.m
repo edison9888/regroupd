@@ -90,6 +90,21 @@ static NSDateFormatter *shortDateFormatter;
     return [dateFormatter stringFromDate:date];
 }
 
++ (NSString *) printTimePartFromDate:(NSDate *)date {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:simpleTimeFormat];
+    
+    return [dateFormatter stringFromDate:date];
+    
+}
++ (NSString *) printDatePartFromDate:(NSDate *)date {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MMM, d yyyy"];
+    
+    return [dateFormatter stringFromDate:date];
+    
+}
+
 + (int) readSelectedIndex:(NSString *)key data:(NSMutableDictionary *)dict 
 {
     return 0;

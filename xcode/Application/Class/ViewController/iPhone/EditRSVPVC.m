@@ -630,25 +630,25 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         case kTagStartDate:
             pickDate = self.datePicker.date;
             
-            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
+            _currentField.text = [DateTimeUtils printDatePartFromDate:pickDate];
             break;
             
         case kTagStartTime:
             pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
+            _currentField.text = [DateTimeUtils printTimePartFromDate:pickDate];
             
             break;
             
         case kTagEndDate:
             pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
+            _currentField.text = [DateTimeUtils printDatePartFromDate:pickDate];
             
             break;
             
         case kTagEndTime:
             
             pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
+            _currentField.text = [DateTimeUtils printTimePartFromDate:pickDate];
             break;
     }
     

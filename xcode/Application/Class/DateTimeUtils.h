@@ -27,5 +27,7 @@
 
 + (NSString *) dbTimeStampFromDateNoOffset:(NSDate *)date;
 
++ (NSString *) printTimePartFromDate:(NSDate *)date;
++ (NSString *) printDatePartFromDate:(NSDate *)date;
 
 @end

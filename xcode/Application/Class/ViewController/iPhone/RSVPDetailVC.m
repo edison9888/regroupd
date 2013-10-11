@@ -1,22 +1,22 @@
 //
-//  EditChatVC.m
+//  RSVPDetailVC.m
 //  NView-iphone
 //
 //  Created by Hugh Lang on 6/29/13.
 //
 //
 
-#import "EditChatVC.h"
-#import "DataModel.h"
+#import "RSVPDetailVC.h"
+#import "SQLiteDB.h"
+#import "DateTimeUtils.h"
 
-@interface EditChatVC ()
+@interface RSVPDetailVC ()
 
 @end
 
-@implementation EditChatVC
+@implementation RSVPDetailVC
 
 @synthesize tableData;
-@synthesize ccSearchBar;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -33,33 +33,50 @@
 {
     [super viewDidLoad];
     
-    chatSvc = [[ChatManager alloc] init];
-    
-    // Do any additional setup after loading the view from its nib.
-    
-    xpos = 3;
-    ypos = 3;
-    
-    contactsMap = [[NSMutableDictionary alloc] init];
-    contactIds = [[NSMutableArray alloc] init];
-    
-    CGRect searchFrame = CGRectMake(5, 150, 310, 32);
-    ccSearchBar = [[CCSearchBar alloc] initWithFrame:searchFrame];
-    ccSearchBar.delegate = self;
-    [self.view addSubview:ccSearchBar];
+    CGRect scrollFrame = CGRectMake(0, 0, [DataModel shared].stageWidth, [DataModel shared].stageHeight);
 
+    self.scrollView.frame = scrollFrame;
+    self.scrollView.delegate = self;
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
     self.theTableView.backgroundColor = [UIColor clearColor];
     
     self.tableData =[[NSMutableArray alloc]init];
     
+    formSvc = [[FormManager alloc] init];
+
+    FormVO *form =[DataModel shared].form;
+    
+    self.subjectLabel.text = [DataModel shared].form.name;
+    
+    NSDate *dt = [DateTimeUtils dateFromDBDateString:form.start_time];
+    
+    self.dateLabel.text = [DateTimeUtils printDatePartFromDate:dt];
+    self.timeLabel.text = [DateTimeUtils printTimePartFromDate:dt];
+    self.whatText.text = form.description;
+    self.whereText.text = form.location;
+    
+ 
+    [self.roundPic.layer setCornerRadius:50.0f];
+    [self.roundPic.layer setMasksToBounds:YES];
+    [self.roundPic.layer setBorderWidth:1.0f];
+    [self.roundPic.layer setBorderColor:[UIColor whiteColor].CGColor];
+    self.roundPic.clipsToBounds = YES;
+    self.roundPic.contentMode = UIViewContentModeScaleAspectFill;
+    
+    UIImage *img;
+    if (form.imagefile != nil) {
+        img = [formSvc loadFormImage:form.imagefile];
+        self.roundPic.image = img;
+    }
+
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
-    
+
+
     [self performSearch:@""];
     
-    
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -67,51 +84,57 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-#pragma mark - UISearchBar
-/*
- SOURCE: http://jduff.github.com/2010/03/01/building-a-searchview-with-uisearchbar-and-uitableview/
- */
 
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
-    [ccSearchBar setShowsCancelButton:NO animated:YES];
-    
-    self.theTableView.allowsSelection = YES;
-    self.theTableView.scrollEnabled = YES;
-}
+#pragma mark - Form Options handling
 
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+- (void) loadFormOptions {
     
-    self.theTableView.hidden = NO;
-    [self performSearch:searchText];
+    @try {
+        
+        NSMutableArray *results = [[NSMutableArray alloc] init];
+        
+        NSString *sql = @"select * from form_option where form_id=?";
+        
+        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
+                           [NSNumber numberWithInt:[DataModel shared].form.form_id]];
+        
+        NSDictionary *dict;
+        NSString *filename;
+        
+        while ([rs next]) {
+            dict = [rs resultDictionary];
+            filename = (NSString *) [dict valueForKey:@"imagefile"];
+            if (filename == nil || filename.length == 0) {
+                [dict setValue:@"tesla.jpg" forKey:@"imagefile"];
+            }
+            [results addObject:dict];
+        }
+        
+        
+    }
+    @catch (NSException *exception) {
+        NSLog(@"%@", exception);
+    }
     
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    NSLog(@"%s", __FUNCTION__);
-    ccSearchBar.text=@"";
-    
-    //    self.theTableView.hidden = YES;
-    selectedIndex = -1;
-    
-}
-
-- (void)searchBarSearchButtonClicked:(UISearchBar *)_searchBar {
-    // You'll probably want to do this on another thread
-    // SomeService is just a dummy class representing some
-    // api that you are using to do the search
-    NSLog(@"search text=%@", _searchBar.text);
-    
-    [self performSearch:_searchBar.text];
     
 }
 
 
 #pragma mark - UITableViewDataSource
 
+//- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+//{
+//    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
+//        
+//        UITableViewHeaderFooterView *tableViewHeaderFooterView = (UITableViewHeaderFooterView *) view;
+//        tableViewHeaderFooterView.textLabel.textColor = [UIColor blueColor];
+//    }
+//}
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
     // Return the number of sections.
-    return 1;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
@@ -154,6 +177,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"%s", __FUNCTION__);
     
     @try {
         if (indexPath != nil) {
@@ -161,22 +185,11 @@
             
             selectedIndex = indexPath.row;
             NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
-            ContactVO *contact;
-            contact = [ContactVO readFromDictionary:rowdata];
-            [DataModel shared].contact = contact;
             
-            [contactsMap setObject:contact forKey:[NSNumber numberWithInt:contact.contact_id]];
+            [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
             
-            [contactIds addObject:[NSNumber numberWithInt:contact.contact_id]];
-            
-            CGRect itemFrame = CGRectMake(xpos, ypos, 100, 24);
-            SelectedItemWidget *item = [[SelectedItemWidget alloc] initWithFrame:itemFrame];
-
-            [item setFieldLabel:@"Hugh Lang"];
-            
-            
-            [self.selectionsView addSubview:item];
-            
+//            [DataModel shared].action = kActionEDIT;
+            [_delegate gotoNextSlide];
             
         }
     } @catch (NSException * e) {
@@ -234,32 +247,13 @@
 
 #pragma mark - Action handlers
 
-- (IBAction)tapDoneButton
+- (IBAction)tapCloseButton
 {
-    //    BOOL isOk = YES;
+    [_delegate gotoSlideWithName:@"FormsHome"];
     
-    BOOL isOK = YES;
-    
-    if (contactIds.count == 0) {
-        isOK = NO;
-    }
-    if (isOK) {
-        ChatVO *chat = [[ChatVO alloc] init];
-        
-        
-        chat.name = @"Test Chat";
-        
-        [_delegate gotoSlideWithName:@"Chat"];
-    } else {
-        [[[UIAlertView alloc] initWithTitle:@"Try again" message:@"Please add at least one contact" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-
-    }
-    
+}
+- (IBAction)tapAnswerButton {
     
 }
 
-- (IBAction)tapCancelButton
-{
-    
-}
 @end

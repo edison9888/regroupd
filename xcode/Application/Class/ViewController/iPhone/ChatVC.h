@@ -9,11 +9,19 @@
 #import "SlideViewController.h"
 #import "FancyCheckbox.h" 
 #import "FancyTextField.h"
-#import "BrandUITextField.h"
-#import "FancyDateTimeField.h"
-#import "BSKeyboardControls.h"
+#import "FancyTextView.h"
 
-@interface ChatVC : SlideViewController<UIScrollViewDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate, BSKeyboardControlsDelegate> {
+#import "BrandUITextField.h"
+#import "UIBubbleTableViewDataSource.h"
+#import "FormSelectorVC.h"
+//#import ""
+
+#import "ChatManager.h"
+#import "ChatVO.h"
+#import "ChatMessageVO.h"
+#import "FormVO.h"
+
+@interface ChatVC : SlideViewController<UIBubbleTableViewDataSource, UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate> {
     int fieldIndex;
     
     CGPoint  offset; // unused
@@ -31,53 +39,71 @@
 //    NEW SCROLLER
     CGFloat animatedDistance;
     
+    ChatManager *chatSvc;
+    
+    BOOL hasAttachment;
+    int attachmentType;
+    UIImage *attachedPhoto;
+    FormVO *attachedForm;
+    NSString *formTitle;
 }
 
+@property (nonatomic, retain) NSMutableArray *bubbleData;
+
 @property (nonatomic, retain) UIImagePickerController* imagePickerVC;
-//@property (nonatomic, retain) IBOutlet UIDatePicker *datePicker;
-//@property (nonatomic, retain) IBOutlet UIDatePicker *timePicker;
-@property (nonatomic, retain) IBOutlet UIToolbar* doneToolbar;
-@property (nonatomic, retain) UIDatePicker *datePicker;
-@property (nonatomic, retain) UIDatePicker *timePicker;
-@property (nonatomic, strong) BSKeyboardControls *keyboardControls;
+@property (nonatomic, retain) FormSelectorVC* formSelectorVC;
 
+@property (nonatomic, retain) IBOutlet BrandUILabel *navTitle;
+@property (nonatomic, strong) IBOutlet UIBubbleTableView *bubbleTable;
 
+@property (nonatomic, strong) IBOutlet UIView *chatBar;
+@property (nonatomic, strong) IBOutlet UIButton *attachButton;
+@property (nonatomic, strong) IBOutlet UIButton *sendButton;
+@property (nonatomic, retain) IBOutlet FancyTextView *inputField;
 
-@property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
-@property (nonatomic, retain) IBOutlet UIView *lowerForm;
-
-@property (nonatomic, strong) IBOutlet UIView *photoHolder;
-@property (nonatomic, strong) IBOutlet UIImageView *roundPic;
-@property (nonatomic, strong) IBOutlet UIButton *pickPhoto;
-
-@property (nonatomic, retain) IBOutlet BrandUITextField *subjectField;
-@property (nonatomic, retain) IBOutlet BrandUITextField *whereField;
-@property (nonatomic, retain) IBOutlet BrandUITextField *descriptionField;
-
-@property (nonatomic, retain) IBOutlet FancyDateTimeField *tfStartDate;
-@property (nonatomic, retain) IBOutlet FancyDateTimeField *tfStartTime;
-@property (nonatomic, retain) IBOutlet FancyDateTimeField *tfEndDate;
-@property (nonatomic, retain) IBOutlet FancyDateTimeField *tfEndTime;
-
-@property (nonatomic, retain) IBOutlet FancyCheckbox *ckAllowOthersYes;
-@property (nonatomic, retain) IBOutlet FancyCheckbox *ckAllowOthersNo;
-
+@property (nonatomic, strong) IBOutlet UIView *attachModal;
 @property (nonatomic, strong) IBOutlet UIView *photoModal;
 
+@property (nonatomic, strong) IBOutlet UIView *plusIconsView;
+@property (nonatomic, retain) IBOutlet BrandUILabel *attachPhotoLabel;
+@property (nonatomic, retain) IBOutlet BrandUILabel *attachPollLabel;
+@property (nonatomic, retain) IBOutlet BrandUILabel *attachRatingLabel;
+@property (nonatomic, retain) IBOutlet BrandUILabel *attachRSVPLabel;
+
+@property (nonatomic, retain) IBOutlet UIImageView *attachPhotoIcon;
+@property (nonatomic, retain) IBOutlet UIImageView *attachPollIcon;
+@property (nonatomic, retain) IBOutlet UIImageView *attachRatingIcon;
+@property (nonatomic, retain) IBOutlet UIImageView *attachRSVPIcon;
+
+@property (nonatomic, strong) IBOutlet UIButton *attachPhotoHotspot;
+@property (nonatomic, strong) IBOutlet UIButton *attachPollHotspot;
+@property (nonatomic, strong) IBOutlet UIButton *attachRatingHotspot;
+@property (nonatomic, strong) IBOutlet UIButton *attachRSVPHotspot;
+@property (nonatomic, strong) IBOutlet UIButton *cancelHotspot;
+
+@property (nonatomic, strong) IBOutlet UIButton *detachButton;
+
+
 - (IBAction)tapCancelButton;
-- (IBAction)tapDoneButton;
+- (IBAction)tapClearButton;
+- (IBAction)tapAttachButton;
+- (IBAction)tapSendButton;
+- (IBAction)tapDetachButton;
 
 - (IBAction)modalCameraButton;
 - (IBAction)modalChooseButton;
 - (IBAction)modalCancelButton;
 
-- (IBAction)tapPickPhoto;
-- (IBAction)dismissDatePicker:(id)sender;
+- (void) showAttachModal;
+- (void) hideAttachModal;
 
-- (void) setPhoto:(UIImage *)photo;
+- (void) showFormSelector;
+- (void) hideFormSelector;
 
-- (void) showModal;
-- (void) hideModal;
+- (void) setupModalHotspots;
+
+- (void) resetChatUI;
+- (void) insertMessageInChat;
 
 
 @end

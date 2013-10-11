@@ -152,6 +152,10 @@
                     [DataModel shared].form = form;
                     [_delegate gotoSlideWithName:@"RatingDetail"];
                     break;
+                case FormType_RSVP:
+                    [DataModel shared].form = form;
+                    [_delegate gotoSlideWithName:@"RSVPDetail"];
+                    break;
                     
                 default:
                     break;
