@@ -70,7 +70,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     CGRect scrollFrame = CGRectMake(0, navbarHeight,[DataModel shared].stageWidth, [DataModel shared].stageHeight - navbarHeight);
     self.scrollView.frame = scrollFrame;
-    CGSize scrollContentSize = CGSizeMake([DataModel shared].stageWidth, 600);
+    CGSize scrollContentSize = CGSizeMake([DataModel shared].stageWidth, 800);
     self.scrollView.contentSize = scrollContentSize;
     self.scrollView.delegate = self;
     
@@ -231,7 +231,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     // resize the scrollview
     CGRect viewFrame = self.scrollView.frame;
     // I'm also subtracting a constant kTabBarHeight because my UIScrollView was offset by the UITabBar so really only the portion of the keyboard that is leftover pass the UITabBar is obscuring my UIScrollView.
-    viewFrame.size.height += (keyboardSize.height - navbarHeight - 44);
+    viewFrame.size.height = [DataModel shared].stageHeight - 44;
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];

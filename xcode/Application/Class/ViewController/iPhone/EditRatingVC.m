@@ -48,7 +48,7 @@
     
     CGRect scrollFrame = CGRectMake(0, navbarHeight,[DataModel shared].stageWidth, [DataModel shared].stageHeight - navbarHeight);
     self.scrollView.frame = scrollFrame;
-    CGSize scrollContentSize = CGSizeMake([DataModel shared].stageWidth, 600);
+    CGSize scrollContentSize = CGSizeMake([DataModel shared].stageWidth, 800);
     self.scrollView.contentSize = scrollContentSize;
     self.scrollView.delegate = self;
     

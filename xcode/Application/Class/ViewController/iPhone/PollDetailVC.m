@@ -80,9 +80,6 @@
         while ([rs next]) {
             dict = [rs resultDictionary];
             filename = (NSString *) [dict valueForKey:@"imagefile"];
-            if (filename == nil || filename.length == 0) {
-                [dict setValue:@"tesla.jpg" forKey:@"imagefile"];
-            }
             [results addObject:dict];
         }
         

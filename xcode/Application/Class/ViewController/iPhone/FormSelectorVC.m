@@ -129,12 +129,13 @@
 - (void)performSearch:(NSString *)searchText
 {
     NSLog(@"%s: %@", __FUNCTION__, searchText);
-    NSString *sqlTemplate = @"select * from form where type=? order by form_id desc";
+    NSString *sql = @"select * from form where type=? order by form_id desc";
+    int formtype = (int) [DataModel shared].formType;
+//    NSString *sql = [NSString stringWithFormat:sqlTemplate,
+//                     [NSNumber numberWithInt:formtype]];
+//                     
     
-    NSString *sql = [NSString stringWithFormat:sqlTemplate,
-                     [NSNumber numberWithInt:[DataModel shared].formType]];
-    
-    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql, [NSNumber numberWithInt:formtype]];
     [tableData removeAllObjects];
     
     

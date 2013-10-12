@@ -260,6 +260,6 @@
 
 - (IBAction)tapCancelButton
 {
-    
+    [_delegate gotoPreviousSlide];
 }
 @end

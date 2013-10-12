@@ -19,28 +19,32 @@
 		isInScrollWindow = NO;
         self.data = pageData;
 
-        FormManager *formSvc = [[FormManager alloc] init];
-        
         _theView = [[[NSBundle mainBundle] loadNibNamed:@"ScrollOptionView" owner:self options:nil] objectAtIndex:0];
         _theView.backgroundColor = [UIColor clearColor];
+
+        NSString *name = (NSString *)[self.data objectForKey:@"name"];
+
+//        NSLog(@"option = %@", name);
+        self.optionLabel.text = name;
         
-        NSString *imagefile = (NSString *) [self.data objectForKey:@"imagefile"];
-        UIImage *img;
-        if (![imagefile isEqualToString:@"tesla.jpg"]) {
-            img = [formSvc loadFormImage:imagefile];
-        } else {
-            img = [UIImage imageNamed:imagefile];
-        }
-        self.roundPic.image = img;
-        
+
         [self.roundPic.layer setCornerRadius:96.0f];
         [self.roundPic.layer setMasksToBounds:YES];
         [self.roundPic.layer setBorderWidth:2.0f];
         [self.roundPic.layer setBorderColor:[UIColor whiteColor].CGColor];
         self.roundPic.clipsToBounds = YES;
         self.roundPic.contentMode = UIViewContentModeScaleAspectFill;
+
         
-        self.optionLabel.text = [self.data objectForKey:@"name"];
+        NSString *imagefile = (NSString *) [self.data objectForKey:@"imagefile"];
+        UIImage *img;
+        if (imagefile != nil) {
+            FormManager *formSvc = [[FormManager alloc] init];
+            img = [formSvc loadFormImage:imagefile];
+            self.roundPic.image = img;
+        }
+        
+        
         
         [self addSubview:_theView];
         

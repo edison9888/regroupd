@@ -49,7 +49,7 @@
             embedOption.tag = k_CHAT_OPTION_BASETAG + index;
             embedOption.userInteractionEnabled = YES;
             
-            if (opt.imagefile != nil && opt.imagefile.length > 0) {
+            if (opt.imagefile != nil) {
                 UIImage *img = nil;
                 img = [formSvc loadFormImage:opt.imagefile];
                 embedOption.roundPic.image =img;

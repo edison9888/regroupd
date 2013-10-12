@@ -7,7 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ScrollOptionView">
             <connections>
-                <outlet property="optionLabel" destination="nY8-cI-eBI" id="jNq-UA-gDB"/>
+                <outlet property="optionLabel" destination="nY8-cI-eBI" id="Uyr-S0-NWB"/>
                 <outlet property="roundPic" destination="25" id="37"/>
             </connections>
         </placeholder>
@@ -16,7 +16,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="300"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Burgers" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="nY8-cI-eBI" userLabel="BrandUI Label - option" customClass="BrandUILabel">
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="nY8-cI-eBI" userLabel="BrandUI Label - option" customClass="BrandUILabel">
                     <rect key="frame" x="10" y="260" width="300" height="28"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
