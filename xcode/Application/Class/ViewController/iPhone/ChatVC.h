@@ -21,7 +21,7 @@
 #import "ChatMessageVO.h"
 #import "FormVO.h"
 
-@interface ChatVC : SlideViewController<UIBubbleTableViewDataSource, UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate> {
+@interface ChatVC : SlideViewController<UIBubbleTableViewDataSource, UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate, UIGestureRecognizerDelegate> {
     int fieldIndex;
     
     CGPoint  offset; // unused
@@ -56,6 +56,7 @@
 @property (nonatomic, retain) IBOutlet BrandUILabel *navTitle;
 @property (nonatomic, strong) IBOutlet UIBubbleTableView *bubbleTable;
 
+@property (nonatomic, strong) IBOutlet UIView *topDrawer;
 @property (nonatomic, strong) IBOutlet UIView *chatBar;
 @property (nonatomic, strong) IBOutlet UIButton *attachButton;
 @property (nonatomic, strong) IBOutlet UIButton *sendButton;

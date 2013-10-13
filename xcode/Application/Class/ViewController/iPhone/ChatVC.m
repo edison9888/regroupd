@@ -43,6 +43,10 @@
 #define kScrollViewTop 50
 #define kChatBarHeight 50
 
+#define kMinDrawerPull    50
+#define kMaxDrawerPull    120
+
+#define kTagTopDrawer   13
 #define kTagAttachModalBG 666
 #define kTagPhotoModalBG  667
 #define kTagFormModalBG  668
@@ -160,6 +164,28 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     tapRecognizer.numberOfTapsRequired = 1;
     tapRecognizer.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tapRecognizer];
+    
+    /*
+     
+     http://stackoverflow.com/questions/6672677/how-to-use-uipangesturerecognizer-to-move-object-iphone-ipad
+     
+     */
+    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc]
+                                             
+                                             initWithTarget:self action:@selector(handlePull:)];
+    
+    // Specify that the gesture must be a single tap
+    [panRecognizer setMinimumNumberOfTouches:1];
+    
+    panRecognizer.cancelsTouchesInView = YES;
+    [self.topDrawer addGestureRecognizer:panRecognizer];
+
+//    UILongPressGestureRecognizer *touchDrag = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleDrag:)];
+//    touchDrag.numberOfTapsRequired=1;
+//    touchDrag.minimumPressDuration=0.0;
+//    touchDrag.delegate = self;
+//    [self.view addGestureRecognizer:touchDrag];
+
 
 }
 
@@ -588,7 +614,39 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 
 #pragma mark - Tap Gestures
+-(void)handleDrag:(UILongPressGestureRecognizer*)sender
+{
+    NSLog(@"%s", __FUNCTION__);
+    UIView* view = sender.view;
+    CGPoint loc = [sender locationInView:view];
+    UIView* subview = [view hitTest:loc withEvent:nil];
+    CGPoint subloc = [sender locationInView:subview];
+    NSLog(@"hit tag = %i at point %f / %f", subview.tag, subloc.x, subloc.y);
+    
+    
+   
+}
 
+- (void)handlePull:(UIPanGestureRecognizer *)sender {
+    
+    CGPoint translation = [sender translationInView:self.view];
+    
+    // Height of blue tab is 20px so use 10 as offset from center
+    if (sender.view.center.y - 10 + translation.y <= kMaxDrawerPull &&
+        sender.view.center.y - 10 + translation.y >= kMinDrawerPull) {
+        sender.view.center = CGPointMake(sender.view.center.x,
+                                         sender.view.center.y + translation.y);
+        
+    } else if (sender.view.center.y - 10 + translation.y > kMaxDrawerPull) {
+        sender.view.center = CGPointMake(sender.view.center.x,
+                                         kMaxDrawerPull - 10);
+    } else if (sender.view.center.y - 10 + translation.y < kMinDrawerPull) {
+        sender.view.center = CGPointMake(sender.view.center.x,
+                                         kMinDrawerPull - 10);
+    }
+    [sender setTranslation:CGPointMake(0, 0) inView:self.view];
+
+}
 -(void)singleTap:(UITapGestureRecognizer*)sender
 {
     NSLog(@"%s", __FUNCTION__);

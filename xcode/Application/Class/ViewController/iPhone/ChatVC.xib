@@ -26,10 +26,10 @@
                 <outlet property="chatBar" destination="VL9-59-RBu" id="oCj-cg-eIn"/>
                 <outlet property="detachButton" destination="aCq-zV-oCj" id="vSn-3G-XMh"/>
                 <outlet property="inputField" destination="5JB-Ai-Vv9" id="PXM-2z-8LL"/>
-                <outlet property="navTitle" destination="22" id="K7T-L0-xiK"/>
                 <outlet property="photoModal" destination="lHV-BO-JO1" id="MBM-Nt-cLQ"/>
                 <outlet property="plusIconsView" destination="v9D-BJ-uId" id="ePy-76-ZQr"/>
                 <outlet property="sendButton" destination="2x0-BK-fQF" id="wJW-Q6-reg"/>
+                <outlet property="topDrawer" destination="2b7-SW-YnZ" id="8nl-vC-G7V"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -39,59 +39,26 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="YhV-Zy-cDk" customClass="UIBubbleTableView">
-                    <rect key="frame" x="0.0" y="49" width="320" height="500"/>
+                    <rect key="frame" x="0.0" y="50" width="320" height="500"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
-                <view contentMode="scaleToFill" id="19" userLabel="View - navbar">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+                <view autoresizesSubviews="NO" tag="13" contentMode="scaleToFill" id="2b7-SW-YnZ" userLabel="View - top drawer">
+                    <rect key="frame" x="0.0" y="-130" width="320" height="200"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="topnav_aqua_bg.png" id="5">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="top_pull_handle.png" id="0T6-j3-0mA">
+                            <rect key="frame" x="0.0" y="180" width="320" height="20"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         </imageView>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Chat" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="22" customClass="BrandUILabel">
-                            <rect key="frame" x="70" y="11" width="180" height="28"/>
+                        <view contentMode="scaleToFill" id="m6t-xP-xVt" userLabel="View - drawer bg">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="20"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="6">
-                            <rect key="frame" x="8" y="7" width="60" height="36"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.31372549020000001" green="0.61960784310000006" blue="0.6705882353" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="15"/>
-                            <state key="normal" title="Chats" backgroundImage="btn_aqua_bg_small.png">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <state key="highlighted">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="tapCancelButton" destination="-1" eventType="touchUpInside" id="hao-V7-TYv"/>
-                            </connections>
-                        </button>
-                        <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="20">
-                            <rect key="frame" x="252" y="7" width="60" height="36"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.31372549020000001" green="0.61960784310000006" blue="0.6705882353" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="15"/>
-                            <state key="normal" title="Clear" backgroundImage="btn_aqua_bg_small.png">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <state key="highlighted">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="tapClearButton" destination="-1" eventType="touchUpInside" id="xVe-dt-ueP"/>
-                            </connections>
-                        </button>
+                            <color key="backgroundColor" red="0.15686274509803921" green="0.81176470588235294" blue="0.91764705882352937" alpha="1" colorSpace="calibratedRGB"/>
+                        </view>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                 </view>
                 <view contentMode="scaleToFill" id="VL9-59-RBu" userLabel="View - chat bar">
                     <rect key="frame" x="0.0" y="550" width="320" height="50"/>
@@ -135,6 +102,38 @@
                     </subviews>
                     <color key="backgroundColor" red="0.51764705882352946" green="0.58823529411764708" blue="0.62745098039215685" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
+                <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="20">
+                    <rect key="frame" x="254" y="8" width="60" height="36"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="0.31372549020000001" green="0.61960784310000006" blue="0.6705882353" alpha="1" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="15"/>
+                    <state key="normal" title="Clear" backgroundImage="btn_aqua_bg_small.png">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="highlighted">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="tapClearButton" destination="-1" eventType="touchUpInside" id="xVe-dt-ueP"/>
+                    </connections>
+                </button>
+                <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="6">
+                    <rect key="frame" x="5" y="8" width="60" height="36"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="0.31372549020000001" green="0.61960784310000006" blue="0.6705882353" alpha="1" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="15"/>
+                    <state key="normal" title="Chats" backgroundImage="btn_aqua_bg_small.png">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="highlighted">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="tapCancelButton" destination="-1" eventType="touchUpInside" id="hao-V7-TYv"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" red="0.90196078431372551" green="0.92156862745098034" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -384,6 +383,6 @@
         <image name="icon_attach_rsvp.png" width="27" height="27"/>
         <image name="modal_add_photo.png" width="302" height="159"/>
         <image name="modal_vertical_divider.png" width="1" height="36"/>
-        <image name="topnav_aqua_bg.png" width="320" height="50"/>
+        <image name="top_pull_handle.png" width="320" height="20"/>
     </resources>
 </document>
