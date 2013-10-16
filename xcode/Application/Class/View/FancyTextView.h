@@ -16,6 +16,7 @@
     BOOL showPlaceholder;
     
     UILabel *__numLabel;
+    UIFont *theFont;
     
 }
 
@@ -25,4 +26,7 @@
 -(void)setNumLabel:(NSString*)num;
 -(void)setPlaceholder:(NSString*)placeholder;
 -(void)unsetPlaceholder:(NSString*)placeholder;
+
+- (CGSize)determineSize:(NSString *)text constrainedToSize:(CGSize)size;
+
 @end

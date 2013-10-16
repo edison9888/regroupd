@@ -24,6 +24,9 @@
 #import "NSBubbleData.h"
 #import "UIColor+ColorWithHex.h"
 
+#define kMinInputHeight 40
+#define kMaxInputHeight 93
+
 
 @interface ChatVC ()
 {
@@ -44,9 +47,10 @@
 #define kChatBarHeight 50
 
 #define kMinDrawerPull    50
-#define kMaxDrawerPull    120
+#define kMaxDrawerPull    130
 
 #define kTagTopDrawer   13
+#define kTagSendButton   33
 #define kTagAttachModalBG 666
 #define kTagPhotoModalBG  667
 #define kTagFormModalBG  668
@@ -83,6 +87,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    inputHeight = 0;
+    theFont = [UIFont fontWithName:@"Raleway-Regular" size:13];
+
     self.inputField.delegate = self;
     self.detachButton.hidden = YES;
     hasAttachment = NO;
@@ -101,9 +108,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     self.bubbleTable.backgroundColor = [UIColor colorWithHexValue:kChatBGGrey andAlpha:1.0];
     self.bubbleTable.userInteractionEnabled = YES;
     
-    CGRect chatFrame = self.chatBar.frame;
+    chatFrame = self.chatBar.frame;
     chatFrame.origin.y = [DataModel shared].stageHeight - kChatBarHeight;
     self.chatBar.frame = chatFrame;
+    
+    inputFrame = self.inputField.frame;
+    [self.inputField setContentInset:UIEdgeInsetsMake(0.0, 4.0, 0.0, -10.0)];
+
     
     NSBubbleData *heyBubble = [NSBubbleData dataWithText:@"Hey, halloween is soon" date:[NSDate dateWithTimeIntervalSinceNow:-300] type:BubbleTypeSomeoneElse];
     heyBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
@@ -213,7 +224,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
     NSLog(@"===== %s", __FUNCTION__);
-    
+    inputHeight = textView.frame.size.height;
+
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
@@ -224,6 +236,49 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void)textViewDidChange:(UITextView *)textView {
     //    NSLog(@"%s tag=%i", __FUNCTION__, textView.tag);
+    
+    float vshift = 0;
+    
+//    CGSize estSize = [self determineSize:textView.text constrainedToSize:self.inputField.frame.size];
+//    textView.attributedText =  [[NSMutableAttributedString alloc] initWithString:textView.text];
+    CGSize estSize;
+    
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        estSize = [textView sizeThatFits:textView.frame.size];
+    } else {
+        estSize = textView.contentSize;
+    }
+    
+    float newsize = estSize.height;
+    
+    NSLog(@"inputHeight %f // newsize %f", inputHeight, newsize);
+    
+    if (inputHeight != newsize ) {
+        NSLog(@"textView height is now %f", newsize);
+        vshift = newsize - inputHeight;
+        
+        inputHeight = newsize;
+        if (inputHeight < kMaxInputHeight) {
+            CGRect frame = self.inputField.frame;
+            frame.size.height = newsize;
+            self.inputField.frame = frame;
+            
+//            self.inputField.frame = CGRectMake(self.inputField.frame.origin.x,
+//                                           self.inputField.frame.origin.y,
+//                                           self.inputField.frame.size.width,
+//                                           newsize);
+//            self.inputField.frame = inputFrame;
+
+            frame = self.chatBar.frame;
+            
+            frame.size.height += vshift;
+            frame.origin.y -= vshift;
+            self.chatBar.frame = frame;
+
+        } else {
+//            [textView scr]
+        }
+    }
     
     
 }
@@ -241,6 +296,29 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         
     }
 }
+
+- (CGSize)determineSize:(NSString *)text constrainedToSize:(CGSize)size
+{
+    
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        CGRect frame = [text boundingRectWithSize:size
+                                          options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
+                                       attributes:@{NSFontAttributeName:theFont}
+                                          context:nil];
+        return frame.size;
+    } else {
+        return [text sizeWithFont:theFont constrainedToSize:size];
+    }
+}
+- (CGFloat)textViewHeightForAttributedText:(NSAttributedString*)text andWidth:(CGFloat)width
+{
+    UITextView *calculationView = [[UITextView alloc] init];
+    [calculationView setAttributedText:text];
+    CGSize size = [calculationView sizeThatFits:CGSizeMake(width, FLT_MAX)];
+    return size.height;
+}
+
+
 #pragma mark - Keyboard events
 
 - (void)keyboardWasShown:(NSNotification*)aNotification
@@ -254,11 +332,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     [UIView animateWithDuration:0.1f animations:^{
         
-        CGRect frame = self.chatBar.frame;
-        frame.origin.y -= kbSize.height;
-        self.chatBar.frame = frame;
+        chatFrameWithKeyboard = self.chatBar.frame;
+        chatFrameWithKeyboard.origin.y -= kbSize.height;
         
-        frame = self.bubbleTable.frame;
+        self.chatBar.frame = chatFrameWithKeyboard;
+        
+        CGRect frame = self.bubbleTable.frame;
         frame.size.height -= kbSize.height + kChatBarHeight;
         
         self.bubbleTable.frame = frame;
@@ -629,22 +708,43 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void)handlePull:(UIPanGestureRecognizer *)sender {
     
-    CGPoint translation = [sender translationInView:self.view];
-    
-    // Height of blue tab is 20px so use 10 as offset from center
-    if (sender.view.center.y - 10 + translation.y <= kMaxDrawerPull &&
-        sender.view.center.y - 10 + translation.y >= kMinDrawerPull) {
-        sender.view.center = CGPointMake(sender.view.center.x,
-                                         sender.view.center.y + translation.y);
+    // SEE http://www.raywenderlich.com/6567/uigesturerecognizer-tutorial-in-ios-5-pinches-pans-and-more
+    if (sender.state == UIGestureRecognizerStateEnded) {
         
-    } else if (sender.view.center.y - 10 + translation.y > kMaxDrawerPull) {
-        sender.view.center = CGPointMake(sender.view.center.x,
-                                         kMaxDrawerPull - 10);
-    } else if (sender.view.center.y - 10 + translation.y < kMinDrawerPull) {
-        sender.view.center = CGPointMake(sender.view.center.x,
-                                         kMinDrawerPull - 10);
+        CGPoint velocity = [sender velocityInView:self.view];
+        CGFloat magnitude = sqrtf((velocity.x * velocity.x) + (velocity.y * velocity.y));
+        CGFloat slideMult = magnitude / 200;
+        NSLog(@"magnitude: %f, slideMult: %f", magnitude, slideMult);
+        
+        float slideFactor = 0.1 * slideMult; // Increase for more of a slide
+        CGPoint finalPoint = CGPointMake(sender.view.center.x,
+                                         sender.view.center.y + (velocity.y * slideFactor));
+        finalPoint.x = MIN(MAX(finalPoint.x, 0), self.view.bounds.size.width);
+        finalPoint.y = MIN(MAX(finalPoint.y, 0), kMaxDrawerPull);
+        
+        [UIView animateWithDuration:slideFactor*2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            sender.view.center = finalPoint;
+        } completion:nil];
+        
+    } else {
+        CGPoint translation = [sender translationInView:self.view];
+        
+        // Height of blue tab is 20px so use 10 as offset from center
+        if (sender.view.center.y - 10 + translation.y <= kMaxDrawerPull &&
+            sender.view.center.y - 10 + translation.y >= kMinDrawerPull) {
+            sender.view.center = CGPointMake(sender.view.center.x,
+                                             sender.view.center.y + translation.y);
+            
+        } else if (sender.view.center.y - 10 + translation.y > kMaxDrawerPull) {
+            sender.view.center = CGPointMake(sender.view.center.x,
+                                             kMaxDrawerPull - 10);
+        } else if (sender.view.center.y - 10 + translation.y < kMinDrawerPull) {
+            sender.view.center = CGPointMake(sender.view.center.x,
+                                             kMinDrawerPull - 10);
+        }
+        [sender setTranslation:CGPointMake(0, 0) inView:self.view];
+        
     }
-    [sender setTranslation:CGPointMake(0, 0) inView:self.view];
 
 }
 -(void)singleTap:(UITapGestureRecognizer*)sender
@@ -652,17 +752,18 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSLog(@"%s", __FUNCTION__);
     if (UIGestureRecognizerStateEnded == sender.state)
     {
-        if (keyboardIsShown) {
+        UIView* view = sender.view;
+        CGPoint loc = [sender locationInView:view];
+        UIView* subview = [view hitTest:loc withEvent:nil];
+        CGPoint subloc = [sender locationInView:subview];
+        NSLog(@"hit tag = %i at point %f / %f", subview.tag, subloc.x, subloc.y);
+
+        if (keyboardIsShown && subview.tag != kTagSendButton) {
             [self.inputField resignFirstResponder];
             [self.inputField endEditing:YES];
             
         } else {
             
-            UIView* view = sender.view;
-            CGPoint loc = [sender locationInView:view];
-            UIView* subview = [view hitTest:loc withEvent:nil];
-            CGPoint subloc = [sender locationInView:subview];
-            NSLog(@"hit tag = %i at point %f / %f", subview.tag, subloc.x, subloc.y);
             
             switch (subview.tag) {
                 case kTagAttachModalBG:
@@ -853,6 +954,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
         
         self.inputField.text = @"";
+        
+        // Reset frame of chat and input
+        self.inputField.frame = inputFrame;
+        self.chatBar.frame = chatFrameWithKeyboard;
     }
     // Insert attachment if present. Reset inputs when done
     if (hasAttachment) {

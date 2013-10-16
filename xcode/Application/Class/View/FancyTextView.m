@@ -20,7 +20,9 @@
         
         self.clipsToBounds = YES;
         [self setTextColor:[UIColor colorWithHexValue:0x333333 andAlpha:1.0]];
-        [self setFont:[UIFont fontWithName:@"Raleway-Regular" size:13]];
+        theFont = [UIFont fontWithName:@"Raleway-Regular" size:13];
+        
+        [self setFont:theFont];
         [self setTextAlignment:NSTextAlignmentLeft];
         [self.layer setBorderColor:[UIColor grayColor].CGColor];
         [self.layer setBorderWidth:1.0];
@@ -66,4 +68,19 @@
     
 }
 
+//http://stackoverflow.com/questions/19028743/ios7-uitextview-contentsize-height-alternative
+
+
+- (CGSize)determineSize:(NSString *)text constrainedToSize:(CGSize)size
+{
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        CGRect frame = [text boundingRectWithSize:size
+                                          options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
+                                       attributes:@{NSFontAttributeName:theFont}
+                                          context:nil];
+        return frame.size;
+    } else {
+        return [text sizeWithFont:theFont constrainedToSize:size];
+    }
+}
 @end

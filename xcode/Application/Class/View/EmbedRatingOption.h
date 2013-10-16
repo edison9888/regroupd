@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FancyTextView.h"
 #import "BrandUILabel.h"
 #import "RatingMeterSlider.h"
 

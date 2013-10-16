@@ -66,21 +66,6 @@
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setNumberStyle: NSNumberFormatterSpellOutStyle];
     
-//    // OPTION 1 INPUT
-//    count++;
-//    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
-//
-//    optionFrame= CGRectMake(10, ypos, 236, kMinInputHeight);
-//    
-//    fancyInput = [[FancyTextView alloc] initWithFrame:optionFrame];
-//    //set the parent view
-//    fancyInput.delegate = self;
-//    fancyInput.tag = count;
-//    [fancyInput setNumLabel:@"3"];
-//    [fancyInput setPlaceholder:defaultText];
-//    
-//    [fancyInput scrollRectToVisible:CGRectMake(0,0,1,1) animated:NO];
-//    [self.scrollView addSubview:fancyInput];
 
     SurveyOptionWidget *surveyOption;
     // OPTION 1 INPUT
@@ -307,7 +292,15 @@
     
     float vshift = 0;
     
-    float newsize = textView.contentSize.height;
+    CGSize estSize;
+    
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        estSize = [textView sizeThatFits:textView.frame.size];
+    } else {
+        estSize = textView.contentSize;
+    }
+    
+    float newsize = estSize.height;
     if (inputHeight != newsize ) {
         NSLog(@"textView height is now %f", newsize);
         vshift = newsize - inputHeight;

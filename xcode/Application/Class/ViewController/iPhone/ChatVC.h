@@ -31,6 +31,15 @@
     BOOL keyboardIsShown;
     float keyboardHeight;
     float navbarHeight;
+
+    float inputHeight;
+    float chatBarHeight;
+    UIFont *theFont;
+    
+    CGRect chatFrame;
+    CGRect inputFrame;
+    CGRect chatFrameWithKeyboard;
+    
     
     UIView *bgLayer;
     
