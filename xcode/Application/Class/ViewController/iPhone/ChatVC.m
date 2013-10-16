@@ -30,7 +30,7 @@
 
 @interface ChatVC ()
 {
-//    IBOutlet UIBubbleTableView *bubbleTable;
+    //    IBOutlet UIBubbleTableView *bubbleTable;
     
     NSMutableArray *bubbleData;
 }
@@ -46,8 +46,10 @@
 #define kScrollViewTop 50
 #define kChatBarHeight 50
 
-#define kMinDrawerPull    50
-#define kMaxDrawerPull    130
+#define kMinDrawerPull    -65
+#define kMaxDrawerPull    90
+#define kHeightDrawerPull    200
+
 
 #define kTagTopDrawer   13
 #define kTagSendButton   33
@@ -89,7 +91,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [super viewDidLoad];
     inputHeight = 0;
     theFont = [UIFont fontWithName:@"Raleway-Regular" size:13];
-
+    
     self.inputField.delegate = self;
     self.detachButton.hidden = YES;
     hasAttachment = NO;
@@ -114,11 +116,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     inputFrame = self.inputField.frame;
     [self.inputField setContentInset:UIEdgeInsetsMake(0.0, 4.0, 0.0, -10.0)];
-
+    
     
     NSBubbleData *heyBubble = [NSBubbleData dataWithText:@"Hey, halloween is soon" date:[NSDate dateWithTimeIntervalSinceNow:-300] type:BubbleTypeSomeoneElse];
     heyBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
-
+    
     NSBubbleData *photoBubble = [NSBubbleData dataWithImage:[UIImage imageNamed:@"maserati.jpg"] date:[NSDate dateWithTimeIntervalSinceNow:-290] type:BubbleTypeSomeoneElse];
     photoBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
     
@@ -146,7 +148,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     //    - NSBubbleTypingTypeMe - shows "now typing" bubble on the right
     //    - NSBubbleTypingTypeNone - no "now typing" bubble
     
-//    self.bubbleTable.typingBubble = NSBubbleTypingTypeSomebody;
+    //    self.bubbleTable.typingBubble = NSBubbleTypingTypeSomebody;
     
     [self.bubbleTable reloadData];
     
@@ -162,8 +164,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
-
-
+    
+    
     // Create and initialize a tap gesture
     
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
@@ -190,14 +192,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     panRecognizer.cancelsTouchesInView = YES;
     [self.topDrawer addGestureRecognizer:panRecognizer];
-
-//    UILongPressGestureRecognizer *touchDrag = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleDrag:)];
-//    touchDrag.numberOfTapsRequired=1;
-//    touchDrag.minimumPressDuration=0.0;
-//    touchDrag.delegate = self;
-//    [self.view addGestureRecognizer:touchDrag];
-
-
+    
+    drawerMinTop = self.topDrawer.frame.origin.y;
+    drawerMaxTop = 0;
+    
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -225,7 +224,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)textViewDidBeginEditing:(UITextView *)textView {
     NSLog(@"===== %s", __FUNCTION__);
     inputHeight = textView.frame.size.height;
-
+    
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
@@ -239,8 +238,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     float vshift = 0;
     
-//    CGSize estSize = [self determineSize:textView.text constrainedToSize:self.inputField.frame.size];
-//    textView.attributedText =  [[NSMutableAttributedString alloc] initWithString:textView.text];
+    //    CGSize estSize = [self determineSize:textView.text constrainedToSize:self.inputField.frame.size];
+    //    textView.attributedText =  [[NSMutableAttributedString alloc] initWithString:textView.text];
     CGSize estSize;
     
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
@@ -263,20 +262,20 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             frame.size.height = newsize;
             self.inputField.frame = frame;
             
-//            self.inputField.frame = CGRectMake(self.inputField.frame.origin.x,
-//                                           self.inputField.frame.origin.y,
-//                                           self.inputField.frame.size.width,
-//                                           newsize);
-//            self.inputField.frame = inputFrame;
-
+            //            self.inputField.frame = CGRectMake(self.inputField.frame.origin.x,
+            //                                           self.inputField.frame.origin.y,
+            //                                           self.inputField.frame.size.width,
+            //                                           newsize);
+            //            self.inputField.frame = inputFrame;
+            
             frame = self.chatBar.frame;
             
             frame.size.height += vshift;
             frame.origin.y -= vshift;
             self.chatBar.frame = frame;
-
+            
         } else {
-//            [textView scr]
+            //            [textView scr]
         }
     }
     
@@ -285,16 +284,17 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     
-    if( [text isEqualToString:[text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]]] ) {
-        return YES;
-
-    } else {
-        NSLog(@"Return key event");
-        [self insertMessageInChat];
-        
-        return NO;
-        
-    }
+    //    if( [text isEqualToString:[text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]]] ) {
+    //        return YES;
+    //
+    //    } else {
+    //        NSLog(@"Return key event");
+    //        [self insertMessageInChat];
+    //
+    //        return NO;
+    //
+    //    }
+    return YES;
 }
 
 - (CGSize)determineSize:(NSString *)text constrainedToSize:(CGSize)size
@@ -323,12 +323,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
-//    NSLog(@"%s", __FUNCTION__);
+    //    NSLog(@"%s", __FUNCTION__);
     keyboardIsShown = YES;
     NSDictionary* info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-//    kbSize.height += kChatBarHeight;
-//    NSLog(@"Keyboard height is %f", kbSize.height)
+    //    kbSize.height += kChatBarHeight;
+    //    NSLog(@"Keyboard height is %f", kbSize.height)
     
     [UIView animateWithDuration:0.1f animations:^{
         
@@ -350,12 +350,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     keyboardIsShown = NO;
     
     [UIView animateWithDuration:0.1f animations:^{
-
+        
         CGRect frame = self.bubbleTable.frame;
         frame.size.height = [DataModel shared].stageHeight - kChatBarHeight - kScrollViewTop;
-//        frame.size.height += kbSize.height + kChatBarHeight;
+        //        frame.size.height += kbSize.height + kChatBarHeight;
         self.bubbleTable.frame = frame;
-
+        
         frame = self.chatBar.frame;
         frame.origin.y = [DataModel shared].stageHeight - kChatBarHeight;
         self.chatBar.frame = frame;
@@ -381,7 +381,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     // Setup modal state
     [self setupModalHotspots];
-
+    
     // Setup attachModal
     
     CGRect modalFrame = self.attachModal.frame;
@@ -395,7 +395,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     self.attachModal.frame = modalFrame;
     [self.view addSubview:self.attachModal];
     
-
+    
     ypos = ([DataModel shared].stageHeight - modalFrame.size.height);
     modalFrame.origin.y = ypos;
     
@@ -429,7 +429,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                      animations:^{
                          self.attachModal.frame = modalFrame;
                      }
-                     completion:^(BOOL finished){                                                  
+                     completion:^(BOOL finished){
                      }];
     
     
@@ -482,7 +482,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         [bgLayer removeFromSuperview];
         bgLayer = nil;
     }
-
+    
     CGRect modalFrame = self.photoModal.frame;
     float ypos = -modalFrame.size.height - 40;
     modalFrame.origin.y = ypos;
@@ -508,14 +508,14 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void) showFormSelector {
     
     
-//    CGRect fullscreen = CGRectMake(0, 0, [DataModel shared].stageWidth, [DataModel shared].stageHeight);
-//    bgLayer = [[UIView alloc] initWithFrame:fullscreen];
-//    bgLayer.backgroundColor = [UIColor grayColor];
-//    bgLayer.alpha = 0.8;
-//    bgLayer.layer.zPosition = 8;
-//    bgLayer.tag = kTagFormModalBG;
-//    [self.view addSubview:bgLayer];
-
+    //    CGRect fullscreen = CGRectMake(0, 0, [DataModel shared].stageWidth, [DataModel shared].stageHeight);
+    //    bgLayer = [[UIView alloc] initWithFrame:fullscreen];
+    //    bgLayer.backgroundColor = [UIColor grayColor];
+    //    bgLayer.alpha = 0.8;
+    //    bgLayer.layer.zPosition = 8;
+    //    bgLayer.tag = kTagFormModalBG;
+    //    [self.view addSubview:bgLayer];
+    
     
     self.formSelectorVC = [[FormSelectorVC alloc] initWithNibName:@"FormSelectorVC" bundle:nil];
     CGRect panelFrame = self.formSelectorVC.view.frame;
@@ -527,7 +527,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self.view addSubview:self.formSelectorVC.view];
     
     self.formSelectorVC.titleLabel.text = formTitle;
-//    [self.view bringSubviewToFront:self.formSelectorVC.view];
+    //    [self.view bringSubviewToFront:self.formSelectorVC.view];
     
     float ypos = ([DataModel shared].stageHeight - panelFrame.size.height);
     panelFrame.origin.y = ypos;
@@ -542,7 +542,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                      completion:^(BOOL finished){
                          // nothing
                      }];
-
+    
 }
 - (void) hideFormSelector {
     if (bgLayer != nil) {
@@ -563,8 +563,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                      completion:^(BOOL finished){
                          
                      }];
-
-
+    
+    
 }
 
 
@@ -680,72 +680,53 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
 	[self dismissViewControllerAnimated:YES completion:nil];
     self.imagePickerVC = nil;
-
+    
     [self hidePhotoModal];
     
-//    self.attachButton.imageView.image = [UIImage imageNamed:kAttachPhotoIcon];
+    //    self.attachButton.imageView.image = [UIImage imageNamed:kAttachPhotoIcon];
     [self.attachButton setImage:[UIImage imageNamed:kAttachPhotoIconAqua] forState:UIControlStateNormal];
-//    [self.attachButton setImage:[UIImage imageNamed:kAttachPhotoIconAqua] forState:UIControlStateSelected];
+    //    [self.attachButton setImage:[UIImage imageNamed:kAttachPhotoIconAqua] forState:UIControlStateSelected];
     
- 
+    
     //    [self setupButtonsForEdit];
     
 }
 
 #pragma mark - Tap Gestures
--(void)handleDrag:(UILongPressGestureRecognizer*)sender
-{
-    NSLog(@"%s", __FUNCTION__);
-    UIView* view = sender.view;
-    CGPoint loc = [sender locationInView:view];
-    UIView* subview = [view hitTest:loc withEvent:nil];
-    CGPoint subloc = [sender locationInView:subview];
-    NSLog(@"hit tag = %i at point %f / %f", subview.tag, subloc.x, subloc.y);
-    
-    
-   
-}
 
 - (void)handlePull:(UIPanGestureRecognizer *)sender {
     
     // SEE http://www.raywenderlich.com/6567/uigesturerecognizer-tutorial-in-ios-5-pinches-pans-and-more
+    CGPoint translation = [sender translationInView:self.view];
+    float ypos = sender.view.center.y - (sender.view.frame.size.height / 2);
+
     if (sender.state == UIGestureRecognizerStateEnded) {
         
-        CGPoint velocity = [sender velocityInView:self.view];
-        CGFloat magnitude = sqrtf((velocity.x * velocity.x) + (velocity.y * velocity.y));
-        CGFloat slideMult = magnitude / 200;
-        NSLog(@"magnitude: %f, slideMult: %f", magnitude, slideMult);
-        
-        float slideFactor = 0.1 * slideMult; // Increase for more of a slide
-        CGPoint finalPoint = CGPointMake(sender.view.center.x,
-                                         sender.view.center.y + (velocity.y * slideFactor));
-        finalPoint.x = MIN(MAX(finalPoint.x, 0), self.view.bounds.size.width);
-        finalPoint.y = MIN(MAX(finalPoint.y, 0), kMaxDrawerPull);
-        
-        [UIView animateWithDuration:slideFactor*2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-            sender.view.center = finalPoint;
+        CGPoint targetPoint;
+        if (ypos - drawerMinTop < drawerMaxTop - ypos) {
+            // Slide back up
+            targetPoint = CGPointMake(sender.view.center.x, drawerMinTop + (sender.view.frame.size.height / 2));
+            
+        } else {
+            targetPoint = CGPointMake(sender.view.center.x, drawerMaxTop + (sender.view.frame.size.height / 2));
+            // Slide back down
+        }
+        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            sender.view.center = targetPoint;
         } completion:nil];
         
     } else {
-        CGPoint translation = [sender translationInView:self.view];
-        
         // Height of blue tab is 20px so use 10 as offset from center
-        if (sender.view.center.y - 10 + translation.y <= kMaxDrawerPull &&
-            sender.view.center.y - 10 + translation.y >= kMinDrawerPull) {
+        
+        if (ypos + translation.y >= drawerMinTop && ypos + translation.y <= drawerMaxTop) {
             sender.view.center = CGPointMake(sender.view.center.x,
                                              sender.view.center.y + translation.y);
-            
-        } else if (sender.view.center.y - 10 + translation.y > kMaxDrawerPull) {
-            sender.view.center = CGPointMake(sender.view.center.x,
-                                             kMaxDrawerPull - 10);
-        } else if (sender.view.center.y - 10 + translation.y < kMinDrawerPull) {
-            sender.view.center = CGPointMake(sender.view.center.x,
-                                             kMinDrawerPull - 10);
         }
-        [sender setTranslation:CGPointMake(0, 0) inView:self.view];
-        
     }
-
+    [sender setTranslation:CGPointMake(0, 0) inView:self.view];
+    
+    //    }
+    
 }
 -(void)singleTap:(UITapGestureRecognizer*)sender
 {
@@ -757,7 +738,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         UIView* subview = [view hitTest:loc withEvent:nil];
         CGPoint subloc = [sender locationInView:subview];
         NSLog(@"hit tag = %i at point %f / %f", subview.tag, subloc.x, subloc.y);
-
+        
         if (keyboardIsShown && subview.tag != kTagSendButton) {
             [self.inputField resignFirstResponder];
             [self.inputField endEditing:YES];
@@ -791,7 +772,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         [self.attachPollHotspot removeTarget:self action:@selector(tapPollHotspot:) forControlEvents:UIControlEventTouchUpInside];
         [self.attachRatingHotspot removeTarget:self action:@selector(tapRatingHotspot:) forControlEvents:UIControlEventTouchUpInside];
         [self.attachRSVPHotspot removeTarget:self action:@selector(tapRSVPHotspot:) forControlEvents:UIControlEventTouchUpInside];
-
+        
         CGRect xframe = self.detachButton.frame;
         
         switch (attachmentType) {
@@ -818,7 +799,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 break;
             case FormType_RATING:
                 self.attachRatingLabel.text = @"Rating Attached";
-
+                
                 self.attachRatingLabel.alpha = kAlphaDisabled;
                 self.attachRatingLabel.alpha = kAlphaDisabled;
                 
@@ -836,7 +817,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 xframe.origin.y = self.attachRSVPLabel.frame.origin.y;
                 self.detachButton.frame = xframe;
                 self.detachButton.hidden = NO;
-
+                
                 break;
             default:
                 break;
@@ -858,7 +839,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         self.attachRatingIcon.alpha = 1.0;
         self.attachRSVPLabel.alpha = 1.0;
         self.attachRSVPIcon.alpha = 1.0;
-
+        
         [self.attachPhotoHotspot addTarget:self action:@selector(tapPhotoHotspot:) forControlEvents:UIControlEventTouchUpInside];
         [self.attachPollHotspot addTarget:self action:@selector(tapPollHotspot:) forControlEvents:UIControlEventTouchUpInside];
         [self.attachRatingHotspot addTarget:self action:@selector(tapRatingHotspot:) forControlEvents:UIControlEventTouchUpInside];
@@ -887,26 +868,26 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     formTitle = self.attachRatingLabel.text;
     
     [self hideAttachModal];
-
+    
     [self showFormSelector];
-
+    
 }
 - (void) tapRSVPHotspot:(id)sender {
     [DataModel shared].formType = FormType_RSVP;
     formTitle = self.attachRSVPLabel.text;
     
     [self hideAttachModal];
-
+    
     [self showFormSelector];
-
+    
 }
 - (void) tapCancelHotspot:(id)sender {
     self.cancelHotspot.highlighted = YES;
-//    self.cancelHotspot.backgroundColor = [UIColor grayColor];
+    //    self.cancelHotspot.backgroundColor = [UIColor grayColor];
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         self.cancelHotspot.highlighted = NO;
-//        self.cancelHotspot.backgroundColor = [UIColor clearColor];
+        //        self.cancelHotspot.backgroundColor = [UIColor clearColor];
     });
     [self hideAttachModal];
 }
@@ -920,8 +901,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         attachmentType = attachedForm.type;
         hasAttachment = YES;
         NSLog(@"Form pick: %@", attachedForm.name);
-
-
+        
+        
         switch (attachmentType) {
             case FormType_POLL:
             {
@@ -943,7 +924,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 
 - (void) insertMessageInChat {
-//    [self.bubbleTable becomeFirstResponder];
+    //    [self.bubbleTable becomeFirstResponder];
     
     if (self.inputField.text.length > 0) {
         self.bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
@@ -961,7 +942,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
     // Insert attachment if present. Reset inputs when done
     if (hasAttachment) {
-
+        
         if (attachedForm != nil) {
             FormManager *formSvc = [[FormManager alloc] init];
             
@@ -1011,12 +992,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 case FormType_RSVP:
                 {
                     EmbedRSVPWidget *embedWidget = [[EmbedRSVPWidget alloc] initWithFrame:embedFrame andOptions:formOptions isOwner:NO];
-//                    embedWidget.subjectLabel.text = attachedForm.name;
+                    //                    embedWidget.subjectLabel.text = attachedForm.name;
                     embedWidget.whatText.text = attachedForm.description;
                     embedWidget.whereText.text = attachedForm.location;
                     
                     NSDate *dt = [DateTimeUtils readDateFromFriendlyDateTime:attachedForm.start_time];
-                
+                    
                     embedWidget.dateLabel.text = [DateTimeUtils printDatePartFromDate:dt];
                     embedWidget.timeLabel.text = [DateTimeUtils printTimePartFromDate:dt];
                     embedWidget.whatText.text = attachedForm.description;
@@ -1040,7 +1021,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                     // FIXME: use user avatar image
                     formBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
                     
-
+                    
                     break;
                 }
             }
@@ -1066,7 +1047,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         NSLog(@"Set scroll frame height to %f", scrollFrame.size.height);
         
         self.bubbleTable.frame = scrollFrame;
-
+        
         hasAttachment = NO;
         attachedPhoto = nil;
         attachedForm = nil;

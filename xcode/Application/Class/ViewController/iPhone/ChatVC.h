@@ -24,6 +24,9 @@
 @interface ChatVC : SlideViewController<UIBubbleTableViewDataSource, UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate, UIGestureRecognizerDelegate> {
     int fieldIndex;
     
+    float drawerMinTop;
+    float drawerMaxTop;
+    
     CGPoint  offset; // unused
     UIResponder *_currentFocus;
     UITextField *_currentField;
