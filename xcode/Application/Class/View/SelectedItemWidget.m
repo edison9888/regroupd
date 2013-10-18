@@ -15,15 +15,17 @@
 - (id)initWithFrame:(CGRect)frame
 {
     NSLog(@"%s", __FUNCTION__);
-
+    bgColor = [UIColor colorWithHexValue:0x28CFEA andAlpha:1.0];
+    
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        [self setBackgroundColor:[UIColor colorWithHexValue:0x28CFEA andAlpha:1.0]];
+        [self setBackgroundColor:bgColor];
+        [self.layer setBackgroundColor:bgColor.CGColor];
+        
         [self.layer setBorderColor:[UIColor colorWithHexValue:0x09a1bd].CGColor];
         [self.layer setBorderWidth:1.0];
         [self.layer setCornerRadius:3];
-        [self.layer setBackgroundColor:[UIColor colorWithHexValue:0x28CFEA andAlpha:1.0].CGColor];
         
     }
     return self;
@@ -39,7 +41,7 @@
     
     //    self.borderStyle = UITextBorderStyleRoundedRect; // clear out default border
     
-    [self setBackgroundColor:[UIColor clearColor]];
+    [self setBackgroundColor:bgColor];
     
     [self addSubview:self.itemText];
     [self resizeLabel:self.itemText];

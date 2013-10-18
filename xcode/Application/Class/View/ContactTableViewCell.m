@@ -1,17 +1,16 @@
 //
-//  CCTableViewCell.m
+//  ContactTableViewCell.m
 //  Blocpad
 //
 //  Created by Hugh Lang on 4/8/13.
 //
 //
 
-#import "CCTableViewCell.h"
+#import "ContactTableViewCell.h"
 
-@implementation CCTableViewCell
+@implementation ContactTableViewCell
 
 @synthesize titleLabel;
-@synthesize rowdata;
 
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -25,12 +24,7 @@
 }
 
 - (NSString *) reuseIdentifier {
-    return @"CCTableCell";
-}
-- (void)setRowdata:(NSDictionary *)data
-{
-    rowdata = data;
-    self.titleLabel.text = [data objectForKey:@"name"];
+    return @"ContactTableCell";
 }
 
 
@@ -57,6 +51,5 @@
 #endif
     [super setSelected:selected animated:animated];
 
-    // Configure the view for the selected state
 }
 @end

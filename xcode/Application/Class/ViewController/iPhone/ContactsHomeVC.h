@@ -9,13 +9,14 @@
 #import "SlideViewController.h"
 #import "SQLiteDB.h"
 #import "CCSearchBar.h"
-#import "CCTableViewCell.h"
 #import "ContactVO.h"
 
 @interface ContactsHomeVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *tableData;
+    UIView *bgLayer;
+
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
@@ -28,9 +29,18 @@
 @property (nonatomic, strong) IBOutlet UIButton *editButton;
 @property (nonatomic, strong) IBOutlet UIButton *addButton;
 
+@property (nonatomic, strong) IBOutlet UIView *addModal;
+
 
 - (IBAction)tapAddButton;
 
 - (IBAction)tapEditButton;
+- (IBAction)tapNewContactButton;
+- (IBAction)tapNewGroupButton;
+- (IBAction)tapCancelButton;
+
+- (void) showModal;
+- (void) hideModal;
+
 
 @end

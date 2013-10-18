@@ -133,7 +133,8 @@
         if (cell == nil) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:CellNib owner:self options:nil];
             cell = (CCTableViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleGray;
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         
         NSDictionary *rowData = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
@@ -169,7 +170,18 @@
             
             [contactIds addObject:[NSNumber numberWithInt:contact.contact_id]];
             
-            CGRect itemFrame = CGRectMake(xpos, ypos, 100, 24);
+            float estWidth = 100;
+            if (xpos + estWidth + 10 > self.selectionsView.frame.size.width) {
+                xpos = 0;
+                ypos +=30;
+            }
+            if (ypos + 30 > self.selectionsView.frame.size.height) {
+                CGRect sframe = self.selectionsView.frame;
+                sframe.size.height += 30;
+                self.selectionsView.frame = sframe;
+            }
+            
+            CGRect itemFrame = CGRectMake(xpos, ypos, estWidth, 24);
             SelectedItemWidget *item = [[SelectedItemWidget alloc] initWithFrame:itemFrame];
 
             [item setFieldLabel:@"Hugh Lang"];

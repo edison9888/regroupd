@@ -10,7 +10,7 @@
 #import "UIView+Resize.h"
 
 @interface SelectedItemWidget : UIView {
-    
+    UIColor *bgColor;
 }
 
 @property (nonatomic, strong) UILabel *itemText;

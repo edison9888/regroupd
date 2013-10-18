@@ -24,6 +24,12 @@
 		1E0CAA43178253F100A294C0 /* BrandUITextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E0CAA41178253DF00A294C0 /* BrandUITextField.m */; };
 		1E0CAA461782586400A294C0 /* pattern_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA441782586400A294C0 /* pattern_background@2x.png */; };
 		1E0CAA471782586400A294C0 /* pattern_background-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA451782586400A294C0 /* pattern_background-568h@2x.png */; };
+		1E0F8EF61810999E00B6C6AF /* settings_big_button_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0F8EF21810999E00B6C6AF /* settings_big_button_bg@2x.png */; };
+		1E0F8EF71810999E00B6C6AF /* settings_icon_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0F8EF31810999E00B6C6AF /* settings_icon_off@2x.png */; };
+		1E0F8EF81810999E00B6C6AF /* settings_icon_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0F8EF41810999E00B6C6AF /* settings_icon_on@2x.png */; };
+		1E0F8EF91810999E00B6C6AF /* settings_switch@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0F8EF51810999E00B6C6AF /* settings_switch@2x.png */; };
+		1E0F8EFD18109B9C00B6C6AF /* FancyToggle.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E0F8EFB18109B9C00B6C6AF /* FancyToggle.m */; };
+		1E0F8EFE18109B9C00B6C6AF /* FancyToggle.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E0F8EFC18109B9C00B6C6AF /* FancyToggle.xib */; };
 		1E131D5517F60AE600749506 /* EditRSVPVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E131D5317F60AE500749506 /* EditRSVPVC.m */; };
 		1E131D5617F60AE600749506 /* EditRSVPVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E131D5417F60AE500749506 /* EditRSVPVC.xib */; };
 		1E131D5817F60EF900749506 /* hbar_dark_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E131D5717F60EF900749506 /* hbar_dark_grey@2x.png */; };
@@ -311,15 +317,9 @@
 		1E928258177FB690008A583C /* DataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E92813F177FB68F008A583C /* DataModel.m */; };
 		1E92825B177FB690008A583C /* HelpCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E928145177FB68F008A583C /* HelpCopy.m */; };
 		1E92825C177FB690008A583C /* HelpModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E928147177FB68F008A583C /* HelpModel.m */; };
-		1E928267177FB690008A583C /* CalculatorEditableLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E92815F177FB68F008A583C /* CalculatorEditableLabelView.m */; };
-		1E928268177FB690008A583C /* CalculatorKeyPadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E928161177FB68F008A583C /* CalculatorKeyPadView.m */; };
-		1E928269177FB690008A583C /* CalculatorKeyPadView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E928162177FB68F008A583C /* CalculatorKeyPadView.xib */; };
-		1E92826A177FB690008A583C /* CalculatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E928164177FB68F008A583C /* CalculatorView.m */; };
 		1E92826B177FB690008A583C /* CCSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E928166177FB68F008A583C /* CCSearchBar.m */; };
 		1E92826C177FB690008A583C /* CCTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E928168177FB68F008A583C /* CCTableViewCell.m */; };
 		1E92826D177FB690008A583C /* TabBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E928169177FB68F008A583C /* TabBarView.xib */; };
-		1E928276177FB690008A583C /* KeypadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E92817B177FB68F008A583C /* KeypadViewController.m */; };
-		1E928277177FB690008A583C /* KeypadViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E92817C177FB68F008A583C /* KeypadViewController.xib */; };
 		1E928278177FB690008A583C /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E92817D177FB68F008A583C /* ViewController.xib */; };
 		1E92828C177FB690008A583C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9281A0177FB690008A583C /* ViewController.m */; };
 		1E92828E177FB690008A583C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E9281A4177FB690008A583C /* InfoPlist.strings */; };
@@ -454,6 +454,9 @@
 		1EBA5DD617E9425800E46FFF /* icon_rating_purple@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DC917E9425800E46FFF /* icon_rating_purple@2x.png */; };
 		1EBA5DD717E9425800E46FFF /* icon_poll_purple@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DCA17E9425800E46FFF /* icon_poll_purple@2x.png */; };
 		1EBA5DD817E9425800E46FFF /* icon_event_purple@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DCB17E9425800E46FFF /* icon_event_purple@2x.png */; };
+		1EC3DE22180F204C008E2D3F /* ContactTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EC3DE20180F204C008E2D3F /* ContactTableViewCell.m */; };
+		1EC3DE23180F204C008E2D3F /* ContactTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EC3DE21180F204C008E2D3F /* ContactTableViewCell.xib */; };
+		1EC3DE25180F275F008E2D3F /* modal_add_contact-group@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EC3DE24180F275F008E2D3F /* modal_add_contact-group@2x.png */; };
 		1EF463341783AE1C00D38DBB /* UserVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF463331783AE1C00D38DBB /* UserVO.m */; };
 		800F4C92170264A6001D2C50 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 800F4C91170264A6001D2C50 /* SenTestingKit.framework */; };
 		800F4C93170264A6001D2C50 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02B80A9F1518FA8600DE3F39 /* UIKit.framework */; };
@@ -484,6 +487,13 @@
 		1E0CAA441782586400A294C0 /* pattern_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pattern_background@2x.png"; sourceTree = "<group>"; };
 		1E0CAA451782586400A294C0 /* pattern_background-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pattern_background-568h@2x.png"; sourceTree = "<group>"; };
 		1E0CAA4B1782638200A294C0 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		1E0F8EF21810999E00B6C6AF /* settings_big_button_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_big_button_bg@2x.png"; sourceTree = "<group>"; };
+		1E0F8EF31810999E00B6C6AF /* settings_icon_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_icon_off@2x.png"; sourceTree = "<group>"; };
+		1E0F8EF41810999E00B6C6AF /* settings_icon_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_icon_on@2x.png"; sourceTree = "<group>"; };
+		1E0F8EF51810999E00B6C6AF /* settings_switch@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_switch@2x.png"; sourceTree = "<group>"; };
+		1E0F8EFA18109B9C00B6C6AF /* FancyToggle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FancyToggle.h; sourceTree = "<group>"; };
+		1E0F8EFB18109B9C00B6C6AF /* FancyToggle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FancyToggle.m; sourceTree = "<group>"; };
+		1E0F8EFC18109B9C00B6C6AF /* FancyToggle.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FancyToggle.xib; sourceTree = "<group>"; };
 		1E131D5217F60AE500749506 /* EditRSVPVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditRSVPVC.h; path = Application/Class/ViewController/iPhone/EditRSVPVC.h; sourceTree = SOURCE_ROOT; };
 		1E131D5317F60AE500749506 /* EditRSVPVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditRSVPVC.m; path = Application/Class/ViewController/iPhone/EditRSVPVC.m; sourceTree = SOURCE_ROOT; };
 		1E131D5417F60AE500749506 /* EditRSVPVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EditRSVPVC.xib; path = Application/Class/ViewController/iPhone/EditRSVPVC.xib; sourceTree = SOURCE_ROOT; };
@@ -847,21 +857,11 @@
 		1E928145177FB68F008A583C /* HelpCopy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpCopy.m; sourceTree = "<group>"; };
 		1E928146177FB68F008A583C /* HelpModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpModel.h; sourceTree = "<group>"; };
 		1E928147177FB68F008A583C /* HelpModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpModel.m; sourceTree = "<group>"; };
-		1E92815E177FB68F008A583C /* CalculatorEditableLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalculatorEditableLabelView.h; sourceTree = "<group>"; };
-		1E92815F177FB68F008A583C /* CalculatorEditableLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalculatorEditableLabelView.m; sourceTree = "<group>"; };
-		1E928160177FB68F008A583C /* CalculatorKeyPadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalculatorKeyPadView.h; sourceTree = "<group>"; };
-		1E928161177FB68F008A583C /* CalculatorKeyPadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalculatorKeyPadView.m; sourceTree = "<group>"; };
-		1E928162177FB68F008A583C /* CalculatorKeyPadView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CalculatorKeyPadView.xib; sourceTree = "<group>"; };
-		1E928163177FB68F008A583C /* CalculatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalculatorView.h; sourceTree = "<group>"; };
-		1E928164177FB68F008A583C /* CalculatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalculatorView.m; sourceTree = "<group>"; };
 		1E928165177FB68F008A583C /* CCSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCSearchBar.h; sourceTree = "<group>"; };
 		1E928166177FB68F008A583C /* CCSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCSearchBar.m; sourceTree = "<group>"; };
 		1E928167177FB68F008A583C /* CCTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCTableViewCell.h; sourceTree = "<group>"; };
 		1E928168177FB68F008A583C /* CCTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCTableViewCell.m; sourceTree = "<group>"; };
 		1E928169177FB68F008A583C /* TabBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TabBarView.xib; sourceTree = "<group>"; };
-		1E92817A177FB68F008A583C /* KeypadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeypadViewController.h; sourceTree = "<group>"; };
-		1E92817B177FB68F008A583C /* KeypadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeypadViewController.m; sourceTree = "<group>"; };
-		1E92817C177FB68F008A583C /* KeypadViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KeypadViewController.xib; sourceTree = "<group>"; };
 		1E92817D177FB68F008A583C /* ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ViewController.xib; path = ../View/ViewController.xib; sourceTree = "<group>"; };
 		1E92819F177FB690008A583C /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		1E9281A0177FB690008A583C /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
@@ -1051,6 +1051,10 @@
 		1EBA5DC917E9425800E46FFF /* icon_rating_purple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_rating_purple@2x.png"; sourceTree = "<group>"; };
 		1EBA5DCA17E9425800E46FFF /* icon_poll_purple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_poll_purple@2x.png"; sourceTree = "<group>"; };
 		1EBA5DCB17E9425800E46FFF /* icon_event_purple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_event_purple@2x.png"; sourceTree = "<group>"; };
+		1EC3DE1F180F204C008E2D3F /* ContactTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactTableViewCell.h; sourceTree = "<group>"; };
+		1EC3DE20180F204C008E2D3F /* ContactTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactTableViewCell.m; sourceTree = "<group>"; };
+		1EC3DE21180F204C008E2D3F /* ContactTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactTableViewCell.xib; sourceTree = "<group>"; };
+		1EC3DE24180F275F008E2D3F /* modal_add_contact-group@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "modal_add_contact-group@2x.png"; sourceTree = "<group>"; };
 		1EF463321783AE1C00D38DBB /* UserVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserVO.h; sourceTree = "<group>"; };
 		1EF463331783AE1C00D38DBB /* UserVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserVO.m; sourceTree = "<group>"; };
 		800F4C90170264A6001D2C50 /* Regroupd Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Regroupd Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1205,6 +1209,9 @@
 		1E1E25BF17F32F450079416C /* Widget */ = {
 			isa = PBXGroup;
 			children = (
+				1E0F8EFA18109B9C00B6C6AF /* FancyToggle.h */,
+				1E0F8EFB18109B9C00B6C6AF /* FancyToggle.m */,
+				1E0F8EFC18109B9C00B6C6AF /* FancyToggle.xib */,
 				1E3ACA4B1804E5B200A6E6B2 /* EmbedPollOption.h */,
 				1E3ACA4C1804E5B200A6E6B2 /* EmbedPollOption.m */,
 				1E3ACA4D1804E5B200A6E6B2 /* EmbedPollOption.xib */,
@@ -1444,6 +1451,11 @@
 		1E9280E9177FB68F008A583C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1E0F8EF21810999E00B6C6AF /* settings_big_button_bg@2x.png */,
+				1E0F8EF31810999E00B6C6AF /* settings_icon_off@2x.png */,
+				1E0F8EF41810999E00B6C6AF /* settings_icon_on@2x.png */,
+				1E0F8EF51810999E00B6C6AF /* settings_switch@2x.png */,
+				1EC3DE24180F275F008E2D3F /* modal_add_contact-group@2x.png */,
 				1EA0B45818087CFD004C4DDA /* icon_clock_aqua_38@2x.png */,
 				1EA0B45918087CFD004C4DDA /* icon_calendar_aqua_38@2x.png */,
 				1EA0B45A18087CFD004C4DDA /* btn_rsvp_no_off@2x.png */,
@@ -1771,16 +1783,12 @@
 				1E59F10C17FA5E8D00EE2902 /* Scroller */,
 				1E1E25BF17F32F450079416C /* Widget */,
 				1E0CAA3F178253CE00A294C0 /* UI */,
-				1E92815E177FB68F008A583C /* CalculatorEditableLabelView.h */,
-				1E92815F177FB68F008A583C /* CalculatorEditableLabelView.m */,
-				1E928160177FB68F008A583C /* CalculatorKeyPadView.h */,
 				1E59F12117FC873900EE2902 /* ChatTableViewCell.h */,
 				1E59F12217FC873900EE2902 /* ChatTableViewCell.m */,
 				1E59F12317FC873900EE2902 /* ChatTableViewCell.xib */,
-				1E928161177FB68F008A583C /* CalculatorKeyPadView.m */,
-				1E928162177FB68F008A583C /* CalculatorKeyPadView.xib */,
-				1E928163177FB68F008A583C /* CalculatorView.h */,
-				1E928164177FB68F008A583C /* CalculatorView.m */,
+				1EC3DE1F180F204C008E2D3F /* ContactTableViewCell.h */,
+				1EC3DE20180F204C008E2D3F /* ContactTableViewCell.m */,
+				1EC3DE21180F204C008E2D3F /* ContactTableViewCell.xib */,
 				1E928165177FB68F008A583C /* CCSearchBar.h */,
 				1E928166177FB68F008A583C /* CCSearchBar.m */,
 				1E928167177FB68F008A583C /* CCTableViewCell.h */,
@@ -1798,9 +1806,6 @@
 				1EB652A0179F6F7200BEC96C /* SignatureView.h */,
 				1EB652A1179F6F7200BEC96C /* SignatureView.m */,
 				1EB652A3179F6F9900BEC96C /* SignatureView.xib */,
-				1E92817A177FB68F008A583C /* KeypadViewController.h */,
-				1E92817B177FB68F008A583C /* KeypadViewController.m */,
-				1E92817C177FB68F008A583C /* KeypadViewController.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2237,11 +2242,9 @@
 				1E92824D177FB690008A583C /* trend_dot.png in Resources */,
 				1EA0B46718087CFD004C4DDA /* btn_rsvp_yes_off@2x.png in Resources */,
 				1E92824E177FB690008A583C /* trend_dot_dark.png in Resources */,
-				1E928269177FB690008A583C /* CalculatorKeyPadView.xib in Resources */,
 				1E7A6E2E1806EDED004B62CE /* icon_star_purple@2x.png in Resources */,
 				1E7A6E201806EA21004B62CE /* EmbedRatingWidget.xib in Resources */,
 				1E92826D177FB690008A583C /* TabBarView.xib in Resources */,
-				1E928277177FB690008A583C /* KeypadViewController.xib in Resources */,
 				1E928278177FB690008A583C /* ViewController.xib in Resources */,
 				1E92828E177FB690008A583C /* InfoPlist.strings in Resources */,
 				1E9282C4177FDB6C008A583C /* AppStartVC.xib in Resources */,
@@ -2253,6 +2256,7 @@
 				1EA0B46218087CFD004C4DDA /* btn_rsvp_no_off@2x.png in Resources */,
 				1E9282F2177FDCEB008A583C /* icon_profile.png in Resources */,
 				1E9282F3177FDCEB008A583C /* icon_recents.png in Resources */,
+				1E0F8EF81810999E00B6C6AF /* settings_icon_on@2x.png in Resources */,
 				1E4B78591803556C00A8812D /* icon_attach_cancel@2x.png in Resources */,
 				1E7A6E291806EDED004B62CE /* rating_meter_dot_aqua@2x.png in Resources */,
 				1E59F12017FC7AF300EE2902 /* NotoSans-Regular.ttf in Resources */,
@@ -2265,6 +2269,7 @@
 				1E9282FB177FDCEB008A583C /* tabbar_bg.png in Resources */,
 				1E9282FC177FDCEB008A583C /* tabbar_current_bg.png in Resources */,
 				1EA0B45318087602004C4DDA /* EditChatVC.xib in Resources */,
+				1EC3DE25180F275F008E2D3F /* modal_add_contact-group@2x.png in Resources */,
 				1E9282FD177FDCEB008A583C /* wood_bg-568h.png in Resources */,
 				1E9282FE177FDCEB008A583C /* wood_bg.png in Resources */,
 				1E9282FF177FDCEB008A583C /* opaque_bg@2x.png in Resources */,
@@ -2293,6 +2298,7 @@
 				1E0AEC6C1793B11E00710FDE /* icon_plus.png in Resources */,
 				1E0AEC6D1793B11E00710FDE /* icon_plus@2x.png in Resources */,
 				1EB6FC451794F81900CBF48D /* ProfileStart1VC.xib in Resources */,
+				1E0F8EF91810999E00B6C6AF /* settings_switch@2x.png in Resources */,
 				1EB6FC4D1794F81900CBF48D /* ProfileStart3VC.xib in Resources */,
 				1E4B78721803908200A8812D /* chat_attach_plus@2x.png in Resources */,
 				1EB6FC511794F81900CBF48D /* ProfileStart4VC.xib in Resources */,
@@ -2351,6 +2357,7 @@
 				1E2C7E9817E4FFCB0043E28D /* btn_yes_ltblue@2x.png in Resources */,
 				1E2C7E9917E4FFCB0043E28D /* btn_no_grey@2x.png in Resources */,
 				1E3ACA811806011000A6E6B2 /* typingMine.png in Resources */,
+				1E0F8EFE18109B9C00B6C6AF /* FancyToggle.xib in Resources */,
 				1E2C7E9A17E4FFCB0043E28D /* btn_chat_add_grey@2x.png in Resources */,
 				1E2C7E9B17E4FFCB0043E28D /* chat_footer_bg@2x.png in Resources */,
 				1E2C7E9C17E4FFCB0043E28D /* btn_aqua_bg_small@2x.png in Resources */,
@@ -2361,6 +2368,7 @@
 				1E59F11D17FC7AF200EE2902 /* NotoSans-Bold.ttf in Resources */,
 				1E7A6E1E1806EA21004B62CE /* EmbedRatingOption.xib in Resources */,
 				1E2C7EA117E4FFCB0043E28D /* dkblue_small2_btn_bg@2x.png in Resources */,
+				1E0F8EF71810999E00B6C6AF /* settings_icon_off@2x.png in Resources */,
 				1E2C7EA217E4FFCB0043E28D /* dkblue_btn_bg_slice@2x.png in Resources */,
 				1E2C7EA317E4FFCB0043E28D /* dkblue_med2_btn_bg@2x.png in Resources */,
 				1E2C7EA417E4FFCB0043E28D /* dkblue_med1_btn_bg@2x.png in Resources */,
@@ -2396,6 +2404,7 @@
 				1EBA5DD317E9425800E46FFF /* poll_checkbox@2x.png in Resources */,
 				1EBA5DD417E9425800E46FFF /* chat_survey_header_right@2px.png in Resources */,
 				1EBA5DD517E9425800E46FFF /* icon_refresh_purple@2x.png in Resources */,
+				1E0F8EF61810999E00B6C6AF /* settings_big_button_bg@2x.png in Resources */,
 				1EBA5DD617E9425800E46FFF /* icon_rating_purple@2x.png in Resources */,
 				1EBA5DD717E9425800E46FFF /* icon_poll_purple@2x.png in Resources */,
 				1EBA5DD817E9425800E46FFF /* icon_event_purple@2x.png in Resources */,
@@ -2407,6 +2416,7 @@
 				1E1E25D417F395EF0079416C /* icon_cancel@2x.png in Resources */,
 				1E4B784E1803535900A8812D /* icon_attach_poll@2x.png in Resources */,
 				1E1E25D517F395EF0079416C /* icon_pick_photo@2x.png in Resources */,
+				1EC3DE23180F204C008E2D3F /* ContactTableViewCell.xib in Resources */,
 				1E1E25D617F395EF0079416C /* icon_pick_camera@2x.png in Resources */,
 				1E88805A17F4E9A10070116C /* FormsHomeVC.xib in Resources */,
 				1E88805C17F4E9A10070116C /* EditRatingVC.xib in Resources */,
@@ -2504,6 +2514,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1EC3DE22180F204C008E2D3F /* ContactTableViewCell.m in Sources */,
 				1E1A9AA717FE5016008D81E6 /* NSBubbleData.m in Sources */,
 				1E0CAA43178253F100A294C0 /* BrandUITextField.m in Sources */,
 				1E928250177FB690008A583C /* AppDelegate.m in Sources */,
@@ -2517,18 +2528,14 @@
 				1E92825B177FB690008A583C /* HelpCopy.m in Sources */,
 				1E1A9A9417FE4A4C008D81E6 /* ChatVO.m in Sources */,
 				1E92825C177FB690008A583C /* HelpModel.m in Sources */,
-				1E928267177FB690008A583C /* CalculatorEditableLabelView.m in Sources */,
 				1E37C2A017FE2B8D0029D95F /* SelectedItemWidget.m in Sources */,
-				1E928268177FB690008A583C /* CalculatorKeyPadView.m in Sources */,
 				1E3ACA4E1804E5B200A6E6B2 /* EmbedPollOption.m in Sources */,
 				1E7A6E1D1806EA21004B62CE /* EmbedRatingOption.m in Sources */,
-				1E92826A177FB690008A583C /* CalculatorView.m in Sources */,
 				1E92826B177FB690008A583C /* CCSearchBar.m in Sources */,
 				1E92826C177FB690008A583C /* CCTableViewCell.m in Sources */,
 				1E1A9A9A17FE4D3D008D81E6 /* ChatManager.m in Sources */,
 				1E1A9AA917FE5016008D81E6 /* UIBubbleTableView.m in Sources */,
 				1E3ACA491804E49500A6E6B2 /* EmbedPollWidget.m in Sources */,
-				1E928276177FB690008A583C /* KeypadViewController.m in Sources */,
 				1E92828C177FB690008A583C /* ViewController.m in Sources */,
 				1E92828F177FB690008A583C /* PresentationViewController.m in Sources */,
 				1E928290177FB690008A583C /* SlideViewController.m in Sources */,
@@ -2568,6 +2575,7 @@
 				1E9282AE177FB690008A583C /* NSObject+SBJson.m in Sources */,
 				1E59F10B17FA544C00EE2902 /* PageScrollView.m in Sources */,
 				1E9282AF177FB690008A583C /* SBJsonParser.m in Sources */,
+				1E0F8EFD18109B9C00B6C6AF /* FancyToggle.m in Sources */,
 				1E9282B0177FB690008A583C /* SBJsonStreamParser.m in Sources */,
 				1E1A9AAA17FE5016008D81E6 /* UIBubbleTableViewCell.m in Sources */,
 				1E9282B1177FB690008A583C /* SBJsonStreamParserAccumulator.m in Sources */,

@@ -46,11 +46,6 @@
 #define kScrollViewTop 50
 #define kChatBarHeight 50
 
-#define kMinDrawerPull    -65
-#define kMaxDrawerPull    90
-#define kHeightDrawerPull    200
-
-
 #define kTagTopDrawer   13
 #define kTagSendButton   33
 #define kTagAttachModalBG 666
@@ -297,26 +292,26 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     return YES;
 }
 
-- (CGSize)determineSize:(NSString *)text constrainedToSize:(CGSize)size
-{
-    
-    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
-        CGRect frame = [text boundingRectWithSize:size
-                                          options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-                                       attributes:@{NSFontAttributeName:theFont}
-                                          context:nil];
-        return frame.size;
-    } else {
-        return [text sizeWithFont:theFont constrainedToSize:size];
-    }
-}
-- (CGFloat)textViewHeightForAttributedText:(NSAttributedString*)text andWidth:(CGFloat)width
-{
-    UITextView *calculationView = [[UITextView alloc] init];
-    [calculationView setAttributedText:text];
-    CGSize size = [calculationView sizeThatFits:CGSizeMake(width, FLT_MAX)];
-    return size.height;
-}
+//- (CGSize)determineSize:(NSString *)text constrainedToSize:(CGSize)size
+//{
+//    
+//    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+//        CGRect frame = [text boundingRectWithSize:size
+//                                          options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
+//                                       attributes:@{NSFontAttributeName:theFont}
+//                                          context:nil];
+//        return frame.size;
+//    } else {
+//        return [text sizeWithFont:theFont constrainedToSize:size];
+//    }
+//}
+//- (CGFloat)textViewHeightForAttributedText:(NSAttributedString*)text andWidth:(CGFloat)width
+//{
+//    UITextView *calculationView = [[UITextView alloc] init];
+//    [calculationView setAttributedText:text];
+//    CGSize size = [calculationView sizeThatFits:CGSizeMake(width, FLT_MAX)];
+//    return size.height;
+//}
 
 
 #pragma mark - Keyboard events
