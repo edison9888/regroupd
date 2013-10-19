@@ -81,7 +81,7 @@ SW5jbHVkZSBjaGF0IG1lc3NhZ2UgA2luIG5vdGlmaWNhdGlvbnM
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Qcz-if-xpA" customClass="BrandUIButton">
-                    <rect key="frame" x="15" y="291" width="290" height="40"/>
+                    <rect key="frame" x="15" y="290" width="290" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" title="Contact regroup'd" backgroundImage="settings_big_button_bg.png">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -92,7 +92,7 @@ SW5jbHVkZSBjaGF0IG1lc3NhZ2UgA2luIG5vdGlmaWNhdGlvbnM
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="zTI-Gg-JMK" customClass="BrandUIButton">
-                    <rect key="frame" x="14" y="339" width="290" height="40"/>
+                    <rect key="frame" x="14" y="345" width="290" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" title="Clear all conversations" backgroundImage="settings_big_button_bg.png">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

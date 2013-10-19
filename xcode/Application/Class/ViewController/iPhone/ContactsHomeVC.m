@@ -8,6 +8,9 @@
 
 #import "ContactsHomeVC.h"
 #import "ContactTableViewCell.h"
+#import "UIColor+ColorWithHex.h"
+
+#define kStatusAvailable @"Available"
 
 @interface ContactsHomeVC ()
 
@@ -55,10 +58,78 @@
 
 #pragma mark - UITableViewDataSource
 
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//    NSString *title = nil;
+//    switch (section) {
+//            
+//        case 0:
+//            title = @"Available Contacts";
+//            break;
+//
+//        case 1:
+//            title = @"Groups";
+//            break;
+//
+//        case 2:
+//            title = @"Invite to Regroupd";
+//            break;
+//            
+//        default:
+//            break;
+//    }
+//    return title;
+////    return _rowsInSection[section].count ? _sections[section] : nil;
+//}
+
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    NSString *title = nil;
+    switch (section) {
+            
+        case 0:
+            title = @"Available Contacts";
+            break;
+            
+        case 1:
+            title = @"Groups";
+            break;
+            
+        case 2:
+            title = @"Invite to Regroupd";
+            break;
+            
+        default:
+            break;
+    }
+    CGRect headerFrame = CGRectMake(0, 0, [DataModel shared].stageWidth, 30);
+    
+    UIView* customView = [[UIView alloc] initWithFrame:headerFrame];
+    if(section==0 || section==1  || section==2)
+    {
+        customView.backgroundColor = [UIColor colorWithHexValue:0xd6dde1];
+        
+        UILabel * headerLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        headerLabel.backgroundColor = [UIColor clearColor];
+        headerLabel.opaque = NO;
+        headerLabel.textColor = [UIColor blackColor];
+        [headerLabel setFont:[UIFont fontWithName:@"Raleway-Bold" size:14]];
+        headerLabel.frame = CGRectMake(10, 2, 300, 20);
+        headerLabel.textAlignment = NSTextAlignmentCenter;
+        headerLabel.text = title;
+        
+        [customView addSubview:headerLabel];
+    }
+    
+    
+    
+    return customView;
+}
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
     // Return the number of sections.
-    return 1;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
@@ -74,6 +145,7 @@
     static NSString *CellIdentifier = @"ContactTableCell";
     static NSString *CellNib = @"ContactTableViewCell";
     
+    // TODO: replace this with generic UITableViewCell for performance
     ContactTableViewCell *cell = (ContactTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     @try {
         
@@ -84,7 +156,8 @@
         }
         
         NSDictionary *rowData = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
-        cell.rowdata = rowData;
+        cell.titleLabel.text = (NSString *) [rowData objectForKey:@"name"];
+        cell.statusLabel.text = kStatusAvailable;
         
     } @catch (NSException * e) {
         NSLog(@"Exception: %@", e);
@@ -113,6 +186,8 @@
             NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
             
             [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
+            [_delegate gotoSlideWithName:@"ContactInfo"];
+            
             
 //            [DataModel shared].action = kActionEDIT;
 //            [_delegate gotoNextSlide];
@@ -189,6 +264,19 @@
 }
 
 - (IBAction)tapNewContactButton {
+    ABNewPersonViewController *newContactVC = [[ABNewPersonViewController alloc] init];
+    
+    newContactVC.newPersonViewDelegate = self;
+    
+    NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
+    
+    
+    UINavigationController *newNavigationController = [[UINavigationController alloc]
+                                                       initWithRootViewController:newContactVC];
+    
+    [self presentViewController:newNavigationController animated:YES completion:nil];
+    
     
 }
 - (IBAction)tapNewGroupButton {
@@ -264,4 +352,21 @@
     
     
 }
+
+#pragma mark ABNewPersonViewControllerDelegate methods
+
+// Dismisses the new-person view controller.
+
+- (void)newPersonViewController:(ABNewPersonViewController *)newPersonViewController didCompleteWithNewPerson:(ABRecordRef)person
+
+{
+    
+    [self dismissViewControllerAnimated:YES completion:NULL];
+
+    NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
+    
+}
+
+
 @end

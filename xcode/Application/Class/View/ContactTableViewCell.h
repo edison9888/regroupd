@@ -17,7 +17,4 @@
 @property (nonatomic, retain) IBOutlet UILabel *titleLabel;
 @property (nonatomic, retain) IBOutlet UILabel *statusLabel;
 
-@property (nonatomic, retain) NSDictionary *rowdata;
-
-
 @end

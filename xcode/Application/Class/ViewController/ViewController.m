@@ -28,7 +28,7 @@
     NSLog(@"%s", __FUNCTION__);
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.presentationModel = [PresentationModel presentationModelWithPlistFile:@"AppUI.plist"];
+        self.presentationModel = [PresentationModel presentationModelWithPlistFile:@"RegroupdUI.plist"];
     }
     return self;
 }

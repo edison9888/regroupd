@@ -10,8 +10,10 @@
 #import "SQLiteDB.h"
 #import "CCSearchBar.h"
 #import "ContactVO.h"
-
-@interface ContactsHomeVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
+#import <AddressBook/AddressBook.h>
+#import <AddressBookUI/AddressBookUI.h>
+//ABPersonViewControllerDelegate, 
+@interface ContactsHomeVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, ABNewPersonViewControllerDelegate> {
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *tableData;
@@ -33,8 +35,8 @@
 
 
 - (IBAction)tapAddButton;
-
 - (IBAction)tapEditButton;
+
 - (IBAction)tapNewContactButton;
 - (IBAction)tapNewGroupButton;
 - (IBAction)tapCancelButton;
