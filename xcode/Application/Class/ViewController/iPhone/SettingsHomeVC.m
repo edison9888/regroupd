@@ -35,6 +35,22 @@
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
     
     
+    self.toggle1.tag = 1;
+    self.toggle2.tag = 2;
+    self.toggle3.tag = 3;
+    
+    // Create and initialize a tap gesture
+    
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
+                                             
+                                             initWithTarget:self action:@selector(singleTap:)];
+    
+    // Specify that the gesture must be a single tap
+    
+    tapRecognizer.numberOfTapsRequired = 1;
+    
+    [self.view addGestureRecognizer:tapRecognizer];
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -44,18 +60,51 @@
 }
 
 
-#pragma mark - Action handlers
 
-- (IBAction)tapAddButton
+
+#pragma mark - Tap Gestures
+
+
+-(void)singleTap:(UITapGestureRecognizer*)sender
 {
-    //    BOOL isOk = YES;
-    [DataModel shared].action = kActionADD;
-    [_delegate gotoNextSlide];
+    NSLog(@"%s", __FUNCTION__);
+    if (UIGestureRecognizerStateEnded == sender.state)
+    {
+        UIView* view = sender.view;
+        CGPoint loc = [sender locationInView:view];
+        UIView* subview = [view hitTest:loc withEvent:nil];
+        NSLog(@"tag = %i", subview.tag);
+                
+        switch (subview.tag) {
+            case 1:
+                [self.toggle1 toggle];
+                break;
+            case 2:
+                [self.toggle2 toggle];
+                break;
+            case 3:
+                [self.toggle3 toggle];
+                break;
+                
+        }
+//        CGPoint loc = [sender locationInView:view];
+//        UIView* subview = [view hitTest:loc withEvent:nil];
+//        CGPoint subloc = [sender locationInView:subview];
+//        NSLog(@"hit tag = %i at point %f / %f", subview.tag, subloc.x, subloc.y);
+    }
+
+}
+
+#pragma mark - IBActions 
+- (IBAction)tapClearAllButton {
+    
+    
+    
+}
+- (IBAction)tapContactButton {
+    
+    
     
 }
 
-- (IBAction)tapEditButton
-{
-    
-}
 @end

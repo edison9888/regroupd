@@ -7,16 +7,20 @@
 //
 
 #import "SlideViewController.h"
-#import "SQLiteDB.h"
-#import "CCSearchBar.h"
-#import "CCTableViewCell.h"
-#import "ContactVO.h"
+#import "FancyToggle.h"
 
 @interface SettingsHomeVC : SlideViewController {
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *tableData;
 }
+
+@property (nonatomic, strong) IBOutlet FancyToggle *toggle1;
+@property (nonatomic, strong) IBOutlet FancyToggle *toggle2;
+@property (nonatomic, strong) IBOutlet FancyToggle *toggle3;
+
+- (IBAction)tapClearAllButton;
+- (IBAction)tapContactButton;
 
 
 @end

@@ -11,14 +11,18 @@
 
 @interface FancyToggle : UIView {
     uint bgColorSelected;
-    UIImage *onImage;
-    UIImage *offImage;
     
     UIView *_theView;
 }
-@property (nonatomic, strong) IBOutlet BrandUILabel *ckLabel;
-@property (nonatomic, strong) IBOutlet UIImageView *ckIcon;
 
+
+@property BOOL isOn;
+
+@property (nonatomic, strong) IBOutlet UIImageView *onIcon;
+@property (nonatomic, strong) IBOutlet UIImageView *offIcon;
+@property (nonatomic, strong) IBOutlet UIImageView *switchIcon;
+
+- (void) toggle;
 - (void) selected;
 - (void) unselected;
 

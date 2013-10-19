@@ -10,6 +10,11 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor+ColorWithHex.h"
 
+#define kLeftPositionY  2
+#define kRightPositionY 50
+#define kOnColor    0x28cfea
+#define kOffColor   0x1788b2
+
 #define kCheckboxOff @"poll_checkbox"
 #define kCheckboxOn @"poll_checkbox_on"
 
@@ -39,42 +44,58 @@
     if ((self = [super init])) {
         _theView = [[[NSBundle mainBundle] loadNibNamed:@"FancyToggle" owner:self options:nil] objectAtIndex:0];
         
-        [self.layer setCornerRadius:5.0f];
+        [self.layer setCornerRadius:3.0f];
         [self.layer setMasksToBounds:YES];
         [self.layer setBorderWidth:0.0f];
 //        [self.layer setBorderColor:[[UIColor grayColor] CGColor]];
         [self addSubview:_theView];
         
         bgColorSelected = _theView.backgroundColor.colorCode;
+        [self selected];
 
-        onImage = [UIImage imageNamed:kCheckboxOn];
-        offImage = [UIImage imageNamed:kCheckboxOff];
     }
     
     return self;
 }
 
-- (void) selected {
-//    self.backgroundColor = [UIColor colorWithHexValue:bgColorSelected andAlpha:1.0];
-    _theView.backgroundColor = [UIColor colorWithHexValue:bgColorSelected andAlpha:1.0];
-    self.layer.backgroundColor = [UIColor colorWithHexValue:bgColorSelected andAlpha:1.0].CGColor;
+- (void) toggle {
+    if (self.isOn) {
+        [self unselected];
+    } else {
+        [self selected];
+    }
+}
 
-    self.ckIcon.image = onImage;
+- (void) selected {
+    self.isOn = YES;
+    
+    _theView.backgroundColor = [UIColor colorWithHexValue:kOnColor];
+//    self.layer.backgroundColor = [UIColor colorWithHexValue:kOnColor].CGColor;
+    self.offIcon.hidden = YES;
+    self.onIcon.hidden = NO;
+    
+    [UIView animateWithDuration:0.1f animations:^{
+
+        CGRect switchFrame = self.switchIcon.frame;
+        switchFrame.origin.x = kLeftPositionY;
+        self.switchIcon.frame = switchFrame;
+    }];
+    
 }
 - (void) unselected {
-    NSLog(@"%s", __FUNCTION__);
-    _theView.backgroundColor = [UIColor clearColor];
-    self.layer.backgroundColor = [UIColor clearColor].CGColor;
+    self.isOn = NO;
+    
+    _theView.backgroundColor = [UIColor colorWithHexValue:kOffColor];
+//    self.layer.backgroundColor = [UIColor colorWithHexValue:kOffColor].CGColor;
+    self.offIcon.hidden = NO;
+    self.onIcon.hidden = YES;
 
-    self.ckIcon.image = offImage;
-
-}
-
-- (void)setTag:(NSInteger)theTag
-{
-    NSLog(@"set tag=%i", theTag);
-//    [super setTag:theTag];
-    _theView.tag = theTag;
+    [UIView animateWithDuration:0.1f animations:^{
+        
+        CGRect switchFrame = self.switchIcon.frame;
+        switchFrame.origin.x = kRightPositionY;
+        self.switchIcon.frame = switchFrame;
+    }];
 }
 
 

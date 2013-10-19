@@ -7,34 +7,38 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FancyToggle">
             <connections>
-                <outlet property="ckIcon" destination="20" id="22"/>
-                <outlet property="ckLabel" destination="19" id="21"/>
+                <outlet property="offIcon" destination="vsM-Qb-QhM" id="ypF-07-hfR"/>
+                <outlet property="onIcon" destination="eoD-HX-Yf9" id="h2E-js-3uM"/>
+                <outlet property="switchIcon" destination="20" id="Bns-8L-kYL"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view autoresizesSubviews="NO" opaque="NO" contentMode="TopLeft" id="18">
-            <rect key="frame" x="0.0" y="0.0" width="120" height="36"/>
+        <view autoresizesSubviews="NO" opaque="NO" userInteractionEnabled="NO" tag="11" contentMode="TopLeft" id="18">
+            <rect key="frame" x="0.0" y="0.0" width="93" height="26"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Public" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="19" customClass="BrandUILabel">
-                    <rect key="frame" x="45" y="4" width="180" height="28"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="settings_icon_off.png" id="vsM-Qb-QhM">
+                    <rect key="frame" x="10" y="4" width="17" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="16"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <imageView userInteractionEnabled="NO" tag="99" contentMode="scaleToFill" image="poll_checkbox.png" id="20">
-                    <rect key="frame" x="10" y="5" width="27" height="27"/>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="settings_icon_on.png" id="eoD-HX-Yf9">
+                    <rect key="frame" x="65" y="4" width="17" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="settings_switch.png" id="20">
+                    <rect key="frame" x="2" y="2" width="41" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" red="0.58823529409999997" green="0.38823529410000002" blue="0.69411764710000001" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.15686274509803921" green="0.81176470588235294" blue="0.91764705882352937" alpha="1" colorSpace="calibratedRGB"/>
             <accessibility key="accessibilityConfiguration">
                 <accessibilityTraits key="traits" none="YES" button="YES"/>
             </accessibility>
         </view>
     </objects>
     <resources>
-        <image name="poll_checkbox.png" width="13" height="13"/>
+        <image name="settings_icon_off.png" width="17" height="17"/>
+        <image name="settings_icon_on.png" width="17" height="17"/>
+        <image name="settings_switch.png" width="40" height="21"/>
     </resources>
 </document>
