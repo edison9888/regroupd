@@ -16,7 +16,7 @@
 - (UserVO *) lookupDefaultUser {
     // get first user from database
     NSString *sql = nil;
-    sql = @"select * from user limit 1";
+    sql = @"select * from user where user_key is not null limit 1";
     
     FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
     NSDictionary *dict;
@@ -34,51 +34,63 @@
 - (void) createUser:(UserVO *) user {
     NSLog(@"%s", __FUNCTION__);
     
-//    [user dumpInfo];
+    //    [user dumpInfo];
     
-    [[SQLiteDB sharedQueue] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        NSString *sql;
-        BOOL success;
-        NSDate *now = [NSDate date];
-        NSString *dt = [DateTimeUtils dbDateTimeStampFromDate:now];
-        NSLog(@"dt %@", dt);
+    NSString *sql;
+    BOOL success;
+    NSDate *now = [NSDate date];
+    NSString *dt = [DateTimeUtils dbDateTimeStampFromDate:now];
+    NSLog(@"dt %@", dt);
+    
+    /*
+     CREATE TABLE IF NOT EXISTS user (
+     user_key TEXT,
+     username TEXT,
+     password TEXT,
+     system_id TEXT,
+     facebook_id TEXT,
+     first_name TEXT,
+     last_name TEXT,
+     phone TEXT,
+     email TEXT,
+     imagefile TEXT,
+     type INT DEFAULT 1,
+     status INT DEFAULT 0,
+     created TEXT,
+     updated TEXT
+     );
+     
+     */
+    sql = @"INSERT into user (user_key, username, password, first_name, last_name, phone, email, imagefile, type, status, created, updated) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    success = [[SQLiteDB sharedConnection] executeUpdate:sql,
+               user.user_key,
+               user.username,
+               user.password,
+               user.first_name,
+               user.last_name,
+               user.phone,
+               user.email,
+               user.imagefile,
+               [NSNumber numberWithInt:1],
+               [NSNumber numberWithInt:0],
+               dt,
+               dt
+               ];
+    
+    if (!success) {
+        NSLog(@"################################### SQL Insert failed ###################################");
+    } else {
+        NSLog(@"=================================== SQL INSERT SUCCESS ===================================");
         
-        sql = @"INSERT into user (firstname, middlename, lastname, company, title, phone, fax, address, city, state, zip, password, hint, email, status, created, updated) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-        success = [db executeUpdate:sql,
-                   user.firstname,
-                   user.middlename,
-                   user.lastname,
-                   user.company,
-                   user.title,
-                   user.phone,
-                   user.fax,
-                   user.address,
-                   user.city,
-                   user.state,
-                   user.zip,
-                   user.password,
-                   user.hint,
-                   user.email,
-                   [NSNumber numberWithInt:1],
-                   dt,
-                   dt
-                   ];
+        sql = @"SELECT last_insert_rowid()";
         
-        if (!success) {
-            NSLog(@"################################### SQL Insert failed ###################################");
-        } else {
-            NSLog(@"=================================== SQL INSERT SUCCESS ===================================");
-            
-            sql = @"SELECT last_insert_rowid()";
-            
-            FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-
-            if ([rs next]) {
-                int lastId = [rs intForColumnIndex:0];
-                NSLog(@"lastId = %i", lastId);
-            }
+        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+        
+        if ([rs next]) {
+            int lastId = [rs intForColumnIndex:0];
+            NSLog(@"lastId = %i", lastId);
         }
-    }];
+    }
 }
 
 /*
@@ -113,6 +125,39 @@
     }
     @catch (NSException *exception) {
         return nil;
-    }    
+    }
 }
+
+#pragma mark - User API
+// API functions
+- (UserVO *) apiLoadUser:(NSString *)objectId {
+    
+    return nil;
+}
+- (NSString *) apiSaveUser:(UserVO *) user {
+
+    PFUser *u = [PFUser currentUser];
+    u.username = user.username;
+    u.password = user.password;
+    if (user.email != nil) {
+        u.email = user.email;
+    }
+    [u setObject:user.phone forKey:@"phone"];
+    BOOL success = [u signUp];
+    if (success) {
+        return u.objectId;
+        
+    } else {
+        NSLog(@"apiSaveUser failed");
+        return nil;
+    }
+    
+}
+- (NSMutableArray *) apiListUsers:(NSString *)userId {
+    return nil;
+}
+- (void) apiDeleteUser:(UserVO *)user {
+}
+
+
 @end

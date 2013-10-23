@@ -47,7 +47,10 @@
     img = [UIImage imageNamed:@"anonymous_user"];
     self.roundPic.image = img;
     
-    self.nameLabel.text = [DataModel shared].contact.name;
+    NSString *nameFormat = @"%@ %@";
+    self.nameLabel.text = [NSString stringWithFormat:nameFormat,
+                           [DataModel shared].contact.first_name,
+                           [DataModel shared].contact.last_name];
     
 
 }

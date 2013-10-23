@@ -8,6 +8,11 @@
 
 #import "EditGroupVC.h"
 #import "DataModel.h"
+#import "ContactManager.h"
+#import "UIColor+ColorWithHex.h"
+#import <QuartzCore/QuartzCore.h>
+
+#define kSearchViewBGColor 0xCACFD0
 
 @interface EditGroupVC ()
 
@@ -17,6 +22,7 @@
 
 @synthesize tableData;
 @synthesize ccSearchBar;
+@synthesize navTitle;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -37,19 +43,35 @@
     
     // Do any additional setup after loading the view from its nib.
     
+    if ([[DataModel shared].action isEqualToString:kActionADD]) {
+        self.navTitle.text = @"New Group";
+        self.groupName.text = @"new group";
+        
+    } else {
+        self.navTitle.text = @"Edit Group";
+    }
+    
     xpos = 3;
     ypos = 3;
     
     contactsMap = [[NSMutableDictionary alloc] init];
     contactIds = [[NSMutableArray alloc] init];
     
-    CGRect searchFrame = CGRectMake(5, 150, 310, 32);
+    CGRect searchFrame = CGRectMake(5,5,300,36);
+    
     ccSearchBar = [[CCSearchBar alloc] initWithFrame:searchFrame];
     ccSearchBar.delegate = self;
-    [self.view addSubview:ccSearchBar];
-
+    [self.searchView addSubview:ccSearchBar];
+    [self.searchView.layer setCornerRadius:3.0];
+    self.searchView.backgroundColor = [UIColor clearColor];
+    
+    
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
+    self.theTableView.hidden = YES;
+    [self.theTableView setSeparatorColor:[UIColor grayColor]];
+    
+    
     self.theTableView.backgroundColor = [UIColor clearColor];
     
     self.tableData =[[NSMutableArray alloc]init];
@@ -80,9 +102,15 @@
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    
-    self.theTableView.hidden = NO;
-    [self performSearch:searchText];
+
+    if (searchText.length > 0) {
+        self.searchView.backgroundColor = [UIColor colorWithHexValue:kSearchViewBGColor];
+        self.theTableView.hidden = NO;
+        [self performSearch:searchText];
+    } else {
+        self.searchView.backgroundColor = [UIColor clearColor];
+        self.theTableView.hidden = YES;
+    }
     
 }
 
@@ -122,23 +150,22 @@
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"%s", __FUNCTION__);
-    // http://stackoverflow.com/questions/413993/loading-a-reusable-uitableviewcell-from-a-nib
-    
-    static NSString *CellIdentifier = @"CCTableCell";
-    static NSString *CellNib = @"CCTableViewCell";
-    
-    CCTableViewCell *cell = (CCTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    static NSString *CellIdentifier = @"ContactTVC";
+    UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     @try {
         
         if (cell == nil) {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:CellNib owner:self options:nil];
-            cell = (CCTableViewCell *)[nib objectAtIndex:0];
-            
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            cell.frame = CGRectMake(0, 0, 300, 36);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell.textLabel setFont:[UIFont fontWithName:@"Raleway-Regular" size:13]];
+            cell.textLabel.textColor = [UIColor colorWithHexValue:0x111111];
+            cell.textLabel.textAlignment = NSTextAlignmentLeft;
+            cell.backgroundColor = [UIColor clearColor];
         }
         
         NSDictionary *rowData = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
-        cell.rowdata = rowData;
+        cell.textLabel.text = [NSString stringWithFormat:kFullNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
         
     } @catch (NSException * e) {
         NSLog(@"Exception: %@", e);
@@ -150,7 +177,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 54;
+    return 36;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -204,24 +231,28 @@
     NSLog(@"%s: %@", __FUNCTION__, searchText);
     
     if (searchText.length > 0) {
-        NSString *sqlTemplate = @"select * from contact where name like '%%%@%%' limit 20";
+        NSString *sqlTemplate = @"select * from contact where first_name like '%%%@%%' or last_name like '%%%@%%' limit 20";
         
         isLoading = YES;
         
-        NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
+        NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText, searchText];
+        NSLog(@"sql=%@", sql);
+        
         
         FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
         [tableData removeAllObjects];
         
         while ([rs next]) {
-            [tableData addObject:[rs resultDictionary]];
+            NSDictionary *dict =[rs resultDictionary];
+            
+            [tableData addObject:dict];
+            NSLog(@"Result %@", [dict objectForKey:@"first_name"]);
         }
         isLoading = NO;
-        
         [self.theTableView reloadData];
         
     } else {
-        NSString *sqlTemplate = @"select * from contact order by name";
+        NSString *sqlTemplate = @"select * from contact order by last_name";
         
         isLoading = YES;
         
@@ -232,7 +263,6 @@
         
         while ([rs next]) {
             NSDictionary *dict =[rs resultDictionary];
-            NSLog(@"Result %@", [dict objectForKey:@"name"]);
             
             [tableData addObject:dict];
         }
@@ -240,7 +270,6 @@
         
         [self.theTableView reloadData];
     }
-    
     
 }
 
@@ -256,12 +285,28 @@
         isOK = NO;
     }
     if (isOK) {
-        ChatVO *chat = [[ChatVO alloc] init];
+        
+        // TODO: save to group table
+        ContactManager *contactSvc = [[ContactManager alloc]init];
+        GroupVO *group = [[GroupVO alloc] init];
+        group.name = self.groupName.text;
         
         
-        chat.name = @"Test Chat";
         
-        [_delegate gotoSlideWithName:@"Chat"];
+        int groupId = [contactSvc saveGroup:group];
+        
+        NSLog(@"New groupId %i", groupId);
+        
+        for (NSNumber*  contactId in contactIds) {
+            
+            BOOL exists = [contactSvc checkGroupContact:groupId contactId:contactId.intValue];
+            
+            if (!exists) {
+                [contactSvc addGroupContact:groupId contactId:contactId.intValue];
+            }
+        }
+        
+        [_delegate gotoSlideWithName:@"GroupsHome"];
     } else {
         [[[UIAlertView alloc] initWithTitle:@"Try again" message:@"Please add at least one contact" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 

@@ -11,6 +11,7 @@
 #import "UIColor+ColorWithHex.h"
 
 #define kStatusAvailable @"Available"
+#define kNameFormat @"%@ %@"
 
 @interface ContactsHomeVC ()
 
@@ -156,7 +157,9 @@
         }
         
         NSDictionary *rowData = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
-        cell.titleLabel.text = (NSString *) [rowData objectForKey:@"name"];
+        
+        
+        cell.titleLabel.text = [NSString stringWithFormat:kNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
         cell.statusLabel.text = kStatusAvailable;
         
     } @catch (NSException * e) {
@@ -206,7 +209,7 @@
     NSLog(@"%s: %@", __FUNCTION__, searchText);
     
     if (searchText.length > 0) {
-        NSString *sqlTemplate = @"select * from contact where name like '%%%@%%' limit 20";
+        NSString *sqlTemplate = @"select * from contact where first_name like '%%%@%%' or last_name like '%%%@%%' limit 20";
         
         isLoading = YES;
         
@@ -223,7 +226,7 @@
         [self.theTableView reloadData];
         
     } else {
-        NSString *sqlTemplate = @"select * from contact order by name";
+        NSString *sqlTemplate = @"select * from contact order by last_name";
         
         isLoading = YES;
         
@@ -280,7 +283,8 @@
     
 }
 - (IBAction)tapNewGroupButton {
-    
+    [DataModel shared].action = kActionADD;
+    [_delegate gotoSlideWithName:@"EditGroup" returnPath:@"ContactsHome"];
 }
 - (IBAction)tapCancelButton {
     
@@ -360,13 +364,105 @@
 - (void)newPersonViewController:(ABNewPersonViewController *)newPersonViewController didCompleteWithNewPerson:(ABRecordRef)person
 
 {
-    
+    NSLog(@"%s", __FUNCTION__);
+    [self hideModal];
     [self dismissViewControllerAnimated:YES completion:NULL];
 
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
+
+    
+    @try {
+        ContactVO *contact = [self readContactFromABPerson:person];
+        
+        if (contactSvc == nil) {
+            contactSvc = [[ContactManager alloc] init];
+        }
+        [contactSvc saveContact:contact];
+        
+    }
+    @catch (NSException *exception) {
+        NSLog(@"#####ERROR###### %@", exception);
+//
+    }
+    [self.theTableView reloadData];
     
 }
 
+
+- (ContactVO *) readContactFromABPerson:(ABRecordRef)person
+{
+    ContactVO* c = [[ContactVO alloc] init];
+    
+    ABRecordID abRecordID = ABRecordGetRecordID(person);
+    NSNumber *recordId = [NSNumber numberWithInt:abRecordID];
+    
+    NSLog(@"RecordId = %@", recordId);
+    
+    
+    CFErrorRef err;
+    ABAddressBookRef ab = ABAddressBookCreateWithOptions(NULL, &err);
+    __block BOOL accessGranted = NO;
+    
+    if (ABAddressBookRequestAccessWithCompletion != NULL) { // we're on iOS 6
+        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+        ABAddressBookRequestAccessWithCompletion(ab, ^(bool granted, CFErrorRef error) {
+            accessGranted = granted;
+            dispatch_semaphore_signal(sema);
+        });
+        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+        //        dispatch_release(sema);
+    }
+    else { // we're on iOS 5 or older
+        accessGranted = YES;
+    }
+    
+    if (accessGranted)
+    {
+            ABMultiValueRef emails = ABRecordCopyValue(person, kABPersonEmailProperty);
+            ABMultiValueRef phones = ABRecordCopyValue(person, kABPersonPhoneProperty);
+        
+//            ABMultiValueRef profiles = ABRecordCopyValue(person, kABPersonSocialProfileProperty);
+//            CFIndex multiCount = ABMultiValueGetCount(profiles);
+//            for (CFIndex i=0; i<multiCount; i++) {
+//                NSDictionary* profile = ( NSDictionary*)CFBridgingRelease(ABMultiValueCopyValueAtIndex(profiles, i));
+//                NSLog(@"Profile: %@", profile);
+//                c.facebook_id=[profile objectForKey:@"identifier"];
+//            }
+//            CFRelease(profiles);
+            NSString *phoneNumber;
+            if(phones)
+            {
+                CFStringRef phoneNumberRef = ABMultiValueCopyValueAtIndex(phones, 0);
+                CFRelease(phones);
+                phoneNumber = (__bridge NSString *)phoneNumberRef;
+                c.phone=phoneNumber;
+            }
+            if (ABPersonHasImageData(person))
+            {
+                UIImage *image = [UIImage imageWithData:(NSData *)CFBridgingRelease(ABPersonCopyImageData(person))];
+                if(image) {
+//                    p.imagen=image;
+                }
+            } else  {
+//                p.imagen=[UIImage imageNamed:@"profile-default-sm.png"];
+            }
+            CFStringRef email = ABMultiValueCopyValueAtIndex(emails, 0);
+            CFStringRef firstName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
+            CFStringRef lastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
+            c.first_name = (__bridge NSString *)firstName;
+            c.last_name = (__bridge NSString *)lastName;
+            
+            if (firstName)
+                CFRelease(firstName);
+            if (lastName)
+                CFRelease(lastName);
+            if(email)
+                CFRelease(email);
+            CFRelease(emails);
+    }
+    CFRelease(ab);
+    return c;
+}
 
 @end

@@ -30,7 +30,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    // ######### TEMP DEBUG #############
+    self.value1.text = [DataModel shared].user.username;
+    self.value2.text = [DataModel shared].user.password;
+    self.value3.text = [DataModel shared].user.user_key;
     
+    // ######### TEMP DEBUG #############
+
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
     

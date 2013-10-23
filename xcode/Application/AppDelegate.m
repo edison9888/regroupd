@@ -6,6 +6,7 @@
 #import "AppDelegate.h"
 #import "ViewController.h"
 #import "SQLiteDB.h"
+#import <Parse/Parse.h>
 
 @implementation AppDelegate
 
@@ -16,7 +17,30 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-
+    
+//  #################### PARSE SETUP #####################
+//    https://www.parse.com/apps/quickstart#ios/native/existing
+    
+    [Parse setApplicationId:@"0X6bOlKkUa5eJHdqxw25nfkotophFkPb8Pw1ukZK"
+                  clientKey:@"etSuT6uoistqip5L1somaXNRz63Y3Rk0CHxIEMkd"];
+    
+    [PFUser enableAutomaticUser];
+    
+    PFACL *defaultACL = [PFACL ACL];
+    
+    // If you would like all objects to be private by default, remove this line.
+    [defaultACL setPublicReadAccess:YES];
+    
+    [PFACL setDefaultACL:defaultACL withAccessForCurrentUser:YES];
+    
+    
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
+     UIRemoteNotificationTypeAlert|
+     UIRemoteNotificationTypeSound];
+    
+//  #################### /PARSE SETUP #####################
+    
     [DataModel shared].needsLookup = YES;
 
     UIImage *image = [UIImage imageNamed:@"tabbar_bg"];

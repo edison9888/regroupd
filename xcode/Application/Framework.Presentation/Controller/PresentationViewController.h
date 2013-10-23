@@ -8,7 +8,6 @@
 #import "SlideViewController.h"
 #import "PresentationModel.h"
 #import "PresentationNotifications.h"
-#import "FoundationMovieView.h"
 
 typedef struct {
 	NSInteger	iCurrentSlide;
@@ -18,13 +17,12 @@ typedef struct {
 
 @class PresentationAnimationSequence;
 
-@interface PresentationViewController : SlideViewController <SlideViewControllerDelegate, FoundationMovieViewDelegate> {
+@interface PresentationViewController : SlideViewController <SlideViewControllerDelegate> {
 	PresentationModel			*_presentationModel;
 	PresentationSlideCursor		_slideCursor;
 	BOOL						_ignoreNextCursor;
 	
 	// support for fullscreen movies
-    FoundationMovieView			*_movieView;
 	BOOL						_forceLandscapeMovie;
 	BOOL						_loopMovie;
 	CGAffineTransform			_originalTopTransform;
@@ -50,19 +48,20 @@ typedef struct {
 - (void)gotoSlide:(SlideModel*)slide;
 - (void)gotoSlideWithName:(NSString*)name;
 - (void)gotoSlideWithName:(NSString *)name andOverrideTransition:(PresentationTransitionFlags)transition;
+- (void)gotoSlideWithName:(NSString*)name returnPath:(NSString *)backPath;
+
 - (void)gotoSlideAtIndex:(NSUInteger)index;
 - (void)gotoNextSlide;
 - (void)gotoPreviousSlide;
 - (void)gotoFirstSlide;
 - (void)gotoLastSlide;
+- (void)goBack;
+- (void)setBackPath:(NSString *)_path;
 
 - (void)transitionComplete;
 
 - (BOOL)dismissConcurrentSlideWithName:(NSString*)name;
 - (void)dismissAllConcurrentSlides;
-
-- (void)presentFullscreenMovieWithName:(NSString*)name landscapeOnly:(BOOL)landscape loopMovie:(BOOL)loop;
-- (void)dismissFullscreenMovie;
 
 /**
  * Runs the animation sequence when transitioning between slides. This method should not be called directly.

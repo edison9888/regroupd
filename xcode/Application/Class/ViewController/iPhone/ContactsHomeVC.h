@@ -10,6 +10,8 @@
 #import "SQLiteDB.h"
 #import "CCSearchBar.h"
 #import "ContactVO.h"
+#import "ContactManager.h"
+
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 //ABPersonViewControllerDelegate, 
@@ -18,7 +20,8 @@
     int selectedIndex;
     NSMutableArray *tableData;
     UIView *bgLayer;
-
+    ContactManager *contactSvc;
+    
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;

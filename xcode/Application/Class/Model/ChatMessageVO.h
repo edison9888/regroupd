@@ -23,4 +23,5 @@
 
 + (ChatMessageVO *) readFromDictionary:(NSDictionary *) dict;
 
++ (ChatMessageVO *) readFromPFObject:(PFObject *)data;
 @end

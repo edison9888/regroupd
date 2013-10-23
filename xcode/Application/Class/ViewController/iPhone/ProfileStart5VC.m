@@ -49,7 +49,7 @@
 - (IBAction)tapNoButton
 {
     UserVO *user = [[UserVO alloc] init];
-    user.firstname = @"default";
+    user.first_name = @"default";
     [userSvc createUser:user];
     [[[UIAlertView alloc] initWithTitle:@"Thank you" message:@"Sign up complete." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 
@@ -60,15 +60,32 @@
 
 - (IBAction)tapYesButton
 {
-    UserVO *user = [[UserVO alloc] init];
-    user.firstname = @"default";
-
-    [userSvc createUser:user];
+    UserVO *user = [DataModel shared].user;
+    user.first_name = @"default";
     
-    [[[UIAlertView alloc] initWithTitle:@"Thank you" message:@"Sign up complete." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    NSString *objectId = [userSvc apiSaveUser:user];
+    if (objectId != nil) {
+        NSLog(@"Saved user %@, with objectId %@", user.username, objectId);
+        user.user_key = objectId;
+        user.system_id = objectId;
+        [userSvc createUser:user];
+        [DataModel shared].user = user;
+        
+        [[[UIAlertView alloc] initWithTitle:@"Thank you" message:@"Sign up complete." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 
-    [DataModel shared].navIndex = 4;
-    [_delegate gotoSlideWithName:@"FormsHome" andOverrideTransition:kPresentationTransitionDown];
+    } else {
+        NSLog(@"objectId is null.");
+    }
+
 }
+
+#pragma mark - UIAlert view
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    
+    [DataModel shared].navIndex = 4;
+    [_delegate gotoSlideWithName:@"FormsHome"];
+    
+}
+
 
 @end

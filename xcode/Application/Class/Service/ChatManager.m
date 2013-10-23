@@ -9,8 +9,10 @@
 #import "ChatManager.h"
 #import "SQLiteDB.h"
 #import "DateTimeUtils.h"
+#import "DataModel.h"
 
 @implementation ChatManager
+
 
 - (ChatVO *) loadChat:(int)_chatId {
     return [self loadChat:_chatId fetchAll:NO];
@@ -207,4 +209,125 @@
 - (NSMutableArray *) listChatMessages:(int)type {
     return nil;
 }
+
+#pragma mark - Find By System ID
+
+// Find ChatVO by system_id
+- (ChatVO *) findChatBySystemId:(NSString *)objectId {
+    
+    
+    NSString *sql = nil;
+    sql = @"select * from chat where system_id=?";
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql, objectId];
+    
+    NSDictionary *dict;
+    if ([rs next]) {
+        dict = [rs resultDictionary];
+    }
+    
+    if (dict != nil) {
+        ChatVO *result = [ChatVO readFromDictionary:dict];
+        return result;
+    }
+    return nil;
+    
+}
+- (ChatMessageVO *) findChatMessageBySystemId:(NSString *)objectId {
+    NSString *sql = nil;
+    sql = @"select * from chat_message where system_id=?";
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql, objectId];
+    
+    NSDictionary *dict;
+    if ([rs next]) {
+        dict = [rs resultDictionary];
+    }
+    
+    if (dict != nil) {
+        ChatMessageVO *result = [ChatMessageVO readFromDictionary:dict];
+        return result;
+    }
+    return nil;
+    
+}
+
+
+
+#pragma mark - Chat API 
+
+- (ChatVO *) apiLoadChat:(NSString *)objectId {
+    
+    
+    return [self apiLoadChat:objectId fetchAll:NO];
+}
+- (ChatVO *) apiLoadChat:(NSString *)objectId fetchAll:(BOOL)fetchAll {
+
+    PFQuery *query = [PFQuery queryWithClassName:kChatDB];
+    PFObject *data = [query getObjectWithId:objectId];
+    // Do something with the returned PFObject .
+
+    ChatVO *chat = [ChatVO readFromPFObject:data];
+    
+    if (fetchAll) {
+        chat.messages = [[NSMutableArray alloc] init];
+        ChatMessageVO *msg;
+        
+        query = [PFQuery queryWithClassName:kChatMessageDB];
+        [query whereKey:@"chat" equalTo:data];
+        [query orderByAscending:@"created"];
+        
+        NSArray *results = [query findObjects];
+        for (PFObject *msgdata in results) {
+            msg = [ChatMessageVO readFromPFObject:msgdata];
+            if (msg != nil) {
+                [chat.messages addObject:msg];
+            }
+        }
+        
+    }
+    
+    return chat;
+//    ChatVO *match = [self findChatBySystemId:data.objectId];
+//    if (match == nil) {
+//        // Save to database
+//        [self saveChat:chat];
+//    }
+    return nil;
+
+}
+- (NSString *) apiSaveChat:(ChatVO *) chat {
+    
+    PFObject *data = [PFObject objectWithClassName:kChatDB];
+    
+    data[@"name"] = chat.name;
+    data[@"user"] = [PFUser currentUser];
+    data[@"contact_keys"] = chat.contact_keys;
+    [data save];
+    
+    NSLog(@"Saved chat with objectId %@", data.objectId);
+    return data.objectId;
+    
+}
+- (NSMutableArray *) apiListChats:(NSString *)userId {
+    
+    return nil;
+}
+- (void) apiDeleteChat:(ChatVO *)chat {
+    
+}
+
+- (ChatMessageVO *) apiLoadChatMessage:(NSString *)objectId {
+    
+    return nil;
+}
+- (NSString *) apiSaveChatMessage:(ChatMessageVO *) msg {
+
+    return nil;
+
+}
+- (void) apiDeleteChatMessage:(ChatMessageVO *)msg {
+    
+}
+
 @end

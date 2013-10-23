@@ -1,45 +1,48 @@
 
 DROP TABLE contact;
 
-CREATE TABLE IF NOT EXISTS user ( 
-    user_id INTEGER PRIMARY KEY,  
+CREATE TABLE IF NOT EXISTS user (
+user_key TEXT PRIMARY KEY,
+username TEXT,
+password TEXT,
+system_id TEXT,
+facebook_id TEXT,
+first_name TEXT,
+last_name TEXT,
+phone TEXT,
+email TEXT,
+imagefile TEXT,
+type INT DEFAULT 1,
+status INT DEFAULT 0,
+created TEXT,
+updated TEXT
+);
+
+CREATE TABLE IF NOT EXISTS contact (
+contact_id INTEGER PRIMARY KEY,
+user_key TEXT,
+record_id BIGINT,
+system_id TEXT,
+facebook_id TEXT,
+first_name TEXT,
+last_name TEXT,
+phone TEXT,
+email TEXT,
+imagefile TEXT,
+type int DEFAULT 1,
+status INT DEFAULT 0,
+created TEXT,
+updated TEXT
+);
+
+CREATE TABLE IF NOT EXISTS db_group ( 
+    group_id INTEGER PRIMARY KEY,  
+    user_key TEXT,  
     system_id TEXT,
-    firstname TEXT, 
-    middlename TEXT,
-    lastname TEXT,
-    company TEXT,
-    title TEXT,
-    phone TEXT,
-    fax TEXT,
-    address TEXT,
-    city TEXT,
-    state TEXT,
-    zip TEXT,
-    password TEXT,
-    hint TEXT,
-    email TEXT,
+    name TEXT, 
+    type int DEFAULT 1, 
     status INT DEFAULT 0,
 	created TEXT,
-    updated TEXT
-);
-
-CREATE TABLE IF NOT EXISTS contact ( 
-    contact_id INTEGER PRIMARY KEY,  
-    system_id TEXT,
-    name TEXT, 
-    phone TEXT,
-    fax TEXT,
-    type int DEFAULT 1, 
-    status INT DEFAULT 0,
-	updated TEXT
-);
-
-CREATE TABLE IF NOT EXISTS group ( 
-    group_id INTEGER PRIMARY KEY,  
-    system_id TEXT,
-    name TEXT, 
-    type int DEFAULT 1, 
-    status INT DEFAULT 0,
 	updated TEXT
 );
 
@@ -50,6 +53,7 @@ CREATE TABLE IF NOT EXISTS group_contact (
 
 CREATE TABLE IF NOT EXISTS chat ( 
     chat_id INTEGER PRIMARY KEY,  
+    user_key TEXT,  
     system_id TEXT,
     name TEXT, 	
     type int DEFAULT 1, 
@@ -76,6 +80,7 @@ CREATE TABLE IF NOT EXISTS chat_contact (
 
 CREATE TABLE IF NOT EXISTS form ( 
     form_id INTEGER PRIMARY KEY,  
+    user_key TEXT,  
     system_id TEXT,
     name TEXT,
     location TEXT,
@@ -107,7 +112,7 @@ CREATE TABLE IF NOT EXISTS form_option (
     updated TEXT
 );
 
-insert into contact (name, phone, fax) values ('Hugh Lang', '1-646-498-6305', '1-855-546-5470');
+insert into contact (first_name, last_name, phone) values ('Hugh', 'Lang', '1-646-498-6305');
 
 INSERT INTO "form" (form_id, name, type, status, created, updated) VALUES(2,'Lunch',1,0,'2013-09-26 22:12:31','2013-09-26 22:12:31');
 INSERT INTO "form" (form_id, name, type, status, created, updated) VALUES(3,'Who will win the World Cup?',1,0,'2013-09-26 22:58:05','2013-09-26 22:58:05');

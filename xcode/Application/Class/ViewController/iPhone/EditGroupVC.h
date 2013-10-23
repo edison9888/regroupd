@@ -14,6 +14,8 @@
 #import "ChatVO.h"
 #import "ContactVO.h"
 #import "SelectedItemWidget.h"
+#import "BrandUILabel.h"
+#import "BrandUITextField.h"
 
 @interface EditGroupVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     BOOL isLoading;
@@ -30,13 +32,14 @@
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
 @property (nonatomic, retain) IBOutlet UIView *selectionsView;
+@property (nonatomic, retain) IBOutlet UIView *searchView;
+@property (nonatomic, retain) IBOutlet BrandUILabel *navTitle;
+@property (nonatomic, retain) IBOutlet BrandUITextField *groupName;
 
 @property (nonatomic, retain) CCSearchBar *ccSearchBar;
 
 @property(retain) NSMutableArray *tableData;
 - (void)performSearch:(NSString *)searchText;
-
-@property (nonatomic, strong) IBOutlet UILabel *navTitle;
 
 - (IBAction)tapDoneButton;
 

@@ -5,11 +5,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TVOutManager.h"
 #import "SlideModel.h"
 #import "AnimationModel.h"
 #import "PopOverComponent.h"
-
 
 typedef enum {
 	kPresentationAnimationStageIdle,
@@ -24,18 +22,19 @@ typedef enum {
 @required
 - (void)gotoSlide:(SlideModel*)slide;
 - (void)gotoSlideWithName:(NSString*)name;
+- (void)gotoSlideWithName:(NSString*)name returnPath:(NSString *)backPath;
+
 - (void)gotoSlideWithName:(NSString *)name andOverrideTransition:(PresentationTransitionFlags)transition;
 - (void)gotoSlideAtIndex:(NSUInteger)index;
 - (void)gotoNextSlide;
 - (void)gotoPreviousSlide;
 - (void)gotoFirstSlide;
 - (void)gotoLastSlide;
+- (void)goBack;
+- (void)setBackPath:(NSString *)path;
 
 - (void)dismissConcurrentSlideWithName:(NSString*)name;
 - (void)dismissAllConcurrentSlides;
-
-- (void)presentFullscreenMovieWithName:(NSString*)name landscapeOnly:(BOOL)landscape loopMovie:(BOOL)loop;
-- (void)dismissFullscreenMovie;
 
 @property (readonly, assign) SlideViewController *activeSlide;
 
@@ -50,19 +49,27 @@ typedef enum {
     NSInteger               _iSection;
 	
 	id<SlideViewControllerDelegate> __weak _delegate;
-
+    
+    NSString				*_returnPath;
+    NSMutableArray          *_pathArray;
+    
     // Programmatic display mirroring
 	NSString				*_breadCrumb;
     BOOL                    _isMirror;
+    
 }
 
 @property (nonatomic, strong) SlideModel *slideModel;
 @property (nonatomic, assign) BOOL isAnimating;
 @property (nonatomic, weak) id<SlideViewControllerDelegate> delegate;
 @property (nonatomic, strong) NSString *breadCrumb;
+@property (nonatomic, strong) NSString *returnPath;
 @property (nonatomic, assign) BOOL isMirror;
 @property (nonatomic, strong) IBOutletCollection(BaseComponentView) NSArray *componentViews;
 @property (nonatomic, strong) IBOutletCollection(UIView) NSArray *sectionViews;
+
+@property (nonatomic, strong) IBOutlet UILabel *navTitle;
+- (IBAction)goBack:(id)sender;
 
 // programmatic section support
 - (void)switchToSection:(NSInteger)iSection duration:(NSTimeInterval)duration options:(UIViewAnimationOptions)options completion:(void (^)(BOOL finished))completion;
@@ -70,10 +77,6 @@ typedef enum {
 
 // typically used internally by subclasses
 - (NSArray*)componentViewsForSection:(NSInteger)iSection;
-
-// display mirroring support
-- (void)sendMirrorNotification:(NSInvocation *)invocation;
-- (void)handleMirrorNotification:(NSNotification *)note;
 
 // transition animation supports
 - (NSArray*)enterAnimationsForStage:(PresentationAnimationStage)stage fromSlide:(SlideModel*)fromSlide;
@@ -86,6 +89,6 @@ typedef enum {
 
 - (void)willGotoNextSlide;
 - (void)willgotoPrevSlide;
-
+- (void)dismiss;
 
 @end

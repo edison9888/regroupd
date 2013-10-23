@@ -24,41 +24,76 @@
  */
 
 
-+ (ChatMessageVO *) readFromDictionary:(NSDictionary *) dict {
++ (ChatMessageVO *) readFromDictionary:(NSDictionary *) data {
     ChatMessageVO *o = [[ChatMessageVO alloc] init];
     NSString *text;
     
-    text = [dict valueForKey:@"message_id"];
+    text = [data valueForKey:@"message_id"];
     o.message_id = text.integerValue;
     
-    text = [dict valueForKey:@"chat_id"];
+    text = [data valueForKey:@"chat_id"];
     o.chat_id = text.integerValue;
 
-    text = [dict valueForKey:@"contact_id"];
+    text = [data valueForKey:@"contact_id"];
     o.contact_id = text.integerValue;
 
-    text = [dict valueForKey:@"form_id"];
+    text = [data valueForKey:@"form_id"];
     o.form_id = text.integerValue;
     
-    text = [dict valueForKey:@"system_id"];
+    text = [data valueForKey:@"system_id"];
     o.system_id = text;
     
-    text = [dict valueForKey:@"message"];
+    text = [data valueForKey:@"message"];
     o.message = text;
     
-    text = [dict valueForKey:@"attachment"];
+    text = [data valueForKey:@"attachment"];
     o.attachment = text;
     
-    text = [dict valueForKey:@"type"];
+    text = [data valueForKey:@"type"];
     o.type = text.integerValue;
     
-    text = [dict valueForKey:@"status"];
+    text = [data valueForKey:@"status"];
     o.status = text.integerValue;
     
-    text = [dict valueForKey:@"created"];
+    text = [data valueForKey:@"created"];
     o.created = text;
     
     return o;
     
+}
+
++ (ChatMessageVO *) readFromPFObject:(PFObject *)data {
+    ChatMessageVO *o = [[ChatMessageVO alloc] init];
+    NSString *text;
+    
+    o.system_id = data.objectId;
+    
+    text = [data valueForKey:@"message_id"];
+    o.message_id = text.integerValue;
+    
+    text = [data valueForKey:@"chat_id"];
+    o.chat_id = text.integerValue;
+    
+    text = [data valueForKey:@"contact_id"];
+    o.contact_id = text.integerValue;
+    
+    text = [data valueForKey:@"form_id"];
+    o.form_id = text.integerValue;
+    
+    text = [data valueForKey:@"message"];
+    o.message = text;
+    
+    text = [data valueForKey:@"attachment"];
+    o.attachment = text;
+    
+    text = [data valueForKey:@"type"];
+    o.type = text.integerValue;
+    
+    text = [data valueForKey:@"status"];
+    o.status = text.integerValue;
+    
+    text = [data valueForKey:@"created"];
+    o.created = text;
+    return o;
 }
 @end

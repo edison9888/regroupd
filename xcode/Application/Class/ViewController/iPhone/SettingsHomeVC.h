@@ -8,6 +8,7 @@
 
 #import "SlideViewController.h"
 #import "FancyToggle.h"
+#import "BrandUILabel.h"
 
 @interface SettingsHomeVC : SlideViewController {
     BOOL isLoading;
@@ -18,6 +19,10 @@
 @property (nonatomic, strong) IBOutlet FancyToggle *toggle1;
 @property (nonatomic, strong) IBOutlet FancyToggle *toggle2;
 @property (nonatomic, strong) IBOutlet FancyToggle *toggle3;
+
+@property (nonatomic, strong) IBOutlet BrandUILabel *value1;
+@property (nonatomic, strong) IBOutlet BrandUILabel *value2;
+@property (nonatomic, strong) IBOutlet BrandUILabel *value3;
 
 - (IBAction)tapClearAllButton;
 - (IBAction)tapContactButton;

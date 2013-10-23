@@ -58,8 +58,11 @@
     
     UserVO *user = [userService lookupDefaultUser];
     
+    PFUser *u = [PFUser currentUser];
+    NSLog(@"Current user is %@, %@", u.username, u.objectId);
     
-    
+    [DataModel shared].user = user;
+
     if (user == nil) {
 //        [DataModel shared].navIndex = 1;
 //        [_delegate gotoSlideWithName:@"GroupsHome"];

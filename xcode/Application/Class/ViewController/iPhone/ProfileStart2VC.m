@@ -46,7 +46,7 @@
     [self.tf1 setKeyboardType:UIKeyboardTypePhonePad];
     
     if ([DataModel shared].user != nil) {
-        if ([DataModel shared].user.firstname != nil) {
+        if ([DataModel shared].user.first_name != nil) {
             self.tf1.text = [DataModel shared].user.phone;
         }
     }
@@ -220,9 +220,12 @@
         isOk = NO;
     }
     if (isOk) {
-        UserVO *user = [[UserVO alloc] init];
-        user.verifycode = self.tf1.text;
-        [DataModel shared].user = user;
+        UserVO *user = [DataModel shared].user;
+        user.password = self.tf1.text;
+        
+        // TODO: Validate that code is correct
+        
+        
         
         [_delegate gotoNextSlide];
     } else {

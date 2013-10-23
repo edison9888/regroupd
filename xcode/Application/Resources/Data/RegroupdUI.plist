@@ -331,6 +331,38 @@
 			<key>nextSlideName</key>
 			<string></string>
 		</dict>
+		<dict>
+			<key>slideData</key>
+			<dict/>
+			<key>allowLeftSlide</key>
+			<false/>
+			<key>allowRightSlide</key>
+			<false/>
+			<key>category</key>
+			<string>Contacts</string>
+			<key>name</key>
+			<string>GroupInfo</string>
+			<key>controllerName</key>
+			<string>GroupInfoVC</string>
+			<key>nextSlideName</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>slideData</key>
+			<dict/>
+			<key>allowLeftSlide</key>
+			<false/>
+			<key>allowRightSlide</key>
+			<false/>
+			<key>category</key>
+			<string>Contacts</string>
+			<key>name</key>
+			<string>EditGroup</string>
+			<key>controllerName</key>
+			<string>EditGroupVC</string>
+			<key>nextSlideName</key>
+			<string></string>
+		</dict>
 		<!-- ########## Settings ########### -->
 		<dict>
 			<key>slideData</key>

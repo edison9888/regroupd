@@ -16,6 +16,7 @@
 @synthesize componentViews = _componentViews;
 @synthesize sectionViews = _sectionViews;
 @synthesize breadCrumb = _breadCrumb;
+@synthesize returnPath = _returnPath;
 @synthesize isMirror = _isMirror;
 
 
@@ -26,7 +27,6 @@
         componentView.delegate = nil;
     }
     
-	
 }
 
 - (void)didReceiveMemoryWarning
@@ -41,7 +41,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    _pathArray = [[NSMutableArray alloc] init];
+    
     self.componentViews = [UIView sortViewArrayByIndex:_componentViews];
 	
 	// set up components
@@ -51,7 +52,6 @@
 		PopOverComponent *componentView = [_componentViews objectAtIndex:i];
 		NSArray *instances = [_slideModel.components objectForKey:@"instances"];
         NSMutableDictionary *componentData = [NSMutableDictionary dictionaryWithDictionary:[[instances objectAtIndex:i] objectForKey:@"params"]];
-		componentView.isMirror = self.isMirror;
 		componentView.breadCrumb = [_breadCrumb stringByAppendingFormat:@".componentView%d", i];
         componentView.delegate = self;
 		
@@ -78,7 +78,7 @@
     
     if (_sectionViews.count) {
         for (int i = 0; i < _sectionViews.count; i++) {
-//        for (UIView *view in _sectionViews) {
+            //        for (UIView *view in _sectionViews) {
             UIView *view = [_sectionViews objectAtIndex:i];
             [self.view addSubview:view];
             if (i < _slideModel.sections.count) {
@@ -123,10 +123,10 @@
     // e.g. self.myOutlet = nil;
 }
 
-- (void)viewDidAppear:(BOOL)animated 
+- (void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
-
+    
     for (int i = 0; i < _componentViews.count; i++) {
 		PopOverComponent *componentView = [_componentViews objectAtIndex:i];
 		NSArray *componentInstances = [_slideModel.components objectForKey:@"instances"];
@@ -135,7 +135,7 @@
 		if (!autoStart || [autoStart boolValue]) {
 			[componentView startComponent];
 		}
-	}	
+	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -227,13 +227,13 @@
     UIView *newSection = [_sectionViews objectAtIndex:iSection];
     NSLog(@"lastSection: %@, newSection: %@", [lastSection description], [newSection description]);
     if (options) {
-        [UIView transitionFromView:lastSection toView:newSection duration:duration 
+        [UIView transitionFromView:lastSection toView:newSection duration:duration
                            options:options | UIViewAnimationOptionShowHideTransitionViews completion:completion];
     }
     else if (duration >= 0) {
         newSection.hidden = NO;
         newSection.alpha = 0.0;
-        [UIView animateWithDuration:duration delay:0.0 options:0 
+        [UIView animateWithDuration:duration delay:0.0 options:0
                          animations:^{
                              lastSection.alpha = 0.0;
                              newSection.alpha = 1.0;
@@ -249,40 +249,6 @@
         lastSection.hidden = YES;
     }
     _iSection = iSection;
-}
-
-#pragma mark - Procedural Mirroring
-
-- (void)setIsMirror:(BOOL)isMirror 
-{
-	if (isMirror == _isMirror) {
-		return;
-	}
-	
-	NSString *notificationName = [kPresentationMirrorNotificationPrefix stringByAppendingString:_breadCrumb];
-	if (isMirror) {
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleMirrorNotification:) name:notificationName object:nil];
-	} else {
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:notificationName object:nil];
-	}
-}
-
-- (void)sendMirrorNotification:(NSInvocation *)invocation
-{
-	NSString *notificationName = [kPresentationMirrorNotificationPrefix stringByAppendingString:_breadCrumb];
-    if ([[TVOutManager sharedInstance] projectorConnected] && !_isMirror) {
-		NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:invocation, @"invocation", _breadCrumb, @"breadCrumb", nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:nil userInfo:userInfo];
-    }
-}
-
-- (void)handleMirrorNotification:(NSNotification *)note
-{
-    NSDictionary *noteDict = [note userInfo];
-//	if ([_breadCrumb isEqual:[noteDict objectForKey:@"breadCrumb"]]) {
-		NSInvocation *invocation = [noteDict objectForKey:@"invocation"];
-		[invocation invokeWithTarget:self];
-//	}
 }
 
 
@@ -309,5 +275,15 @@
 
 - (void)willGotoNextSlide {}
 - (void)willgotoPrevSlide {}
+
+- (void)dismiss {
+    [_delegate goBack];
+}
+
+#pragma mark IBActions
+
+- (IBAction)goBack:(id)sender {
+    [_delegate goBack];
+}
 
 @end

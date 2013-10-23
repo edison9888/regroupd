@@ -20,4 +20,11 @@
 - (NSString *)saveSignature:(UIImage *)saveImage withName:(NSString *)filename;
 - (UIImage *)loadSignature:(NSString *)filename;
 
+
+// API functions
+- (UserVO *) apiLoadUser:(NSString *)objectId;
+- (NSString *) apiSaveUser:(UserVO *) user;
+- (NSMutableArray *) apiListUsers:(NSString *)userId;
+- (void) apiDeleteUser:(UserVO *)user;
+
 @end

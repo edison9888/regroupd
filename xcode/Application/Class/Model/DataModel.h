@@ -6,6 +6,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Parse/Parse.h>
+
 #import "UserVO.h"
 #import "ContactVO.h"
 #import "FormVO.h"
@@ -13,6 +15,10 @@
 #import "ChatVO.h"
 
 #define contains(str1, str2) ([str1 rangeOfString: str2 ].location != NSNotFound)
+
+#define kChatDB             @"ChatDB"
+#define kChatMessageDB      @"ChatMessageDB"
+#define kChatContactIndex   @"ChatContactIndex"
 
 @interface DataModel : NSObject {
     NSMutableDictionary *contactData;

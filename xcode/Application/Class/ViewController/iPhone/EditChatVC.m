@@ -41,7 +41,7 @@
     ypos = 3;
     
     contactsMap = [[NSMutableDictionary alloc] init];
-    contactIds = [[NSMutableArray alloc] init];
+    contactKeys = [[NSMutableArray alloc] init];
     
     CGRect searchFrame = CGRectMake(5, 150, 310, 32);
     ccSearchBar = [[CCSearchBar alloc] initWithFrame:searchFrame];
@@ -168,7 +168,7 @@
             
             [contactsMap setObject:contact forKey:[NSNumber numberWithInt:contact.contact_id]];
             
-            [contactIds addObject:[NSNumber numberWithInt:contact.contact_id]];
+            [contactKeys addObject:contact.system_id];
             
             float estWidth = 100;
             if (xpos + estWidth + 10 > self.selectionsView.frame.size.width) {
@@ -204,7 +204,7 @@
     NSLog(@"%s: %@", __FUNCTION__, searchText);
     
     if (searchText.length > 0) {
-        NSString *sqlTemplate = @"select * from contact where name like '%%%@%%' limit 20";
+        NSString *sqlTemplate = @"select * from contact where first_name like '%%%@%%' or last_name like '%%%@%%' limit 20";
         
         isLoading = YES;
         
@@ -252,16 +252,24 @@
     
     BOOL isOK = YES;
     
-    if (contactIds.count == 0) {
+    if (contactKeys.count == 0) {
         isOK = NO;
     }
     if (isOK) {
+        [contactKeys addObject:[DataModel shared].user.user_key];
+         
         ChatVO *chat = [[ChatVO alloc] init];
         
+        chat.contact_keys = [contactKeys copy];
         
-        chat.name = @"Test Chat";
+        NSString *objectId = [chatSvc apiSaveChat:chat];
+        
+        chat.system_id = objectId;
+        
+        [chatSvc saveChat:chat];
         
         [_delegate gotoSlideWithName:@"Chat"];
+        
     } else {
         [[[UIAlertView alloc] initWithTitle:@"Try again" message:@"Please add at least one contact" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 

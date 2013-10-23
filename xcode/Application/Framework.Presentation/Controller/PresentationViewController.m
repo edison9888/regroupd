@@ -7,7 +7,6 @@
 #import "PresentationViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "HitPassView.h"
-#import "SystemVersioning.h"
 
 
 
@@ -26,14 +25,7 @@
 - (NSTimeInterval)runSlideAnimations:(NSArray*)animations minHoldTime:(NSTimeInterval)minHold;
 - (NSTimeInterval)runSlideTransition:(PresentationAnimationSequence*)animSequence;
 - (void)dismissConcurrentSlide:(SlideViewController*)slideVC;
-// movie support
-- (void)playFullScreenMovieWithName:(NSString *)movieName landscapeOnly:(BOOL)landscape loopMovie:(BOOL)loop;
-- (void)stopMovie;
-- (void)cleanupMovieView;
-- (void)landscapeMovieStarted:(UIWindow*)window;
-- (void)landscapeMovieEnded;
-- (CGRect)calculateFrameForView:(UIView*)view withGravity:(PresentationGravityFlags)gravityFlags;
-- (PresentationTransitionFlags)calculateAutoTransitionFlags:(PresentationTransitionFlags)transitionFlags slideA:(SlideViewController*)slideA slideB:(SlideViewController*)slideB;
+
 @end
 
 
@@ -201,10 +193,15 @@
 
 - (void)gotoSlide:(SlideModel*)slide
 {
-	if (!slide || (!slide.isConcurrent && _activeSlide &&
-				   (_activeSlide.isAnimating || slide.slideIndex == _activeSlide.slideModel.slideIndex))) {
-		return;
-	}
+    NSLog(@"gotoSlide %@", slide.name);
+    if (!slide) {
+        return;
+    }
+    // No idea what this does yet.
+    //	if (!slide.isConcurrent && _activeSlide &&
+    //				   (_activeSlide.isAnimating || slide.slideIndex == _activeSlide.slideModel.slideIndex)) {
+    //		return;
+    //	}
 	
 	SlideViewController *slideVC = [SlideViewController slideViewControllerWithSlide:slide];
     
@@ -231,9 +228,25 @@
 
 - (void)gotoSlideWithName:(NSString*)name
 {
+    NSLog(@"gotoSlideWithName %@", name);
 	[self gotoSlide:[_presentationModel slideWithName:name]];
 }
 
+- (void)gotoSlideWithName:(NSString*)name returnPath:(NSString *)backPath {
+    
+    //    if (_returnPath.length > 0) {
+    //        _returnPath = [NSString stringWithFormat:@"%@/%@", _returnPath, backPath];
+    //    } else {
+    //        _returnPath = backPath;
+    //    }
+    [_pathArray addObject:backPath];
+    _returnPath = [_pathArray componentsJoinedByString:@"/"];
+    
+    NSLog(@"Setting back path to %@", _returnPath);
+    
+	[self gotoSlide:[_presentationModel slideWithName:name]];
+    
+}
 - (void)gotoSlideWithName:(NSString *)name andOverrideTransition:(PresentationTransitionFlags)transition
 {
     SlideModel *slideModel = [_presentationModel slideWithName:name];
@@ -272,6 +285,22 @@
 	[self gotoSlideWithName:_presentationModel.lastSlideName];
 }
 
+- (void)goBack
+{
+    NSString *target = nil;
+    if (_pathArray.count > 0) {
+        target = (NSString *)[_pathArray lastObject];
+        [_pathArray removeLastObject];
+        NSLog(@"goBack to %@", target);
+        [self gotoSlideWithName:target];
+    }
+}
+- (void)setBackPath:(NSString *)_path {
+    NSLog(@"returnPath set to %@", _path);
+    _pathArray = [_path componentsSeparatedByString:@"/"].mutableCopy;
+    
+    _returnPath = _path;
+}
 
 #pragma mark Concurrent slide flow
 
@@ -315,9 +344,13 @@
 
 - (void)processAnimationSequence:(PresentationAnimationSequence*)animSequence
 {
+    
 	SlideViewController *slideA = animSequence.slideA;
 	SlideViewController *slideB = animSequence.slideB;
-	
+    //    NSLog(@"Setting back slide to %@", slideA.slideModel.name);
+    //
+    //    _presentationModel.backSlideName = slideA.slideModel.name;
+    
     //exit animation for current vc
 	if (animSequence.animationStage == kPresentationAnimationStageIdle) {
 		animSequence.animationStage = kPresentationAnimationStageStart;
@@ -335,7 +368,8 @@
 		slideB.view.frame = [self calculateFrameForView:slideB.view withGravity:slideB.slideModel.gravityFlags];
 		slideB.delegate = self;
 		slideB.breadCrumb = [_breadCrumb stringByAppendingFormat:@".%@", slideB.slideModel.name];
-		
+		NSLog(@"breadcrumb: %@", slideB.breadCrumb);
+        
 		// send child VC messages
         if (SYSTEM_VERSION_LESS_THAN(@"5.0")) {
             [slideA viewWillDisappear:YES];
@@ -611,176 +645,6 @@
 	}
 	
 	return frame;
-}
-
-
-#pragma mark Fullscreen movie presentation
-
-- (void)presentFullscreenMovieWithName:(NSString*)name landscapeOnly:(BOOL)landscape loopMovie:(BOOL)loop;
-{
-	[self playFullScreenMovieWithName:name landscapeOnly:landscape loopMovie:loop];
-}
-
-- (void)dismissFullscreenMovie
-{
-	[self stopMovie];
-}
-
-
-#pragma mark -
-#pragma mark Fullscreen movie support
-
-- (void)playFullScreenMovieWithName:(NSString *)movieName landscapeOnly:(BOOL)landscape loopMovie:(BOOL)loop
-{
-	_forceLandscapeMovie = landscape;
-	_loopMovie = loop;
-	
-	if ([[UIScreen screens] count] == 2 && !_isMirror && ![[TVOutManager sharedInstance] projectorIsMirror]) {
-		// Add button overlay
-		UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		[doneButton setTag:100];
-		[doneButton setFrame:self.view.bounds];
-		[self.view addSubview:doneButton];
-		[doneButton addTarget:self action:@selector(stopMovie) forControlEvents:UIControlEventTouchUpInside];
-		return;
-	}
-	
-    // Setup background
-    UIView *blackBackground = [[UIView alloc] initWithFrame:self.view.bounds];
-    [blackBackground setBackgroundColor:[UIColor blackColor]];
-    [blackBackground setTag:100];
-    [self.view addSubview:blackBackground];
-	
-    // Show movie
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSString *finalPath = [path stringByAppendingPathComponent:movieName];
-	
-	FoundationMovieView *foundationMovieView = [[FoundationMovieView alloc] initWithFrame:self.view.bounds andPath:finalPath];
-    _movieView = foundationMovieView;
-	
-    _movieView.isInlinePlayer = NO;
-    [_movieView setBackgroundColor:[UIColor clearColor]];
-    _movieView.tag = 100;
-    [_movieView setOpaque:NO];
-	[_movieView setDelegate:self];
-	
-	if (_forceLandscapeMovie) {
-		if ([[TVOutManager sharedInstance] projectorIsMirror]) {
-			UIWindow *window2 = [[TVOutManager sharedInstance] startTVOutAllowMirror:NO];
-			[window2 addSubview:_movieView];
-			[self landscapeMovieStarted:window2];
-		} else {
-			[self.view addSubview:_movieView];
-			[self landscapeMovieStarted:self.view.window];
-		}
-	} else {
-		[self.view addSubview:_movieView];
-	}
-	
-    [_movieView loadPlayer];
-}
-
-
-- (void) stopMovie
-{
-    // pass invocation to TV Out handler
-	NSInvocation *invocation = [self invocationWithSelector:@selector(stopMovie) object:nil];
-    [self sendMirrorNotification:invocation];
-	
-	//NSLog(@"stop movie");
-	if ([[UIScreen screens] count] == 2 && !_isMirror) {
-		for(UIView *subview in [self.view subviews]) {
-			if(subview.tag == 100) {
-				[subview removeFromSuperview];
-			}
-		}
-	}
-	
-	if (_movieView) {
-		[_movieView stop];
-	}
-}
-
-- (void)cleanupMovieView
-{
-	if (_movieView) {
-		_movieView = nil;
-	}
-}
-
-
-#pragma mark -
-#pragma mark Rotate Landscape Movie
-
-- (void)landscapeMovieStarted:(UIWindow*)window
-{
-	UIView *containerView = [window.subviews objectAtIndex:0];
-	_originalTopTransform = containerView.transform;
-	
-	// rotate the top-level screen
-	if (self.isMirror || [[TVOutManager sharedInstance] supportsVideoMirror]) {
-		CGSize tvOutWindowSize = [TVOutManager sharedInstance].mirror.view.window.frame.size;
-		float scale = MAX(tvOutWindowSize.width / self.view.bounds.size.height,
-						  tvOutWindowSize.height / self.view.bounds.size.width);
-		CGAffineTransform transform = CGAffineTransformMakeRotation(-M_PI / 2);
-		containerView.transform = CGAffineTransformScale(transform, scale, scale);
-		// de-rotate and scale the video
-		transform = CGAffineTransformMakeRotation(M_PI / 2);
-		_movieView.transform = transform;
-	} else {
-		UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-		float scale = MAX(window.frame.size.height / containerView.frame.size.width,
-						  window.frame.size.width / containerView.frame.size.height);
-		CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI / 2);
-		containerView.transform = CGAffineTransformScale(transform, scale, scale);
-	}
-}
-
-- (void)landscapeMovieEnded
-{
-	UIView *containerView = [self.view.window.subviews objectAtIndex:0];
-	containerView.transform = _originalTopTransform;
-	
-	if ([[TVOutManager sharedInstance] supportsVideoMirror]) {
-		[[TVOutManager sharedInstance] stopTVOut];
-	}
-}
-
-
-#pragma mark FoundationMovieViewDelegate
-
-- (void)foundationMoviePlayerDidFinish:(FoundationMovieView *)foundationMovieView
-{
-	for(UIView *subview in [self.view subviews]) {
-        if(subview.tag == 100) {
-            [subview removeFromSuperview];
-        }
-    }
-	
-	if (_forceLandscapeMovie) {
-		[self landscapeMovieEnded];
-		[_movieView removeFromSuperview];
-		[self cleanupMovieView];
-	}
-	if (_loopMovie) {
-		[[_movieView player] seekToTime:CMTimeMakeWithSeconds(0,1)];
-		[[_movieView player] play];
-		
-		return;
-	}
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:AVPlayerItemDidPlayToEndTimeNotification object:nil];
-	[self cleanupMovieView];
-}
-
-- (void)foundationMovieView:(FoundationMovieView *)foundationMovieView playerIsReady:(AVPlayer *)player
-{
-	// Add button overlay
-    UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [doneButton setTag:100];
-    [doneButton setFrame:self.view.bounds];
-    [self.view addSubview:doneButton];
-    [doneButton addTarget:self action:@selector(stopMovie) forControlEvents:UIControlEventTouchUpInside];
 }
 
 

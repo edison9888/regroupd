@@ -183,7 +183,7 @@
     NSLog(@"%s: %@", __FUNCTION__, searchText);
     
     if (searchText.length > 0) {
-        NSString *sqlTemplate = @"select * from contact where name like '%%%@%%' limit 20";
+        NSString *sqlTemplate = @"select * from contact where first_name like '%%%@%%' or last_name like '%%%@%%' limit 20";
         
         isLoading = YES;
         
@@ -200,7 +200,7 @@
         [self.theTableView reloadData];
         
     } else {
-        NSString *sqlTemplate = @"select * from contact order by name";
+        NSString *sqlTemplate = @"select * from contact order by first_name";
         
         isLoading = YES;
         

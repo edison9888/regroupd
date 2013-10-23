@@ -46,7 +46,7 @@
     [self.tf1 setKeyboardType:UIKeyboardTypePhonePad];
     
     if ([DataModel shared].user != nil) {
-        if ([DataModel shared].user.firstname != nil) {
+        if ([DataModel shared].user.first_name != nil) {
             self.tf1.text = [DataModel shared].user.phone;
         }
     }
@@ -222,6 +222,9 @@
     if (isOk) {
         UserVO *user = [[UserVO alloc] init];
         user.phone = self.tf1.text;
+        user.username = self.tf1.text;
+        
+        // TODO: Add country code and normalize
         [DataModel shared].user = user;
         
         [_delegate gotoNextSlide];

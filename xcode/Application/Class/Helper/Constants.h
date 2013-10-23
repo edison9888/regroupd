@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 
 #define k_CHAT_OPTION_BASETAG   2000
+#define kFullNameFormat @"%@ %@"
 
 extern uint const kLabelDarkGrey444242;
 extern uint const kLabelLightBlue02c1ff;
