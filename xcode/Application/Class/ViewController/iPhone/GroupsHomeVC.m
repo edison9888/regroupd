@@ -114,7 +114,7 @@
             [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
             
             [DataModel shared].action = kActionEDIT;
-            [_delegate gotoNextSlide];
+            [_delegate gotoSlideWithName:@"GroupInfo"];
             
         }
     } @catch (NSException * e) {
@@ -176,7 +176,7 @@
 {
     //    BOOL isOk = YES;
     [DataModel shared].action = kActionADD;
-    [_delegate gotoNextSlide];
+    [_delegate gotoSlideWithName:@"EditGroup" returnPath:@"GroupsHome"];
     
 }
 

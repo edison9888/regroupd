@@ -16,9 +16,12 @@
 
 #define contains(str1, str2) ([str1 rangeOfString: str2 ].location != NSNotFound)
 
+#define kContactDB          @"ContactDB"
 #define kChatDB             @"ChatDB"
 #define kChatMessageDB      @"ChatMessageDB"
-#define kChatContactIndex   @"ChatContactIndex"
+#define kFormDB             @"FormDB"
+#define kFormOptionDB       @"FormOptionDB"
+
 
 @interface DataModel : NSObject {
     NSMutableDictionary *contactData;

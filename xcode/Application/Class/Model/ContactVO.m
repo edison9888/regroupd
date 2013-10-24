@@ -34,38 +34,68 @@
  
  */
 
-+ (ContactVO *) readFromDictionary:(NSDictionary *) dict {
++ (ContactVO *) readFromDictionary:(NSDictionary *) data {
     ContactVO *o = [[ContactVO alloc] init];
     NSString *text;
     
-    text = [dict valueForKey:@"contact_id"];
+    text = [data valueForKey:@"contact_id"];
     o.contact_id = text.integerValue;
-    text = [dict valueForKey:@"record_id"];
-    o.record_id = [NSNumber numberWithInt:text.integerValue];
+//    text = [data valueForKey:@"record_id"];
+//    o.record_id = [NSNumber numberWithInt:text.integerValue];
     
-    text = [dict valueForKey:@"system_id"];
+    text = [data valueForKey:@"system_id"];
     o.system_id = text;
-    text = [dict valueForKey:@"facebook_id"];
+    text = [data valueForKey:@"facebook_id"];
     o.facebook_id = text;
-    text = [dict valueForKey:@"first_name"];
+    text = [data valueForKey:@"first_name"];
     o.first_name = text;
-    text = [dict valueForKey:@"last_name"];
+    text = [data valueForKey:@"last_name"];
     o.last_name = text;
-    text = [dict valueForKey:@"phone"];
+    text = [data valueForKey:@"phone"];
     o.phone = text;
-    text = [dict valueForKey:@"email"];
+    text = [data valueForKey:@"email"];
     o.email = text;
-    text = [dict valueForKey:@"imagefile"];
+    text = [data valueForKey:@"imagefile"];
     o.imagefile = text;
-    text = [dict valueForKey:@"type"];
+    text = [data valueForKey:@"type"];
     o.type = text.intValue;
-    text = [dict valueForKey:@"status"];
+    text = [data valueForKey:@"status"];
     o.status = text.intValue;
-    text = [dict valueForKey:@"created"];
+    text = [data valueForKey:@"created"];
     o.created = text;
-    text = [dict valueForKey:@"updated"];
+    text = [data valueForKey:@"updated"];
     o.updated = text;
     
+    return o;
+}
+
++ (ContactVO *) readFromPFObject:(PFObject *)data {
+    ContactVO *o = [[ContactVO alloc] init];
+    NSString *text;
+
+    o.system_id = data.objectId;
+    o.createdAt = data.createdAt;
+    o.updatedAt = data.updatedAt;
+    
+    text = [data valueForKey:@"record_id"];
+    o.record_id = [NSNumber numberWithInt:text.integerValue];
+    
+    text = [data valueForKey:@"facebook_id"];
+    o.facebook_id = text;
+    text = [data valueForKey:@"first_name"];
+    o.first_name = text;
+    text = [data valueForKey:@"last_name"];
+    o.last_name = text;
+    text = [data valueForKey:@"phone"];
+    o.phone = text;
+    text = [data valueForKey:@"email"];
+    o.email = text;
+    text = [data valueForKey:@"imagefile"];
+    o.imagefile = text;
+    text = [data valueForKey:@"type"];
+    o.type = text.intValue;
+    text = [data valueForKey:@"status"];
+    o.status = text.intValue;
     return o;
 }
 

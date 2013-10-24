@@ -32,14 +32,14 @@
 {
     //    IBOutlet UIBubbleTableView *bubbleTable;
     
-    NSMutableArray *bubbleData;
+    NSMutableArray *tableDataSource;
 }
 
 @end
 
 @implementation ChatVC
 
-@synthesize bubbleData;
+@synthesize tableDataSource;
 @synthesize bubbleTable;
 
 #define kFirstOptionId  1
@@ -113,17 +113,71 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self.inputField setContentInset:UIEdgeInsetsMake(0.0, 4.0, 0.0, -10.0)];
     
     
-    NSBubbleData *heyBubble = [NSBubbleData dataWithText:@"Hey, halloween is soon" date:[NSDate dateWithTimeIntervalSinceNow:-300] type:BubbleTypeSomeoneElse];
-    heyBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
+    // Keyboard events
+    // Setup notifications
     
-    NSBubbleData *photoBubble = [NSBubbleData dataWithImage:[UIImage imageNamed:@"maserati.jpg"] date:[NSDate dateWithTimeIntervalSinceNow:-290] type:BubbleTypeSomeoneElse];
-    photoBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
+    NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(hideFormSelectorNotificationHandler:)     name:@"hideFormSelectorNotification"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(showImagePickerNotificationHandler:)     name:@"showImagePickerNotification"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
     
     
-    NSBubbleData *replyBubble = [NSBubbleData dataWithText:@"Wow.. Really cool picture out there. iPhone 5 has really nice camera, yeah?" date:[NSDate dateWithTimeIntervalSinceNow:-5] type:BubbleTypeMine];
-    replyBubble.avatar = nil;
+    // Create and initialize a tap gesture
     
-    bubbleData = [[NSMutableArray alloc] initWithObjects:heyBubble, photoBubble, replyBubble, nil];
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
+                                             
+                                             initWithTarget:self action:@selector(singleTap:)];
+    
+    // Specify that the gesture must be a single tap
+    
+    tapRecognizer.numberOfTapsRequired = 1;
+    tapRecognizer.cancelsTouchesInView = NO;
+    [self.view addGestureRecognizer:tapRecognizer];
+    
+    /*
+     http://stackoverflow.com/questions/6672677/how-to-use-uipangesturerecognizer-to-move-object-iphone-ipad
+     */
+    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc]
+                                             initWithTarget:self action:@selector(handlePull:)];
+    
+    // Specify that the gesture must be a single tap
+    [panRecognizer setMinimumNumberOfTouches:1];
+    
+    panRecognizer.cancelsTouchesInView = YES;
+    [self.topDrawer addGestureRecognizer:panRecognizer];
+    
+    drawerMinTop = self.topDrawer.frame.origin.y;
+    drawerMaxTop = 0;
+    
+    [self loadChatMessages];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (void) loadChatMessages
+{
+
+    // Setup chat bubble config
+    
     self.bubbleTable.bubbleDataSource = self;
     
     // The line below sets the snap interval in seconds. This defines how the bubbles will be grouped in time.
@@ -144,73 +198,94 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     //    - NSBubbleTypingTypeNone - no "now typing" bubble
     
     //    self.bubbleTable.typingBubble = NSBubbleTypingTypeSomebody;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatMessagesLoadedHandler:) name:@"chatMessagesLoaded" object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatContactsLoadedHandler:) name:@"chatContactsLoaded" object:nil];
+    
+    if ([DataModel shared].chat != nil) {
+        
+        
+    }
+    
     
     [self.bubbleTable reloadData];
     
-    // Keyboard events
-    // Setup notifications
-    
-    NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideFormSelectorNotificationHandler:)     name:@"hideFormSelectorNotification"            object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showImagePickerNotificationHandler:)     name:@"showImagePickerNotification"            object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
-    
-    
-    // Create and initialize a tap gesture
-    
-    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
-                                             
-                                             initWithTarget:self action:@selector(singleTap:)];
-    
-    // Specify that the gesture must be a single tap
-    
-    tapRecognizer.numberOfTapsRequired = 1;
-    tapRecognizer.cancelsTouchesInView = NO;
-    [self.view addGestureRecognizer:tapRecognizer];
-    
-    /*
-     
-     http://stackoverflow.com/questions/6672677/how-to-use-uipangesturerecognizer-to-move-object-iphone-ipad
-     
-     */
-    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc]
-                                             
-                                             initWithTarget:self action:@selector(handlePull:)];
-    
-    // Specify that the gesture must be a single tap
-    [panRecognizer setMinimumNumberOfTouches:1];
-    
-    panRecognizer.cancelsTouchesInView = YES;
-    [self.topDrawer addGestureRecognizer:panRecognizer];
-    
-    drawerMinTop = self.topDrawer.frame.origin.y;
-    drawerMaxTop = 0;
-    
-    
 }
 
-- (void)didReceiveMemoryWarning
+#pragma mark - Notifications
+- (void)chatMessagesLoadedHandler:(NSNotification*)notification
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+    @try {
+        if (notification.object != nil) {
+            ChatVO *theChat = (ChatVO *) notification.object;
+            
+            tableDataSource = [[NSMutableArray alloc] init];
+            NSBubbleData *bubble;
+            
+            for (ChatMessageVO* msg in theChat.messages) {
+                if ([msg.user_key isEqualToString:[DataModel shared].user.user_key]) {
+                    // my message
+                    bubble = [NSBubbleData dataWithText:msg.message date:msg.createdAt type:BubbleTypeMine];
+                    bubble.avatar = nil;
+                } else {
+                    // someone else
+                    bubble = [NSBubbleData dataWithText:msg.message date:msg.createdAt type:BubbleTypeSomeoneElse];
+                    bubble.avatar = nil;
+                }
+                [tableDataSource addObject:bubble];
+            }
+            [self.bubbleTable reloadData];
 
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"########### Exception %@", exception);
+    }
+    
+    
+}
+- (void)chatContactsLoadedHandler:(NSNotification*)notification
+{
+    
+}
+- (void)hideFormSelectorNotificationHandler:(NSNotification*)notification
+{
+    if (notification.object != nil) {
+        attachedForm = (FormVO *) notification.object;
+        attachmentType = attachedForm.type;
+        hasAttachment = YES;
+        NSLog(@"Form pick: %@", attachedForm.name);
+        
+        
+        switch (attachmentType) {
+            case FormType_POLL:
+            {
+                [self.attachButton setImage:[UIImage imageNamed:kAttachPollIconAqua] forState:UIControlStateNormal];
+                break;
+            }
+            case FormType_RATING:
+                [self.attachButton setImage:[UIImage imageNamed:kAttachRatingIconAqua] forState:UIControlStateNormal];
+                break;
+            case FormType_RSVP:
+                [self.attachButton setImage:[UIImage imageNamed:kAttachRSVPIconAqua] forState:UIControlStateNormal];
+                break;
+        }
+        
+        
+    }
+    
+    [self hideFormSelector];
+}
 
 #pragma mark - UIBubbleTableViewDataSource implementation
 
 - (NSInteger)rowsForBubbleTable:(UIBubbleTableView *)tableView
 {
-    return [bubbleData count];
+    return [tableDataSource count];
 }
 
 - (NSBubbleData *)bubbleTableView:(UIBubbleTableView *)tableView dataForRow:(NSInteger)row
 {
-    return [bubbleData objectAtIndex:row];
+    return [tableDataSource objectAtIndex:row];
 }
 
 
@@ -887,36 +962,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self hideAttachModal];
 }
 
-#pragma mark - Notifications
-
-- (void)hideFormSelectorNotificationHandler:(NSNotification*)notification
-{
-    if (notification.object != nil) {
-        attachedForm = (FormVO *) notification.object;
-        attachmentType = attachedForm.type;
-        hasAttachment = YES;
-        NSLog(@"Form pick: %@", attachedForm.name);
-        
-        
-        switch (attachmentType) {
-            case FormType_POLL:
-            {
-                [self.attachButton setImage:[UIImage imageNamed:kAttachPollIconAqua] forState:UIControlStateNormal];
-                break;
-            }
-            case FormType_RATING:
-                [self.attachButton setImage:[UIImage imageNamed:kAttachRatingIconAqua] forState:UIControlStateNormal];
-                break;
-            case FormType_RSVP:
-                [self.attachButton setImage:[UIImage imageNamed:kAttachRSVPIconAqua] forState:UIControlStateNormal];
-                break;
-        }
-        
-        
-    }
-    
-    [self hideFormSelector];
-}
+#pragma mark - Chat message handling
 
 - (void) insertMessageInChat {
     //    [self.bubbleTable becomeFirstResponder];
@@ -925,7 +971,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         self.bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
         
         NSBubbleData *sayBubble = [NSBubbleData dataWithText:self.inputField.text date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
-        [bubbleData addObject:sayBubble];
+        [tableDataSource addObject:sayBubble];
         [self.bubbleTable reloadData];
         [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
         
@@ -1021,7 +1067,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 }
             }
             
-            [bubbleData addObject:formBubble];
+            [tableDataSource addObject:formBubble];
             [self.bubbleTable reloadData];
             [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
             
@@ -1032,7 +1078,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             // FIXME: use user avatar image
             photoBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
             
-            [bubbleData addObject:photoBubble];
+            [tableDataSource addObject:photoBubble];
             [self.bubbleTable reloadData];
             [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
             

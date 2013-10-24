@@ -210,8 +210,9 @@
             
             CGRect itemFrame = CGRectMake(xpos, ypos, estWidth, 24);
             SelectedItemWidget *item = [[SelectedItemWidget alloc] initWithFrame:itemFrame];
-
-            [item setFieldLabel:@"Hugh Lang"];
+            
+            NSString *fullname = [NSString stringWithFormat:@"%@ %@", contact.first_name, contact.last_name];
+            [item setFieldLabel:fullname];
             
             
             [self.selectionsView addSubview:item];
@@ -317,6 +318,6 @@
 
 - (IBAction)tapCancelButton
 {
-    [_delegate gotoPreviousSlide];
+    [_delegate goBack];
 }
 @end

@@ -8,6 +8,7 @@
 
 #import "EditChatVC.h"
 #import "DataModel.h"
+#import "UIColor+ColorWithHex.h"
 
 @interface EditChatVC ()
 
@@ -43,13 +44,21 @@
     contactsMap = [[NSMutableDictionary alloc] init];
     contactKeys = [[NSMutableArray alloc] init];
     
-    CGRect searchFrame = CGRectMake(5, 150, 310, 32);
+    CGRect searchFrame = CGRectMake(5, 5, 300, 36);
     ccSearchBar = [[CCSearchBar alloc] initWithFrame:searchFrame];
     ccSearchBar.delegate = self;
-    [self.view addSubview:ccSearchBar];
-
+    [self.searchView addSubview:ccSearchBar];
+ 
+    [self.searchView.layer setCornerRadius:3.0];
+//    self.searchView.backgroundColor = [UIColor clearColor];
+    
+    
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
+    self.theTableView.hidden = YES;
+    [self.theTableView setSeparatorColor:[UIColor grayColor]];
+    
+    
     self.theTableView.backgroundColor = [UIColor clearColor];
     
     self.tableData =[[NSMutableArray alloc]init];
@@ -122,23 +131,22 @@
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"%s", __FUNCTION__);
-    // http://stackoverflow.com/questions/413993/loading-a-reusable-uitableviewcell-from-a-nib
-    
-    static NSString *CellIdentifier = @"CCTableCell";
-    static NSString *CellNib = @"CCTableViewCell";
-    
-    CCTableViewCell *cell = (CCTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    static NSString *CellIdentifier = @"ContactTVC";
+    UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     @try {
         
         if (cell == nil) {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:CellNib owner:self options:nil];
-            cell = (CCTableViewCell *)[nib objectAtIndex:0];
-            
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            cell.frame = CGRectMake(0, 0, 300, 36);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell.textLabel setFont:[UIFont fontWithName:@"Raleway-Regular" size:13]];
+            cell.textLabel.textColor = [UIColor colorWithHexValue:0x111111];
+            cell.textLabel.textAlignment = NSTextAlignmentLeft;
+            cell.backgroundColor = [UIColor clearColor];
         }
         
         NSDictionary *rowData = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
-        cell.rowdata = rowData;
+        cell.textLabel.text = [NSString stringWithFormat:kFullNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
         
     } @catch (NSException * e) {
         NSLog(@"Exception: %@", e);
@@ -267,6 +275,8 @@
         chat.system_id = objectId;
         
         [chatSvc saveChat:chat];
+        
+        [DataModel shared].chat = chat;
         
         [_delegate gotoSlideWithName:@"Chat"];
         

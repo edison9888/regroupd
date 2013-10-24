@@ -98,6 +98,7 @@
 
 - (void)viewDidLoad
 {
+    _pathArray = [[NSMutableArray alloc] initWithCapacity:3];
 	if (self.view.window != [[UIApplication sharedApplication] keyWindow]) {
 		self.isMirror = YES;
 	}

@@ -46,6 +46,10 @@
 @property (nonatomic, retain) NSString *created;
 @property (nonatomic, retain) NSString *updated;
 
+@property (nonatomic, retain) NSDate *createdAt;
+@property (nonatomic, retain) NSDate *updatedAt;
+
 + (ContactVO *) readFromDictionary:(NSDictionary *) dict;
++ (ContactVO *) readFromPFObject:(PFObject *)data;
 
 @end

@@ -32,4 +32,6 @@
 - (void) addGroupContact:(int)groupId contactId:(int)contactId;
 - (void) removeGroupContact:(int)groupId contactId:(int)contactId;
 
+- (NSString *) apiSaveContact:(ContactVO *) contact;
+
 @end

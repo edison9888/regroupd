@@ -378,6 +378,10 @@
         if (contactSvc == nil) {
             contactSvc = [[ContactManager alloc] init];
         }
+        
+        NSString *objectId = [contactSvc apiSaveContact:contact];
+        contact.system_id = objectId;
+        
         [contactSvc saveContact:contact];
         
     }
@@ -398,38 +402,38 @@
     NSNumber *recordId = [NSNumber numberWithInt:abRecordID];
     
     NSLog(@"RecordId = %@", recordId);
-    
-    
-    CFErrorRef err;
-    ABAddressBookRef ab = ABAddressBookCreateWithOptions(NULL, &err);
-    __block BOOL accessGranted = NO;
-    
-    if (ABAddressBookRequestAccessWithCompletion != NULL) { // we're on iOS 6
-        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
-        ABAddressBookRequestAccessWithCompletion(ab, ^(bool granted, CFErrorRef error) {
-            accessGranted = granted;
-            dispatch_semaphore_signal(sema);
-        });
-        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-        //        dispatch_release(sema);
-    }
-    else { // we're on iOS 5 or older
-        accessGranted = YES;
-    }
-    
-    if (accessGranted)
-    {
+
+    if (recordId > 0) {
+        CFErrorRef err;
+        ABAddressBookRef ab = ABAddressBookCreateWithOptions(NULL, &err);
+        __block BOOL accessGranted = NO;
+        
+        if (ABAddressBookRequestAccessWithCompletion != NULL) { // we're on iOS 6
+            dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+            ABAddressBookRequestAccessWithCompletion(ab, ^(bool granted, CFErrorRef error) {
+                accessGranted = granted;
+                dispatch_semaphore_signal(sema);
+            });
+            dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+            //        dispatch_release(sema);
+        }
+        else { // we're on iOS 5 or older
+            accessGranted = YES;
+        }
+        
+        if (accessGranted)
+        {
             ABMultiValueRef emails = ABRecordCopyValue(person, kABPersonEmailProperty);
             ABMultiValueRef phones = ABRecordCopyValue(person, kABPersonPhoneProperty);
-        
-//            ABMultiValueRef profiles = ABRecordCopyValue(person, kABPersonSocialProfileProperty);
-//            CFIndex multiCount = ABMultiValueGetCount(profiles);
-//            for (CFIndex i=0; i<multiCount; i++) {
-//                NSDictionary* profile = ( NSDictionary*)CFBridgingRelease(ABMultiValueCopyValueAtIndex(profiles, i));
-//                NSLog(@"Profile: %@", profile);
-//                c.facebook_id=[profile objectForKey:@"identifier"];
-//            }
-//            CFRelease(profiles);
+            
+            //            ABMultiValueRef profiles = ABRecordCopyValue(person, kABPersonSocialProfileProperty);
+            //            CFIndex multiCount = ABMultiValueGetCount(profiles);
+            //            for (CFIndex i=0; i<multiCount; i++) {
+            //                NSDictionary* profile = ( NSDictionary*)CFBridgingRelease(ABMultiValueCopyValueAtIndex(profiles, i));
+            //                NSLog(@"Profile: %@", profile);
+            //                c.facebook_id=[profile objectForKey:@"identifier"];
+            //            }
+            //            CFRelease(profiles);
             NSString *phoneNumber;
             if(phones)
             {
@@ -442,10 +446,10 @@
             {
                 UIImage *image = [UIImage imageWithData:(NSData *)CFBridgingRelease(ABPersonCopyImageData(person))];
                 if(image) {
-//                    p.imagen=image;
+                    //                    p.imagen=image;
                 }
             } else  {
-//                p.imagen=[UIImage imageNamed:@"profile-default-sm.png"];
+                //                p.imagen=[UIImage imageNamed:@"profile-default-sm.png"];
             }
             CFStringRef email = ABMultiValueCopyValueAtIndex(emails, 0);
             CFStringRef firstName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
@@ -460,9 +464,14 @@
             if(email)
                 CFRelease(email);
             CFRelease(emails);
+        }
+        CFRelease(ab);
+        return c;
+        
+    } else {
+        return nil;
     }
-    CFRelease(ab);
-    return c;
+    
 }
 
 @end

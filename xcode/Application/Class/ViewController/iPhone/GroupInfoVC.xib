@@ -110,6 +110,8 @@
     <resources>
         <image name="btn_aqua_medium.png" width="94" height="37"/>
         <image name="contact_btn_bg_aqua_large.png" width="200" height="37"/>
+        <image name="contact_btn_bg_aqua_large.png" width="200" height="37"/>
+        <image name="contact_btn_bg_gray_large.png" width="200" height="37"/>
         <image name="contact_btn_bg_gray_large.png" width="200" height="37"/>
         <image name="hbar_96x2.png" width="96" height="2"/>
         <image name="topnav_aqua_bg.png" width="320" height="50"/>

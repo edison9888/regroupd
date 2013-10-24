@@ -40,5 +40,7 @@
 - (NSString *) apiSaveChatMessage:(ChatMessageVO *) msg;
 - (void) apiDeleteChatMessage:(ChatMessageVO *)msg;
 
+- (NSMutableArray *) asyncListChatMessages:(NSString *)objectId;
+- (NSMutableArray *) asyncListChatContacts:(NSArray *)objectIds;
 
 @end

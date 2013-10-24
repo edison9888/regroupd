@@ -8,8 +8,9 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditChatVC">
             <connections>
                 <outlet property="navTitle" destination="19" id="2sL-TB-73k"/>
+                <outlet property="searchView" destination="ghd-vi-V8M" id="NbH-YR-yCI"/>
                 <outlet property="selectionsView" destination="RAX-bf-4s9" id="Axm-YO-wEY"/>
-                <outlet property="theTableView" destination="30" id="31"/>
+                <outlet property="theTableView" destination="Wad-4S-MR4" id="wDh-eP-D6h"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -64,7 +65,7 @@
                 <view contentMode="scaleToFill" id="RAX-bf-4s9" userLabel="View - selections">
                     <rect key="frame" x="10" y="85" width="300" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="New Chat" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="19" customClass="BrandUILabel">
                     <rect key="frame" x="70" y="12" width="180" height="28"/>
@@ -73,12 +74,20 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="59" sectionHeaderHeight="22" sectionFooterHeight="22" id="30">
-                    <rect key="frame" x="11" y="184" width="300" height="369"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                </tableView>
+                <view contentMode="scaleToFill" id="ghd-vi-V8M" userLabel="View - search contacts">
+                    <rect key="frame" x="5" y="143" width="310" height="364"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="36" sectionHeaderHeight="22" sectionFooterHeight="22" id="Wad-4S-MR4">
+                            <rect key="frame" x="10" y="47" width="290" height="369"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <color key="sectionIndexTrackingBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </tableView>
+                    </subviews>
+                    <color key="backgroundColor" red="0.79215686269999996" green="0.81176470590000005" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
+                </view>
             </subviews>
             <color key="backgroundColor" red="0.90196078431372551" green="0.92156862745098034" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

@@ -18,13 +18,20 @@
 @property (nonatomic, retain) NSString *name;
 @property int type;
 @property int status;
+@property (nonatomic, retain) NSDate *createdAt;
+@property (nonatomic, retain) NSDate *updatedAt;
+
 @property (nonatomic, retain) NSString *created;
 @property (nonatomic, retain) NSString *updated;
 
+@property (nonatomic, retain) NSArray *contact_keys; // for phoneIds
+@property (nonatomic, retain) NSArray *contact_ids;  // for objectIds
+
+// Transient fields
 @property (nonatomic, retain) NSMutableArray *messages;
 @property (nonatomic, retain) NSMutableArray *contacts;
+@property (nonatomic, retain) NSMutableDictionary *contactMap;
 
-@property (nonatomic, retain) NSArray *contact_keys;
 
 + (ChatVO *) readFromDictionary:(NSDictionary *) dict;
 + (ChatVO *) readFromPFObject:(PFObject *)data;

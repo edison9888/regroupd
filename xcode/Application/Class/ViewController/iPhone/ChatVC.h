@@ -60,7 +60,7 @@
     NSString *formTitle;
 }
 
-@property (nonatomic, retain) NSMutableArray *bubbleData;
+@property (nonatomic, retain) NSMutableArray *tableDataSource;
 
 @property (nonatomic, retain) UIImagePickerController* imagePickerVC;
 @property (nonatomic, retain) FormSelectorVC* formSelectorVC;

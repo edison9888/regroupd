@@ -56,6 +56,8 @@
     NSString *text;
 
     o.system_id = data.objectId;
+    o.createdAt = data.createdAt;
+    o.updatedAt = data.updatedAt;
 
     text = [data valueForKey:@"chat_id"];
     o.chat_id = text.integerValue;
@@ -71,13 +73,7 @@
     
     text = [data valueForKey:@"status"];
     o.status = text.integerValue;
-    
-    text = [data valueForKey:@"created"];
-    o.created = text;
-    
-    text = [data valueForKey:@"updated"];
-    o.updated = text;
-    
+        
     o.contact_keys = (NSArray *) [data valueForKey:@"contact_keys"];
 
     return o;

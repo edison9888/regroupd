@@ -60,7 +60,7 @@
      );
 
      */
-    sql = @"INSERT into contact (user_key, system_id, first_name, last_name, phone, email, imagefile, type, status, created, updated) values (?, ?, ?, ?, ?, ?, ?);";
+    sql = @"INSERT into contact (user_key, system_id, first_name, last_name, phone, email, imagefile, type, status, created, updated) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
    
     success = [[SQLiteDB sharedConnection] executeUpdate:sql,
                [DataModel shared].user.user_key,
@@ -379,4 +379,26 @@
                ];
 
 }
+
+#pragma mark - parse.com - Contact API
+
+- (NSString *) apiSaveContact:(ContactVO *) contact {
+    
+    PFObject *data = [PFObject objectWithClassName:kContactDB];
+    
+    data[@"first_name"] = contact.first_name;
+    data[@"last_name"] = contact.last_name;
+    data[@"phone"] = contact.phone;
+    
+    if (contact.email != nil) {
+        data[@"email"] = contact.email;
+    }
+    
+    [data save];
+    
+    NSLog(@"Saved chat with objectId %@", data.objectId);
+    return data.objectId;
+    
+}
+
 @end

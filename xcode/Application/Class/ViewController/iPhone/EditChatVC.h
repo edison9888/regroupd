@@ -30,6 +30,7 @@
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
 @property (nonatomic, retain) IBOutlet UIView *selectionsView;
+@property (nonatomic, retain) IBOutlet UIView *searchView;
 
 @property (nonatomic, retain) CCSearchBar *ccSearchBar;
 

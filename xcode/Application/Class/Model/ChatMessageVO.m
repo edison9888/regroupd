@@ -67,7 +67,9 @@
     NSString *text;
     
     o.system_id = data.objectId;
-    
+    o.createdAt = data.createdAt;
+    o.updatedAt = data.updatedAt;
+
     text = [data valueForKey:@"message_id"];
     o.message_id = text.integerValue;
     
@@ -79,7 +81,13 @@
     
     text = [data valueForKey:@"form_id"];
     o.form_id = text.integerValue;
+
+    text = [data valueForKey:@"contact_key"];
+    o.contact_key = text;
     
+    text = [data valueForKey:@"user_key"];
+    o.user_key = text;
+
     text = [data valueForKey:@"message"];
     o.message = text;
     
