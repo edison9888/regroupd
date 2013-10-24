@@ -53,26 +53,35 @@
 - (void) startNewProfile
 {
     NSLog(@"%s", __FUNCTION__);
-    
-    UserManager *userService = [[UserManager alloc] init];
-    
-    UserVO *user = [userService lookupDefaultUser];
-    
     PFUser *u = [PFUser currentUser];
     NSLog(@"Current user is %@, %@", u.username, u.objectId);
     
-    [DataModel shared].user = user;
-
-    if (user == nil) {
-//        [DataModel shared].navIndex = 1;
-//        [_delegate gotoSlideWithName:@"GroupsHome"];
-        [_delegate gotoSlideWithName:@"ProfileStart1"];
-        
-    } else {
+    if (u.objectId != nil && u.objectId.length > 0) {
         [DataModel shared].navIndex = 3;
         [_delegate gotoSlideWithName:@"FormsHome"];
         
+    } else {
+        [_delegate gotoSlideWithName:@"ProfileStart1"];
+        
     }
+    
+//    UserManager *userService = [[UserManager alloc] init];
+//    
+//    UserVO *user = [userService lookupDefaultUser];
+//    
+//    
+//    [DataModel shared].user = user;
+//
+//    if (user == nil) {
+////        [DataModel shared].navIndex = 1;
+////        [_delegate gotoSlideWithName:@"GroupsHome"];
+//        [_delegate gotoSlideWithName:@"ProfileStart1"];
+//        
+//    } else {
+//        [DataModel shared].navIndex = 3;
+//        [_delegate gotoSlideWithName:@"FormsHome"];
+//        
+//    }
     
 }
 

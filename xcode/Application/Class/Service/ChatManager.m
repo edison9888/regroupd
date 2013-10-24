@@ -300,7 +300,9 @@
     
     PFObject *data = [PFObject objectWithClassName:kChatDB];
     
-    data[@"name"] = chat.name;
+    if (chat.name != nil) {
+        data[@"name"] = chat.name;        
+    }
     data[@"user"] = [PFUser currentUser];
     data[@"contact_keys"] = chat.contact_keys;
     [data save];
@@ -323,7 +325,16 @@
 }
 - (NSString *) apiSaveChatMessage:(ChatMessageVO *) msg {
 
-    return nil;
+    PFObject *data = [PFObject objectWithClassName:kChatMessageDB];
+
+    data[@"message"]=msg.message;
+    data[@"user"] = [PFUser currentUser];
+    data[@"contact_key"] = msg.contact_key;
+    
+    [data save];
+    
+    NSLog(@"Saved chat with objectId %@", data.objectId);
+    return data.objectId;
 
 }
 - (void) apiDeleteChatMessage:(ChatMessageVO *)msg {
@@ -337,46 +348,55 @@
  
  */
 - (NSMutableArray *) asyncListChatMessages:(NSString *)objectId {
-    PFQuery *query = [PFQuery queryWithClassName:kChatMessageDB];
-    [query whereKey:@"chat"
-            equalTo:[PFObject objectWithoutDataWithClassName:kChatDB objectId:objectId]];
+    __block ChatVO *chat = [[ChatVO alloc] init];
+
     
-    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
-        NSMutableArray *msgs = [[NSMutableArray alloc] initWithCapacity:results.count];
-        ChatMessageVO *msg;
-        NSMutableArray *userKeys = [[NSMutableArray alloc] init];
+    PFQuery *query = [PFQuery queryWithClassName:kChatDB];
+    [query getObjectInBackgroundWithId:objectId block:^(PFObject *object, NSError *error) {
+        chat = [ChatVO readFromPFObject:object];
         
-        for (PFObject *result in results) {
-            msg = [[ChatMessageVO alloc] init];
-            msg = [ChatMessageVO readFromPFObject:result];
-            [msgs addObject:msg];
-            
-            if (msg.user_key != nil) {
-                if ([userKeys indexOfObject:msg.user_key] != NSNotFound) {
-                    [userKeys addObject:msg.user_key];
-                }
-            }
-        }
-        __block ChatVO *chat = [[ChatVO alloc] init];
-        chat.messages = msgs;
-        PFQuery *query = [PFQuery queryWithClassName:kContactDB];
-        [query whereKey:@"objectId" containedIn:[userKeys copy]];
+        PFQuery *query = [PFQuery queryWithClassName:kChatMessageDB];
+        [query whereKey:@"chat"
+                equalTo:[PFObject objectWithoutDataWithClassName:kChatDB objectId:objectId]];
         
         [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
-            NSMutableDictionary *contactMap = [[NSMutableDictionary alloc] initWithCapacity:results.count];
-            ContactVO *contact;
-            for (PFObject *result in results) {
-                contact = [ContactVO readFromPFObject:result];
-                [contactMap setObject:contact forKey:contact.system_id];
-            }
-            chat.contactMap = contactMap;
+            NSMutableArray *msgs = [[NSMutableArray alloc] initWithCapacity:results.count];
+            ChatMessageVO *msg;
+            NSMutableArray *userKeys = [[NSMutableArray alloc] init];
             
-            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"chatMessagesLoaded"
-                                                                                                 object:chat]];
+            for (PFObject *result in results) {
+                msg = [[ChatMessageVO alloc] init];
+                msg = [ChatMessageVO readFromPFObject:result];
+                [msgs addObject:msg];
+                
+                if (msg.user_key != nil) {
+                    if ([userKeys indexOfObject:msg.user_key] != NSNotFound) {
+                        [userKeys addObject:msg.user_key];
+                    }
+                }
+            }
+            chat.messages = msgs;
+            PFQuery *query = [PFQuery queryWithClassName:kContactDB];
+            [query whereKey:@"objectId" containedIn:[userKeys copy]];
+            
+            [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+                NSMutableDictionary *contactMap = [[NSMutableDictionary alloc] initWithCapacity:results.count];
+                ContactVO *contact;
+                for (PFObject *result in results) {
+                    contact = [ContactVO readFromPFObject:result];
+                    [contactMap setObject:contact forKey:contact.system_id];
+                }
+                chat.contactMap = contactMap;
+                
+                [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"chatMessagesLoaded"
+                                                                                                     object:chat]];
+            }];
+            
+            
         }];
         
-        
     }];
+
     return nil;
 }
 - (NSMutableArray *) asyncListChatContacts:(NSArray *)objectIds {

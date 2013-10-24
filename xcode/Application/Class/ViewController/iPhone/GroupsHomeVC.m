@@ -111,10 +111,10 @@
             selectedIndex = indexPath.row;
             NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
             
-            [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
+            [DataModel shared].group = [GroupVO readFromDictionary:rowdata];
             
             [DataModel shared].action = kActionEDIT;
-            [_delegate gotoSlideWithName:@"GroupInfo"];
+            [_delegate gotoSlideWithName:@"GroupInfo" returnPath:@"GroupsHome"];
             
         }
     } @catch (NSException * e) {

@@ -269,7 +269,6 @@
                 </scrollView>
             </subviews>
             <color key="backgroundColor" red="0.53333333329999999" green="0.58039215690000001" blue="0.60784313729999995" alpha="1" colorSpace="calibratedRGB"/>
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
         </view>
         <view autoresizesSubviews="NO" contentMode="scaleToFill" id="56" userLabel="View - modal">

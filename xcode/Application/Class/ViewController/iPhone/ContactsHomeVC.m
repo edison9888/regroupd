@@ -287,7 +287,7 @@
     [_delegate gotoSlideWithName:@"EditGroup" returnPath:@"ContactsHome"];
 }
 - (IBAction)tapCancelButton {
-    
+    [self hideModal];
 }
 
 
@@ -373,23 +373,26 @@
 
     
     @try {
-        ContactVO *contact = [self readContactFromABPerson:person];
-        
-        if (contactSvc == nil) {
-            contactSvc = [[ContactManager alloc] init];
+        if (person != NULL) {
+            ContactVO *contact = [self readContactFromABPerson:person];
+            
+            if (contactSvc == nil) {
+                contactSvc = [[ContactManager alloc] init];
+            }
+            
+            NSString *objectId = [contactSvc apiSaveContact:contact];
+            contact.system_id = objectId;
+            
+            [contactSvc saveContact:contact];
+            
         }
-        
-        NSString *objectId = [contactSvc apiSaveContact:contact];
-        contact.system_id = objectId;
-        
-        [contactSvc saveContact:contact];
         
     }
     @catch (NSException *exception) {
         NSLog(@"#####ERROR###### %@", exception);
 //
     }
-    [self.theTableView reloadData];
+    [self performSearch:@""];
     
 }
 

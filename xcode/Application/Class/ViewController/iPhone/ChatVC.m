@@ -203,11 +203,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     if ([DataModel shared].chat != nil) {
         
-        
+        [chatSvc asyncListChatMessages:[DataModel shared].chat.system_id];
     }
     
     
-    [self.bubbleTable reloadData];
     
 }
 
@@ -969,7 +968,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     if (self.inputField.text.length > 0) {
         self.bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
+        ChatMessageVO *msg = [[ChatMessageVO alloc] init];
+        msg.message = self.inputField.text;
+        msg.contact_key = [DataModel shared].user.user_key;
         
+        [chatSvc apiSaveChatMessage:msg];
         NSBubbleData *sayBubble = [NSBubbleData dataWithText:self.inputField.text date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
         [tableDataSource addObject:sayBubble];
         [self.bubbleTable reloadData];

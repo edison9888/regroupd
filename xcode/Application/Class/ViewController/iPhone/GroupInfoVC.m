@@ -42,16 +42,7 @@
     self.roundPic.clipsToBounds = YES;
     self.roundPic.contentMode = UIViewContentModeScaleAspectFill;
 
-    UIImage *img;
-    
-    img = [UIImage imageNamed:@"anonymous_user"];
-    self.roundPic.image = img;
-    
-    NSString *nameFormat = @"%@ %@";
-    self.nameLabel.text = [NSString stringWithFormat:nameFormat,
-                           [DataModel shared].contact.first_name,
-                           [DataModel shared].contact.last_name];
-    
+    self.nameLabel.text = [DataModel shared].group.name;
 
 }
 
@@ -66,19 +57,16 @@
 #pragma mark - IBActions
 
 - (IBAction)tapBackButton {
-    [_delegate gotoSlideWithName:@"ContactsHome" andOverrideTransition:kPresentationTransitionAuto];
+    [_delegate goBack];
     
 }
 - (IBAction)tapMessageButton {
     
 }
-- (IBAction)tapPhoneButton {
+- (IBAction)tapManageButton {
     
 }
-- (IBAction)tapGroupsButton {
-    
-}
-- (IBAction)tapBlockButton {
+- (IBAction)tapDeleteButton {
     
 }
 

@@ -291,8 +291,9 @@
         ContactManager *contactSvc = [[ContactManager alloc]init];
         GroupVO *group = [[GroupVO alloc] init];
         group.name = self.groupName.text;
-        
-        
+        group.system_id = @"";
+        group.status = 0;
+        group.type = 1;
         
         int groupId = [contactSvc saveGroup:group];
         

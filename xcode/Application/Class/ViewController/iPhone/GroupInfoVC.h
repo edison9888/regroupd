@@ -21,9 +21,8 @@
 
 - (IBAction)tapBackButton;
 - (IBAction)tapMessageButton;
-- (IBAction)tapPhoneButton;
-- (IBAction)tapGroupsButton;
-- (IBAction)tapBlockButton;
+- (IBAction)tapManageButton;
+- (IBAction)tapDeleteButton;
 
 
 @end

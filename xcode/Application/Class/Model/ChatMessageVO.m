@@ -82,6 +82,9 @@
     text = [data valueForKey:@"form_id"];
     o.form_id = text.integerValue;
 
+    text = [data valueForKey:@"chat_key"];
+    o.chat_key = text;
+
     text = [data valueForKey:@"contact_key"];
     o.contact_key = text;
     

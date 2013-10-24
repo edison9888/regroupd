@@ -29,21 +29,21 @@ last_name TEXT,
 phone TEXT,
 email TEXT,
 imagefile TEXT,
-type int DEFAULT 1,
+type INT DEFAULT 1,
 status INT DEFAULT 0,
 created TEXT,
 updated TEXT
 );
 
 CREATE TABLE IF NOT EXISTS db_group ( 
-    group_id INTEGER PRIMARY KEY,  
-    user_key TEXT,  
-    system_id TEXT,
-    name TEXT, 
-    type int DEFAULT 1, 
-    status INT DEFAULT 0,
-	created TEXT,
-	updated TEXT
+group_id INTEGER PRIMARY KEY,  
+user_key TEXT,  
+system_id TEXT,
+name TEXT, 
+type INT DEFAULT 1, 
+status INT DEFAULT 0,
+created TEXT,
+updated TEXT
 );
 
 CREATE TABLE IF NOT EXISTS group_contact ( 
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS chat (
     user_key TEXT,  
     system_id TEXT,
     name TEXT, 	
-    type int DEFAULT 1, 
+    type INT DEFAULT 1, 
     status INT DEFAULT 0,
     created TEXT,
     updated TEXT
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS chat_message (
     system_id TEXT,
     message TEXT, 	
     attachment TEXT, 	
-    type int DEFAULT 1, 
+    type INT DEFAULT 1, 
     status INT DEFAULT 0,
     created TEXT
 );
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS form (
     location TEXT,
     description TEXT,
     imagefile TEXT,
-    type int DEFAULT 1, 
+    type INT DEFAULT 1, 
     status INT DEFAULT 0,
     start_time TEXT,
     end_time TEXT,
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS form_option (
     stats TEXT,
     datafile TEXT,
     imagefile TEXT,
-    type int DEFAULT 1, 
+    type INT DEFAULT 1, 
     status INT DEFAULT 0,
     created TEXT,
     updated TEXT

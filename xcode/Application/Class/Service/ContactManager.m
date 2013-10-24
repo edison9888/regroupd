@@ -1,3 +1,4 @@
+
 //
 //  GroupManager.m
 //  Regroupd
@@ -220,14 +221,11 @@
     NSLog(@"dt %@", dt);
     
     @try {
-        sql = @"INSERT into db_group (system_id, name, type, status, created, updated) values (?, ?, ?, ?, ?, ?);";
+        sql = @"INSERT into db_group (user_key, system_id, name) values (?, ?, ?);";
         success = [[SQLiteDB sharedConnection] executeUpdate:sql,
+                   [DataModel shared].user.user_key,
                    group.system_id,
-                   group.name,
-                   group.type,
-                   group.status,
-                   dt,
-                   dt
+                   group.name
                    ];
         
         if (!success) {

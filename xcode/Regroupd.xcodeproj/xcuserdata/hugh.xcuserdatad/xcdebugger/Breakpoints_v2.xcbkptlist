@@ -42,57 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Application/Class/ViewController/iPhone/ContactsHomeVC.m"
-            timestampString = "404272690.79083"
+            timestampString = "404305561.106122"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "376"
-            endingLineNumber = "376"
-            landmarkName = "-newPersonViewController:didCompleteWithNewPerson:"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[ContactsHomeVC newPersonViewController:didCompleteWithNewPerson:]"
-                  moduleName = "regroupd"
-                  urlString = "file://localhost/Sandbox/APPMOB/regroup/regroupd/xcode/Application/Class/ViewController/iPhone/ContactsHomeVC.m"
-                  timestampString = "404272713.328582"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "376"
-                  endingLineNumber = "376"
-                  offsetFromSymbolStart = "298">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[ContactsHomeVC newPersonViewController:didCompleteWithNewPerson:]"
-                  moduleName = "regroupd"
-                  urlString = "file://localhost/Sandbox/APPMOB/regroup/regroupd/xcode/Application/Class/ViewController/iPhone/ContactsHomeVC.m"
-                  timestampString = "404272713.329843"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "376"
-                  endingLineNumber = "376"
-                  offsetFromSymbolStart = "476">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Application/Class/ViewController/iPhone/ContactsHomeVC.m"
-            timestampString = "404277600.001878"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "404"
-            endingLineNumber = "404"
+            startingLineNumber = "407"
+            endingLineNumber = "407"
             landmarkName = "-readContactFromABPerson:"
             landmarkType = "5">
          </BreakpointContent>
@@ -116,7 +70,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Application/Class/ViewController/iPhone/GroupsHomeVC.m"
@@ -126,6 +80,22 @@
             startingLineNumber = "108"
             endingLineNumber = "108"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Application/Class/Service/ContactManager.m"
+            timestampString = "404312703.171839"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "221"
+            endingLineNumber = "221"
+            landmarkName = "-saveGroup:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

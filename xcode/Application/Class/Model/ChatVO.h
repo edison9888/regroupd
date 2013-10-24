@@ -32,6 +32,7 @@
 @property (nonatomic, retain) NSMutableArray *contacts;
 @property (nonatomic, retain) NSMutableDictionary *contactMap;
 
+@property (nonatomic, retain) PFObject *pf_chat;
 
 + (ChatVO *) readFromDictionary:(NSDictionary *) dict;
 + (ChatVO *) readFromPFObject:(PFObject *)data;

@@ -13,6 +13,7 @@
 #import "FormVO.h"
 #import "FormOptionVO.h"
 #import "ChatVO.h"
+#import "GroupVO.h"
 
 #define contains(str1, str2) ([str1 rangeOfString: str2 ].location != NSNotFound)
 
@@ -45,6 +46,7 @@
 @property (nonatomic, retain) ContactVO *contact;
 @property (nonatomic, retain) FormVO *form;
 @property (nonatomic, retain) ChatVO *chat;
+@property (nonatomic, retain) GroupVO *group;
 
 @property (nonatomic, retain) NSMutableDictionary *contactData;
 @property (nonatomic, retain) NSString *action;

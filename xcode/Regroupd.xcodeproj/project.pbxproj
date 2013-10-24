@@ -23,6 +23,8 @@
 		1E0CAA43178253F100A294C0 /* BrandUITextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E0CAA41178253DF00A294C0 /* BrandUITextField.m */; };
 		1E0CAA461782586400A294C0 /* pattern_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA441782586400A294C0 /* pattern_background@2x.png */; };
 		1E0CAA471782586400A294C0 /* pattern_background-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA451782586400A294C0 /* pattern_background-568h@2x.png */; };
+		1E0D0FA51819343600B8174B /* group_roundpic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0D0FA31819343600B8174B /* group_roundpic@2x.png */; };
+		1E0D0FA61819343600B8174B /* icon_search_aqua@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0D0FA41819343600B8174B /* icon_search_aqua@2x.png */; };
 		1E0F8EF61810999E00B6C6AF /* settings_big_button_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0F8EF21810999E00B6C6AF /* settings_big_button_bg@2x.png */; };
 		1E0F8EF71810999E00B6C6AF /* settings_icon_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0F8EF31810999E00B6C6AF /* settings_icon_off@2x.png */; };
 		1E0F8EF81810999E00B6C6AF /* settings_icon_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0F8EF41810999E00B6C6AF /* settings_icon_on@2x.png */; };
@@ -517,6 +519,8 @@
 		1E0CAA441782586400A294C0 /* pattern_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pattern_background@2x.png"; sourceTree = "<group>"; };
 		1E0CAA451782586400A294C0 /* pattern_background-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pattern_background-568h@2x.png"; sourceTree = "<group>"; };
 		1E0CAA4B1782638200A294C0 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		1E0D0FA31819343600B8174B /* group_roundpic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "group_roundpic@2x.png"; sourceTree = "<group>"; };
+		1E0D0FA41819343600B8174B /* icon_search_aqua@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_search_aqua@2x.png"; sourceTree = "<group>"; };
 		1E0F8EF21810999E00B6C6AF /* settings_big_button_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_big_button_bg@2x.png"; sourceTree = "<group>"; };
 		1E0F8EF31810999E00B6C6AF /* settings_icon_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_icon_off@2x.png"; sourceTree = "<group>"; };
 		1E0F8EF41810999E00B6C6AF /* settings_icon_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_icon_on@2x.png"; sourceTree = "<group>"; };
@@ -1480,6 +1484,8 @@
 		1E9280E9177FB68F008A583C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1E0D0FA31819343600B8174B /* group_roundpic@2x.png */,
+				1E0D0FA41819343600B8174B /* icon_search_aqua@2x.png */,
 				1EC44BCA1813072A00F4A2C2 /* anonymous_user@2x.png */,
 				1EC44BC61813018D00F4A2C2 /* contact_btn_bg_aqua_large@2x.png */,
 				1EC44BC71813018D00F4A2C2 /* contact_btn_bg_gray_large@2x.png */,
@@ -2391,6 +2397,7 @@
 				1E9282F4177FDCEB008A583C /* icon_search.png in Resources */,
 				1E9282F5177FDCEB008A583C /* opaque_bg.png in Resources */,
 				1E9282F6177FDCEB008A583C /* page_dot_grey.png in Resources */,
+				1E0D0FA51819343600B8174B /* group_roundpic@2x.png in Resources */,
 				1E9282F7177FDCEB008A583C /* page_dot_red.png in Resources */,
 				1E9282F8177FDCEB008A583C /* popup_bg.png in Resources */,
 				1E9282FB177FDCEB008A583C /* tabbar_bg.png in Resources */,
@@ -2503,6 +2510,7 @@
 				1E2C7EA217E4FFCB0043E28D /* dkblue_btn_bg_slice@2x.png in Resources */,
 				1E2C7EA317E4FFCB0043E28D /* dkblue_med2_btn_bg@2x.png in Resources */,
 				1E79B7181815BB9F002E417A /* appicon_80.png in Resources */,
+				1E0D0FA61819343600B8174B /* icon_search_aqua@2x.png in Resources */,
 				1EC44C6918130CC100F4A2C2 /* GroupsHomeVC.xib in Resources */,
 				1E2C7EA417E4FFCB0043E28D /* dkblue_med1_btn_bg@2x.png in Resources */,
 				1EC44C5118130CC100F4A2C2 /* ChatsHomeVC.xib in Resources */,
@@ -2882,8 +2890,8 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Application/Regroupd-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = regroupd;
-				PROVISIONING_PROFILE = "7CBB6405-A28A-4734-AA9F-91BB0BAC7390";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7CBB6405-A28A-4734-AA9F-91BB0BAC7390";
+				PROVISIONING_PROFILE = "0007D108-C4EF-44C8-9EFF-0BED2E36292F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0007D108-C4EF-44C8-9EFF-0BED2E36292F";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2978,8 +2986,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_NAME = regroupd;
-				PROVISIONING_PROFILE = "6FA8FE41-B50F-4CEB-A997-0D206D7B5D78";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "6FA8FE41-B50F-4CEB-A997-0D206D7B5D78";
+				PROVISIONING_PROFILE = "E525A46A-4DEA-41E1-AF37-9D7D79B22F5C";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E525A46A-4DEA-41E1-AF37-9D7D79B22F5C";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2991,7 +2999,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Appetizer Mobile LLC (283U9AE89W)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Sandbox/APPMOB/regroup/regroupd/xcode/Application/ThirdParty,
@@ -3003,8 +3011,8 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Application/Regroupd-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = regroupd;
-				PROVISIONING_PROFILE = "7CBB6405-A28A-4734-AA9F-91BB0BAC7390";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7CBB6405-A28A-4734-AA9F-91BB0BAC7390";
+				PROVISIONING_PROFILE = "0007D108-C4EF-44C8-9EFF-0BED2E36292F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0007D108-C4EF-44C8-9EFF-0BED2E36292F";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
