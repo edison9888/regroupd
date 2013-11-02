@@ -22,6 +22,9 @@
 #import "FormVO.h"
 
 @interface ChatVC : SlideViewController<UIBubbleTableViewDataSource, UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate, UIGestureRecognizerDelegate> {
+    
+    NSString *chatId;
+    
     int fieldIndex;
     
     float drawerMinTop;

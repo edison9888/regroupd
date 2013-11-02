@@ -7,12 +7,19 @@
 //
 
 #import "ContactVO.h"
+#define kNameFormat @"%@ %@"
 
 @implementation ContactVO
 
 @synthesize contact_id, record_id, system_id, facebook_id;
 @synthesize first_name, last_name, phone, email, imagefile;
 @synthesize type, status, created, updated;
+
+//@synthesize contact_key;
+
+- (NSString *) fullname {
+    return [NSString stringWithFormat:kNameFormat, self.first_name, self.last_name];
+}
 
 /*
  CREATE TABLE IF NOT EXISTS contact (
@@ -99,4 +106,24 @@
     return o;
 }
 
++ (ContactVO *) readFromPFUserContact:(PFObject *)data {
+    ContactVO *o = [[ContactVO alloc] init];
+    NSString *text;
+    
+    o.createdAt = data.createdAt;
+    o.updatedAt = data.updatedAt;
+    
+    // This is a cheat. We are creating a fake ContactVO from the date in UserContactDB
+    text = [data valueForKey:@"contact_key"];
+    o.system_id = text;
+    text = [data valueForKey:@"first_name"];
+    o.first_name = text;
+    text = [data valueForKey:@"last_name"];
+    o.last_name = text;
+    text = [data valueForKey:@"imagefile"];
+    o.imagefile = text;
+    
+    return o;
+
+}
 @end

@@ -27,10 +27,10 @@
 - (NSString *) reuseIdentifier {
     return @"ChatTableCell";
 }
-- (void)setRowdata:(NSDictionary *)data
+- (void)setRowdata:(ChatVO *)chat
 {
-    rowdata = data;
-    self.titleLabel.text = [data objectForKey:@"name"];
+    rowdata = chat;
+    self.titleLabel.text = chat.names;
 }
 
 

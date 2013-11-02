@@ -84,6 +84,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    chatId = [DataModel shared].chat.system_id;
+    
     inputHeight = 0;
     theFont = [UIFont fontWithName:@"Raleway-Regular" size:13];
     
@@ -202,7 +205,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatContactsLoadedHandler:) name:@"chatContactsLoaded" object:nil];
     
     if ([DataModel shared].chat != nil) {
-        
+        NSLog(@"Fetch chat by objectId %@", [DataModel shared].chat.system_id);
         [chatSvc asyncListChatMessages:[DataModel shared].chat.system_id];
     }
     
@@ -221,7 +224,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             NSBubbleData *bubble;
             
             for (ChatMessageVO* msg in theChat.messages) {
-                if ([msg.user_key isEqualToString:[DataModel shared].user.user_key]) {
+                if ([msg.contact_key isEqualToString:[DataModel shared].user.user_key]) {
                     // my message
                     bubble = [NSBubbleData dataWithText:msg.message date:msg.createdAt type:BubbleTypeMine];
                     bubble.avatar = nil;
@@ -967,22 +970,24 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     //    [self.bubbleTable becomeFirstResponder];
     
     if (self.inputField.text.length > 0) {
-        self.bubbleTable.typingBubble = NSBubbleTypingTypeNobody;
         ChatMessageVO *msg = [[ChatMessageVO alloc] init];
         msg.message = self.inputField.text;
         msg.contact_key = [DataModel shared].user.user_key;
         
-        [chatSvc apiSaveChatMessage:msg];
-        NSBubbleData *sayBubble = [NSBubbleData dataWithText:self.inputField.text date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
-        [tableDataSource addObject:sayBubble];
-        [self.bubbleTable reloadData];
-        [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
-        
-        self.inputField.text = @"";
-        
-        // Reset frame of chat and input
-        self.inputField.frame = inputFrame;
-        self.chatBar.frame = chatFrameWithKeyboard;
+        [chatSvc apiSaveChatMessage:msg chatId:chatId callback:^(PFObject *msg) {
+            NSBubbleData *sayBubble = [NSBubbleData dataWithText:self.inputField.text date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
+            [tableDataSource addObject:sayBubble];
+            [self.bubbleTable reloadData];
+            [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+            
+            self.inputField.text = @"";
+            
+            // Reset frame of chat and input
+            self.inputField.frame = inputFrame;
+            self.chatBar.frame = chatFrameWithKeyboard;
+            
+        }];
+//        [chatSvc apiSaveChatMessage:msg];
     }
     // Insert attachment if present. Reset inputs when done
     if (hasAttachment) {

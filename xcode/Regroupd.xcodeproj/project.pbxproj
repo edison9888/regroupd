@@ -214,7 +214,6 @@
 		1E88806417F4FC340070116C /* SurveyOptionWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88806217F4FC320070116C /* SurveyOptionWidget.m */; };
 		1E88806517F4FC340070116C /* SurveyOptionWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E88806317F4FC330070116C /* SurveyOptionWidget.xib */; };
 		1E88806817F4FC650070116C /* FancyTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88806717F4FC630070116C /* FancyTextView.m */; };
-		1E88806B17F50B790070116C /* ExpandingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E88806917F50B740070116C /* ExpandingTextView.m */; };
 		1E8BFAC317F738280053BEE3 /* navbtn_done@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAC217F738280053BEE3 /* navbtn_done@2x.png */; };
 		1E8BFAC517F738540053BEE3 /* navbtn_done.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E8BFAC417F738540053BEE3 /* navbtn_done.png */; };
 		1E8BFACF17F73B3C0053BEE3 /* NSArray+Random.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8BFAC917F73B3C0053BEE3 /* NSArray+Random.m */; };
@@ -759,8 +758,6 @@
 		1E88806317F4FC330070116C /* SurveyOptionWidget.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SurveyOptionWidget.xib; sourceTree = "<group>"; };
 		1E88806617F4FC620070116C /* FancyTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FancyTextView.h; sourceTree = "<group>"; };
 		1E88806717F4FC630070116C /* FancyTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FancyTextView.m; sourceTree = "<group>"; };
-		1E88806917F50B740070116C /* ExpandingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExpandingTextView.m; sourceTree = "<group>"; };
-		1E88806A17F50B770070116C /* ExpandingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExpandingTextView.h; sourceTree = "<group>"; };
 		1E8BFAC217F738280053BEE3 /* navbtn_done@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbtn_done@2x.png"; sourceTree = "<group>"; };
 		1E8BFAC417F738540053BEE3 /* navbtn_done.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navbtn_done.png; sourceTree = "<group>"; };
 		1E8BFAC817F73B3C0053BEE3 /* NSArray+Random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Random.h"; sourceTree = "<group>"; };
@@ -1322,8 +1319,6 @@
 				1E7A6E101806EA21004B62CE /* EmbedRSVPWidget.h */,
 				1E7A6E111806EA21004B62CE /* EmbedRSVPWidget.m */,
 				1E7A6E121806EA21004B62CE /* EmbedRSVPWidget.xib */,
-				1E88806A17F50B770070116C /* ExpandingTextView.h */,
-				1E88806917F50B740070116C /* ExpandingTextView.m */,
 				1E1E25C517F342180079416C /* FancyTextField.h */,
 				1E1E25C617F342180079416C /* FancyTextField.m */,
 				1E88806617F4FC620070116C /* FancyTextView.h */,
@@ -2772,7 +2767,6 @@
 				1E88806417F4FC340070116C /* SurveyOptionWidget.m in Sources */,
 				1EC44C6618130CC100F4A2C2 /* GroupInfoVC.m in Sources */,
 				1E88806817F4FC650070116C /* FancyTextView.m in Sources */,
-				1E88806B17F50B790070116C /* ExpandingTextView.m in Sources */,
 				1E7A6E1F1806EA21004B62CE /* EmbedRatingWidget.m in Sources */,
 				1E131D5B17F60FBE00749506 /* FancyDateTimeField.m in Sources */,
 				1E8BFACF17F73B3C0053BEE3 /* NSArray+Random.m in Sources */,

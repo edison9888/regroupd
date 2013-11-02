@@ -30,10 +30,14 @@
 - (ChatMessageVO *) findChatMessageBySystemId:(NSString *)objectId;
 
 // API functions
+- (void) apiListChats:(NSString *)userId callback:(void (^)(NSArray *results))callback;
+- (void) apiSaveChatMessage:(ChatMessageVO *)msg chatId:(NSString *)chatId callback:(void (^)(PFObject *object))callback;
+
+// Syncrhonous API functions
 - (ChatVO *) apiLoadChat:(NSString *)objectId;
 - (ChatVO *) apiLoadChat:(NSString *)objectId fetchAll:(BOOL)all;
 - (NSString *) apiSaveChat:(ChatVO *) chat;
-- (NSMutableArray *) apiListChats:(NSString *)userId;
+
 - (void) apiDeleteChat:(ChatVO *)chat;
 
 - (ChatMessageVO *) apiLoadChatMessage:(NSString *)objectId;

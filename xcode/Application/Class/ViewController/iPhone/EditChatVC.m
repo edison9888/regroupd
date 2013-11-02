@@ -10,6 +10,9 @@
 #import "DataModel.h"
 #import "UIColor+ColorWithHex.h"
 
+#define kcontactsRowHeight  25
+#define kcontactsGap  5
+
 @interface EditChatVC ()
 
 @end
@@ -38,7 +41,7 @@
     
     // Do any additional setup after loading the view from its nib.
     
-    xpos = 3;
+    xpos = 0;
     ypos = 3;
     
     contactsMap = [[NSMutableDictionary alloc] init];
@@ -174,28 +177,40 @@
             contact = [ContactVO readFromDictionary:rowdata];
             [DataModel shared].contact = contact;
             
-            [contactsMap setObject:contact forKey:[NSNumber numberWithInt:contact.contact_id]];
+//            [contactsMap setObject:contact forKey:[NSNumber numberWithInt:contact.contact_id]];
             
-            [contactKeys addObject:contact.system_id];
+//            if (![contactKeys containsObject:contact.system_id]) {
+                [contactKeys addObject:contact.system_id];
+                NSString *fullname = [NSString stringWithFormat:kFullNameFormat, contact.first_name, contact.last_name];
             
-            float estWidth = 100;
-            if (xpos + estWidth + 10 > self.selectionsView.frame.size.width) {
-                xpos = 0;
-                ypos +=30;
-            }
-            if (ypos + 30 > self.selectionsView.frame.size.height) {
-                CGRect sframe = self.selectionsView.frame;
-                sframe.size.height += 30;
-                self.selectionsView.frame = sframe;
-            }
-            
-            CGRect itemFrame = CGRectMake(xpos, ypos, estWidth, 24);
-            SelectedItemWidget *item = [[SelectedItemWidget alloc] initWithFrame:itemFrame];
+                float estWidth = fullname.length * 8 + 10;
+                if (xpos + estWidth + 10 > self.selectionsView.frame.size.width) {
+                    xpos = 0;
+                    ypos +=kcontactsRowHeight;
+                }
+                
+                if (ypos + kcontactsRowHeight > self.selectionsView.frame.size.height) {
+                    CGRect sframe = self.selectionsView.frame;
+                    sframe.size.height += kcontactsRowHeight;
+                    self.selectionsView.frame = sframe;
+                    
+                    CGRect searchFrame = self.searchView.frame;
+                    if (sframe.origin.y + sframe.size.height > searchFrame.origin.y) {
+                        searchFrame.origin.y += kcontactsRowHeight;
+                        searchFrame.size.height -= kcontactsRowHeight;
+                        self.searchView.frame = searchFrame;
+                    }
+                }
+                
+                CGRect itemFrame = CGRectMake(xpos, ypos, estWidth, 24);
+                SelectedItemWidget *item = [[SelectedItemWidget alloc] initWithFrame:itemFrame];
+                
+                [item setFieldLabel:fullname];
 
-            [item setFieldLabel:@"Hugh Lang"];
-            
-            
-            [self.selectionsView addSubview:item];
+                xpos += estWidth + 10;
+                [self.selectionsView addSubview:item];
+                
+//            }
             
             
         }
@@ -264,7 +279,10 @@
         isOK = NO;
     }
     if (isOK) {
-        [contactKeys addObject:[DataModel shared].user.user_key];
+        
+        NSLog(@"contact keys count = %i", contactKeys.count);
+
+        [contactKeys addObject:[DataModel shared].user.contact_key];
          
         ChatVO *chat = [[ChatVO alloc] init];
         

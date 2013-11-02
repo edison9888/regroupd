@@ -42,7 +42,8 @@ double  easeInOutQuad (double t, double b, double c, double d);
  * @return		The correct value.
  */
 double  easeInQuad (double t, double b, double c, double d) {
-	return c*(t/=d)*t + b;
+    t /= d;
+    return c*t*t + b;
 }
 
 /**
@@ -55,7 +56,8 @@ double  easeInQuad (double t, double b, double c, double d) {
  * @return		The correct value.
  */
 double  easeOutQuad (double t, double b, double c, double d) {
-	return -c *(t/=d)*(t-2) + b;
+    t /= d;
+    return -c * t * (t-2) + b;
 }
 
 /**
@@ -68,8 +70,11 @@ double  easeOutQuad (double t, double b, double c, double d) {
  * @return		The correct value.
  */
 double  easeInOutQuad (double t, double b, double c, double d) {
-	if ((t/=d/2) < 1) return c/2*t*t + b;
-	return -c/2 * ((--t)*(t-2) - 1) + b;
+    // WARNING: Formula was converted to avoid Unsequenced modification and access to
+    // See also: http://stackoverflow.com/questions/18729323/unsequenced-modification-and-access-to-parameter
+    return c*t*t + b;
+	if ((t/2) < 1) return c/2*t*t + b;
+	return -c/2 * ((t-1)*(t-2) - 1) + b;
 }
 
 @end

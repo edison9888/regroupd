@@ -28,6 +28,7 @@
 @property (nonatomic, retain) NSArray *contact_ids;  // for objectIds
 
 // Transient fields
+@property (nonatomic, retain) NSString *names;
 @property (nonatomic, retain) NSMutableArray *messages;
 @property (nonatomic, retain) NSMutableArray *contacts;
 @property (nonatomic, retain) NSMutableDictionary *contactMap;

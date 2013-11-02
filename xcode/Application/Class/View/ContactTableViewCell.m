@@ -31,9 +31,6 @@
 ////http://stackoverflow.com/questions/11920156/custom-uitableviewcell-selection-style
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
 {
-#ifdef DEBUGX
-    NSLog(@"%s", __FUNCTION__);
-#endif
     if (highlighted) {
         self.titleLabel.textColor = [UIColor blackColor];
     } else {
@@ -46,9 +43,6 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
-#ifdef DEBUGX
-    NSLog(@"%s", __FUNCTION__);
-#endif
     [super setSelected:selected animated:animated];
 
 }

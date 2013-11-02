@@ -10,11 +10,15 @@
 #import "SQLiteDB.h"
 #import "ChatTableViewCell.h"
 #import "ContactVO.h"
+#import "ChatManager.h"
+#import "ContactManager.h"
 
 @interface ChatsHomeVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *tableData;
+    ChatManager *chatSvc;
+    ContactManager *contactSvc;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;

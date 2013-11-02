@@ -18,14 +18,24 @@
 @interface ContactsHomeVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, ABNewPersonViewControllerDelegate> {
     BOOL isLoading;
     int selectedIndex;
-    NSMutableArray *tableData;
+    NSMutableArray *contactsData;
+    NSMutableArray *groupsData;
+//    NSArray *addressBookData;
+
+    NSMutableArray *peopleData;
+
     UIView *bgLayer;
     ContactManager *contactSvc;
     
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
-@property(retain) NSMutableArray *tableData;
+@property(retain) NSMutableArray *contactsData;
+@property(retain) NSMutableArray *groupsData;
+//@property(retain) NSArray *addressBookData;
+@property(retain) NSArray *peopleData;
+
+
 - (void)performSearch:(NSString *)searchText;
 
 @property (nonatomic, strong) IBOutlet UILabel *navTitle;

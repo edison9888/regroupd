@@ -23,9 +23,11 @@
 @property (nonatomic, strong) IBOutlet BrandUILabel *value1;
 @property (nonatomic, strong) IBOutlet BrandUILabel *value2;
 @property (nonatomic, strong) IBOutlet BrandUILabel *value3;
+@property (nonatomic, strong) IBOutlet BrandUILabel *value4;
 
 - (IBAction)tapClearAllButton;
 - (IBAction)tapContactButton;
+- (IBAction)tapDeleteAccount;
 
 
 @end

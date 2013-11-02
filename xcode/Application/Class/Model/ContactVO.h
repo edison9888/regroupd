@@ -33,6 +33,8 @@
 @property (nonatomic, retain) NSNumber *record_id;
 
 @property (nonatomic, retain) NSString *system_id;
+//@property (nonatomic, retain) NSString *contact_key;
+
 @property (nonatomic, retain) NSString *facebook_id;
 @property (nonatomic, retain) NSString *first_name;
 @property (nonatomic, retain) NSString *last_name;
@@ -49,7 +51,9 @@
 @property (nonatomic, retain) NSDate *createdAt;
 @property (nonatomic, retain) NSDate *updatedAt;
 
+- (NSString *) fullname;
+
 + (ContactVO *) readFromDictionary:(NSDictionary *) dict;
 + (ContactVO *) readFromPFObject:(PFObject *)data;
-
++ (ContactVO *) readFromPFUserContact:(PFObject *)data;
 @end

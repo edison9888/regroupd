@@ -48,37 +48,37 @@
 
 - (IBAction)tapNoButton
 {
-    UserVO *user = [[UserVO alloc] init];
-    user.first_name = @"default";
-    [userSvc createUser:user];
-    [[[UIAlertView alloc] initWithTitle:@"Thank you" message:@"Sign up complete." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-
-    
-    [DataModel shared].navIndex = 4;
-    [_delegate gotoSlideWithName:@"FormsHome" andOverrideTransition:kPresentationTransitionDown];
+    // TODO: save permissions
+    [self createUser];
 }
 
 - (IBAction)tapYesButton
 {
+    // TODO: save permissions
+    [self createUser];
+}
+
+- (void) createUser {
     UserVO *user = [DataModel shared].user;
     user.first_name = @"default";
+
     
-    NSString *objectId = [userSvc apiSaveUser:user];
-    if (objectId != nil) {
-        NSLog(@"Saved user %@, with objectId %@", user.username, objectId);
-        user.user_key = objectId;
-        user.system_id = objectId;
+    if (userSvc == nil) {
+        userSvc = [[UserManager alloc] init];
+    }
+    [userSvc apiCreateUserAndContact:user callback:^(PFObject *pfUser) {
+        NSLog(@"Callback response objectId %@", pfUser.objectId);
+        user.user_key = pfUser.objectId;
+        user.system_id = pfUser.objectId;
+        
         [userSvc createUser:user];
         [DataModel shared].user = user;
         
         [[[UIAlertView alloc] initWithTitle:@"Thank you" message:@"Sign up complete." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    }];
 
-    } else {
-        NSLog(@"objectId is null.");
-    }
-
+    
 }
-
 #pragma mark - UIAlert view
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     

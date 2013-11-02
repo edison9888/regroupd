@@ -380,22 +380,154 @@
 
 #pragma mark - parse.com - Contact API
 
-- (NSString *) apiSaveContact:(ContactVO *) contact {
+- (void) apiSaveContact:(ContactVO *)contact callback:(void (^)(PFObject *))callback {
+    NSLog(@"%s", __FUNCTION__);
+
+    PFQuery *query = [PFQuery queryWithClassName:kContactDB];
+    [query whereKey:@"phone" equalTo:contact.phone];
     
-    PFObject *data = [PFObject objectWithClassName:kContactDB];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        PFObject *data = nil;
+        
+        if (results.count == 0) {
+            data = [PFObject objectWithClassName:kContactDB];
+            
+            data[@"phone"] = contact.phone;
+            
+            if (contact.first_name != nil) {
+                data[@"first_name"] = contact.first_name;
+            }
+            
+            if (contact.last_name != nil) {
+                data[@"last_name"] = contact.last_name;
+            }
+            
+            if (contact.email != nil) {
+                data[@"email"] = contact.email;
+            }
+            
+            [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                NSLog(@"Saved contact with objectId %@", data.objectId);
+                callback(data);
+//                [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_contactSavedNotification
+//                                                                                                     object:data]];
+            }];
+            
+        } else if (results.count > 0) {
+            data = [results objectAtIndex:0];
+            
+            if (results.count > 1) {
+                NSLog(@"Data consistency exception. Multiple contacts with same phone number");
+            }
+            NSLog(@"Found contact with phone %@", contact.phone);
+            
+            callback(data);
+//            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_contactSavedNotification
+//                                                                                                 object:data]];
+        }
+        
+    }];
+
     
-    data[@"first_name"] = contact.first_name;
-    data[@"last_name"] = contact.last_name;
-    data[@"phone"] = contact.phone;
+}
+
+- (void) apiLookupContacts:(NSArray *)contactKeys callback:(void (^)(NSArray *))callback {
+    NSLog(@"%s", __FUNCTION__);
     
-    if (contact.email != nil) {
-        data[@"email"] = contact.email;
-    }
+    PFQuery *query = [PFQuery queryWithClassName:kContactDB];
+    [query whereKey:@"objectId" containedIn:contactKeys];
     
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        NSMutableArray *contacts = [[NSMutableArray alloc] init];
+        ContactVO *contact;
+        for (PFObject *result in results) {
+            
+            if ([[DataModel shared].contactCache objectForKey:result.objectId] == nil) {
+                contact = [ContactVO readFromPFObject:result];
+                [[DataModel shared].contactCache setObject:contact forKey:result.objectId];
+            } else {
+                contact = [[DataModel shared].contactCache objectForKey:result.objectId];
+            }
+            [contacts addObject:contact];
+        }
+        callback([contacts copy]);
+    }];
+}
+
+- (void) apiSaveUserContact:(ContactVO *)contact callback:(void (^)(NSString *))callback {
+    PFQuery *query = [PFQuery queryWithClassName:kUserContactDB];
+    [query whereKey:@"user" equalTo:[PFUser currentUser]];
+    [query whereKey:@"contact_key" equalTo:contact.system_id];
+    
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *data, NSError *error){
+//    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        if (data) {
+            // object exists
+            NSLog(@"Found UserContact with objectId %@", data.objectId);
+            callback(data.objectId);
+        } else {
+            
+            data[@"user"] = [PFUser currentUser];
+            data = [PFObject objectWithClassName:kUserContactDB];
+            data[@"contact_key"] = contact.system_id;
+            
+            if (contact.first_name != nil) {
+                data[@"first_name"] = contact.first_name;
+            }
+            
+            if (contact.last_name != nil) {
+                data[@"last_name"] = contact.last_name;
+            }
+            [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (error) {
+                    // Error auto-logged
+                    
+                } else {
+                    NSLog(@"Saved UserContact with objectId %@", data.objectId);
+                    callback(data.objectId);
+                }
+            }];
+        }
+    }];
+}
+
+
+// Usage. null userKey means use PFUser
+- (void) apiListUserContacts:(NSString *)userKey callback:(void (^)(NSArray *))callback {
+    
+    PFQuery *query = [PFQuery queryWithClassName:kUserContactDB];
+    [query whereKey:@"user" equalTo:[PFUser currentUser]];
+//    [query whereKey:@"user" equalTo:[PFObject objectWithoutDataWithClassName:[PFUser parseClassName] objectId:userKey]];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        NSMutableArray *contacts = [[NSMutableArray alloc] init];
+        ContactVO *contact;
+        for (PFObject *result in results) {
+            if ([[DataModel shared].contactCache objectForKey:contact.system_id] == nil) {
+                contact = [ContactVO readFromPFUserContact:result];
+                [[DataModel shared].contactCache setObject:contact forKey:result.objectId];
+            } else {
+                contact = [[DataModel shared].contactCache objectForKey:result.objectId];
+            }
+            [contacts addObject:contact];
+        }
+        callback([contacts copy]);
+    }];
+
+}
+#pragma mark - OLD Non-async methods
+- (PFObject *) apiSaveUserContact:(PFObject *) pfContact {
+    NSLog(@"%s", __FUNCTION__);
+    
+    PFObject *data = [PFObject objectWithClassName:kUserContactDB];
+    
+    data[@"user"] = [PFUser currentUser];
+    data[@"contact"] = pfContact;
+
     [data save];
     
-    NSLog(@"Saved chat with objectId %@", data.objectId);
-    return data.objectId;
+    NSLog(@"Saved user_contact with objectId %@", data.objectId);
+    return data;
     
 }
 

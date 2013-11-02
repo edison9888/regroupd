@@ -21,15 +21,16 @@
 //  #################### PARSE SETUP #####################
 //    https://www.parse.com/apps/quickstart#ios/native/existing
     
-    [Parse setApplicationId:@"0X6bOlKkUa5eJHdqxw25nfkotophFkPb8Pw1ukZK"
-                  clientKey:@"etSuT6uoistqip5L1somaXNRz63Y3Rk0CHxIEMkd"];
+    [Parse setApplicationId:@"Xsf11WQNwFxIyu6rM447OTYtrvj5qSNNc5EX93Qt"
+                  clientKey:@"ZlDNsNZE4KaiDdyOp9HQC6oPxP85NO2gAJn7tTtQ"];
     
-    [PFUser enableAutomaticUser];
+//    [PFUser enableAutomaticUser];
     
     PFACL *defaultACL = [PFACL ACL];
     
     // If you would like all objects to be private by default, remove this line.
     [defaultACL setPublicReadAccess:YES];
+    [defaultACL setPublicWriteAccess:YES];
     
     [PFACL setDefaultACL:defaultACL withAccessForCurrentUser:YES];
     
@@ -42,7 +43,8 @@
 //  #################### /PARSE SETUP #####################
     
     [DataModel shared].needsLookup = YES;
-
+    [DataModel shared].contactCache = [[NSMutableDictionary alloc] init];
+    
     UIImage *image = [UIImage imageNamed:@"tabbar_bg"];
     [[UINavigationBar appearance] setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
     

@@ -17,7 +17,7 @@
 @synthesize chat;
 @synthesize group;
 
-@synthesize contactData;
+@synthesize contactCache;
 @synthesize timestampText;
 @synthesize needsLookup, needsRefresh;
 @synthesize stageHeight, stageWidth;
@@ -32,11 +32,23 @@ static DataModel *instance = nil;
     @synchronized(self)
     {
         if (instance == nil) {
-            instance = [[DataModel alloc] init];            
+            instance = [[DataModel alloc] init];
         }
         return instance;
     }
 }
 
++ (NSDictionary *) readPFObjectAsDictionary:(PFObject *) data {
+    NSArray * allKeys = [data allKeys];
+    
+    NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
+    
+    for (NSString * key in allKeys) {
+        
+        [dict setObject:[data objectForKey:key] forKey:key];
+        
+    }
+    return dict;
+}
 
 @end

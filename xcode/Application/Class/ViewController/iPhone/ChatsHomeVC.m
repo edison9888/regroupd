@@ -41,9 +41,7 @@
     
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
-    
-    [self performSearch:@""];
-    
+    [self listMyChats];
     
 }
 
@@ -83,7 +81,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
         }
         
-        NSDictionary *rowData = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
+        ChatVO *rowData = (ChatVO *) [tableData objectAtIndex:indexPath.row];
         cell.rowdata = rowData;
         
     } @catch (NSException * e) {
@@ -94,6 +92,20 @@
     
     
 }
+
+- (NSDictionary *) readPFObjectAsDictionary:(PFObject *) data {
+    NSArray * allKeys = [data allKeys];
+    
+    NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
+    
+    for (NSString * key in allKeys) {
+        
+        [dict setObject:[data objectForKey:key] forKey:key];
+        
+    }
+    return dict;
+}
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 54;
@@ -123,6 +135,47 @@
     }
     
     
+}
+
+- (void)listMyChats
+{
+    
+    if (chatSvc == nil) {
+        chatSvc = [[ChatManager alloc] init];
+    }
+    if (contactSvc == nil) {
+        contactSvc = [[ContactManager alloc] init];
+    }
+    
+    [chatSvc apiListChats:[DataModel shared].user.contact_key callback:^(NSArray *results) {
+        NSLog(@"Callback response objectId %i", results.count);
+        ChatVO *chat;
+        for (PFObject* result in results) {
+//            data = [DataModel readPFObjectAsDictionary:result];
+            chat = [ChatVO readFromPFObject:result];
+            
+            NSArray *keys = [result objectForKey:@"contact_keys"];
+            NSLog(@"contact keys = %@", keys);
+            
+            [contactSvc apiLookupContacts:chat.contact_keys callback:^(NSArray *contacts) {
+                NSMutableArray *namesArray = [[NSMutableArray alloc] init];
+                NSString *fullname;
+                for (ContactVO *contact in contacts) {
+                    if (![contact.system_id isEqualToString:[DataModel shared].user.contact_key]) {
+                        fullname = [NSString stringWithFormat:kFullNameFormat, contact.first_name, contact.last_name];
+                        [namesArray addObject:fullname];
+                    }
+                }
+                NSString *names = [namesArray componentsJoinedByString:@", "];
+                chat.names = names;
+//                [data setValue:names forKey:@"names"];
+                
+                isLoading = NO;
+                [tableData addObject:chat];
+                [self.theTableView reloadData];
+            }];
+        }
+    }];
 }
 
 

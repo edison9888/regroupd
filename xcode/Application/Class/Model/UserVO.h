@@ -34,6 +34,7 @@
  */
 
 @property (nonatomic, retain) NSString *user_key;
+@property (nonatomic, retain) NSString *contact_key;
 @property (nonatomic, retain) NSString *username;
 @property (nonatomic, retain) NSString *password;
 

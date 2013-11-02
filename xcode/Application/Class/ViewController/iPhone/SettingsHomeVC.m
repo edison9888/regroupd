@@ -112,5 +112,8 @@
     
     
 }
+- (IBAction)tapDeleteAccount {
+    [[PFUser currentUser] delete];
 
+}
 @end

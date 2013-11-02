@@ -12,10 +12,11 @@
 @implementation UserVO
 
 @synthesize user_key, username, password;
-
 @synthesize system_id, facebook_id;
 @synthesize first_name, last_name, phone, email, imagefile;
 @synthesize type, status, created, updated;
+
+@synthesize contact_key;
 
 - (id)init
 {

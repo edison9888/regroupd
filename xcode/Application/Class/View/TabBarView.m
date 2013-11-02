@@ -46,7 +46,7 @@
     UIButton *button = (UIButton *) selector;
     NSLog(@"hit tag=%i", button.tag);
     
-    if ([DataModel shared].navIndex != button.tag) {
+//    if ([DataModel shared].navIndex != button.tag) {
 
         // move bglayer behind active button
         int xpos = button.frame.origin.x + (button.frame.size.width/2) - _bgLayer.frame.size.width /2;
@@ -63,7 +63,7 @@
         [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
         
         
-    }
+//    }
 
 
     

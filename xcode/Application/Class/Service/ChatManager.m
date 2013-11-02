@@ -255,6 +255,31 @@
 
 
 #pragma mark - Chat API 
+- (void) apiListChats:(NSString *)userId callback:(void (^)(NSArray *results))callback {
+    PFQuery *query = [PFQuery queryWithClassName:kChatDB];
+    [query whereKey:@"contact_keys" containsAllObjectsInArray:@[userId]];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        
+        callback(results);
+    }];
+    
+}
+- (void) apiSaveChatMessage:(ChatMessageVO *)msg chatId:(NSString *)chatId callback:(void (^)(PFObject *object))callback{
+    
+    PFObject *data = [PFObject objectWithClassName:kChatMessageDB];
+    
+    data[@"chat"] = [PFObject objectWithoutDataWithClassName:kChatDB objectId:chatId];
+    data[@"message"]=msg.message;
+    data[@"contact_key"] = msg.contact_key;
+    
+    [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        NSLog(@"Saved message with objectId %@", data.objectId);
+        callback(data);
+    }];
+}
+
+#pragma mark - Synchronous API -- to be deprecated
 
 - (ChatVO *) apiLoadChat:(NSString *)objectId {
     
@@ -311,10 +336,9 @@
     return data.objectId;
     
 }
-- (NSMutableArray *) apiListChats:(NSString *)userId {
-    
-    return nil;
-}
+
+
+
 - (void) apiDeleteChat:(ChatVO *)chat {
     
 }
@@ -323,6 +347,8 @@
     
     return nil;
 }
+
+
 - (NSString *) apiSaveChatMessage:(ChatMessageVO *) msg {
 
     PFObject *data = [PFObject objectWithClassName:kChatMessageDB];
@@ -375,6 +401,9 @@
                     }
                 }
             }
+            
+//            NSLog(@"userKeys %@", userKeys);
+            
             chat.messages = msgs;
             PFQuery *query = [PFQuery queryWithClassName:kContactDB];
             [query whereKey:@"objectId" containedIn:[userKeys copy]];

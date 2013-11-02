@@ -27,11 +27,19 @@
 - (NSMutableArray *) listGroups:(int)type;
 - (int) fetchLastGroupID;
 
+// API METHODS
+- (void) apiSaveContact:(ContactVO *)contact callback:(void (^)(PFObject *))callback;
+
+- (void) apiLookupContacts:(NSArray *)contactKeys callback:(void (^)(NSArray *))callback;
+
+- (void) apiListUserContacts:(NSString *)userKey callback:(void (^)(NSArray *))callback;
+
+- (void) apiSaveUserContact:(ContactVO *)contact callback:(void (^)(NSString *))callback;
+
 - (NSMutableArray *) listGroupContacts:(int)groupId;
 - (BOOL) checkGroupContact:(int)groupId contactId:(int)contactId;
 - (void) addGroupContact:(int)groupId contactId:(int)contactId;
 - (void) removeGroupContact:(int)groupId contactId:(int)contactId;
 
-- (NSString *) apiSaveContact:(ContactVO *) contact;
 
 @end

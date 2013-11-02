@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ContactVO.h"
+#import "ChatVO.h"
 
 @interface ChatTableViewCell : UITableViewCell {
     UILabel *titleLabel;
@@ -16,7 +17,7 @@
 
 @property (nonatomic, retain) IBOutlet UILabel *titleLabel;
 
-@property (nonatomic, retain) NSDictionary *rowdata;
+@property (nonatomic, retain) ChatVO *rowdata;
 
 
 @end

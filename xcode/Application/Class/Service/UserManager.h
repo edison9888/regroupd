@@ -22,6 +22,9 @@
 
 
 // API functions
+- (void) apiLookupContactForUser:(PFUser *)pfUser callback:(void (^)(PFObject *pfContact))callback;
+- (void) apiCreateUserAndContact:(UserVO *)user callback:(void (^)(PFObject *pfUser))callback;
+
 - (UserVO *) apiLoadUser:(NSString *)objectId;
 - (NSString *) apiSaveUser:(UserVO *) user;
 - (NSMutableArray *) apiListUsers:(NSString *)userId;

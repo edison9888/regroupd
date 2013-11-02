@@ -18,10 +18,12 @@
 #define contains(str1, str2) ([str1 rangeOfString: str2 ].location != NSNotFound)
 
 #define kContactDB          @"ContactDB"
+#define kUserContactDB      @"UserContactDB"
 #define kChatDB             @"ChatDB"
 #define kChatMessageDB      @"ChatMessageDB"
 #define kFormDB             @"FormDB"
 #define kFormOptionDB       @"FormOptionDB"
+#define kFormResponseDB     @"FormResponseDB"
 
 
 @interface DataModel : NSObject {
@@ -48,7 +50,7 @@
 @property (nonatomic, retain) ChatVO *chat;
 @property (nonatomic, retain) GroupVO *group;
 
-@property (nonatomic, retain) NSMutableDictionary *contactData;
+@property (nonatomic, retain) NSMutableDictionary *contactCache;
 @property (nonatomic, retain) NSString *action;
 @property (nonatomic, retain) NSString *timestampText;
 
@@ -62,5 +64,8 @@
 
 
 + (DataModel *) shared;
+
++ (NSDictionary *) readPFObjectAsDictionary:(PFObject *) data;
+
 
 @end
