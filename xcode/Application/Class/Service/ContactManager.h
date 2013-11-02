@@ -19,13 +19,6 @@
 - (void) deleteContact:(ContactVO *) contact;
 - (void) updateContact:(ContactVO *) contact;
 
-- (GroupVO *) loadGroup:(int)_groupId;
-- (GroupVO *) loadGroup:(int)_groupId fetchAll:(BOOL)all;
-- (int) saveGroup:(GroupVO *) group;
-- (void) deleteGroup:(GroupVO *) group;
-- (void) updateGroup:(GroupVO *) group;
-- (NSMutableArray *) listGroups:(int)type;
-- (int) fetchLastGroupID;
 
 // API METHODS
 - (void) apiSaveContact:(ContactVO *)contact callback:(void (^)(PFObject *))callback;
@@ -36,10 +29,18 @@
 
 - (void) apiSaveUserContact:(ContactVO *)contact callback:(void (^)(NSString *))callback;
 
-- (NSMutableArray *) listGroupContacts:(int)groupId;
-- (BOOL) checkGroupContact:(int)groupId contactId:(int)contactId;
-- (void) addGroupContact:(int)groupId contactId:(int)contactId;
-- (void) removeGroupContact:(int)groupId contactId:(int)contactId;
+
+- (void) apiLookupContactsByPhoneNumbers:(NSArray *)numbers callback:(void (^)(NSArray *))callback;
+
+// Phonebook methods
+- (NSDictionary *) findPersonByPhone:(NSString *)phone;
+- (NSMutableArray *) listPhonebookByStatus:(int)status;
+- (void)bulkLoadPhonebook:(NSArray *)contacts;
+- (void)purgePhonebook;
+- (void)updatePhonebookWithContacts:(NSArray *)contacts;
+
+// Address Book
+- (NSMutableArray *)readAddressBook;
 
 
 @end

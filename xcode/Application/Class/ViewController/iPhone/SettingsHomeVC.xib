@@ -151,17 +151,6 @@ SW5jbHVkZSBjaGF0IG1lc3NhZ2UgA2luIG5vdGlmaWNhdGlvbnM
                         <action selector="tapContactButton" destination="-1" eventType="touchUpInside" id="jvK-s2-XNg"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="r9X-U7-Wca" customClass="BrandUIButton">
-                    <rect key="frame" x="16" y="465" width="290" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="Delete my account" backgroundImage="settings_big_button_bg.png">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="tapDeleteAccount" destination="-1" eventType="touchUpInside" id="pvG-ir-bAB"/>
-                    </connections>
-                </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="zTI-Gg-JMK" customClass="BrandUIButton">
                     <rect key="frame" x="14" y="345" width="290" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

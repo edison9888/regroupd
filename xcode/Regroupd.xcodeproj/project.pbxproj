@@ -165,6 +165,7 @@
 		1E59F12517FC873900EE2902 /* ChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E59F12317FC873900EE2902 /* ChatTableViewCell.xib */; };
 		1E5CABD817BA8DF0000D8759 /* RecentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5CABD617BA8DF0000D8759 /* RecentTableViewCell.m */; };
 		1E5CABD917BA8DF0000D8759 /* RecentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E5CABD717BA8DF0000D8759 /* RecentTableViewCell.xib */; };
+		1E5CB6CC1825B2F7002FE4FA /* GroupManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5CB6CB1825B2F7002FE4FA /* GroupManager.m */; };
 		1E751B2C179C4B11003AB13D /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E751B2B179C4B11003AB13D /* UserManager.m */; };
 		1E76F4A417960BE1007EF5B0 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA4B1782638200A294C0 /* Default-568h@2x.png */; };
 		1E76F4A617961169007EF5B0 /* CCTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E76F4A517961169007EF5B0 /* CCTableViewCell.xib */; };
@@ -687,6 +688,8 @@
 		1E5CABD517BA8DF0000D8759 /* RecentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecentTableViewCell.h; sourceTree = "<group>"; };
 		1E5CABD617BA8DF0000D8759 /* RecentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecentTableViewCell.m; sourceTree = "<group>"; };
 		1E5CABD717BA8DF0000D8759 /* RecentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecentTableViewCell.xib; sourceTree = "<group>"; };
+		1E5CB6CA1825B2F7002FE4FA /* GroupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupManager.h; sourceTree = "<group>"; };
+		1E5CB6CB1825B2F7002FE4FA /* GroupManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupManager.m; sourceTree = "<group>"; };
 		1E751B2A179C4B11003AB13D /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserManager.h; sourceTree = "<group>"; };
 		1E751B2B179C4B11003AB13D /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserManager.m; sourceTree = "<group>"; };
 		1E76F4941795EE3E007EF5B0 /* AppIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon@2x.png"; sourceTree = "<group>"; };
@@ -1811,6 +1814,8 @@
 				1E1A9A9917FE4D3D008D81E6 /* ChatManager.m */,
 				1E79B70418159FFE002E417A /* ContactManager.h */,
 				1E79B70518159FFE002E417A /* ContactManager.m */,
+				1E5CB6CA1825B2F7002FE4FA /* GroupManager.h */,
+				1E5CB6CB1825B2F7002FE4FA /* GroupManager.m */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -2708,6 +2713,7 @@
 				1E9282A6177FB690008A583C /* main.m in Sources */,
 				1E9282A7177FB690008A583C /* FMDatabase.m in Sources */,
 				1E9282A8177FB690008A583C /* FMDatabaseAdditions.m in Sources */,
+				1E5CB6CC1825B2F7002FE4FA /* GroupManager.m in Sources */,
 				1E79B70618159FFE002E417A /* ContactManager.m in Sources */,
 				1E9282A9177FB690008A583C /* FMDatabasePool.m in Sources */,
 				1E9282AA177FB690008A583C /* FMDatabaseQueue.m in Sources */,

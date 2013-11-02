@@ -19,10 +19,10 @@
 
 @implementation ContactsHomeVC
 
-@synthesize contactsData;
+@synthesize availableContacts;
 @synthesize groupsData;
 //@synthesize addressBookData;
-@synthesize peopleData;
+@synthesize otherContacts;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -44,19 +44,20 @@
     self.theTableView.dataSource = self;
     self.theTableView.backgroundColor = [UIColor clearColor];
     
-    self.contactsData =[[NSMutableArray alloc]init];
+    self.availableContacts =[[NSMutableArray alloc]init];
     self.groupsData =[[NSMutableArray alloc]init];
-    self.peopleData =[[NSMutableArray alloc]init];
+    self.otherContacts =[[NSMutableArray alloc]init];
     
-    [self populateFromAddressBook];
+//    [self populateFromAddressBook];
 //    self.contactsData =[[NSMutableArray alloc]init];
     
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
     
+    [self preparePhonebook];
 //    [self performSearch:@""];
     
-    [self listMyContacts];
+//    [self listMyContacts];
 }
 
 - (void)didReceiveMemoryWarning
@@ -64,7 +65,37 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+- (void) preparePhonebook {
+    
+    if (contactSvc == nil) {
+        contactSvc = [[ContactManager alloc] init];
+    }
+    [contactSvc purgePhonebook];
+    NSMutableArray *people = [contactSvc readAddressBook];
+    NSLog(@"Found addressbook contacts to load qty:%i", people.count);
+    
+    [contactSvc bulkLoadPhonebook:[people copy]];
 
+    NSMutableArray *others = [contactSvc listPhonebookByStatus:0];
+    NSMutableArray *numbers = [[NSMutableArray alloc] init];
+    NSDictionary *dict;
+    NSString *phoneId;
+    for (int i=0; i<others.count; i++) {
+        dict = (NSDictionary *) [others objectAtIndex:i];
+        phoneId = (NSString *)[dict objectForKey:@"phone"];
+        [numbers addObject:phoneId];
+    }
+    NSLog(@"numbers %@", numbers);
+    
+    [contactSvc apiLookupContactsByPhoneNumbers:numbers callback:^(NSArray *contacts) {
+        NSLog(@"Callback response count %i", contacts.count);
+        if (contacts) {
+            [contactSvc updatePhonebookWithContacts:contacts];
+        }
+        [self performSearch:@""];
+    }];
+    
+}
 - (void) listMyContacts {
     if (contactSvc == nil) {
         contactSvc = [[ContactManager alloc] init];
@@ -73,7 +104,7 @@
     [contactSvc apiListUserContacts:nil callback:^(NSArray *contacts) {
         NSLog(@"Callback response count %i", contacts.count);
         if (contacts) {
-            self.contactsData = [contacts mutableCopy];
+            self.availableContacts = [contacts mutableCopy];
             isLoading = NO;
             [self.theTableView reloadData];
         }
@@ -159,10 +190,10 @@
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
     
     if (section == 0) {
-        if (self.contactsData.count == 0) {
+        if (self.availableContacts.count == 0) {
             return 1;
         } else {
-            return [self.contactsData count];
+            return [self.availableContacts count];
         }
     } else if (section == 1) {
         if (self.groupsData.count == 0) {
@@ -171,7 +202,7 @@
             return [self.groupsData count];
         }
     } else if (section == 2) {
-        return self.peopleData.count;
+        return self.otherContacts.count;
     }
     return 0;
 }
@@ -179,8 +210,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"%s", __FUNCTION__);
-    // http://stackoverflow.com/questions/413993/loading-a-reusable-uitableviewcell-from-a-nib
     
     static NSString *CellIdentifier = @"ContactTableCell";
     static NSString *CellNib = @"ContactTableViewCell";
@@ -197,9 +226,9 @@
                 cell.selectionStyle = UITableViewCellSelectionStyleGray;
             }
             
-            if (contactsData.count > 0) {
-                ContactVO *contact = (ContactVO *) [contactsData objectAtIndex:indexPath.row];
-                cell.titleLabel.text = [contact fullname];
+            if (availableContacts.count > 0) {
+                NSDictionary *rowData = (NSDictionary *) [availableContacts objectAtIndex:indexPath.row];
+                cell.titleLabel.text = [NSString stringWithFormat:kNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
                 
                 cell.statusLabel.text = kStatusAvailable;
                 
@@ -253,15 +282,10 @@
                 cell.selectionStyle = UITableViewCellSelectionStyleGray;
             }
             
-//            ContactVO *contact = [self contactFromAddressBookAtIndex:indexPath.row];
+            NSDictionary *rowData = (NSDictionary *) [otherContacts objectAtIndex:indexPath.row];
+            cell.titleLabel.text = [NSString stringWithFormat:kNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
             
-            ContactVO *contact = (ContactVO *) [peopleData objectAtIndex:indexPath.row];
-            
-            cell.titleLabel.text = [contact fullname];
-            
-            //        NSDictionary *rowData = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
-            //        cell.titleLabel.text = [NSString stringWithFormat:kNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
-            cell.statusLabel.text = kStatusAvailable;
+            cell.statusLabel.text = @"";
             
         } @catch (NSException * e) {
             NSLog(@"Exception: %@", e);
@@ -290,7 +314,7 @@
             NSLog(@"Selected row %i", indexPath.row);
             
             selectedIndex = indexPath.row;
-            NSDictionary *rowdata = [contactsData objectAtIndex:indexPath.row];
+            NSDictionary *rowdata = [availableContacts objectAtIndex:indexPath.row];
             
             [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
             [_delegate gotoSlideWithName:@"ContactInfo"];
@@ -313,38 +337,54 @@
     NSLog(@"%s: %@", __FUNCTION__, searchText);
     
     if (searchText.length > 0) {
-        NSString *sqlTemplate = @"select * from contact where first_name like '%%%@%%' or last_name like '%%%@%%' limit 20";
+        NSString *sqlTemplate = @"select * from phonebook where first_name like '%%%@%%' or last_name like '%%%@%%' limit 20";
         
         isLoading = YES;
         
         NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
         
         FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-        [contactsData removeAllObjects];
+        [availableContacts removeAllObjects];
         
         while ([rs next]) {
-            [contactsData addObject:[rs resultDictionary]];
+            [availableContacts addObject:[rs resultDictionary]];
         }
         isLoading = NO;
         
         [self.theTableView reloadData];
         
     } else {
-        NSString *sqlTemplate = @"select * from contact order by last_name";
+        NSString *sqlTemplate;
+        sqlTemplate = @"select * from phonebook where status=%i order by last_name";
         
         isLoading = YES;
-        
-        NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
+        int status;
+        NSString *sql;
+
+        status = 1;
+        sql = [NSString stringWithFormat:sqlTemplate, status];
         
         FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-        [contactsData removeAllObjects];
+        [availableContacts removeAllObjects];
         
         while ([rs next]) {
             NSDictionary *dict =[rs resultDictionary];
-            NSLog(@"Result %@", [dict objectForKey:@"name"]);
-            
-            [contactsData addObject:dict];
+            [availableContacts addObject:dict];
         }
+        
+        status = 0;
+        sql = [NSString stringWithFormat:sqlTemplate, status];
+        
+        rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+        [otherContacts removeAllObjects];
+        
+        while ([rs next]) {
+            
+            NSDictionary *dict =[rs resultDictionary];
+            [otherContacts addObject:dict];
+        }
+        NSLog(@"otherContacts %i", otherContacts.count);
+        
         isLoading = NO;
         
         [self.theTableView reloadData];
@@ -620,122 +660,6 @@
     
 }
 
-#pragma mark - Private methods
-- (ContactVO *) contactFromAddressBookAtIndex:(int)index {
-    ContactVO *c = [[ContactVO alloc] init];
-    ABRecordRef person;
-    CFStringRef firstName;
-    CFStringRef lastName;
-    @try {
-//        ABRecord
-//        person = (__bridge ABRecordRef)[addressBookData objectAtIndex:index];
-        firstName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
-        lastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
-        c.first_name = (__bridge NSString *)firstName;
-        c.last_name = (__bridge NSString *)lastName;
-    }
-    @catch (NSException *exception) {
-        NSLog(@"%@ %@", firstName, exception);
-    }
-    @finally {
-        if (firstName)
-            CFRelease(firstName);
-        if (lastName)
-            CFRelease(lastName);
-        CFRelease(person);
-    }
-    return c;
-    
-}
 
-- (void)populateFromAddressBook {
-    CFErrorRef err;
-    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, &err);
-//    __block BOOL accessGranted = NO;
-//    ABAddressBookRef addressBook = ABAddressBookCreate();
-    NSArray *people = (__bridge_transfer NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
-//    self.hasAddressBookMatch = ([people count] > 0);
-    
-//    if (self.hasAddressBookMatch) {
-    ContactVO *c;
-    CFStringRef firstName;
-    CFStringRef lastName;
-    
-    for (int i=0; i<people.count; i++) {
-        ABRecordRef person = (__bridge ABRecordRef)[people objectAtIndex:i];
-        
-//        contact = [self readABPerson:person];
-        
-        c = [[ContactVO alloc] init];
-        @try {
-            firstName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
-            lastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
-            c.first_name = (__bridge NSString *)firstName;
-            c.last_name = (__bridge NSString *)lastName;
-        }
-        @catch (NSException *exception) {
-            NSLog(@"%@", exception);
-        }
-        
-        [peopleData addObject:c];
-//        CFRelease(person);
-    }
-    if (firstName)
-        CFRelease(firstName);
-    if (lastName)
-        CFRelease(lastName);
-    CFRelease(addressBook);
-    
-//        ABRecordRef owner = (__bridge ABRecordRef)[people objectAtIndex:0];
-//        
-//        // Email
-//        ABMultiValueRef emailMultiValue = ABRecordCopyValue(owner, kABPersonEmailProperty);
-//        NSArray *emails = (__bridge_transfer NSArray *)ABMultiValueCopyArrayOfAllValues(emailMultiValue);
-//        
-//        if ([emails count] > 0) {
-//            self.email = (NSString *)[emails objectAtIndex:0];
-//        }
-//        
-//        CFRelease(emailMultiValue);
-//        
-//        // Phone
-//        ABMultiValueRef phoneMultiValue = ABRecordCopyValue(owner, kABPersonPhoneProperty);
-//        NSArray *phones = (__bridge_transfer NSArray *)ABMultiValueCopyArrayOfAllValues(phoneMultiValue);
-//        
-//        if ([phones count] > 0) {
-//            self.phone = (NSString *)[phones objectAtIndex:0];
-//        }
-//        
-//        CFRelease(phoneMultiValue);
-    
-    
-//    }
-    
-//    CFRelease(addressBook);
-}
-
-- (ContactVO *) readABPerson:(ABRecordRef)person
-{
-    ContactVO *c = [[ContactVO alloc] init];
-    CFStringRef firstName;
-    CFStringRef lastName;
-    @try {
-        firstName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
-        lastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
-        c.first_name = (__bridge NSString *)firstName;
-        c.last_name = (__bridge NSString *)lastName;
-    }
-    @catch (NSException *exception) {
-        NSLog(@"%@ %@", firstName, exception);
-    }
-    @finally {
-        if (firstName)
-            CFRelease(firstName);
-        if (lastName)
-            CFRelease(lastName);
-    }
-    return c;
-    
-}
 
 @end

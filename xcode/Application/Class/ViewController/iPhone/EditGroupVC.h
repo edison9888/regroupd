@@ -11,6 +11,8 @@
 #import "CCSearchBar.h"
 #import "CCTableViewCell.h"
 #import "ChatManager.h"
+#import "GroupManager.h"
+
 #import "ChatVO.h"
 #import "ContactVO.h"
 #import "SelectedItemWidget.h"
@@ -27,7 +29,7 @@
     float ypos;
     float xpos;
     ChatManager *chatSvc;
-    
+    GroupManager *groupSvc;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;

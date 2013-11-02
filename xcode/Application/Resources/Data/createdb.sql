@@ -112,6 +112,16 @@ CREATE TABLE IF NOT EXISTS form_option (
     updated TEXT
 );
 
+CREATE TABLE IF NOT EXISTS phonebook ( 
+record_id BIGINT PRIMARY KEY,
+contact_key TEXT,
+first_name TEXT,
+last_name TEXT,
+phone TEXT,
+status INT,
+timestamp INTEGER
+);
+
 insert into contact (first_name, last_name, phone) values ('Hugh', 'Lang', '1-646-498-6305');
 
 INSERT INTO "form" (form_id, name, type, status, created, updated) VALUES(2,'Lunch',1,0,'2013-09-26 22:12:31','2013-09-26 22:12:31');

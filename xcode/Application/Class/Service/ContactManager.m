@@ -10,6 +10,7 @@
 #import "ContactManager.h"
 #import "SQLiteDB.h"
 #import "DateTimeUtils.h"
+#import <AddressBook/AddressBook.h>
 
 @implementation ContactManager
 
@@ -154,229 +155,6 @@
     return maxId;
 }
 
-#pragma mark - Group DAO
-- (int) fetchLastGroupID{
-    NSLog(@"%s", __FUNCTION__);
-    
-    NSString *sql = nil;
-    sql = @"SELECT MAX(group_id) AS max_id FROM db_group";
-    
-    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-    int maxId = 0;
-    
-    if ([rs next]) {
-        maxId = [rs intForColumnIndex:0];
-    }
-    
-    return maxId;
-}
-- (GroupVO *) loadGroup:(int)_groupId {
-    return [self loadGroup:_groupId fetchAll:NO];
-}
-- (GroupVO *) loadGroup:(int)_groupId fetchAll:(BOOL)all{
-    NSLog(@"%s", __FUNCTION__);
-    
-    NSString *sql = nil;
-    sql = @"select * from db_group where group_id=?";
-    
-    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
-                       [NSNumber numberWithInt:_groupId]];
-    
-    NSDictionary *dict;
-    if ([rs next]) {
-        dict = [rs resultDictionary];
-    }
-    
-    if (dict != nil) {
-        GroupVO *result = [GroupVO readFromDictionary:dict];
-        
-        if (all) {
-            NSMutableArray *contacts = [[NSMutableArray alloc] init];
-            
-            //            sql = @"select * from group_contact where group_id=? order by Contact_id";
-            //            rs = [[SQLiteDB sharedConnection] executeQuery:sql,
-            //                  [NSNumber numberWithInt:_GroupId]];
-            //            ContactVO *Contact;
-            //
-            //            while ([rs next]) {
-            //                Contact = [ContactVO readFromDictionary:[rs resultDictionary]];
-            //                [Contacts addObject:Contact];
-            //            }
-            //            result.Contacts = Contacts;
-        }
-        return result;
-    } else {
-        return nil;
-    }
-    
-}
-
-
-- (int) saveGroup:(GroupVO *) group {
-    
-    NSString *sql;
-    BOOL success;
-    NSDate *now = [NSDate date];
-    NSString *dt = [DateTimeUtils dbDateTimeStampFromDate:now];
-    NSLog(@"dt %@", dt);
-    
-    @try {
-        sql = @"INSERT into db_group (user_key, system_id, name) values (?, ?, ?);";
-        success = [[SQLiteDB sharedConnection] executeUpdate:sql,
-                   [DataModel shared].user.user_key,
-                   group.system_id,
-                   group.name
-                   ];
-        
-        if (!success) {
-            NSLog(@"####### SQL Insert failed #######");
-        } else {
-            NSLog(@"====== SQL INSERT SUCCESS ======");
-            
-            sql = @"SELECT last_insert_rowid()";
-            
-            FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-            
-            if ([rs next]) {
-                int lastId = [rs intForColumnIndex:0];
-                NSLog(@"lastId = %i", lastId);
-                return lastId;
-            }
-            
-        }
-    }
-    @catch (NSException *exception) {
-        NSLog(@"EXCEPTION %@", exception);
-    }
-    return -1;
-    
-}
-
-- (void) deleteGroup:(GroupVO *) group {
-    
-    NSString *sql;
-    BOOL success;
-    
-    sql = @"delete from db_group where group_id=?";
-    
-    success = [[SQLiteDB sharedConnection] executeUpdate:sql,
-               group.group_id
-               ];
-    
-    if (!success) {
-        NSLog(@"####### SQL Delete failed #######");
-    } else {
-        NSLog(@"====== SQL DELETE SUCCESS ======");
-    }
-    
-}
-- (void) updateGroup:(GroupVO *) group{
-    NSString *sql;
-    BOOL success;
-    NSDate *now = [NSDate date];
-    NSString *dt = [DateTimeUtils dbDateTimeStampFromDate:now];
-    NSLog(@"dt %@", dt);
-    
-    sql = @"UPDATE db_group set system_id=?, name=?, type=?, status=?, updated=? where group_id=?";
-    success = [[SQLiteDB sharedConnection] executeUpdate:sql,
-               group.system_id,
-               group.name,
-               group.type,
-               group.status,
-               dt,
-               [NSNumber numberWithInt:group.group_id]
-               ];
-    
-    if (!success) {
-        NSLog(@"####### SQL Update failed #######");
-    } else {
-        NSLog(@"====== SQL UPDATE SUCCESS ======");
-    }
-    
-}
-- (NSMutableArray *) listGroups:(int)typeFilter {
-    NSMutableArray *results = [[NSMutableArray alloc] init];
-    
-    NSString *sql = @"select * from db_group order by updated desc";
-    
-    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-    GroupVO *row;
-    
-    while ([rs next]) {
-        row = [GroupVO readFromDictionary:[rs resultDictionary]];
-        [results addObject:row];
-    }
-    return results;
-}
-
-
-
-#pragma mark - group_contact DAO
-- (NSMutableArray *) listGroupContacts:(int)groupId {
-    NSMutableArray *results = [[NSMutableArray alloc] init];
-    
-    NSString *sql = @"select c.* from contact as c join group_contact as gc on c.contact_id=gc.contact_id where gc.group_id=? order by c.first_name?";
-    
-    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
-                       [NSNumber numberWithInt:groupId]];
-    ContactVO *row;
-    
-    while ([rs next]) {
-        row = [ContactVO readFromDictionary:[rs resultDictionary]];
-        [results addObject:row];
-    }
-    
-    return results;
-}
-
-- (BOOL) checkGroupContact:(int)groupId contactId:(int)contactId {
-    NSString *sql = @"select * from group_contact where group_id=? and contact_id=?";
-    
-    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
-                       [NSNumber numberWithInt:groupId],
-                       [NSNumber numberWithInt:contactId]
-                       ];
-    if ([rs next]) {
-        return YES;
-    } else {
-        return NO;
-    }
-}
-
-- (void) addGroupContact:(int)groupId contactId:(int)contactId {
-    
-    NSString *sql;
-    BOOL success;
-    NSDate *now = [NSDate date];
-    NSString *dt = [DateTimeUtils dbDateTimeStampFromDate:now];
-    NSLog(@"dt %@", dt);
-    sql = @"INSERT into group_contact (group_id, contact_id) values (?, ?);";
-    
-    success = [[SQLiteDB sharedConnection] executeUpdate:sql,
-               [NSNumber numberWithInt:groupId],
-               [NSNumber numberWithInt:contactId]
-               ];
-    
-    if (!success) {
-        NSLog(@"####### SQL Insert failed #######");
-    } else {
-        NSLog(@"====== SQL INSERT SUCCESS ======");
-    }
-    
-}
-
-- (void) removeGroupContact:(int)groupId contactId:(int)contactId {
-    NSString *sql;
-    BOOL success;
-
-    sql = @"delete from group_contact where group_id=? and contact_id=?";
-
-    success = [[SQLiteDB sharedConnection] executeUpdate:sql,
-               [NSNumber numberWithInt:groupId],
-               [NSNumber numberWithInt:contactId]
-               ];
-
-}
 
 #pragma mark - parse.com - Contact API
 
@@ -454,6 +232,24 @@
     }];
 }
 
+
+- (void) apiLookupContactsByPhoneNumbers:(NSArray *)numbers callback:(void (^)(NSArray *))callback {
+    
+    PFQuery *query = [PFQuery queryWithClassName:kContactDB];
+    [query whereKey:@"phone" containedIn:numbers];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        NSMutableArray *contacts = [[NSMutableArray alloc] init];
+        ContactVO *contact;
+        for (PFObject *result in results) {
+            contact = [ContactVO readFromPFObject:result];
+
+            [contacts addObject:contact];
+        }
+        callback([contacts copy]);
+    }];
+    
+}
 - (void) apiSaveUserContact:(ContactVO *)contact callback:(void (^)(NSString *))callback {
     PFQuery *query = [PFQuery queryWithClassName:kUserContactDB];
     [query whereKey:@"user" equalTo:[PFUser currentUser]];
@@ -515,6 +311,7 @@
     }];
 
 }
+
 #pragma mark - OLD Non-async methods
 - (PFObject *) apiSaveUserContact:(PFObject *) pfContact {
     NSLog(@"%s", __FUNCTION__);
@@ -530,5 +327,188 @@
     return data;
     
 }
+
+#pragma mark - Phonebook DAO
+
+- (NSDictionary *) findPersonByPhone:(NSString *)phone {
+    NSLog(@"%s", __FUNCTION__);
+    
+    NSString *sql = nil;
+    sql = @"select * from phone_book where phone=?";
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql, phone];
+    
+    NSDictionary *dict;
+    if ([rs next]) {
+        dict = [rs resultDictionary];
+    }
+    
+    return dict;
+}
+
+- (NSMutableArray *) listPhonebookByStatus:(int)status {
+    
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    
+    NSString *sql = @"select * from phonebook where status=?";
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
+                       [NSNumber numberWithInt:status]];
+    while ([rs next]) {
+        [results addObject:[rs resultDictionary]];
+    }
+    
+    return results;
+    
+}
+
+
+- (void)purgePhonebook;
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    
+    [[SQLiteDB sharedQueue] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        NSString *sql;
+        BOOL success;
+        sql = @"DELETE from phonebook";
+        success = [db executeUpdate:sql];
+    }];
+}
+
+- (void)bulkLoadPhonebook:(NSArray *)contacts;
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    
+    [[SQLiteDB sharedQueue] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        
+        NSString *insertSql = @"INSERT INTO phonebook (record_id, first_name, last_name, phone, status, timestamp) VALUES (?, ?, ?, ?, ?, ?);";
+        for (ContactVO *contact in contacts) {
+            
+            BOOL success = [db executeUpdate:insertSql,
+                            contact.record_id,
+                            contact.first_name,
+                            contact.last_name,
+                            contact.phone,
+                            [NSNumber numberWithInt:0],
+                            [NSNumber numberWithInt:0]
+                            ];
+            
+            if (!success) {
+                NSLog(@"################################### SQL Insert failed ###################################");
+            }
+        }
+    }];
+    
+}
+- (void)updatePhonebookWithContacts:(NSArray *)contacts;
+{
+    NSLog(@"%s", __FUNCTION__);
+    NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
+    [[SQLiteDB sharedQueue] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        NSString *sql;
+        BOOL success;
+        sql = @"update phonebook set status=1, contact_key=?, timestamp=? where phone=?";
+        for (ContactVO *contact in contacts) {
+            success = [db executeUpdate:sql,
+                       contact.system_id,
+                       [NSNumber numberWithDouble:seconds],
+                       contact.phone];
+        }
+    }];
+}
+
+
+#pragma mark - Address Book integration
+
+- (NSMutableArray *)readAddressBook {
+    NSMutableArray *peopleData = [[NSMutableArray alloc] init];
+    
+    CFErrorRef err;
+    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, &err);
+    NSArray *people = (__bridge_transfer NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
+    
+    ContactVO *c;
+    CFStringRef firstName;
+    CFStringRef lastName;
+    
+    // Only capture users who have mobile phone numbers
+    for (int i=0; i<people.count; i++) {
+        ABRecordRef person = (__bridge ABRecordRef)[people objectAtIndex:i];
+        ABRecordID abRecordID = ABRecordGetRecordID(person);
+        NSNumber *recordId = [NSNumber numberWithInt:abRecordID];
+        
+        @try {
+            ABMultiValueRef phones = ABRecordCopyValue(person, kABPersonPhoneProperty);
+            
+            NSString* mobile=nil;
+            NSString* mobileLabel;
+            for (int i=0; i < ABMultiValueGetCount(phones); i++) {
+                //NSString *phone = (NSString *)ABMultiValueCopyValueAtIndex(phones, i);
+                //NSLog(@"%@", phone);
+                mobileLabel = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phones, i);
+                if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneIPhoneLabel]) {
+                    mobile = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
+                    continue;
+                    
+                } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneMobileLabel]) {
+                    mobile = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
+                    continue;
+                }
+            }
+            
+            if (mobile != nil && mobile.length > 10) {
+                
+                mobile = [self makePhoneId:mobile];
+                c = [[ContactVO alloc] init];
+                c.phone = mobile;
+                
+                firstName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
+                lastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
+                c.first_name = (__bridge NSString *)firstName;
+                c.last_name = (__bridge NSString *)lastName;
+                c.record_id = recordId;
+                [peopleData addObject:c];
+                
+            } else {
+                // Ignore contact without mobile phone
+                
+            }
+        }
+        @catch (NSException *exception) {
+            NSLog(@"%@", exception);
+        }
+        
+    }
+    if (firstName)
+        CFRelease(firstName);
+    if (lastName)
+        CFRelease(lastName);
+    CFRelease(addressBook);
+    
+    return peopleData;
+}
+
+- (NSString *) makePhoneId:(NSString *)originalString {
+    NSMutableString *strippedString = [NSMutableString
+                                       stringWithCapacity:originalString.length];
+    
+    NSScanner *scanner = [NSScanner scannerWithString:originalString];
+    NSCharacterSet *numbers = [NSCharacterSet
+                               characterSetWithCharactersInString:@"0123456789"];
+    
+    while ([scanner isAtEnd] == NO) {
+        NSString *buffer;
+        if ([scanner scanCharactersFromSet:numbers intoString:&buffer]) {
+            [strippedString appendString:buffer];
+            
+        } else {
+            [scanner setScanLocation:([scanner scanLocation] + 1)];
+        }
+    }
+    return strippedString;
+}
+
 
 @end

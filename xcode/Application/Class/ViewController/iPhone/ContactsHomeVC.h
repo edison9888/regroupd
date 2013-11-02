@@ -18,11 +18,11 @@
 @interface ContactsHomeVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, ABNewPersonViewControllerDelegate> {
     BOOL isLoading;
     int selectedIndex;
-    NSMutableArray *contactsData;
+    NSMutableArray *availableContacts;
     NSMutableArray *groupsData;
 //    NSArray *addressBookData;
 
-    NSMutableArray *peopleData;
+    NSMutableArray *otherContacts;
 
     UIView *bgLayer;
     ContactManager *contactSvc;
@@ -30,10 +30,10 @@
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
-@property(retain) NSMutableArray *contactsData;
+@property(retain) NSMutableArray *availableContacts;
 @property(retain) NSMutableArray *groupsData;
 //@property(retain) NSArray *addressBookData;
-@property(retain) NSArray *peopleData;
+@property(retain) NSArray *otherContacts;
 
 
 - (void)performSearch:(NSString *)searchText;

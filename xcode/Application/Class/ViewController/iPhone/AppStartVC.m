@@ -8,6 +8,7 @@
 
 #import "AppStartVC.h"
 #import "UserManager.h"
+#import "ContactManager.h"
 
 @interface AppStartVC ()
 

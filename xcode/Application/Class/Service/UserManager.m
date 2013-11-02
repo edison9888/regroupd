@@ -145,7 +145,7 @@
     
     PFQuery *query= [PFUser query];
     
-    [query whereKey:@"phone" equalTo:user.phone];
+    [query whereKey:@"username" equalTo:user.phone];
     
     __block PFUser *pfUser;
     
@@ -172,44 +172,55 @@
         } else {
             NSLog(@"Found user for phone %@", user.phone);
             pfUser = (PFUser *)object;
-        }
-        
-        PFQuery *query = [PFQuery queryWithClassName:kContactDB];
-        [query whereKey:@"phone" equalTo:user.phone];
-        
-        [query getFirstObjectInBackgroundWithBlock:^(PFObject *pfContact, NSError *error){
+            NSError* error;
             
-            if (!pfUser) {
-                NSLog(@"pfUser is null!!!!!!!!!!");
-            }
-            if (!pfContact) {
-                NSLog(@"Creating new contact for phone %@", user.phone);
-                
-                pfContact = [PFObject objectWithClassName:kContactDB];
-                
-                pfContact[@"user"] = pfUser;
-                pfContact[@"phone"] = user.phone;
-//                pfContact[@"first_name"] = user.first_name;
-//                pfContact[@"last_name"] = user.last_name;
-                
+            [PFUser logInWithUsername:user.username password:user.password error:&error] ;
+            
+            if (error) {
+                NSLog(@"%@", error);
             } else {
-                NSLog(@"Updating contact for phone %@", user.phone);
-                pfContact[@"user"] = pfUser;
-                pfContact[@"phone"] = user.phone;
-                [pfUser setObject:user.phone forKey:@"phone"];
-
+                isOk = YES;
             }
+        }
+        if (isOk) {
+            PFQuery *query = [PFQuery queryWithClassName:kContactDB];
+            [query whereKey:@"phone" equalTo:user.phone];
             
-            [pfContact saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if (error) {
-                    NSLog(@"##### %@", error);
-                } else {
-                    NSLog(@"Saved contact with objectId %@", pfContact.objectId);
+            [query getFirstObjectInBackgroundWithBlock:^(PFObject *pfContact, NSError *error){
+                
+                if (!pfUser) {
+                    NSLog(@"pfUser is null!!!!!!!!!!");
                 }
-                callback(pfUser);
+                if (!pfContact) {
+                    NSLog(@"Creating new contact for phone %@", user.phone);
+                    
+                    pfContact = [PFObject objectWithClassName:kContactDB];
+                    
+                    pfContact[@"user"] = pfUser;
+                    pfContact[@"phone"] = user.phone;
+                    //                pfContact[@"first_name"] = user.first_name;
+                    //                pfContact[@"last_name"] = user.last_name;
+                    
+                } else {
+                    NSLog(@"Updating contact for phone %@", user.phone);
+                    pfContact[@"user"] = pfUser;
+                    pfContact[@"phone"] = user.phone;
+                    [pfUser setObject:user.phone forKey:@"phone"];
+                    
+                }
+                
+                [pfContact saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    if (error) {
+                        NSLog(@"##### %@", error);
+                    } else {
+                        NSLog(@"Saved contact with objectId %@", pfContact.objectId);
+                    }
+                    callback(pfUser);
+                }];
+                
             }];
             
-        }];
+        }
         
     }];
    

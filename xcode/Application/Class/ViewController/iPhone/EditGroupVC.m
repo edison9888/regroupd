@@ -9,6 +9,7 @@
 #import "EditGroupVC.h"
 #import "DataModel.h"
 #import "ContactManager.h"
+
 #import "UIColor+ColorWithHex.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -295,16 +296,19 @@
         group.status = 0;
         group.type = 1;
         
-        int groupId = [contactSvc saveGroup:group];
+        if (groupSvc == nil) {
+            groupSvc = [[GroupManager alloc] init];
+        }
+        int groupId = [groupSvc saveGroup:group];
         
         NSLog(@"New groupId %i", groupId);
         
         for (NSNumber*  contactId in contactIds) {
             
-            BOOL exists = [contactSvc checkGroupContact:groupId contactId:contactId.intValue];
+            BOOL exists = [groupSvc checkGroupContact:groupId contactId:contactId.intValue];
             
             if (!exists) {
-                [contactSvc addGroupContact:groupId contactId:contactId.intValue];
+                [groupSvc addGroupContact:groupId contactId:contactId.intValue];
             }
         }
         
