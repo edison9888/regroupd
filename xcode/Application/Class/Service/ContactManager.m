@@ -362,6 +362,34 @@
     
 }
 
+- (NSMutableArray *) lookupContactsFromPhonebook:(NSArray *)contactKeys {
+    
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    
+    NSString *sql = @"select * from phonebook where contact_key=?";
+    ContactVO *contact;
+    
+    for (NSString *key in contactKeys) {
+        NSLog(@"Lookup for contactKey %@", key);
+        if ([[DataModel shared].contactCache objectForKey:key] == nil) {
+            FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
+                               key];
+            
+            if ([rs next]) {
+                contact = [ContactVO readFromPhonebook:[rs resultDictionary]];
+                [[DataModel shared].contactCache setObject:contact forKey:key];
+                [results addObject:contact];
+            }
+            
+        } else {
+            contact = [[DataModel shared].contactCache objectForKey:key];
+            [results addObject:contact];
+        }
+    }
+    return results;
+    
+}
+
 
 - (void)purgePhonebook;
 {
@@ -430,8 +458,6 @@
     NSArray *people = (__bridge_transfer NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
     
     ContactVO *c;
-    CFStringRef firstName;
-    CFStringRef lastName;
     
     // Only capture users who have mobile phone numbers
     for (int i=0; i<people.count; i++) {
@@ -463,6 +489,8 @@
                 mobile = [self makePhoneId:mobile];
                 c = [[ContactVO alloc] init];
                 c.phone = mobile;
+                CFStringRef firstName;
+                CFStringRef lastName;
                 
                 firstName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
                 lastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
@@ -470,21 +498,23 @@
                 c.last_name = (__bridge NSString *)lastName;
                 c.record_id = recordId;
                 [peopleData addObject:c];
+
+                if (firstName)
+                    CFRelease(firstName);
+                if (lastName)
+                    CFRelease(lastName);
                 
             } else {
                 // Ignore contact without mobile phone
                 
             }
+            
         }
         @catch (NSException *exception) {
             NSLog(@"%@", exception);
         }
         
     }
-    if (firstName)
-        CFRelease(firstName);
-    if (lastName)
-        CFRelease(lastName);
     CFRelease(addressBook);
     
     return peopleData;

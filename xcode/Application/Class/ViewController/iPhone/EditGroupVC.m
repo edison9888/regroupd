@@ -56,7 +56,7 @@
     ypos = 3;
     
     contactsMap = [[NSMutableDictionary alloc] init];
-    contactIds = [[NSMutableArray alloc] init];
+    contactKeys = [[NSMutableArray alloc] init];
     
     CGRect searchFrame = CGRectMake(5,5,300,36);
     
@@ -190,13 +190,11 @@
             
             selectedIndex = indexPath.row;
             NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
-            ContactVO *contact;
-            contact = [ContactVO readFromDictionary:rowdata];
-            [DataModel shared].contact = contact;
+            NSString *contactKey = (NSString *) [rowdata objectForKey:@"contact_key"];
+            NSString *fullname = [NSString stringWithFormat:kFullNameFormat, [rowdata objectForKey:@"first_name"], [rowdata objectForKey:@"last_name"]];
             
-            [contactsMap setObject:contact forKey:[NSNumber numberWithInt:contact.contact_id]];
-            
-            [contactIds addObject:[NSNumber numberWithInt:contact.contact_id]];
+            //            if (![contactKeys containsObject:contact.system_id]) {
+            [contactKeys addObject:contactKey];
             
             float estWidth = 100;
             if (xpos + estWidth + 10 > self.selectionsView.frame.size.width) {
@@ -212,7 +210,6 @@
             CGRect itemFrame = CGRectMake(xpos, ypos, estWidth, 24);
             SelectedItemWidget *item = [[SelectedItemWidget alloc] initWithFrame:itemFrame];
             
-            NSString *fullname = [NSString stringWithFormat:@"%@ %@", contact.first_name, contact.last_name];
             [item setFieldLabel:fullname];
             
             
@@ -233,7 +230,7 @@
     NSLog(@"%s: %@", __FUNCTION__, searchText);
     
     if (searchText.length > 0) {
-        NSString *sqlTemplate = @"select * from contact where first_name like '%%%@%%' or last_name like '%%%@%%' limit 20";
+        NSString *sqlTemplate = @"select * from phonebook where status=1 and (first_name like '%%%@%%' or last_name like '%%%@%%') limit 20";
         
         isLoading = YES;
         
@@ -254,7 +251,7 @@
         [self.theTableView reloadData];
         
     } else {
-        NSString *sqlTemplate = @"select * from contact order by last_name";
+        NSString *sqlTemplate = @"select * from phonebook where status=1 order by last_name";
         
         isLoading = YES;
         
@@ -283,13 +280,12 @@
     
     BOOL isOK = YES;
     
-    if (contactIds.count == 0) {
+    if (contactKeys.count == 0) {
         isOK = NO;
     }
     if (isOK) {
         
         // TODO: save to group table
-        ContactManager *contactSvc = [[ContactManager alloc]init];
         GroupVO *group = [[GroupVO alloc] init];
         group.name = self.groupName.text;
         group.system_id = @"";
@@ -303,7 +299,7 @@
         
         NSLog(@"New groupId %i", groupId);
         
-        for (NSNumber*  contactId in contactIds) {
+        for (NSNumber*  contactId in contactKeys) {
             
             BOOL exists = [groupSvc checkGroupContact:groupId contactId:contactId.intValue];
             

@@ -25,7 +25,7 @@
     NSMutableArray *tableData;
     CCSearchBar *ccSearchBar;
     NSMutableDictionary *contactsMap;
-    NSMutableArray *contactIds;
+    NSMutableArray *contactKeys;
     float ypos;
     float xpos;
     ChatManager *chatSvc;

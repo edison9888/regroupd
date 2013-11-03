@@ -122,12 +122,10 @@
             NSLog(@"Selected row %i", indexPath.row);
             
             selectedIndex = indexPath.row;
-            NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
             
-            [DataModel shared].chat = [ChatVO readFromDictionary:rowdata];
+            [DataModel shared].chat = (ChatVO *)[tableData objectAtIndex:indexPath.row];
             
             [_delegate gotoSlideWithName:@"Chat"];
-            
             
         }
     } @catch (NSException * e) {
@@ -150,57 +148,32 @@
     [chatSvc apiListChats:[DataModel shared].user.contact_key callback:^(NSArray *results) {
         NSLog(@"Callback response objectId %i", results.count);
         ChatVO *chat;
+        NSString *fullname;
+        NSMutableArray *namesArray = [[NSMutableArray alloc] init];
         for (PFObject* result in results) {
 //            data = [DataModel readPFObjectAsDictionary:result];
             chat = [ChatVO readFromPFObject:result];
             
             NSArray *keys = [result objectForKey:@"contact_keys"];
             NSLog(@"contact keys = %@", keys);
-            
-            [contactSvc apiLookupContacts:chat.contact_keys callback:^(NSArray *contacts) {
-                NSMutableArray *namesArray = [[NSMutableArray alloc] init];
-                NSString *fullname;
-                for (ContactVO *contact in contacts) {
-                    if (![contact.system_id isEqualToString:[DataModel shared].user.contact_key]) {
-                        fullname = [NSString stringWithFormat:kFullNameFormat, contact.first_name, contact.last_name];
-                        [namesArray addObject:fullname];
-                    }
+            NSMutableArray *contacts = [contactSvc lookupContactsFromPhonebook:keys];
+            for (ContactVO *contact in contacts) {
+                if (![contact.system_id isEqualToString:[DataModel shared].user.contact_key]) {
+                    fullname = [NSString stringWithFormat:kFullNameFormat, contact.first_name, contact.last_name];
+                    [namesArray addObject:fullname];
                 }
-                NSString *names = [namesArray componentsJoinedByString:@", "];
-                chat.names = names;
-//                [data setValue:names forKey:@"names"];
-                
-                isLoading = NO;
-                [tableData addObject:chat];
-                [self.theTableView reloadData];
-            }];
+            }
+            NSString *names = [namesArray componentsJoinedByString:@", "];
+            chat.names = names;
+            isLoading = NO;
+            [tableData addObject:chat];
+            [self.theTableView reloadData];
+            
         }
     }];
 }
 
 
-- (void)performSearch:(NSString *)searchText
-{
-    NSLog(@"%s: %@", __FUNCTION__, searchText);
-    
-    NSString *sqlTemplate = @"select * from chat order by chat_id desc";
-    
-    isLoading = YES;
-    
-    NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
-    
-    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-    [tableData removeAllObjects];
-    
-    while ([rs next]) {
-        [tableData addObject:[rs resultDictionary]];
-    }
-    isLoading = NO;
-    
-    [self.theTableView reloadData];
-    
-    
-}
 
 #pragma mark - Action handlers
 

@@ -23,7 +23,6 @@
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
 @property(retain) NSMutableArray *tableData;
-- (void)performSearch:(NSString *)searchText;
 
 @property (nonatomic, strong) IBOutlet UILabel *navTitle;
 @property (nonatomic, strong) IBOutlet UILabel *navCaption;

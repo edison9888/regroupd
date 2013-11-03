@@ -75,6 +75,25 @@
     
     return o;
 }
++ (ContactVO *) readFromPhonebook:(NSDictionary *) data {
+    ContactVO *o = [[ContactVO alloc] init];
+    NSString *text;
+    
+    text = [data valueForKey:@"contact_key"];
+    o.system_id = text;
+    text = [data valueForKey:@"first_name"];
+    o.first_name = text;
+    text = [data valueForKey:@"last_name"];
+    o.last_name = text;
+    text = [data valueForKey:@"phone"];
+    o.phone = text;
+    text = [data valueForKey:@"email"];
+    o.email = text;
+    text = [data valueForKey:@"imagefile"];
+    o.imagefile = text;
+    
+    return o;
+}
 
 + (ContactVO *) readFromPFObject:(PFObject *)data {
     ContactVO *o = [[ContactVO alloc] init];

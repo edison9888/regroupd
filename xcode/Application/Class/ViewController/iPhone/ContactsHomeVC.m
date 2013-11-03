@@ -11,7 +11,6 @@
 #import "UIColor+ColorWithHex.h"
 
 #define kStatusAvailable @"Available"
-#define kNameFormat @"%@ %@"
 
 @interface ContactsHomeVC ()
 
@@ -228,7 +227,7 @@
             
             if (availableContacts.count > 0) {
                 NSDictionary *rowData = (NSDictionary *) [availableContacts objectAtIndex:indexPath.row];
-                cell.titleLabel.text = [NSString stringWithFormat:kNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
+                cell.titleLabel.text = [NSString stringWithFormat:kFullNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
                 
                 cell.statusLabel.text = kStatusAvailable;
                 
@@ -283,7 +282,7 @@
             }
             
             NSDictionary *rowData = (NSDictionary *) [otherContacts objectAtIndex:indexPath.row];
-            cell.titleLabel.text = [NSString stringWithFormat:kNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
+            cell.titleLabel.text = [NSString stringWithFormat:kFullNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
             
             cell.statusLabel.text = @"";
             
@@ -515,48 +514,7 @@
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
 
-    
-    @try {
-        if (person != NULL) {
-            ContactVO *contact = [self readContactFromABPerson:person];
-            
-            
-            // TODO: Check if phone number is set
-            if (contact.phone != nil && contact.phone.length > 0) {
-                
-                NSLog(@"phone number = %@", contact.phone);
-                
-                NSString *phoneId = [self makePhoneId:contact.phone];
-                NSLog(@"phoneId = %@", phoneId);
-                contact.phone = phoneId;
-                
-                if (contactSvc == nil) {
-                    contactSvc = [[ContactManager alloc] init];
-                }
-                
-                [contactSvc apiSaveContact:contact callback:^(PFObject *pfContact) {
-                    NSLog(@"Callback response objectId %@", pfContact.objectId);
-                    contact.system_id = pfContact.objectId;
-                    [contactSvc saveContact:contact];
-                    
-                    [contactSvc apiSaveUserContact:contact callback:^(NSString *objectId) {
-                        NSLog(@"apiSaveUserContact callback: response objectId %@", pfContact.objectId);
-                        
-                        [self listMyContacts];
-                    }];
-//                    [self performSearch:@""];
-                }];
-                
-            } else {
-                NSLog(@"Phone number missing");
-            }
-        }
-    }
-    @catch (NSException *exception) {
-        NSLog(@"#####ERROR###### %@", exception);
-//
-    }
-    
+    [self preparePhonebook];
 }
 
 - (NSString *) makePhoneId:(NSString *)originalString {

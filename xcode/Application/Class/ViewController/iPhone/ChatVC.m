@@ -87,6 +87,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     chatId = [DataModel shared].chat.system_id;
     
+    if ([DataModel shared].chat.names != nil && [DataModel shared].chat.names.length > 0) {
+        self.navTitle.text = [DataModel shared].chat.names;
+        
+    }
+    
     inputHeight = 0;
     theFont = [UIFont fontWithName:@"Raleway-Regular" size:13];
     

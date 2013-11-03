@@ -54,6 +54,7 @@
 - (NSString *) fullname;
 
 + (ContactVO *) readFromDictionary:(NSDictionary *) dict;
++ (ContactVO *) readFromPhonebook:(NSDictionary *) data;
 + (ContactVO *) readFromPFObject:(PFObject *)data;
 + (ContactVO *) readFromPFUserContact:(PFObject *)data;
 @end

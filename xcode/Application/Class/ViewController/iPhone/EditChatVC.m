@@ -51,9 +51,9 @@
     ccSearchBar = [[CCSearchBar alloc] initWithFrame:searchFrame];
     ccSearchBar.delegate = self;
     [self.searchView addSubview:ccSearchBar];
- 
+    
     [self.searchView.layer setCornerRadius:3.0];
-//    self.searchView.backgroundColor = [UIColor clearColor];
+    //    self.searchView.backgroundColor = [UIColor clearColor];
     
     
     self.theTableView.delegate = self;
@@ -173,44 +173,42 @@
             
             selectedIndex = indexPath.row;
             NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
-            ContactVO *contact;
-            contact = [ContactVO readFromDictionary:rowdata];
-            [DataModel shared].contact = contact;
             
-//            [contactsMap setObject:contact forKey:[NSNumber numberWithInt:contact.contact_id]];
+            //            [contactsMap setObject:contact forKey:[NSNumber numberWithInt:contact.contact_id]];
+            NSString *contactKey = (NSString *) [rowdata objectForKey:@"contact_key"];
+            NSString *fullname = [NSString stringWithFormat:kFullNameFormat, [rowdata objectForKey:@"first_name"], [rowdata objectForKey:@"last_name"]];
             
-//            if (![contactKeys containsObject:contact.system_id]) {
-                [contactKeys addObject:contact.system_id];
-                NSString *fullname = [NSString stringWithFormat:kFullNameFormat, contact.first_name, contact.last_name];
+            //            if (![contactKeys containsObject:contact.system_id]) {
+            [contactKeys addObject:contactKey];
             
-                float estWidth = fullname.length * 8 + 10;
-                if (xpos + estWidth + 10 > self.selectionsView.frame.size.width) {
-                    xpos = 0;
-                    ypos +=kcontactsRowHeight;
+            float estWidth = fullname.length * 8 + 10;
+            if (xpos + estWidth + 10 > self.selectionsView.frame.size.width) {
+                xpos = 0;
+                ypos +=kcontactsRowHeight;
+            }
+            
+            if (ypos + kcontactsRowHeight > self.selectionsView.frame.size.height) {
+                CGRect sframe = self.selectionsView.frame;
+                sframe.size.height += kcontactsRowHeight;
+                self.selectionsView.frame = sframe;
+                
+                CGRect searchFrame = self.searchView.frame;
+                if (sframe.origin.y + sframe.size.height > searchFrame.origin.y) {
+                    searchFrame.origin.y += kcontactsRowHeight;
+                    searchFrame.size.height -= kcontactsRowHeight;
+                    self.searchView.frame = searchFrame;
                 }
-                
-                if (ypos + kcontactsRowHeight > self.selectionsView.frame.size.height) {
-                    CGRect sframe = self.selectionsView.frame;
-                    sframe.size.height += kcontactsRowHeight;
-                    self.selectionsView.frame = sframe;
-                    
-                    CGRect searchFrame = self.searchView.frame;
-                    if (sframe.origin.y + sframe.size.height > searchFrame.origin.y) {
-                        searchFrame.origin.y += kcontactsRowHeight;
-                        searchFrame.size.height -= kcontactsRowHeight;
-                        self.searchView.frame = searchFrame;
-                    }
-                }
-                
-                CGRect itemFrame = CGRectMake(xpos, ypos, estWidth, 24);
-                SelectedItemWidget *item = [[SelectedItemWidget alloc] initWithFrame:itemFrame];
-                
-                [item setFieldLabel:fullname];
-
-                xpos += estWidth + 10;
-                [self.selectionsView addSubview:item];
-                
-//            }
+            }
+            
+            CGRect itemFrame = CGRectMake(xpos, ypos, estWidth, 24);
+            SelectedItemWidget *item = [[SelectedItemWidget alloc] initWithFrame:itemFrame];
+            
+            [item setFieldLabel:fullname];
+            
+            xpos += estWidth + 10;
+            [self.selectionsView addSubview:item];
+            
+            //            }
             
             
         }
@@ -227,7 +225,7 @@
     NSLog(@"%s: %@", __FUNCTION__, searchText);
     
     if (searchText.length > 0) {
-        NSString *sqlTemplate = @"select * from contact where first_name like '%%%@%%' or last_name like '%%%@%%' limit 20";
+        NSString *sqlTemplate = @"select * from phonebook where status=1 and (first_name like '%%%@%%' or last_name like '%%%@%%') limit 20";
         
         isLoading = YES;
         
@@ -244,7 +242,7 @@
         [self.theTableView reloadData];
         
     } else {
-        NSString *sqlTemplate = @"select * from contact order by name";
+        NSString *sqlTemplate = @"select * from phonebook where status=1 order by name";
         
         isLoading = YES;
         
@@ -281,9 +279,9 @@
     if (isOK) {
         
         NSLog(@"contact keys count = %i", contactKeys.count);
-
+        
         [contactKeys addObject:[DataModel shared].user.contact_key];
-         
+        
         ChatVO *chat = [[ChatVO alloc] init];
         
         chat.contact_keys = [contactKeys copy];
@@ -300,7 +298,7 @@
         
     } else {
         [[[UIAlertView alloc] initWithTitle:@"Try again" message:@"Please add at least one contact" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-
+        
     }
     
     
