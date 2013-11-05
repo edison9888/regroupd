@@ -12,6 +12,8 @@
 #import "DateTimeUtils.h"
 #import <AddressBook/AddressBook.h>
 
+#define kLiteralNull    @"<null>"
+
 @implementation ContactManager
 
 
@@ -60,10 +62,10 @@
      created TEXT,
      updated TEXT
      );
-
+     
      */
     sql = @"INSERT into contact (user_key, system_id, first_name, last_name, phone, email, imagefile, type, status, created, updated) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-   
+    
     success = [[SQLiteDB sharedConnection] executeUpdate:sql,
                [DataModel shared].user.user_key,
                contact.system_id,
@@ -160,7 +162,7 @@
 
 - (void) apiSaveContact:(ContactVO *)contact callback:(void (^)(PFObject *))callback {
     NSLog(@"%s", __FUNCTION__);
-
+    
     PFQuery *query = [PFQuery queryWithClassName:kContactDB];
     [query whereKey:@"phone" equalTo:contact.phone];
     
@@ -187,8 +189,8 @@
             [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 NSLog(@"Saved contact with objectId %@", data.objectId);
                 callback(data);
-//                [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_contactSavedNotification
-//                                                                                                     object:data]];
+                //                [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_contactSavedNotification
+                //                                                                                                     object:data]];
             }];
             
         } else if (results.count > 0) {
@@ -200,12 +202,12 @@
             NSLog(@"Found contact with phone %@", contact.phone);
             
             callback(data);
-//            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_contactSavedNotification
-//                                                                                                 object:data]];
+            //            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_contactSavedNotification
+            //                                                                                                 object:data]];
         }
         
     }];
-
+    
     
 }
 
@@ -243,7 +245,7 @@
         ContactVO *contact;
         for (PFObject *result in results) {
             contact = [ContactVO readFromPFObject:result];
-
+            
             [contacts addObject:contact];
         }
         callback([contacts copy]);
@@ -256,7 +258,7 @@
     [query whereKey:@"contact_key" equalTo:contact.system_id];
     
     [query getFirstObjectInBackgroundWithBlock:^(PFObject *data, NSError *error){
-//    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        //    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
         if (data) {
             // object exists
             NSLog(@"Found UserContact with objectId %@", data.objectId);
@@ -293,7 +295,7 @@
     
     PFQuery *query = [PFQuery queryWithClassName:kUserContactDB];
     [query whereKey:@"user" equalTo:[PFUser currentUser]];
-//    [query whereKey:@"user" equalTo:[PFObject objectWithoutDataWithClassName:[PFUser parseClassName] objectId:userKey]];
+    //    [query whereKey:@"user" equalTo:[PFObject objectWithoutDataWithClassName:[PFUser parseClassName] objectId:userKey]];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
         NSMutableArray *contacts = [[NSMutableArray alloc] init];
@@ -309,7 +311,7 @@
         }
         callback([contacts copy]);
     }];
-
+    
 }
 
 #pragma mark - OLD Non-async methods
@@ -320,7 +322,7 @@
     
     data[@"user"] = [PFUser currentUser];
     data[@"contact"] = pfContact;
-
+    
     [data save];
     
     NSLog(@"Saved user_contact with objectId %@", data.objectId);
@@ -455,65 +457,100 @@
     
     CFErrorRef err;
     ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, &err);
-    NSArray *people = (__bridge_transfer NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
     
-    ContactVO *c;
+    __block BOOL accessGranted = NO;
     
-    // Only capture users who have mobile phone numbers
-    for (int i=0; i<people.count; i++) {
-        ABRecordRef person = (__bridge ABRecordRef)[people objectAtIndex:i];
-        ABRecordID abRecordID = ABRecordGetRecordID(person);
-        NSNumber *recordId = [NSNumber numberWithInt:abRecordID];
+    if (ABAddressBookRequestAccessWithCompletion != NULL) { // we're on iOS 6
+        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+        ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
+            accessGranted = granted;
+            dispatch_semaphore_signal(sema);
+        });
+        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+        //        dispatch_release(sema);
+    }
+    else { // we're on iOS 5 or older
+        accessGranted = YES;
+    }
+    
+    if (accessGranted)
+    {
         
-        @try {
-            ABMultiValueRef phones = ABRecordCopyValue(person, kABPersonPhoneProperty);
+        NSArray *people = (__bridge_transfer NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
+        
+        ContactVO *c;
+        NSLog(@"original addressBook count %i", people.count);
+        // Only capture users who have mobile phone numbers
+        for (int i=0; i<people.count; i++) {
+            ABRecordRef person = (__bridge ABRecordRef)[people objectAtIndex:i];
+            ABRecordID abRecordID = ABRecordGetRecordID(person);
+            NSNumber *recordId = [NSNumber numberWithInt:abRecordID];
             
-            NSString* mobile=nil;
-            NSString* mobileLabel;
-            for (int i=0; i < ABMultiValueGetCount(phones); i++) {
-                //NSString *phone = (NSString *)ABMultiValueCopyValueAtIndex(phones, i);
-                //NSLog(@"%@", phone);
-                mobileLabel = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phones, i);
-                if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneIPhoneLabel]) {
-                    mobile = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
-                    continue;
-                    
-                } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneMobileLabel]) {
-                    mobile = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
-                    continue;
+            @try {
+                ABMultiValueRef phones = ABRecordCopyValue(person, kABPersonPhoneProperty);
+                
+                NSString* mobile=nil;
+                NSString* mobileLabel;
+                for (int i=0; i < ABMultiValueGetCount(phones); i++) {
+                    //NSString *phone = (NSString *)ABMultiValueCopyValueAtIndex(phones, i);
+                    //NSLog(@"%@", phone);
+                    mobileLabel = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phones, i);
+                    if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneIPhoneLabel]) {
+                        mobile = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
+                        continue;
+                        
+                    } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneMobileLabel]) {
+                        mobile = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
+                        continue;
+                    } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneMainLabel]) {
+                        mobile = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
+                        continue;
+                    }
                 }
+                
+                if (mobile != nil && mobile.length > 10) {
+                    
+                    mobile = [self makePhoneId:mobile];
+                    c = [[ContactVO alloc] init];
+                    c.phone = mobile;
+                    CFStringRef firstName;
+                    CFStringRef lastName;
+                    
+                    firstName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
+                    lastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
+                    if (firstName) {
+                        c.first_name = (__bridge NSString *)firstName;
+                    } else {
+                        c.first_name = @"";
+                    }
+                    if (lastName) {
+                        c.last_name = (__bridge NSString *)lastName;                        
+                    } else {
+                        c.last_name = @"";
+                    }
+                    
+                    //                if ([c.last_name isEqualToString:kLiteralNull]) {
+                    //                    c.last_name = @"";
+                    //                }
+                    c.record_id = recordId;
+                    [peopleData addObject:c];
+                    
+                    if (firstName)
+                        CFRelease(firstName);
+                    if (lastName)
+                        CFRelease(lastName);
+                    
+                } else {
+                    // Ignore contact without mobile phone
+                    
+                }
+                
             }
-            
-            if (mobile != nil && mobile.length > 10) {
-                
-                mobile = [self makePhoneId:mobile];
-                c = [[ContactVO alloc] init];
-                c.phone = mobile;
-                CFStringRef firstName;
-                CFStringRef lastName;
-                
-                firstName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
-                lastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
-                c.first_name = (__bridge NSString *)firstName;
-                c.last_name = (__bridge NSString *)lastName;
-                c.record_id = recordId;
-                [peopleData addObject:c];
-
-                if (firstName)
-                    CFRelease(firstName);
-                if (lastName)
-                    CFRelease(lastName);
-                
-            } else {
-                // Ignore contact without mobile phone
-                
+            @catch (NSException *exception) {
+                NSLog(@"%@", exception);
             }
             
         }
-        @catch (NSException *exception) {
-            NSLog(@"%@", exception);
-        }
-        
     }
     CFRelease(addressBook);
     

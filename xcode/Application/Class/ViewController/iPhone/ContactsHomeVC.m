@@ -227,8 +227,8 @@
             
             if (availableContacts.count > 0) {
                 NSDictionary *rowData = (NSDictionary *) [availableContacts objectAtIndex:indexPath.row];
-                cell.titleLabel.text = [NSString stringWithFormat:kFullNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
-                
+//                cell.titleLabel.text = [NSString stringWithFormat:kFullNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
+                cell.titleLabel.text = [self readFullnameFromDictionary:rowData];
                 cell.statusLabel.text = kStatusAvailable;
                 
             } else {
@@ -282,8 +282,9 @@
             }
             
             NSDictionary *rowData = (NSDictionary *) [otherContacts objectAtIndex:indexPath.row];
-            cell.titleLabel.text = [NSString stringWithFormat:kFullNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
-            
+//            cell.titleLabel.text = [NSString stringWithFormat:kFullNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
+            cell.titleLabel.text = [self readFullnameFromDictionary:rowData];
+
             cell.statusLabel.text = @"";
             
         } @catch (NSException * e) {
@@ -618,6 +619,16 @@
     
 }
 
+- (NSString *) readFullnameFromDictionary:(NSDictionary *)rowData {
+    NSLog(@"lastname %@", [rowData objectForKey:@"last_name"]);
+    if ([rowData objectForKey:@"first_name"] != NULL && [rowData objectForKey:@"last_name"] == NULL) {
+        return [rowData objectForKey:@"first_name"];
+    } else if ([rowData objectForKey:@"first_name"] == NULL && [rowData objectForKey:@"last_name"] != NULL) {
+        return [rowData objectForKey:@"last_name"];
+    } else {
+        return [NSString stringWithFormat:kFullNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
+    }
+}
 
 
 @end

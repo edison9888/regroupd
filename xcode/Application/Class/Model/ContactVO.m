@@ -18,7 +18,14 @@
 //@synthesize contact_key;
 
 - (NSString *) fullname {
-    return [NSString stringWithFormat:kNameFormat, self.first_name, self.last_name];
+    
+    if (self.first_name != nil && self.last_name == nil) {
+        return self.first_name;
+    } else if (self.first_name == nil && self.last_name != nil) {
+        return self.last_name;
+    } else {
+        return [NSString stringWithFormat:kNameFormat, self.first_name, self.last_name];
+    }
 }
 
 /*
