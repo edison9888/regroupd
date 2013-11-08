@@ -388,25 +388,20 @@
         [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
             NSMutableArray *msgs = [[NSMutableArray alloc] initWithCapacity:results.count];
             ChatMessageVO *msg;
-            NSMutableArray *userKeys = [[NSMutableArray alloc] init];
-            
+//            NSMutableArray *userKeys = [[NSMutableArray alloc] init];
+//            
             for (PFObject *result in results) {
                 msg = [[ChatMessageVO alloc] init];
                 msg = [ChatMessageVO readFromPFObject:result];
                 [msgs addObject:msg];
-                
-                if (msg.user_key != nil) {
-                    if ([userKeys indexOfObject:msg.user_key] != NSNotFound) {
-                        [userKeys addObject:msg.user_key];
-                    }
-                }
+
             }
             
 //            NSLog(@"userKeys %@", userKeys);
             
             chat.messages = msgs;
             PFQuery *query = [PFQuery queryWithClassName:kContactDB];
-            [query whereKey:@"objectId" containedIn:[userKeys copy]];
+            [query whereKey:@"objectId" containedIn:chat.contact_keys];
             
             [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
                 NSMutableDictionary *contactMap = [[NSMutableDictionary alloc] initWithCapacity:results.count];
@@ -417,7 +412,7 @@
                 }
                 chat.contactMap = contactMap;
                 
-                [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"chatMessagesLoaded"
+                [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatMessagesLoaded
                                                                                                      object:chat]];
             }];
             

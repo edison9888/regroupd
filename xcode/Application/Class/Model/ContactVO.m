@@ -15,6 +15,7 @@
 @synthesize first_name, last_name, phone, email, imagefile;
 @synthesize type, status, created, updated;
 
+@synthesize photo;
 //@synthesize contact_key;
 
 - (NSString *) fullname {

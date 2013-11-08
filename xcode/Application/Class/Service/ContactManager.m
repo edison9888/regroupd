@@ -210,6 +210,32 @@
     
     
 }
+// NOT FINISHED
+- (void) apiUpdateContact:(ContactVO *)contact callback:(void (^)(PFObject *))callback {
+    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"NOT FINISHED");
+    
+    PFQuery *query = [PFQuery queryWithClassName:kContactDB];
+    [query whereKey:@"user" equalTo:[PFUser currentUser]];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        PFObject *data = nil;
+        
+        if (results.count == 0) {
+            callback(nil);
+            
+        } else {
+            data = [results objectAtIndex:0];
+            
+            callback(data);
+            //            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_contactSavedNotification
+            //                                                                                                 object:data]];
+        }
+        
+    }];
+    
+    
+}
 
 - (void) apiLookupContacts:(NSArray *)contactKeys callback:(void (^)(NSArray *))callback {
     NSLog(@"%s", __FUNCTION__);
@@ -252,6 +278,78 @@
     }];
     
 }
+- (UIImage *) loadCachedPhoto:(NSString *)contactKey {
+    @try {
+        NSArray *pathsToDocuments = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        
+        NSString *documentsDirectory = [pathsToDocuments objectAtIndex:0];
+        NSString *filename;
+        filename = [NSString stringWithFormat:@"%@.png", contactKey];
+        
+        NSString *filepath = [documentsDirectory stringByAppendingPathComponent:filename];
+        
+        UIImage *image = [UIImage imageWithContentsOfFile:filepath];
+        
+        if (image) {
+            return image;
+        }
+        
+    }
+    @catch (NSException *exception) {
+        NSLog(@"ERROR %@", exception);
+    }
+    return nil;
+}
+- (void)asyncLoadCachedPhoto:(NSString *)contactKey callback:(void (^)(UIImage *img))callback
+{
+    
+    @try {
+        NSArray *pathsToDocuments = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        
+        NSString *documentsDirectory = [pathsToDocuments objectAtIndex:0];
+        NSString *filename;
+        filename = [NSString stringWithFormat:@"%@.png", contactKey];
+        
+        NSString *filepath = [documentsDirectory stringByAppendingPathComponent:filename];
+        
+        UIImage *image = [UIImage imageWithContentsOfFile:filepath];
+        
+        if (image) {
+            NSLog(@"Found cached image at %@", filepath);
+            callback(image);
+        } else {
+            
+            PFQuery *query = [PFQuery queryWithClassName:kContactDB];
+            [query whereKey:@"user" equalTo:[PFUser currentUser]];
+            
+            [query getFirstObjectInBackgroundWithBlock:^(PFObject *pfContact, NSError *error) {
+                if (pfContact) {
+                    PFFile *pfImage = pfContact[@"photo"];
+                    [pfImage getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
+                        if (!error) {
+                            NSLog(@"Downloading image at %@", pfImage.url);
+                            
+                            [imageData writeToFile:filepath atomically:NO];
+                            
+                            UIImage *image = [UIImage imageWithData:imageData];
+                            callback(image);
+                        }
+                    }];
+                } else {
+                    
+                    NSLog(@"Contact not found");
+                    callback(nil);
+                }
+            }];
+            
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"ERROR %@", exception);
+    }
+}
+
+#pragma mark - UserContactDB
 - (void) apiSaveUserContact:(ContactVO *)contact callback:(void (^)(NSString *))callback {
     PFQuery *query = [PFQuery queryWithClassName:kUserContactDB];
     [query whereKey:@"user" equalTo:[PFUser currentUser]];

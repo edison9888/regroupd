@@ -112,8 +112,7 @@
     
     
 }
-- (IBAction)tapDeleteAccount {
-    [[PFUser currentUser] delete];
-
+- (IBAction)tapProfileButton {
+    [_delegate gotoSlideWithName:@"MyProfile" returnPath:@"SettingsHome"];
 }
 @end

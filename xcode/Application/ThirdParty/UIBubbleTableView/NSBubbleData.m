@@ -102,6 +102,8 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
     imageView.image = image;
     imageView.layer.cornerRadius = 5.0;
     imageView.layer.masksToBounds = YES;
+    imageView.clipsToBounds = YES;
+    imageView.contentMode = UIViewContentModeScaleAspectFill;
 
     
 #if !__has_feature(objc_arc)

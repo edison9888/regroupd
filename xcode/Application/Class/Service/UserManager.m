@@ -96,7 +96,7 @@
 /*
  Create a temporary filename and save image data to file in Documents or temp dir
  */
-- (NSString *)saveSignature:(UIImage *)saveImage withName:(NSString *)filename
+- (void)savePhoto:(UIImage *)saveImage filename:(NSString *)filename callback:(void (^)(NSString *imageUrl))callback
 {
     NSArray *pathsToDocuments = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     
@@ -108,10 +108,33 @@
     
     [imageData writeToFile:savePath atomically:NO];
     
-    return savePath;
+    NSLog(@"Save photo to parse");
+    
+    PFFile *fileObject = [PFFile fileWithName:filename data:imageData];
+    
+    [fileObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        NSLog(@"Saved File with URL %@", fileObject.url);
+        
+        PFQuery *query = [PFQuery queryWithClassName:kContactDB];
+        [query whereKey:@"user" equalTo:[PFUser currentUser]];
+        
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *pfContact, NSError *error) {
+            if (pfContact) {
+                NSLog(@"Saving contact with photo");
+                pfContact[@"photo"] = fileObject;
+                [pfContact saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    callback(fileObject.url);
+                }];
+            } else {
+                
+                NSLog(@"Contact not found");
+                callback(nil);
+            }
+        }];
+    }];
 }
 
-- (UIImage *)loadSignature:(NSString *)filename {
+- (UIImage *)loadPhoto:(NSString *)filename {
     
     @try {
         NSArray *pathsToDocuments = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

@@ -13,7 +13,7 @@
 
 #define k_contactSavedNotification @"contactSavedNotification"
 #define k_chatMessagesLoaded @"chatMessagesLoaded"
-
+#define k_chatContactsLoaded @"chatContactsLoaded"
 
 
 extern uint const kLabelDarkGrey444242;

@@ -27,7 +27,8 @@
 
 - (IBAction)tapClearAllButton;
 - (IBAction)tapContactButton;
-- (IBAction)tapDeleteAccount;
+- (IBAction)tapProfileButton;
+
 
 
 @end

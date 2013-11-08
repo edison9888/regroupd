@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SQLiteDB.h"
 #import "UserVO.h"
+#define kDefaultPhotoFilename   @"myphoto.png"
 
 @interface UserManager : NSObject {
 }
@@ -17,8 +18,9 @@
 
 - (UserVO *) lookupDefaultUser;
 - (void) createUser:(UserVO *) user;
-- (NSString *)saveSignature:(UIImage *)saveImage withName:(NSString *)filename;
-- (UIImage *)loadSignature:(NSString *)filename;
+
+- (void)savePhoto:(UIImage *)saveImage filename:(NSString *)filename callback:(void (^)(NSString *imageUrl))callback;
+- (UIImage *)loadPhoto:(NSString *)filename;
 
 
 // API functions

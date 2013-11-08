@@ -17,6 +17,8 @@
 //#import ""
 
 #import "ChatManager.h"
+#import "ContactManager.h"
+
 #import "ChatVO.h"
 #import "ChatMessageVO.h"
 #import "FormVO.h"
@@ -55,15 +57,18 @@
     CGFloat animatedDistance;
     
     ChatManager *chatSvc;
+    ContactManager *contactSvc;
     
     BOOL hasAttachment;
     int attachmentType;
     UIImage *attachedPhoto;
     FormVO *attachedForm;
     NSString *formTitle;
+    
 }
 
 @property (nonatomic, retain) NSMutableArray *tableDataSource;
+@property (nonatomic, retain) NSMutableDictionary *imageMap;
 
 @property (nonatomic, retain) UIImagePickerController* imagePickerVC;
 @property (nonatomic, retain) FormSelectorVC* formSelectorVC;

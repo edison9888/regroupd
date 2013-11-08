@@ -380,6 +380,22 @@
 			<key>nextSlideName</key>
 			<string></string>
 		</dict>
+		<dict>
+			<key>slideData</key>
+			<dict/>
+			<key>allowLeftSlide</key>
+			<false/>
+			<key>allowRightSlide</key>
+			<false/>
+			<key>category</key>
+			<string>Settings</string>
+			<key>name</key>
+			<string>MyProfile</string>
+			<key>controllerName</key>
+			<string>MyProfileVC</string>
+			<key>nextSlideName</key>
+			<string></string>
+		</dict>
 
 
 	</array>

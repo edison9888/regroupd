@@ -194,6 +194,8 @@
 		1E7A6E2E1806EDED004B62CE /* icon_star_purple@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E7A6E271806EDED004B62CE /* icon_star_purple@2x.png */; };
 		1E7A6E311806EF5F004B62CE /* RatingMeterSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E7A6E301806EF5F004B62CE /* RatingMeterSlider.m */; };
 		1E7A6E33180758FE004B62CE /* see_details@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E7A6E32180758FE004B62CE /* see_details@2x.png */; };
+		1E802635182ACC31006FA827 /* MyProfileVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E802633182ACC31006FA827 /* MyProfileVC.m */; };
+		1E802636182ACC31006FA827 /* MyProfileVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E802634182ACC31006FA827 /* MyProfileVC.xib */; };
 		1E8333AD17977B9500B60612 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E8333AC17977B9400B60612 /* libxml2.2.dylib */; };
 		1E8333B917978C2A00B60612 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333B017978C2A00B60612 /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		1E8333BA17978C2A00B60612 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333B017978C2A00B60612 /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -727,6 +729,9 @@
 		1E7A6E2F1806EF5F004B62CE /* RatingMeterSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RatingMeterSlider.h; sourceTree = "<group>"; };
 		1E7A6E301806EF5F004B62CE /* RatingMeterSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RatingMeterSlider.m; sourceTree = "<group>"; };
 		1E7A6E32180758FE004B62CE /* see_details@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "see_details@2x.png"; sourceTree = "<group>"; };
+		1E802632182ACC31006FA827 /* MyProfileVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyProfileVC.h; sourceTree = "<group>"; };
+		1E802633182ACC31006FA827 /* MyProfileVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyProfileVC.m; sourceTree = "<group>"; };
+		1E802634182ACC31006FA827 /* MyProfileVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyProfileVC.xib; sourceTree = "<group>"; };
 		1E8333AC17977B9400B60612 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = usr/lib/libxml2.2.dylib; sourceTree = SDKROOT; };
 		1E8333AF17978C2A00B60612 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
 		1E8333B017978C2A00B60612 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
@@ -2084,9 +2089,6 @@
 				1EC44C0818130CC000F4A2C2 /* AppStartVC.m */,
 				1EC44C0918130CC000F4A2C2 /* AppStartVC.xib */,
 				1EC44C0A18130CC000F4A2C2 /* AppStartVC_5.xib */,
-				1EC44C4A18130CC100F4A2C2 /* SettingsHomeVC.h */,
-				1EC44C4B18130CC100F4A2C2 /* SettingsHomeVC.m */,
-				1EC44C4C18130CC100F4A2C2 /* SettingsHomeVC.xib */,
 				1EC44C3518130CC100F4A2C2 /* ProfileStart1VC.h */,
 				1EC44C3618130CC100F4A2C2 /* ProfileStart1VC.m */,
 				1EC44C3718130CC100F4A2C2 /* ProfileStart1VC.xib */,
@@ -2102,6 +2104,12 @@
 				1EC44C4118130CC100F4A2C2 /* ProfileStart5VC.h */,
 				1EC44C4218130CC100F4A2C2 /* ProfileStart5VC.m */,
 				1EC44C4318130CC100F4A2C2 /* ProfileStart5VC.xib */,
+				1EC44C4A18130CC100F4A2C2 /* SettingsHomeVC.h */,
+				1EC44C4B18130CC100F4A2C2 /* SettingsHomeVC.m */,
+				1EC44C4C18130CC100F4A2C2 /* SettingsHomeVC.xib */,
+				1E802632182ACC31006FA827 /* MyProfileVC.h */,
+				1E802633182ACC31006FA827 /* MyProfileVC.m */,
+				1E802634182ACC31006FA827 /* MyProfileVC.xib */,
 			);
 			name = Setup;
 			sourceTree = "<group>";
@@ -2585,6 +2593,7 @@
 				1E8BFAF617F7A82E0053BEE3 /* navbtn_forms_polls_off@2x.png in Resources */,
 				1EA0B46118087CFD004C4DDA /* icon_calendar_aqua_38@2x.png in Resources */,
 				1E8BFAF717F7A82E0053BEE3 /* navbtn_forms_polls_on@2x.png in Resources */,
+				1E802636182ACC31006FA827 /* MyProfileVC.xib in Resources */,
 				1E8BFAFC17F7B8320053BEE3 /* checkbox_aqua@2x.png in Resources */,
 				1E8BFAFD17F7B8320053BEE3 /* btn_close_x@2x.png in Resources */,
 				1E8BFAFE17F7B8320053BEE3 /* browse_right_arrow@2x.png in Resources */,
@@ -2747,6 +2756,7 @@
 				1EC44C7218130CC100F4A2C2 /* ProfileStart4VC.m in Sources */,
 				1E1A9AA817FE5016008D81E6 /* UIBubbleHeaderTableViewCell.m in Sources */,
 				1EC44C5A18130CC100F4A2C2 /* EditGroupVC.m in Sources */,
+				1E802635182ACC31006FA827 /* MyProfileVC.m in Sources */,
 				1E8333D4179792F600B60612 /* GTMNSString+HTML.m in Sources */,
 				1E8333D8179792F600B60612 /* QSFileManager.m in Sources */,
 				1E8333DA179792F600B60612 /* QSHttpClient.m in Sources */,

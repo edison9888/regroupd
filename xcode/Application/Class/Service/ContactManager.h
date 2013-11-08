@@ -22,6 +22,7 @@
 
 // API METHODS
 - (void) apiSaveContact:(ContactVO *)contact callback:(void (^)(PFObject *))callback;
+- (void) apiUpdateContact:(ContactVO *)contact callback:(void (^)(PFObject *))callback;
 
 - (void) apiLookupContacts:(NSArray *)contactKeys callback:(void (^)(NSArray *))callback;
 
@@ -31,6 +32,10 @@
 
 
 - (void) apiLookupContactsByPhoneNumbers:(NSArray *)numbers callback:(void (^)(NSArray *))callback;
+
+- (UIImage *) loadCachedPhoto:(NSString *)contactKey;
+
+- (void) asyncLoadCachedPhoto:(NSString *)contactKey callback:(void (^)(UIImage *img))callback;
 
 // Phonebook methods
 - (NSDictionary *) findPersonByPhone:(NSString *)phone;

@@ -101,7 +101,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     attachmentType = FormType_POLL;
     
     chatSvc = [[ChatManager alloc] init];
-    
+    contactSvc = [[ContactManager alloc] init];
     
     // Setup table view
     
@@ -206,8 +206,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     //    - NSBubbleTypingTypeNone - no "now typing" bubble
     
     //    self.bubbleTable.typingBubble = NSBubbleTypingTypeSomebody;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatMessagesLoadedHandler:) name:@"chatMessagesLoaded" object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatContactsLoadedHandler:) name:@"chatContactsLoaded" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatMessagesLoadedHandler:) name:k_chatMessagesLoaded object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatContactsLoadedHandler:) name:k_chatContactsLoaded object:nil];
     
     if ([DataModel shared].chat != nil) {
         NSLog(@"Fetch chat by objectId %@", [DataModel shared].chat.system_id);
@@ -221,26 +221,36 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 #pragma mark - Notifications
 - (void)chatMessagesLoadedHandler:(NSNotification*)notification
 {
+    NSLog(@"%s", __FUNCTION__);
+    
     @try {
         if (notification.object != nil) {
             ChatVO *theChat = (ChatVO *) notification.object;
             
             tableDataSource = [[NSMutableArray alloc] init];
-            NSBubbleData *bubble;
+            self.imageMap = [[NSMutableDictionary alloc] initWithCapacity:theChat.contact_keys.count];
             
-            for (ChatMessageVO* msg in theChat.messages) {
-                if ([msg.contact_key isEqualToString:[DataModel shared].user.user_key]) {
-                    // my message
-                    bubble = [NSBubbleData dataWithText:msg.message date:msg.createdAt type:BubbleTypeMine];
-                    bubble.avatar = nil;
-                } else {
-                    // someone else
-                    bubble = [NSBubbleData dataWithText:msg.message date:msg.createdAt type:BubbleTypeSomeoneElse];
-                    bubble.avatar = nil;
-                }
-                [tableDataSource addObject:bubble];
+            
+            int keycount = theChat.contact_keys.count;
+            __block int counter = 0;
+//            theChat.contactMap.ke
+            for (NSString *key in theChat.contact_keys) {
+                
+                [contactSvc asyncLoadCachedPhoto:key callback:^(UIImage *img) {
+                    if (img) {
+                        NSLog(@"Setting image for key %@", key);
+                        [self.imageMap setObject:img forKey:key];
+                    } else {
+                        NSLog(@"No image for key %@", key);
+                    }
+                    counter++;
+                    if (counter == keycount) {
+                        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatContactsLoaded object:theChat]];
+//                            [self.bubbleTable reloadData];
+                    }
+                }];
             }
-            [self.bubbleTable reloadData];
+
 
         }
     }
@@ -252,6 +262,41 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 - (void)chatContactsLoadedHandler:(NSNotification*)notification
 {
+    NSLog(@"%s", __FUNCTION__);
+    NSBubbleData *bubble;
+   if (notification.object) {
+        ChatVO *theChat = (ChatVO *) notification.object;
+       UIImage *img = nil;
+        for (ChatMessageVO* msg in theChat.messages) {
+            
+            if ([msg.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
+                // my message
+                bubble = [NSBubbleData dataWithText:msg.message date:msg.createdAt type:BubbleTypeMine];
+                img = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
+                
+                if (img) {
+                    NSLog(@"found image for key %@", msg.contact_key);
+                } else {
+                    NSLog(@"Missing image for key %@", msg.contact_key);
+                    
+                }
+                bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
+            } else {
+                // someone else
+                bubble = [NSBubbleData dataWithText:msg.message date:msg.createdAt type:BubbleTypeSomeoneElse];
+                img = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
+                
+                if (img) {
+                    NSLog(@"found image for key %@", msg.contact_key);
+                } else {
+                    NSLog(@"Missing image for key %@", msg.contact_key);
+                }
+                bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
+            }
+            [tableDataSource addObject:bubble];
+        }
+    }
+    [self.bubbleTable reloadData];
     
 }
 - (void)hideFormSelectorNotificationHandler:(NSNotification*)notification
@@ -977,10 +1022,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     if (self.inputField.text.length > 0) {
         ChatMessageVO *msg = [[ChatMessageVO alloc] init];
         msg.message = self.inputField.text;
-        msg.contact_key = [DataModel shared].user.user_key;
+        msg.contact_key = [DataModel shared].user.contact_key;
         
         [chatSvc apiSaveChatMessage:msg chatId:chatId callback:^(PFObject *msg) {
             NSBubbleData *sayBubble = [NSBubbleData dataWithText:self.inputField.text date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
+            
+            sayBubble.avatar = (UIImage *)[self.imageMap objectForKey:[DataModel shared].user.contact_key];
+            
             [tableDataSource addObject:sayBubble];
             [self.bubbleTable reloadData];
             [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
@@ -1019,9 +1067,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                     embedWidget.frame = embedFrame;
                     
                     formBubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine insets:UIEdgeInsetsMake(5, 5, 5, 5)];
+                    formBubble.avatar = (UIImage *)[self.imageMap objectForKey:[DataModel shared].user.contact_key];
                     
-                    // FIXME: use user avatar image
-                    formBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
                     break;
                 }
                 case FormType_RATING:
@@ -1037,8 +1084,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                     
                     formBubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine insets:UIEdgeInsetsMake(5, 3, 5, 5)];
                     
-                    // FIXME: use user avatar image
-                    formBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
+                    formBubble.avatar = (UIImage *)[self.imageMap objectForKey:[DataModel shared].user.contact_key];
                     
                     break;
                     
@@ -1072,8 +1118,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                     
                     formBubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine insets:UIEdgeInsetsMake(5, 3, 5, 5)];
                     
-                    // FIXME: use user avatar image
-                    formBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
+                    formBubble.avatar = (UIImage *)[self.imageMap objectForKey:[DataModel shared].user.contact_key];
                     
                     
                     break;

@@ -51,6 +51,10 @@
 @property (nonatomic, retain) NSDate *createdAt;
 @property (nonatomic, retain) NSDate *updatedAt;
 
+// Transient fields
+@property (nonatomic, retain) UIImage *photo;
+
+
 - (NSString *) fullname;
 
 + (ContactVO *) readFromDictionary:(NSDictionary *) dict;

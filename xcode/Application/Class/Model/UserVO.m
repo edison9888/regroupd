@@ -17,7 +17,7 @@
 @synthesize type, status, created, updated;
 
 @synthesize contact_key;
-
+@synthesize photoUrl;
 - (id)init
 {
     self = [super init];

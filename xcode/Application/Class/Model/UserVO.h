@@ -34,7 +34,6 @@
  */
 
 @property (nonatomic, retain) NSString *user_key;
-@property (nonatomic, retain) NSString *contact_key;
 @property (nonatomic, retain) NSString *username;
 @property (nonatomic, retain) NSString *password;
 
@@ -52,6 +51,10 @@
 
 @property (nonatomic, retain) NSString *created;
 @property (nonatomic, retain) NSString *updated;
+
+// Transient fields
+@property (nonatomic, retain) NSString *contact_key;
+@property (nonatomic, retain) NSString *photoUrl;
 
 + (UserVO *) readFromDictionary:(NSDictionary *) dict;
 

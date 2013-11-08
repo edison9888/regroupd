@@ -90,6 +90,8 @@
         self.avatarImage.layer.masksToBounds = YES;
         self.avatarImage.layer.borderColor = [UIColor whiteColor].CGColor;
         self.avatarImage.layer.borderWidth = 1.0;
+        self.avatarImage.clipsToBounds = YES;
+        self.avatarImage.contentMode = UIViewContentModeScaleAspectFill;
         
         CGFloat avatarX = (type == BubbleTypeSomeoneElse) ? 2 : self.frame.size.width - 52;
         CGFloat avatarY = self.frame.size.height - 50;
