@@ -82,9 +82,9 @@
     {
         [self.avatarImage removeFromSuperview];
 #if !__has_feature(objc_arc)
-        self.avatarImage = [[[UIImageView alloc] initWithImage:(self.data.avatar ? self.data.avatar : [UIImage imageNamed:@"missingAvatar.png"])] autorelease];
+        self.avatarImage = [[[UIImageView alloc] initWithImage:(self.data.avatar ? self.data.avatar : [UIImage imageNamed:@"anonymous_user"])] autorelease];
 #else
-        self.avatarImage = [[UIImageView alloc] initWithImage:(self.data.avatar ? self.data.avatar : [UIImage imageNamed:@"missingAvatar.png"])];
+        self.avatarImage = [[UIImageView alloc] initWithImage:(self.data.avatar ? self.data.avatar : [UIImage imageNamed:@"anonymous_user"])];
 #endif
         self.avatarImage.layer.cornerRadius = 25.0;
         self.avatarImage.layer.masksToBounds = YES;

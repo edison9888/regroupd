@@ -137,7 +137,8 @@
 
 - (void)listMyChats
 {
-    
+    NSLog(@"%s", __FUNCTION__);
+
     if (chatSvc == nil) {
         chatSvc = [[ChatManager alloc] init];
     }
@@ -159,8 +160,12 @@
             NSMutableArray *contacts = [contactSvc lookupContactsFromPhonebook:keys];
             for (ContactVO *contact in contacts) {
                 if (![contact.system_id isEqualToString:[DataModel shared].user.contact_key]) {
-                    fullname = [NSString stringWithFormat:kFullNameFormat, contact.first_name, contact.last_name];
-                    [namesArray addObject:fullname];
+                    if (contact.first_name != nil && contact.last_name != nil) {
+                        fullname = [NSString stringWithFormat:kFullNameFormat, contact.first_name, contact.last_name];
+                        [namesArray addObject:fullname];
+                    } else {
+                        [namesArray addObject:contact.phone];
+                    }
                 }
             }
             NSString *names = [namesArray componentsJoinedByString:@", "];

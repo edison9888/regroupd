@@ -52,8 +52,6 @@
     [self.roundPic.layer setBorderColor:[UIColor whiteColor].CGColor];
     self.roundPic.clipsToBounds = YES;
     self.roundPic.contentMode = UIViewContentModeScaleAspectFill;
-
-    UIImage *img;
     
     userSvc = [[UserManager alloc] init];
     contactSvc = [[ContactManager alloc] init];
@@ -62,21 +60,19 @@
 //    NSString *filename;
 //    filename = [NSString stringWithFormat:@"%@.png", [DataModel shared].user.contact_key];
 //    img = [userSvc loadPhoto:filename];
-//    if (img == nil) {
-//        img = [UIImage imageNamed:@"anonymous_user"];
-//        
-//    }
     
-    self.roundPic.image = img;
     
     [contactSvc asyncLoadCachedPhoto:[DataModel shared].user.contact_key callback:^(UIImage *img) {
+        if (img == nil) {
+            img = [UIImage imageNamed:@"anonymous_user"];
+        }
         self.roundPic.image = img;
 
     }];
-    NSString *nameFormat = @"%@ %@";
-    self.nameLabel.text = [NSString stringWithFormat:nameFormat,
-                           [DataModel shared].user.first_name,
-                           [DataModel shared].user.last_name];
+//    NSString *nameFormat = @"%@ %@";
+//    self.nameLabel.text = [NSString stringWithFormat:nameFormat,
+//                           [DataModel shared].user.first_name,
+//                           [DataModel shared].user.last_name];
 
 }
 

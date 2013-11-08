@@ -13,6 +13,25 @@
 
 @synthesize user = _user;
 
+- (UserVO *) lookupUser:(NSString *)userKey {
+    // get first user from database
+    NSString *sql = nil;
+    sql = @"select * from user where user_key=?";
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql, userKey];
+    NSDictionary *dict;
+    if ([rs next]) {
+        dict = [rs resultDictionary];
+    }
+    if (dict != nil) {
+        UserVO *user = [UserVO readFromDictionary:dict];
+        return user;
+        
+    } else {
+        return nil;
+    }
+    
+}
 - (UserVO *) lookupDefaultUser {
     // get first user from database
     NSString *sql = nil;
@@ -164,7 +183,7 @@
  
  
  */
-- (void) apiCreateUserAndContact:(UserVO *)user callback:(void (^)(PFObject *pfUser))callback{
+- (void) apiCreateUserAndContact:(UserVO *)user callback:(void (^)(PFObject *pfUser, PFObject *pfContact))callback{
     
     PFQuery *query= [PFUser query];
     
@@ -238,7 +257,7 @@
                     } else {
                         NSLog(@"Saved contact with objectId %@", pfContact.objectId);
                     }
-                    callback(pfUser);
+                    callback(pfUser, pfContact);
                 }];
                 
             }];

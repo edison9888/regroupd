@@ -699,6 +699,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 - (IBAction)tapClearButton {
     NSLog(@"%s", __FUNCTION__);
+    [chatSvc asyncListChatMessages:[DataModel shared].chat.system_id];
     
 }
 - (IBAction)tapAttachButton {
@@ -1134,7 +1135,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             NSBubbleData *photoBubble = [NSBubbleData dataWithImage:attachedPhoto date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
             
             // FIXME: use user avatar image
-            photoBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
+            photoBubble.avatar = (UIImage *)[self.imageMap objectForKey:[DataModel shared].user.contact_key];
             
             [tableDataSource addObject:photoBubble];
             [self.bubbleTable reloadData];

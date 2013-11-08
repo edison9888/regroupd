@@ -17,6 +17,9 @@
 @property (nonatomic, retain) UserVO *user;
 
 - (UserVO *) lookupDefaultUser;
+
+- (UserVO *) lookupUser:(NSString *)userKey;
+
 - (void) createUser:(UserVO *) user;
 
 - (void)savePhoto:(UIImage *)saveImage filename:(NSString *)filename callback:(void (^)(NSString *imageUrl))callback;
@@ -25,7 +28,7 @@
 
 // API functions
 - (void) apiLookupContactForUser:(PFUser *)pfUser callback:(void (^)(PFObject *pfContact))callback;
-- (void) apiCreateUserAndContact:(UserVO *)user callback:(void (^)(PFObject *pfUser))callback;
+- (void) apiCreateUserAndContact:(UserVO *)user callback:(void (^)(PFObject *pfUser, PFObject *pfContact))callback;
 
 - (UserVO *) apiLoadUser:(NSString *)objectId;
 - (NSString *) apiSaveUser:(UserVO *) user;

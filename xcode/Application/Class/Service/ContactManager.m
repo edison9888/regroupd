@@ -302,6 +302,7 @@
 }
 - (void)asyncLoadCachedPhoto:(NSString *)contactKey callback:(void (^)(UIImage *img))callback
 {
+    NSLog(@"%s", __FUNCTION__);
     
     @try {
         NSArray *pathsToDocuments = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -320,21 +321,36 @@
         } else {
             
             PFQuery *query = [PFQuery queryWithClassName:kContactDB];
-            [query whereKey:@"user" equalTo:[PFUser currentUser]];
+            
+//            [query whereKey:@"user" equalTo:[PFObject objectWithoutDataWithClassName:[PFUser parseClassName] objectId:userKey]];
+            
+            [query whereKey:@"objectId" equalTo:contactKey];
             
             [query getFirstObjectInBackgroundWithBlock:^(PFObject *pfContact, NSError *error) {
                 if (pfContact) {
                     PFFile *pfImage = pfContact[@"photo"];
-                    [pfImage getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-                        if (!error) {
-                            NSLog(@"Downloading image at %@", pfImage.url);
-                            
-                            [imageData writeToFile:filepath atomically:NO];
-                            
-                            UIImage *image = [UIImage imageWithData:imageData];
-                            callback(image);
-                        }
-                    }];
+                    if (pfImage) {
+                        [pfImage getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
+                            if (!error) {
+                                if (imageData) {
+                                    NSLog(@"Downloading image at %@", pfImage.url);
+                                    
+                                    [imageData writeToFile:filepath atomically:NO];
+                                    
+                                    UIImage *image = [UIImage imageWithData:imageData];
+                                    callback(image);
+                                    
+                                } else {
+                                    callback(nil);
+                                }
+                            } else {
+                                callback(nil);
+                            }
+                        }];
+                        
+                    } else {
+                        callback(nil);
+                    }
                 } else {
                     
                     NSLog(@"Contact not found");

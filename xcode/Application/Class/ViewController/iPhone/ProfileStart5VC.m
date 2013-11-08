@@ -60,6 +60,9 @@
 }
 
 - (void) createUser {
+    self.yesButton.enabled = NO;
+    self.noButton.enabled = NO;
+    
     UserVO *user = [DataModel shared].user;
     user.first_name = @"default";
 
@@ -70,13 +73,18 @@
     if (contactSvc == nil) {
         contactSvc = [[ContactManager alloc] init];
     }
-    [userSvc apiCreateUserAndContact:user callback:^(PFObject *pfUser) {
+    [userSvc apiCreateUserAndContact:user callback:^(PFObject *pfUser, PFObject *pfContact) {
         NSLog(@"Callback response objectId %@", pfUser.objectId);
         user.user_key = pfUser.objectId;
         user.system_id = pfUser.objectId;
         
-        [userSvc createUser:user];
+        UserVO *match = [userSvc lookupUser:user.user_key];
+        
+        if (match == nil) {
+            [userSvc createUser:user];
+        }
         [DataModel shared].user = user;
+        [DataModel shared].user.contact_key = pfContact.objectId;
         
         [[[UIAlertView alloc] initWithTitle:@"Thank you" message:@"Sign up complete." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }];

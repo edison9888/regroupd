@@ -229,7 +229,7 @@
         
         isLoading = YES;
         
-        NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
+        NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText, searchText];
         
         FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
         [tableData removeAllObjects];
@@ -242,11 +242,11 @@
         [self.theTableView reloadData];
         
     } else {
-        NSString *sqlTemplate = @"select * from phonebook where status=1 order by name";
+        NSString *sql = @"select * from phonebook where status=1 order by name";
         
         isLoading = YES;
         
-        NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
+//        NSString *sql = [NSString stringWithFormat:sqlTemplate];
         
         FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
         [tableData removeAllObjects];
