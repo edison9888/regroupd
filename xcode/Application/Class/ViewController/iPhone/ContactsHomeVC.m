@@ -87,7 +87,7 @@
     NSLog(@"numbers %@", numbers);
     
     [contactSvc apiLookupContactsByPhoneNumbers:numbers callback:^(NSArray *contacts) {
-        NSLog(@"Callback response count %i", contacts.count);
+//        NSLog(@"Callback response count %i", contacts.count);
         if (contacts) {
             [contactSvc updatePhonebookWithContacts:contacts];
         }
@@ -101,7 +101,7 @@
     }
     isLoading = YES;
     [contactSvc apiListUserContacts:nil callback:^(NSArray *contacts) {
-        NSLog(@"Callback response count %i", contacts.count);
+//        NSLog(@"Callback response count %i", contacts.count);
         if (contacts) {
             self.availableContacts = [contacts mutableCopy];
             isLoading = NO;
@@ -620,7 +620,7 @@
 }
 
 - (NSString *) readFullnameFromDictionary:(NSDictionary *)rowData {
-    NSLog(@"lastname %@", [rowData objectForKey:@"last_name"]);
+//    NSLog(@"lastname %@", [rowData objectForKey:@"last_name"]);
     if ([rowData objectForKey:@"first_name"] != NULL && [rowData objectForKey:@"last_name"] == NULL) {
         return [rowData objectForKey:@"first_name"];
     } else if ([rowData objectForKey:@"first_name"] == NULL && [rowData objectForKey:@"last_name"] != NULL) {

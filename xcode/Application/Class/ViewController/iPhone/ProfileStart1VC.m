@@ -8,6 +8,8 @@
 
 #import "ProfileStart1VC.h"
 #import "UserVO.h"
+#import "NBPhoneNumberUtil.h"
+#import "ContactManager.h"
 
 @interface ProfileStart1VC ()
 
@@ -220,9 +222,14 @@
         isOk = NO;
     }
     if (isOk) {
+        ContactManager *contactSvc = [[ContactManager alloc] init];
+        
+        NSString *phoneId = [contactSvc formatPhoneNumberAsE164:self.tf1.text];
+        
+//        [self readPhoneNumber:self.tf1.text];
         UserVO *user = [[UserVO alloc] init];
-        user.phone = self.tf1.text;
-        user.username = self.tf1.text;
+        user.phone = phoneId;
+        user.username = phoneId;
         
         // TODO: Add country code and normalize
         [DataModel shared].user = user;
@@ -232,6 +239,56 @@
         [[[UIAlertView alloc] initWithTitle:@"INFO" message:@"Please enter a valid phone number." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         
     }
+}
+
+- (NSString *) formatPhoneNumberAsE164:(NSString *)phone {
+    NSString *result = nil;
+    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
+    
+    NSError *aError = nil;
+    NBPhoneNumber *myNumber = [phoneUtil parse:phone defaultRegion:@"US" error:&aError];
+    
+    if (aError == nil) {
+        // Should check error
+        result = [phoneUtil format:myNumber numberFormat:NBEPhoneNumberFormatE164
+                             error:&aError];
+    }
+    else {
+        NSLog(@"Error : %@", [aError localizedDescription]);
+    }
+    return result;
+    
+}
+
+- (void) readPhoneNumber:(NSString *)phone {
+    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
+    
+    NSError *aError = nil;
+    NBPhoneNumber *myNumber = [phoneUtil parse:phone defaultRegion:@"US" error:&aError];
+    
+    if (aError == nil) {
+        // Should check error
+        NSLog(@"isValidPhoneNumber ? [%@]", [phoneUtil isValidNumber:myNumber] ? @"YES":@"NO");
+        NSLog(@"E164          : %@", [phoneUtil format:myNumber numberFormat:NBEPhoneNumberFormatE164
+                                                 error:&aError]);
+        NSLog(@"INTERNATIONAL : %@", [phoneUtil format:myNumber numberFormat:NBEPhoneNumberFormatINTERNATIONAL
+                                                 error:&aError]);
+        NSLog(@"NATIONAL      : %@", [phoneUtil format:myNumber numberFormat:NBEPhoneNumberFormatNATIONAL
+                                                 error:&aError]);
+        NSLog(@"RFC3966       : %@", [phoneUtil format:myNumber numberFormat:NBEPhoneNumberFormatRFC3966
+                                                 error:&aError]);
+    }
+    else {
+        NSLog(@"Error : %@", [aError localizedDescription]);
+    }
+    
+    NSLog (@"extractCountryCode [%ld]", [phoneUtil extractCountryCode:@"823213123123"
+                                                       nationalNumber:nil]);
+    
+    NSString *res = nil;
+    UInt32 dRes = [phoneUtil extractCountryCode:@"823213123123" nationalNumber:&res];
+    
+    NSLog (@"extractCountryCode [%lu] [%@]", dRes, res);
 }
 
 @end

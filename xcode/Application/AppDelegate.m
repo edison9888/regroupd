@@ -7,6 +7,7 @@
 #import "ViewController.h"
 #import "SQLiteDB.h"
 #import <Parse/Parse.h>
+#import "ChatMessageVO.h"
 
 @implementation AppDelegate
 
@@ -116,6 +117,72 @@
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
+    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"newDeviceToken %@", newDeviceToken);
+    
+    // Store the deviceToken in the current installation and save it to Parse.
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:newDeviceToken];
+    [currentInstallation saveInBackground];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    NSLog(@"%s", __FUNCTION__);
+    
+    /*
+     NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+     @"Increment", @"badge",
+     msg.contact_key, @"contact",
+     chatId, @"chat",
+     pfMessage.objectId, @"msg",
+     msg.createdAt, @"dt",
+     nil];
+     */
+    NSString *text;
+    ChatMessageVO *msg = [[ChatMessageVO alloc] init];
+    
+    text = (NSString *) [userInfo objectForKey:@"contact"];
+    if (text) {
+        msg.contact_key = text;
+    }
+    text = (NSString *) [userInfo objectForKey:@"chat"];
+    if (text) {
+        msg.chat_key = text;
+    }
+    text = (NSString *) [userInfo objectForKey:@"msg"];
+    if (text) {
+        msg.system_id = text;
+    }
+    if ([userInfo objectForKey:@"dt"]) {
+        msg.createdAt = (NSDate *)[userInfo objectForKey:@"dt"];
+    }
+    if ([msg.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
+        // ignore
+    } else {
+        NSLog(@"####### contact_key=%@", msg.contact_key);
+        NSLog(@"####### chat_key=%@", msg.chat_key);
+        NSLog(@"####### msg_key=%@", msg.system_id);
+        
+//        [PFPush handlePush:userInfo];
+        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatPushNotificationReceived object:msg]];
+        
+    }
+    
+//
+
+//
+//
+//    [PFPush handlePush:userInfo];
+//    NSString *value;
+//    
+//    for (NSString *key in userInfo) {
+//        value = (NSString *)[userInfo objectForKey:key];
+//        
+//        NSLog(@"Received push notification %@ = %@", key, value);
+//    }
 }
 
 @end

@@ -86,6 +86,7 @@
         [DataModel shared].user = user;
         [DataModel shared].user.contact_key = pfContact.objectId;
         
+        
         [[[UIAlertView alloc] initWithTitle:@"Thank you" message:@"Sign up complete." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }];
 

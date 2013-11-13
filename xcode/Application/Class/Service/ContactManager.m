@@ -11,6 +11,7 @@
 #import "SQLiteDB.h"
 #import "DateTimeUtils.h"
 #import <AddressBook/AddressBook.h>
+#import "NBPhoneNumberUtil.h"
 
 #define kLiteralNull    @"<null>"
 
@@ -322,14 +323,11 @@
             
             PFQuery *query = [PFQuery queryWithClassName:kContactDB];
             
-//            [query whereKey:@"user" equalTo:[PFObject objectWithoutDataWithClassName:[PFUser parseClassName] objectId:userKey]];
-            
-            [query whereKey:@"objectId" equalTo:contactKey];
-            
-            [query getFirstObjectInBackgroundWithBlock:^(PFObject *pfContact, NSError *error) {
+            [query getObjectInBackgroundWithId:contactKey block:^(PFObject *pfContact, NSError *error) {
                 if (pfContact) {
                     PFFile *pfImage = pfContact[@"photo"];
                     if (pfImage) {
+                        NSLog(@"Contact has photo");
                         [pfImage getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
                             if (!error) {
                                 if (imageData) {
@@ -341,14 +339,17 @@
                                     callback(image);
                                     
                                 } else {
+                                    NSLog(@"No imageData");
                                     callback(nil);
                                 }
                             } else {
+                                NSLog(@"Error occurred %@", error);
                                 callback(nil);
                             }
                         }];
                         
                     } else {
+                        NSLog(@"Contact has no photo");
                         callback(nil);
                     }
                 } else {
@@ -623,8 +624,8 @@
                 }
                 
                 if (mobile != nil && mobile.length > 10) {
-                    
-                    mobile = [self makePhoneId:mobile];
+                    mobile = [self formatPhoneNumberAsE164:mobile];
+//                    mobile = [self makePhoneId:mobile];
                     c = [[ContactVO alloc] init];
                     c.phone = mobile;
                     CFStringRef firstName;
@@ -669,6 +670,24 @@
     CFRelease(addressBook);
     
     return peopleData;
+}
+- (NSString *) formatPhoneNumberAsE164:(NSString *)phone {
+    NSString *result = nil;
+    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
+    
+    NSError *aError = nil;
+    NBPhoneNumber *myNumber = [phoneUtil parse:phone defaultRegion:@"US" error:&aError];
+    
+    if (aError == nil) {
+        // Should check error
+        result = [phoneUtil format:myNumber numberFormat:NBEPhoneNumberFormatE164
+                             error:&aError];
+    }
+    else {
+        NSLog(@"Error : %@", [aError localizedDescription]);
+    }
+    return result;
+    
 }
 
 - (NSString *) makePhoneId:(NSString *)originalString {

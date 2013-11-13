@@ -15,6 +15,7 @@
 #import "EmbedPollWidget.h"
 #import "EmbedRatingWidget.h"
 #import "EmbedRSVPWidget.h"
+#import "ChatMessageWidget.h"
 
 #import "FormManager.h"
 //#import "NSDate+Extensions.h"
@@ -92,6 +93,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         
     }
     
+    msgTimeFormat = [[NSDateFormatter alloc] init];
+    [msgTimeFormat setDateFormat:@"hh:mm"];
+    
+    
     inputHeight = 0;
     theFont = [UIFont fontWithName:@"Raleway-Regular" size:13];
     
@@ -144,6 +149,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(showImagePickerNotificationHandler:)     name:@"showImagePickerNotification"
+                                               object:nil];
     
     // Create and initialize a tap gesture
     
@@ -192,7 +200,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     // Interval of 120 means that if the next messages comes in 2 minutes since the last message, it will be added into the same group.
     // Groups are delimited with header which contains date and time for the first message in the group.
     
-    self.bubbleTable.snapInterval = 120;
+    self.bubbleTable.snapInterval = 86400;
     
     // The line below enables avatar support. Avatar can be specified for each bubble with .avatar property of NSBubbleData.
     // Avatars are enabled for the whole table at once. If particular NSBubbleData misses the avatar, a default placeholder will be set (missingAvatar.png)
@@ -208,8 +216,14 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     //    self.bubbleTable.typingBubble = NSBubbleTypingTypeSomebody;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatMessagesLoadedHandler:) name:k_chatMessagesLoaded object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatContactsLoadedHandler:) name:k_chatContactsLoaded object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatPushNotificationHandler:) name:k_chatPushNotificationReceived object:nil];
     
     if ([DataModel shared].chat != nil) {
+        // Auto subscribe user to push notifications for this chat objectId
+        PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+        [currentInstallation addUniqueObject:[DataModel shared].chat.system_id forKey:@"channels"];
+        [currentInstallation saveInBackground];
+
         NSLog(@"Fetch chat by objectId %@", [DataModel shared].chat.system_id);
         [chatSvc asyncListChatMessages:[DataModel shared].chat.system_id];
     }
@@ -264,40 +278,89 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 {
     NSLog(@"%s", __FUNCTION__);
     NSBubbleData *bubble;
-   if (notification.object) {
+    if (notification.object) {
         ChatVO *theChat = (ChatVO *) notification.object;
-       UIImage *img = nil;
+        
         for (ChatMessageVO* msg in theChat.messages) {
             
-            if ([msg.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
-                // my message
-                bubble = [NSBubbleData dataWithText:msg.message date:msg.createdAt type:BubbleTypeMine];
-                img = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
-                
-                if (img) {
-                    NSLog(@"found image for key %@", msg.contact_key);
-                } else {
-                    NSLog(@"Missing image for key %@", msg.contact_key);
-                    
-                }
-                bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
-            } else {
-                // someone else
-                bubble = [NSBubbleData dataWithText:msg.message date:msg.createdAt type:BubbleTypeSomeoneElse];
-                img = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
-                
-                if (img) {
-                    NSLog(@"found image for key %@", msg.contact_key);
-                } else {
-                    NSLog(@"Missing image for key %@", msg.contact_key);
-                }
-                bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
-            }
+            bubble = [self buildMessageBubble:msg];
             [tableDataSource addObject:bubble];
         }
     }
     [self.bubbleTable reloadData];
     
+}
+- (void)chatPushNotificationHandler:(NSNotification*)notification
+{
+    NSLog(@"%s", __FUNCTION__);
+    if (notification.object) {
+        ChatMessageVO *msg = (ChatMessageVO *) notification.object;
+        
+        if ([msg.chat_key isEqualToString:chatId]) {
+
+            [chatSvc asyncListChatMessages:[DataModel shared].chat.system_id];
+            
+            
+        } else {
+            NSLog(@"Message for another chat %@", msg.chat_key);
+        }
+    }
+    
+}
+
+- (NSBubbleData *) buildMessageBubble:(ChatMessageVO *)msg {
+    CGRect msgFrame = CGRectMake(0, 0, 240, 80);
+    NSBubbleData *bubble;
+    UIImage *img = nil;
+    NSString *timeValue;
+    NSString *nameValue;
+
+    if ([msg.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
+        // my message
+        ChatMessageWidget *msgView = [[ChatMessageWidget alloc] initWithFrame:msgFrame message:msg.message isOwner:YES];
+        msgView.tag = 188;
+        
+        NSLog(@"widget height = %f", msgView.dynamicHeight);
+        msgFrame.size.height = msgView.dynamicHeight;
+        msgView.frame = msgFrame;
+        msgView.timeLabel.text = [msgTimeFormat stringFromDate:msg.createdAt];
+        
+        bubble = [NSBubbleData dataWithView:msgView date:msg.createdAt type:BubbleTypeMine insets:UIEdgeInsetsMake(2, 5, 2, 5)];
+        img = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
+        
+        if (img) {
+            NSLog(@"found image for key %@", msg.contact_key);
+        } else {
+            NSLog(@"Missing image for key %@", msg.contact_key);
+            
+        }
+        bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
+    } else {
+        // someone else
+        nameValue = (NSString *) [[DataModel shared].chat.namesMap objectForKey:msg.contact_key];
+        
+        ChatMessageWidget *msgView = [[ChatMessageWidget alloc] initWithFrame:msgFrame message:msg.message isOwner:NO];
+        msgView.tag = 188;
+        
+        NSLog(@"widget height = %f", msgView.dynamicHeight);
+        msgFrame.size.height = msgView.dynamicHeight;
+        msgView.frame = msgFrame;
+        msgView.nameLabel.text = nameValue;
+        
+        timeValue = [msgTimeFormat stringFromDate:msg.createdAt];
+        msgView.timeLabel.text = timeValue;
+        
+        bubble = [NSBubbleData dataWithView:msgView date:msg.createdAt type:BubbleTypeSomeoneElse insets:UIEdgeInsetsMake(2, 10, 2, 0)];
+        img = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
+        
+        if (img) {
+            NSLog(@"found image for key %@", msg.contact_key);
+        } else {
+            NSLog(@"Missing image for key %@", msg.contact_key);
+        }
+        bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
+    }
+    return bubble;
 }
 - (void)hideFormSelectorNotificationHandler:(NSNotification*)notification
 {
@@ -372,7 +435,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     float newsize = estSize.height;
     
-    NSLog(@"inputHeight %f // newsize %f", inputHeight, newsize);
+//    NSLog(@"inputHeight %f // newsize %f", inputHeight, newsize);
     
     if (inputHeight != newsize ) {
         NSLog(@"textView height is now %f", newsize);
@@ -1024,13 +1087,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         ChatMessageVO *msg = [[ChatMessageVO alloc] init];
         msg.message = self.inputField.text;
         msg.contact_key = [DataModel shared].user.contact_key;
+        msg.createdAt = [NSDate date];
         
-        [chatSvc apiSaveChatMessage:msg chatId:chatId callback:^(PFObject *msg) {
-            NSBubbleData *sayBubble = [NSBubbleData dataWithText:self.inputField.text date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine];
+        [chatSvc apiSaveChatMessage:msg chatId:chatId callback:^(PFObject *pfMessage) {
+            NSBubbleData *bubble;
+            bubble = [self buildMessageBubble:msg];
             
-            sayBubble.avatar = (UIImage *)[self.imageMap objectForKey:[DataModel shared].user.contact_key];
-            
-            [tableDataSource addObject:sayBubble];
+            [tableDataSource addObject:bubble];
             [self.bubbleTable reloadData];
             [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
             
@@ -1040,6 +1103,39 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             self.inputField.frame = inputFrame;
             self.chatBar.frame = chatFrameWithKeyboard;
             
+            // Build a target query: everyone in the chat room except for this device.
+            // See also: http://blog.parse.com/2012/07/23/targeting-pushes-from-a-device/
+            PFQuery *query = [PFInstallation query];
+            [query whereKey:@"channels" equalTo:chatId];
+//            [query whereKey:@"installationId" notEqualTo:[PFInstallation currentInstallation].installationId];
+            
+            
+            NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  msg.message, @"alert",
+                                  @"Increment", @"badge",
+                                  msg.contact_key, @"contact",
+                                  chatId, @"chat",
+                                  pfMessage.objectId, @"msg",
+                                  msg.createdAt, @"dt",
+                                  nil];
+            // Create time interval
+            NSTimeInterval interval = 60*60*24*7; // 1 week
+            
+            // Send push notification with expiration interval
+            PFPush *push = [[PFPush alloc] init];
+//            [push expireAfterTimeInterval:interval];
+//            [push setChannel:chatId];
+            [push setQuery:query];
+//            [push setMessage:chatId];
+            [push setData:data];
+            [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    NSLog(@"sendPush success");
+                }
+                if (error) {
+                    NSLog(@"error");
+                }
+            }];
         }];
 //        [chatSvc apiSaveChatMessage:msg];
     }

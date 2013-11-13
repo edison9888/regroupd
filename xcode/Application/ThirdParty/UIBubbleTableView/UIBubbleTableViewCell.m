@@ -94,7 +94,7 @@
         self.avatarImage.contentMode = UIViewContentModeScaleAspectFill;
         
         CGFloat avatarX = (type == BubbleTypeSomeoneElse) ? 2 : self.frame.size.width - 52;
-        CGFloat avatarY = self.frame.size.height - 50;
+        CGFloat avatarY = 2;
         
         self.avatarImage.frame = CGRectMake(avatarX, avatarY, 50, 50);
         [self addSubview:self.avatarImage];

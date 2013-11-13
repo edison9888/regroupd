@@ -196,6 +196,8 @@
 		1E7A6E33180758FE004B62CE /* see_details@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E7A6E32180758FE004B62CE /* see_details@2x.png */; };
 		1E802635182ACC31006FA827 /* MyProfileVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E802633182ACC31006FA827 /* MyProfileVC.m */; };
 		1E802636182ACC31006FA827 /* MyProfileVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E802634182ACC31006FA827 /* MyProfileVC.xib */; };
+		1E80263B182E96AF006FA827 /* ChatMessageWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E802639182E96AF006FA827 /* ChatMessageWidget.xib */; };
+		1E80263C182E9BB3006FA827 /* ChatMessageWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E802638182E96AF006FA827 /* ChatMessageWidget.m */; };
 		1E8333AD17977B9500B60612 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E8333AC17977B9400B60612 /* libxml2.2.dylib */; };
 		1E8333B917978C2A00B60612 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333B017978C2A00B60612 /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		1E8333BA17978C2A00B60612 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E8333B017978C2A00B60612 /* GDataXMLNode.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -493,6 +495,17 @@
 		1EC44C871813118B00F4A2C2 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EC44C851813118B00F4A2C2 /* EventKit.framework */; };
 		1EC44C881813118B00F4A2C2 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EC44C861813118B00F4A2C2 /* EventKitUI.framework */; };
 		1EF463341783AE1C00D38DBB /* UserVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF463331783AE1C00D38DBB /* UserVO.m */; };
+		1EFEA23F182FB97300FEE9E4 /* NBAsYouTypeFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EFEA22F182FB97300FEE9E4 /* NBAsYouTypeFormatter.m */; };
+		1EFEA240182FB97300FEE9E4 /* NBNumberFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EFEA231182FB97300FEE9E4 /* NBNumberFormat.m */; };
+		1EFEA241182FB97300FEE9E4 /* NBPhoneMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EFEA233182FB97300FEE9E4 /* NBPhoneMetaData.m */; };
+		1EFEA242182FB97300FEE9E4 /* NBPhoneMetaDataGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EFEA235182FB97300FEE9E4 /* NBPhoneMetaDataGenerator.m */; };
+		1EFEA243182FB97300FEE9E4 /* NBPhoneNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EFEA237182FB97300FEE9E4 /* NBPhoneNumber.m */; };
+		1EFEA244182FB97300FEE9E4 /* NBPhoneNumberDesc.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EFEA23A182FB97300FEE9E4 /* NBPhoneNumberDesc.m */; };
+		1EFEA245182FB97300FEE9E4 /* NBPhoneNumberUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EFEA23C182FB97300FEE9E4 /* NBPhoneNumberUtil.m */; };
+		1EFEA246182FB97300FEE9E4 /* NSArray+NBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EFEA23E182FB97300FEE9E4 /* NSArray+NBAdditions.m */; };
+		1EFEA248182FB99500FEE9E4 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EFEA247182FB99500FEE9E4 /* CoreTelephony.framework */; };
+		1EFEA24B182FBFA500FEE9E4 /* NBPhoneNumberMetadata.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1EFEA249182FBFA500FEE9E4 /* NBPhoneNumberMetadata.plist */; };
+		1EFEA24C182FBFA500FEE9E4 /* NBPhoneNumberMetadataForTesting.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1EFEA24A182FBFA500FEE9E4 /* NBPhoneNumberMetadataForTesting.plist */; };
 		800F4C92170264A6001D2C50 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 800F4C91170264A6001D2C50 /* SenTestingKit.framework */; };
 		800F4C93170264A6001D2C50 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02B80A9F1518FA8600DE3F39 /* UIKit.framework */; };
 		800F4C94170264A6001D2C50 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02B80AA11518FA8600DE3F39 /* Foundation.framework */; };
@@ -732,6 +745,9 @@
 		1E802632182ACC31006FA827 /* MyProfileVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyProfileVC.h; sourceTree = "<group>"; };
 		1E802633182ACC31006FA827 /* MyProfileVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyProfileVC.m; sourceTree = "<group>"; };
 		1E802634182ACC31006FA827 /* MyProfileVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyProfileVC.xib; sourceTree = "<group>"; };
+		1E802637182E96AF006FA827 /* ChatMessageWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatMessageWidget.h; sourceTree = "<group>"; };
+		1E802638182E96AF006FA827 /* ChatMessageWidget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatMessageWidget.m; sourceTree = "<group>"; };
+		1E802639182E96AF006FA827 /* ChatMessageWidget.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatMessageWidget.xib; sourceTree = "<group>"; };
 		1E8333AC17977B9400B60612 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = usr/lib/libxml2.2.dylib; sourceTree = SDKROOT; };
 		1E8333AF17978C2A00B60612 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
 		1E8333B017978C2A00B60612 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
@@ -1133,6 +1149,26 @@
 		1EC44C861813118B00F4A2C2 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
 		1EF463321783AE1C00D38DBB /* UserVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserVO.h; sourceTree = "<group>"; };
 		1EF463331783AE1C00D38DBB /* UserVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserVO.m; sourceTree = "<group>"; };
+		1EFEA22E182FB97300FEE9E4 /* NBAsYouTypeFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NBAsYouTypeFormatter.h; sourceTree = "<group>"; };
+		1EFEA22F182FB97300FEE9E4 /* NBAsYouTypeFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NBAsYouTypeFormatter.m; sourceTree = "<group>"; };
+		1EFEA230182FB97300FEE9E4 /* NBNumberFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NBNumberFormat.h; sourceTree = "<group>"; };
+		1EFEA231182FB97300FEE9E4 /* NBNumberFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NBNumberFormat.m; sourceTree = "<group>"; };
+		1EFEA232182FB97300FEE9E4 /* NBPhoneMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NBPhoneMetaData.h; sourceTree = "<group>"; };
+		1EFEA233182FB97300FEE9E4 /* NBPhoneMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NBPhoneMetaData.m; sourceTree = "<group>"; };
+		1EFEA234182FB97300FEE9E4 /* NBPhoneMetaDataGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NBPhoneMetaDataGenerator.h; sourceTree = "<group>"; };
+		1EFEA235182FB97300FEE9E4 /* NBPhoneMetaDataGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NBPhoneMetaDataGenerator.m; sourceTree = "<group>"; };
+		1EFEA236182FB97300FEE9E4 /* NBPhoneNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NBPhoneNumber.h; sourceTree = "<group>"; };
+		1EFEA237182FB97300FEE9E4 /* NBPhoneNumber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NBPhoneNumber.m; sourceTree = "<group>"; };
+		1EFEA238182FB97300FEE9E4 /* NBPhoneNumberDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NBPhoneNumberDefines.h; sourceTree = "<group>"; };
+		1EFEA239182FB97300FEE9E4 /* NBPhoneNumberDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NBPhoneNumberDesc.h; sourceTree = "<group>"; };
+		1EFEA23A182FB97300FEE9E4 /* NBPhoneNumberDesc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NBPhoneNumberDesc.m; sourceTree = "<group>"; };
+		1EFEA23B182FB97300FEE9E4 /* NBPhoneNumberUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NBPhoneNumberUtil.h; sourceTree = "<group>"; };
+		1EFEA23C182FB97300FEE9E4 /* NBPhoneNumberUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NBPhoneNumberUtil.m; sourceTree = "<group>"; };
+		1EFEA23D182FB97300FEE9E4 /* NSArray+NBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+NBAdditions.h"; sourceTree = "<group>"; };
+		1EFEA23E182FB97300FEE9E4 /* NSArray+NBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+NBAdditions.m"; sourceTree = "<group>"; };
+		1EFEA247182FB99500FEE9E4 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		1EFEA249182FBFA500FEE9E4 /* NBPhoneNumberMetadata.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = NBPhoneNumberMetadata.plist; sourceTree = "<group>"; };
+		1EFEA24A182FBFA500FEE9E4 /* NBPhoneNumberMetadataForTesting.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = NBPhoneNumberMetadataForTesting.plist; sourceTree = "<group>"; };
 		800F4C90170264A6001D2C50 /* Regroupd Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Regroupd Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		800F4C91170264A6001D2C50 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		80BED3561703C27200816DE3 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -1144,6 +1180,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1EFEA248182FB99500FEE9E4 /* CoreTelephony.framework in Frameworks */,
 				1EC20D9F18180F36001B112F /* MobileCoreServices.framework in Frameworks */,
 				1EC20DA018180F36001B112F /* Security.framework in Frameworks */,
 				1EC20DA118180F36001B112F /* StoreKit.framework in Frameworks */,
@@ -1222,6 +1259,7 @@
 		02B80A9E1518FA8600DE3F39 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1EFEA247182FB99500FEE9E4 /* CoreTelephony.framework */,
 				1EC20D9C18180F36001B112F /* MobileCoreServices.framework */,
 				1EC20D9D18180F36001B112F /* Security.framework */,
 				1EC20D9E18180F36001B112F /* StoreKit.framework */,
@@ -1309,6 +1347,9 @@
 		1E1E25BF17F32F450079416C /* Widget */ = {
 			isa = PBXGroup;
 			children = (
+				1E802637182E96AF006FA827 /* ChatMessageWidget.h */,
+				1E802638182E96AF006FA827 /* ChatMessageWidget.m */,
+				1E802639182E96AF006FA827 /* ChatMessageWidget.xib */,
 				1E0F8EFA18109B9C00B6C6AF /* FancyToggle.h */,
 				1E0F8EFB18109B9C00B6C6AF /* FancyToggle.m */,
 				1E0F8EFC18109B9C00B6C6AF /* FancyToggle.xib */,
@@ -1458,6 +1499,8 @@
 		1E9280DC177FB68F008A583C /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				1EFEA249182FBFA500FEE9E4 /* NBPhoneNumberMetadata.plist */,
+				1EFEA24A182FBFA500FEE9E4 /* NBPhoneNumberMetadataForTesting.plist */,
 				1E2C7E4E17E4F6660043E28D /* regroupd.sqlite */,
 				1E2C7E4F17E4F6660043E28D /* RegroupdUI.plist */,
 			);
@@ -1968,6 +2011,7 @@
 		1E9281DB177FB690008A583C /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				1EFEA22D182FB97300FEE9E4 /* libPhoneNumber-iOS */,
 				1E1A9A9B17FE5016008D81E6 /* UIBubbleTableView */,
 				1E8BFAD817F767290053BEE3 /* BSKeyboardControls */,
 				1EAFEC2E17999C8A00CCBDA1 /* MBProgressHUD */,
@@ -2190,6 +2234,30 @@
 			name = Groups;
 			sourceTree = "<group>";
 		};
+		1EFEA22D182FB97300FEE9E4 /* libPhoneNumber-iOS */ = {
+			isa = PBXGroup;
+			children = (
+				1EFEA22E182FB97300FEE9E4 /* NBAsYouTypeFormatter.h */,
+				1EFEA22F182FB97300FEE9E4 /* NBAsYouTypeFormatter.m */,
+				1EFEA230182FB97300FEE9E4 /* NBNumberFormat.h */,
+				1EFEA231182FB97300FEE9E4 /* NBNumberFormat.m */,
+				1EFEA232182FB97300FEE9E4 /* NBPhoneMetaData.h */,
+				1EFEA233182FB97300FEE9E4 /* NBPhoneMetaData.m */,
+				1EFEA234182FB97300FEE9E4 /* NBPhoneMetaDataGenerator.h */,
+				1EFEA235182FB97300FEE9E4 /* NBPhoneMetaDataGenerator.m */,
+				1EFEA236182FB97300FEE9E4 /* NBPhoneNumber.h */,
+				1EFEA237182FB97300FEE9E4 /* NBPhoneNumber.m */,
+				1EFEA238182FB97300FEE9E4 /* NBPhoneNumberDefines.h */,
+				1EFEA239182FB97300FEE9E4 /* NBPhoneNumberDesc.h */,
+				1EFEA23A182FB97300FEE9E4 /* NBPhoneNumberDesc.m */,
+				1EFEA23B182FB97300FEE9E4 /* NBPhoneNumberUtil.h */,
+				1EFEA23C182FB97300FEE9E4 /* NBPhoneNumberUtil.m */,
+				1EFEA23D182FB97300FEE9E4 /* NSArray+NBAdditions.h */,
+				1EFEA23E182FB97300FEE9E4 /* NSArray+NBAdditions.m */,
+			);
+			path = "libPhoneNumber-iOS";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2308,6 +2376,7 @@
 				1E92821E177FB690008A583C /* key3.png in Resources */,
 				1E3ACA7D1806011000A6E6B2 /* bubbleSomeone.png in Resources */,
 				1E92821F177FB690008A583C /* key3@2x.png in Resources */,
+				1EFEA24B182FBFA500FEE9E4 /* NBPhoneNumberMetadata.plist in Resources */,
 				1EC44C7918130CC100F4A2C2 /* RSVPDetailVC.xib in Resources */,
 				1E928220177FB690008A583C /* key4.png in Resources */,
 				1E3ACA7C1806011000A6E6B2 /* bubbleMine@2x.png in Resources */,
@@ -2504,6 +2573,7 @@
 				1E2C7E9A17E4FFCB0043E28D /* btn_chat_add_grey@2x.png in Resources */,
 				1EC44C4F18130CC100F4A2C2 /* AppStartVC_5.xib in Resources */,
 				1E2C7E9B17E4FFCB0043E28D /* chat_footer_bg@2x.png in Resources */,
+				1EFEA24C182FBFA500FEE9E4 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
 				1E2C7E9C17E4FFCB0043E28D /* btn_aqua_bg_small@2x.png in Resources */,
 				1E2C7E9D17E4FFCB0043E28D /* btn_chat_send@2x.png in Resources */,
 				1E2C7E9E17E4FFCB0043E28D /* chat_right_tail_grey@2x.png in Resources */,
@@ -2596,6 +2666,7 @@
 				1E802636182ACC31006FA827 /* MyProfileVC.xib in Resources */,
 				1E8BFAFC17F7B8320053BEE3 /* checkbox_aqua@2x.png in Resources */,
 				1E8BFAFD17F7B8320053BEE3 /* btn_close_x@2x.png in Resources */,
+				1E80263B182E96AF006FA827 /* ChatMessageWidget.xib in Resources */,
 				1E8BFAFE17F7B8320053BEE3 /* browse_right_arrow@2x.png in Resources */,
 				1E59F12517FC873900EE2902 /* ChatTableViewCell.xib in Resources */,
 				1E8BFAFF17F7B8320053BEE3 /* browse_left_arrow@2x.png in Resources */,
@@ -2659,6 +2730,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E80263C182E9BB3006FA827 /* ChatMessageWidget.m in Sources */,
 				1EC3DE22180F204C008E2D3F /* ContactTableViewCell.m in Sources */,
 				1E1A9AA717FE5016008D81E6 /* NSBubbleData.m in Sources */,
 				1E0CAA43178253F100A294C0 /* BrandUITextField.m in Sources */,
@@ -2668,6 +2740,7 @@
 				1EC44C7418130CC100F4A2C2 /* ProfileStart5VC.m in Sources */,
 				1E928252177FB690008A583C /* UIColor+ColorWithHex.m in Sources */,
 				1E79B70318159EFE002E417A /* GroupVO.m in Sources */,
+				1EFEA246182FB97300FEE9E4 /* NSArray+NBAdditions.m in Sources */,
 				1E928253177FB690008A583C /* UIView+Helper.m in Sources */,
 				1E928254177FB690008A583C /* DateTimeUtils.m in Sources */,
 				1EC44C5418130CC100F4A2C2 /* ContactInfoVC.m in Sources */,
@@ -2704,6 +2777,8 @@
 				1E928299177FB690008A583C /* PresentationModel.m in Sources */,
 				1E92829A177FB690008A583C /* SlideModel.m in Sources */,
 				1E92829B177FB690008A583C /* BaseComponentView.m in Sources */,
+				1EFEA241182FB97300FEE9E4 /* NBPhoneMetaData.m in Sources */,
+				1EFEA242182FB97300FEE9E4 /* NBPhoneMetaDataGenerator.m in Sources */,
 				1E92829C177FB690008A583C /* FoundationMovieView.m in Sources */,
 				1E92829D177FB690008A583C /* HitPassView.m in Sources */,
 				1E92829E177FB690008A583C /* ImageRollComponent.m in Sources */,
@@ -2747,10 +2822,12 @@
 				1E9282B7177FB690008A583C /* SBJsonTokeniser.m in Sources */,
 				1E9282B8177FB690008A583C /* SBJsonUTF8Stream.m in Sources */,
 				1E9282B9177FB690008A583C /* SBJsonWriter.m in Sources */,
+				1EFEA240182FB97300FEE9E4 /* NBNumberFormat.m in Sources */,
 				1EF463341783AE1C00D38DBB /* UserVO.m in Sources */,
 				1E0AEC651793860D00710FDE /* TabBarView.m in Sources */,
 				1E76F4A917961283007EF5B0 /* ContactVO.m in Sources */,
 				1E1A9AAB17FE5016008D81E6 /* UIBubbleTypingTableViewCell.m in Sources */,
+				1EFEA244182FB97300FEE9E4 /* NBPhoneNumberDesc.m in Sources */,
 				1E8333B917978C2A00B60612 /* GDataXMLNode.m in Sources */,
 				1E59F10817FA532D00EE2902 /* SideScrollVC.m in Sources */,
 				1EC44C7218130CC100F4A2C2 /* ProfileStart4VC.m in Sources */,
@@ -2765,12 +2842,15 @@
 				1EAFEC3117999C8A00CCBDA1 /* MBProgressHUD.m in Sources */,
 				1EC44C6018130CC100F4A2C2 /* EditRSVPVC.m in Sources */,
 				1E59F12417FC873900EE2902 /* ChatTableViewCell.m in Sources */,
+				1EFEA23F182FB97300FEE9E4 /* NBAsYouTypeFormatter.m in Sources */,
 				1E751B2C179C4B11003AB13D /* UserManager.m in Sources */,
 				1EB652A2179F6F7200BEC96C /* SignatureView.m in Sources */,
 				1E5CABD817BA8DF0000D8759 /* RecentTableViewCell.m in Sources */,
 				1EC44C6C18130CC100F4A2C2 /* ProfileStart1VC.m in Sources */,
 				1E2C7EAC17E501940043E28D /* BrandUILabel.m in Sources */,
+				1EFEA243182FB97300FEE9E4 /* NBPhoneNumber.m in Sources */,
 				1EC44C6218130CC100F4A2C2 /* FormSelectorVC.m in Sources */,
+				1EFEA245182FB97300FEE9E4 /* NBPhoneNumberUtil.m in Sources */,
 				1E8FBA7C17E7F7B2003758EB /* BrandUIButton.m in Sources */,
 				1E1E25C217F32FC90079416C /* FancyCheckbox.m in Sources */,
 				1E1E25C717F342190079416C /* FancyTextField.m in Sources */,
@@ -2900,8 +2980,8 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Application/Regroupd-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = regroupd;
-				PROVISIONING_PROFILE = "0007D108-C4EF-44C8-9EFF-0BED2E36292F";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0007D108-C4EF-44C8-9EFF-0BED2E36292F";
+				PROVISIONING_PROFILE = "70C81426-6D00-4624-A62E-E2CB499D769F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "70C81426-6D00-4624-A62E-E2CB499D769F";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2982,7 +3062,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2996,8 +3076,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_NAME = regroupd;
-				PROVISIONING_PROFILE = "E525A46A-4DEA-41E1-AF37-9D7D79B22F5C";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E525A46A-4DEA-41E1-AF37-9D7D79B22F5C";
+				PROVISIONING_PROFILE = "70C81426-6D00-4624-A62E-E2CB499D769F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "70C81426-6D00-4624-A62E-E2CB499D769F";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -3021,8 +3101,8 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Application/Regroupd-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = regroupd;
-				PROVISIONING_PROFILE = "0007D108-C4EF-44C8-9EFF-0BED2E36292F";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0007D108-C4EF-44C8-9EFF-0BED2E36292F";
+				PROVISIONING_PROFILE = "70C81426-6D00-4624-A62E-E2CB499D769F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "70C81426-6D00-4624-A62E-E2CB499D769F";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

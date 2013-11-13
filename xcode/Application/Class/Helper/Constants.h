@@ -14,6 +14,7 @@
 #define k_contactSavedNotification @"contactSavedNotification"
 #define k_chatMessagesLoaded @"chatMessagesLoaded"
 #define k_chatContactsLoaded @"chatContactsLoaded"
+#define k_chatPushNotificationReceived @"chatPushNotificationReceived"
 
 
 extern uint const kLabelDarkGrey444242;

@@ -149,28 +149,32 @@
     [chatSvc apiListChats:[DataModel shared].user.contact_key callback:^(NSArray *results) {
         NSLog(@"Callback response objectId %i", results.count);
         ChatVO *chat;
-        NSString *fullname;
         NSMutableArray *namesArray = [[NSMutableArray alloc] init];
+        NSMutableDictionary *namesMap = [[NSMutableDictionary alloc] init];
         for (PFObject* result in results) {
 //            data = [DataModel readPFObjectAsDictionary:result];
             chat = [ChatVO readFromPFObject:result];
             
             NSArray *keys = [result objectForKey:@"contact_keys"];
             NSLog(@"contact keys = %@", keys);
+            NSString *name;
             NSMutableArray *contacts = [contactSvc lookupContactsFromPhonebook:keys];
             for (ContactVO *contact in contacts) {
                 if (![contact.system_id isEqualToString:[DataModel shared].user.contact_key]) {
                     if (contact.first_name != nil && contact.last_name != nil) {
-                        fullname = [NSString stringWithFormat:kFullNameFormat, contact.first_name, contact.last_name];
-                        [namesArray addObject:fullname];
+                        name = [NSString stringWithFormat:kFullNameFormat, contact.first_name, contact.last_name];
                     } else {
-                        [namesArray addObject:contact.phone];
+                        name = contact.phone;
                     }
+                    [namesArray addObject:name];
+                    [namesMap setObject:name forKey:contact.system_id];
                 }
             }
             NSString *names = [namesArray componentsJoinedByString:@", "];
             chat.names = names;
             isLoading = NO;
+
+            chat.namesMap = namesMap;
             [tableData addObject:chat];
             [self.theTableView reloadData];
             

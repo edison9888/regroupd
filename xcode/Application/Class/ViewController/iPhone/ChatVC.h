@@ -65,6 +65,9 @@
     FormVO *attachedForm;
     NSString *formTitle;
     
+    NSDateFormatter *msgTimeFormat;
+    
+    
 }
 
 @property (nonatomic, retain) NSMutableArray *tableDataSource;

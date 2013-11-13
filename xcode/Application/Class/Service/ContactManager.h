@@ -13,6 +13,7 @@
 @interface ContactManager : NSObject {
     
 }
+- (NSString *) formatPhoneNumberAsE164:(NSString *)phone;
 
 - (ContactVO *) loadContact:(int)_contactId;
 - (int) saveContact:(ContactVO *) contact;

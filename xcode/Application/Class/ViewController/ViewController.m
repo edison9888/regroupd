@@ -12,16 +12,6 @@
 @implementation ViewController
 
 @synthesize brandNav;
-//@synthesize popOverNavigation = _popOverNavigation;
-//@synthesize overlayView = _overlayView;
-//@synthesize tabBarOverlayView = _tabBarOverlayView;
-//@synthesize tabBar = _tabBar;
-//@synthesize navigationButtons = _navigationButtons;
-//@synthesize espButton = _espButton;
-//@synthesize selectedButton = _selectedButton;
-//@synthesize lastSelectedButton = _lastSelectedButton;
-//@synthesize isOnHomeSlide = _isOnHomeSlide;
-//@synthesize isOnEspSlide = _isOnEspSlide;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

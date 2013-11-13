@@ -412,6 +412,7 @@
                 }
                 chat.contactMap = contactMap;
                 
+                [DataModel shared].contactCache = contactMap;
                 [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatMessagesLoaded
                                                                                                      object:chat]];
             }];

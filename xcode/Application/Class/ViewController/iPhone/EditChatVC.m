@@ -288,6 +288,10 @@
         
         NSString *objectId = [chatSvc apiSaveChat:chat];
         
+        PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+        [currentInstallation addUniqueObject:objectId forKey:@"channels"];
+        [currentInstallation saveInBackground];
+        
         chat.system_id = objectId;
         
         [chatSvc saveChat:chat];
