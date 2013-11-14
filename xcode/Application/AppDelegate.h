@@ -3,6 +3,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MBProgressHUD.h"
+#import "Reachability.h"
 
 @class ViewController;
 
@@ -10,5 +12,14 @@
 
 @property (nonatomic, strong) UIWindow *window;
 @property (nonatomic, strong) ViewController *viewController;
+
+@property (nonatomic, readonly) int networkStatus;
+
+- (BOOL)isParseReachable;
+
+@property (nonatomic, strong) MBProgressHUD *hud;
+@property (nonatomic, strong) Reachability *hostReach;
+@property (nonatomic, strong) Reachability *internetReach;
+@property (nonatomic, strong) Reachability *wifiReach;
 
 @end

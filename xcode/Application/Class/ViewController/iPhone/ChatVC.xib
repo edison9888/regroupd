@@ -380,22 +380,16 @@
     </objects>
     <resources>
         <image name="btn_aqua_bg_small.png" width="55" height="28"/>
-        <image name="btn_aqua_bg_small.png" width="55" height="28"/>
-        <image name="btn_aqua_bg_small.png" width="55" height="28"/>
         <image name="chat_attach_panel.png" width="320" height="263"/>
         <image name="chat_attach_plus.png" width="27" height="27"/>
         <image name="icon_attach_cancel.png" width="25" height="25"/>
         <image name="icon_attach_photo.png" width="27" height="27"/>
-        <image name="icon_attach_plus.png" width="19" height="19"/>
-        <image name="icon_attach_plus.png" width="19" height="19"/>
         <image name="icon_attach_plus.png" width="19" height="19"/>
         <image name="icon_attach_poll.png" width="27" height="27"/>
         <image name="icon_attach_rating.png" width="27" height="27"/>
         <image name="icon_attach_remove_x.png" width="16" height="16"/>
         <image name="icon_attach_rsvp.png" width="27" height="27"/>
         <image name="modal_add_photo.png" width="302" height="159"/>
-        <image name="modal_vertical_divider.png" width="1" height="36"/>
-        <image name="modal_vertical_divider.png" width="1" height="36"/>
         <image name="modal_vertical_divider.png" width="1" height="36"/>
         <image name="top_pull_handle.png" width="320" height="20"/>
     </resources>

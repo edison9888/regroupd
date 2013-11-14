@@ -19,6 +19,7 @@
     NSMutableArray *tableData;
     ChatManager *chatSvc;
     ContactManager *contactSvc;
+    NSMutableArray *unknownContactKeys;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;

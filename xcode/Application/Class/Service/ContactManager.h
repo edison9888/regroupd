@@ -41,7 +41,7 @@
 // Phonebook methods
 - (NSDictionary *) findPersonByPhone:(NSString *)phone;
 - (NSMutableArray *) listPhonebookByStatus:(int)status;
-- (NSMutableArray *) lookupContactsFromPhonebook:(NSArray *)contactKeys;
+- (NSMutableDictionary *) lookupContactsFromPhonebook:(NSArray *)contactKeys;
 
 - (void)bulkLoadPhonebook:(NSArray *)contacts;
 - (void)purgePhonebook;

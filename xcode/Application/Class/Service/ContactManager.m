@@ -479,9 +479,9 @@
     
 }
 
-- (NSMutableArray *) lookupContactsFromPhonebook:(NSArray *)contactKeys {
+- (NSMutableDictionary *) lookupContactsFromPhonebook:(NSArray *)contactKeys {
     
-    NSMutableArray *results = [[NSMutableArray alloc] init];
+    NSMutableDictionary *results = [[NSMutableDictionary alloc] init];
     
     NSString *sql = @"select * from phonebook where contact_key=?";
     ContactVO *contact;
@@ -495,18 +495,49 @@
             if ([rs next]) {
                 contact = [ContactVO readFromPhonebook:[rs resultDictionary]];
                 [[DataModel shared].contactCache setObject:contact forKey:key];
-                [results addObject:contact];
+                [results setObject:contact forKey:key];
+            } else {
+                [results setObject:[NSNull null] forKey:key];
             }
             
         } else {
             contact = [[DataModel shared].contactCache objectForKey:key];
-            [results addObject:contact];
+            [results setObject:contact forKey:key];
         }
     }
     return results;
     
 }
 
+
+//- (NSMutableArray *) lookupContactsFromPhonebook:(NSArray *)contactKeys {
+//    
+//    NSMutableArray *results = [[NSMutableArray alloc] init];
+//    
+//    NSString *sql = @"select * from phonebook where contact_key=?";
+//    ContactVO *contact;
+//    
+//    for (NSString *key in contactKeys) {
+//        NSLog(@"Lookup for contactKey %@", key);
+//        if ([[DataModel shared].contactCache objectForKey:key] == nil) {
+//            FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
+//                               key];
+//            
+//            if ([rs next]) {
+//                contact = [ContactVO readFromPhonebook:[rs resultDictionary]];
+//                [[DataModel shared].contactCache setObject:contact forKey:key];
+//                [results addObject:contact];
+//            }
+//            
+//        } else {
+//            contact = [[DataModel shared].contactCache objectForKey:key];
+//            [results addObject:contact];
+//        }
+//    }
+//    return results;
+//    
+//}
+//
 
 - (void)purgePhonebook;
 {

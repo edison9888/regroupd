@@ -8,24 +8,31 @@
 #import "SQLiteDB.h"
 #import <Parse/Parse.h>
 #import "ChatMessageVO.h"
+#import "Reachability.h"
 
 @implementation AppDelegate
 
 @synthesize window = _window;
 @synthesize viewController = _viewController;
+@synthesize networkStatus;
+
+@synthesize hud;
+@synthesize hostReach;
+@synthesize internetReach;
+@synthesize wifiReach;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-    
-//  #################### PARSE SETUP #####################
-//    https://www.parse.com/apps/quickstart#ios/native/existing
+
+    //  #################### PARSE SETUP #####################
+    //    https://www.parse.com/apps/quickstart#ios/native/existing
     
     [Parse setApplicationId:@"Xsf11WQNwFxIyu6rM447OTYtrvj5qSNNc5EX93Qt"
                   clientKey:@"ZlDNsNZE4KaiDdyOp9HQC6oPxP85NO2gAJn7tTtQ"];
     
-//    [PFUser enableAutomaticUser];
+    //    [PFUser enableAutomaticUser];
     
     PFACL *defaultACL = [PFACL ACL];
     
@@ -37,12 +44,14 @@
     
     
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    
+    //  #################### /PARSE SETUP #####################
+    [self performSelector:@selector(finishLaunchingApp) withObject:self afterDelay:0];
+
     [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
      UIRemoteNotificationTypeAlert|
      UIRemoteNotificationTypeSound];
-    
-//  #################### /PARSE SETUP #####################
-    
+
     [DataModel shared].needsLookup = YES;
     [DataModel shared].contactCache = [[NSMutableDictionary alloc] init];
     
@@ -50,7 +59,7 @@
     [[UINavigationBar appearance] setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
     
     [SQLiteDB installDatabase];
-    sleep(2);
+    
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
         // code here
         [DataModel shared].stageWidth = [[UIScreen mainScreen] bounds].size.width;
@@ -71,6 +80,41 @@
     return YES;
 }
 
+- (void)monitorReachability {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:ReachabilityChangedNotification object:nil];
+    
+    self.hostReach = [Reachability reachabilityWithHostName: @"api.parse.com"];
+    [self.hostReach startNotifier];
+    
+    self.internetReach = [Reachability reachabilityForInternetConnection];
+    [self.internetReach startNotifier];
+    
+    self.wifiReach = [Reachability reachabilityForLocalWiFi];
+    [self.wifiReach startNotifier];
+}
+//Called by Reachability whenever status changes.
+- (void)reachabilityChanged:(NSNotification* )note {
+    Reachability *curReach = (Reachability *)[note object];
+    NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
+    NSLog(@"Reachability changed: %@", curReach);
+    networkStatus = [curReach currentReachabilityStatus];
+    
+    if ([self isParseReachable] && [PFUser currentUser]) {
+        // Refresh home timeline on network restoration. Takes care of a freshly installed app that failed to load the main timeline under bad network conditions.
+        // In this case, they'd see the empty timeline placeholder and have no way of refreshing the timeline unless they followed someone.
+//        [self.homeViewController loadObjects];
+    }
+}
+
+- (BOOL)isParseReachable {
+    return self.networkStatus != NotReachable;
+}
+
+- (void) finishLaunchingApp {
+    
+
+    
+}
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     /*

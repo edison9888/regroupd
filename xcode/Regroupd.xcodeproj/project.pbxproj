@@ -345,7 +345,7 @@
 		1E9282AA177FB690008A583C /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9281E4177FB690008A583C /* FMDatabaseQueue.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		1E9282AB177FB690008A583C /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9281E6177FB690008A583C /* FMResultSet.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		1E9282AC177FB690008A583C /* SQLiteDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9281E8177FB690008A583C /* SQLiteDB.m */; };
-		1E9282AD177FB690008A583C /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9281EB177FB690008A583C /* Reachability.m */; };
+		1E9282AD177FB690008A583C /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9281EB177FB690008A583C /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		1E9282AE177FB690008A583C /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9281EE177FB690008A583C /* NSObject+SBJson.m */; };
 		1E9282AF177FB690008A583C /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9281F1177FB690008A583C /* SBJsonParser.m */; };
 		1E9282B0177FB690008A583C /* SBJsonStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9281F3177FB690008A583C /* SBJsonStreamParser.m */; };

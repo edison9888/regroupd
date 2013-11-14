@@ -301,7 +301,7 @@
         [_delegate gotoSlideWithName:@"Chat"];
         
     } else {
-        [[[UIAlertView alloc] initWithTitle:@"Try again" message:@"Please add at least one contact" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        [[[UIAlertView alloc] initWithTitle:@"Try again" message:@"Please add at least one contact" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         
     }
     

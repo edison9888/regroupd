@@ -37,7 +37,6 @@
     self.theTableView.dataSource = self;
     self.theTableView.backgroundColor = [UIColor clearColor];
     
-    self.tableData =[[NSMutableArray alloc]init];
     
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
@@ -138,6 +137,7 @@
 - (void)listMyChats
 {
     NSLog(@"%s", __FUNCTION__);
+    self.tableData =[[NSMutableArray alloc]init];
 
     if (chatSvc == nil) {
         chatSvc = [[ChatManager alloc] init];
@@ -151,6 +151,7 @@
         ChatVO *chat;
         NSMutableArray *namesArray = [[NSMutableArray alloc] init];
         NSMutableDictionary *namesMap = [[NSMutableDictionary alloc] init];
+        unknownContactKeys = [[NSMutableArray alloc] init];
         for (PFObject* result in results) {
 //            data = [DataModel readPFObjectAsDictionary:result];
             chat = [ChatVO readFromPFObject:result];
@@ -158,31 +159,64 @@
             NSArray *keys = [result objectForKey:@"contact_keys"];
             NSLog(@"contact keys = %@", keys);
             NSString *name;
-            NSMutableArray *contacts = [contactSvc lookupContactsFromPhonebook:keys];
-            for (ContactVO *contact in contacts) {
-                if (![contact.system_id isEqualToString:[DataModel shared].user.contact_key]) {
-                    if (contact.first_name != nil && contact.last_name != nil) {
-                        name = [NSString stringWithFormat:kFullNameFormat, contact.first_name, contact.last_name];
+            NSMutableDictionary *resultMap = [contactSvc lookupContactsFromPhonebook:keys];
+            ContactVO *contact = nil;
+            for (NSString *key in keys ) {
+                if (![key isEqualToString:[DataModel shared].user.contact_key]) {
+                    if ([resultMap objectForKey:key] == nil) {
+                        // Unlikely result
+                        [unknownContactKeys addObject:key];
+                    } else if ([resultMap objectForKey:key] == [NSNull null]) {
+                        // Null object indicates not in phonebook
+                        [unknownContactKeys addObject:key];
                     } else {
-                        name = contact.phone;
+                        contact = (ContactVO *) [resultMap objectForKey:key];
+                        if (contact.first_name != nil && contact.last_name != nil) {
+                            name = contact.fullname;
+                            [namesArray addObject:name];
+                            [namesMap setObject:name forKey:contact.system_id];
+                        } else if (contact.phone != nil) {
+                            name = contact.phone;
+                            [namesArray addObject:name];
+                            [namesMap setObject:name forKey:contact.system_id];
+                        } else {
+                            // This is unlikely. Contact results are from address book
+                            NSLog(@"Unexpected condition: contact has no name or phone");
+                            [unknownContactKeys addObject:key];
+                        }
+                        
                     }
-                    [namesArray addObject:name];
-                    [namesMap setObject:name forKey:contact.system_id];
                 }
             }
+//            for (ContactVO *contact in contacts) {
+//            }
             NSString *names = [namesArray componentsJoinedByString:@", "];
             chat.names = names;
             isLoading = NO;
 
             chat.namesMap = namesMap;
             [tableData addObject:chat];
-            [self.theTableView reloadData];
             
+
+            // Finish lookup for unknown contacts and reload when done.
+            if (unknownContactKeys.count > 0) {
+                [self lookupUnknownContacts];
+            } else {
+                [self.theTableView reloadData];
+                
+            }
+
         }
     }];
 }
 
-
+- (void) lookupUnknownContacts {
+    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"Unknown contacts %@", unknownContactKeys);
+    [contactSvc apiLookupContacts:unknownContactKeys callback:^(NSArray *results) {
+        [self listMyChats];
+    }];
+}
 
 #pragma mark - Action handlers
 

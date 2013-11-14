@@ -111,12 +111,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     // Setup table view
     
     CGRect scrollFrame = self.bubbleTable.frame;
-    scrollFrame.size.height -= kChatBarHeight;
-    NSLog(@"Set scroll frame height to %f", scrollFrame.size.height);
-    
+    scrollFrame.size.height = [DataModel shared].stageHeight - kChatBarHeight - kScrollViewTop;
     self.bubbleTable.frame = scrollFrame;
     self.bubbleTable.backgroundColor = [UIColor colorWithHexValue:kChatBGGrey andAlpha:1.0];
     self.bubbleTable.userInteractionEnabled = YES;
+    
     
     chatFrame = self.chatBar.frame;
     chatFrame.origin.y = [DataModel shared].stageHeight - kChatBarHeight;
@@ -288,6 +287,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         }
     }
     [self.bubbleTable reloadData];
+    [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+
     
 }
 - (void)chatPushNotificationHandler:(NSNotification*)notification
@@ -523,9 +524,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         self.chatBar.frame = chatFrameWithKeyboard;
         
         CGRect frame = self.bubbleTable.frame;
-        frame.size.height -= kbSize.height + kChatBarHeight;
+//        frame.size.height = chatFrameWithKeyboard.origin.y - kChatBarHeight - kScrollViewTop;
+        frame.size.height -= kbSize.height;
         
         self.bubbleTable.frame = frame;
+        [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+        
     }];
 }
 
