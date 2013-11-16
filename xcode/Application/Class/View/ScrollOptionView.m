@@ -34,15 +34,22 @@
         [self.roundPic.layer setBorderColor:[UIColor whiteColor].CGColor];
         self.roundPic.clipsToBounds = YES;
         self.roundPic.contentMode = UIViewContentModeScaleAspectFill;
+        
+        if ([pageData objectForKey:@"photo"]) {
+            
+            PFFile *pfPhoto = (PFFile *) [pageData objectForKey:@"photo"];
+            self.roundPic.file = pfPhoto;
+            [self.roundPic loadInBackground];
+        }
 
         
-        NSString *imagefile = (NSString *) [self.data objectForKey:@"imagefile"];
-        UIImage *img;
-        if (imagefile != nil) {
-            FormManager *formSvc = [[FormManager alloc] init];
-            img = [formSvc loadFormImage:imagefile];
-            self.roundPic.image = img;
-        }
+//        NSString *imagefile = (NSString *) [self.data objectForKey:@"imagefile"];
+//        UIImage *img;
+//        if (imagefile != nil) {
+//            FormManager *formSvc = [[FormManager alloc] init];
+//            img = [formSvc loadFormImage:imagefile];
+//            self.roundPic.image = img;
+//        }
         
         
         

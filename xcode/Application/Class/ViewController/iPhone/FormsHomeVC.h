@@ -10,6 +10,8 @@
 #import "SQLiteDB.h"
 #import "FormsTableViewCell.h"
 #import "FormVO.h"
+#import "FormManager.h"
+
 
 @interface FormsHomeVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     
@@ -26,9 +28,13 @@
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *tableData;
+    NSMutableArray *allForms;
+    
     UIView *bgLayer;
     
     int typeFilter;
+    
+    FormManager *formSvc;
 
     
 }

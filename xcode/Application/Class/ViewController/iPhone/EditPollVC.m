@@ -150,6 +150,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showImagePickerNotificationHandler:)     name:@"showImagePickerNotification"            object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formSaveCompleteNotificationHandler:)     name:k_formSaveCompleteNotification            object:nil];
+    
     // Create and initialize a tap gesture
     
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
@@ -171,6 +173,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - Notification Handlers
+
+- (void)formSaveCompleteNotificationHandler:(NSNotification*)notification
+{
+    NSLog(@"===== %s", __FUNCTION__);
+    [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Poll created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+}
 
 #pragma mark - Keyboard event handlers
 
@@ -179,9 +188,7 @@
  */
 - (void)keyboardWillHide:(NSNotification *)n
 {
-#ifdef kDEBUG
     NSLog(@"===== %s", __FUNCTION__);
-#endif
     NSDictionary* userInfo = [n userInfo];
     
     // get the size of the keyboard
@@ -192,9 +199,7 @@
 
 - (void)keyboardWillShow:(NSNotification *)n
 {
-#ifdef kDEBUG
     NSLog(@"===== %s", __FUNCTION__);
-#endif
     // This is an ivar I'm using to ensure that we do not do the frame size adjustment on the UIScrollView if the keyboard is already shown.  This can happen if the user, after fixing editing a UITextField, scrolls the resized UIScrollView to another UITextField and attempts to edit the next UITextField.  If we were to resize the UIScrollView again, it would be disastrous.  NOTE: The keyboard notification will fire even when the keyboard is already shown.
     if (keyboardIsShown) {
         return;
@@ -441,6 +446,7 @@
 - (IBAction)tapCancelButton {
     [_delegate gotoSlideWithName:@"FormsHome"];
 }
+
 - (IBAction)tapDoneButton {
     NSLog(@"%s", __FUNCTION__);
 
@@ -450,7 +456,6 @@
         isOK = NO;
     }
 
-    FormOptionVO *option;
     for (SurveyOptionWithPic* surveyOption in surveyOptions) {
         if (surveyOption.input.text.length == 0) {
             NSLog(@"Empty field: %i", surveyOption.index);
@@ -461,9 +466,7 @@
     if (isOK) {
         FormManager *formSvc = [[FormManager alloc] init];
         
-        NSString *filename_fmt = @"option_%i-%i_photo.png";
-        NSString *imagefile;
-        
+        NSString *filename_fmt = @"form_%@-%i_photo.png";
         int lastId = 0;
         lastId = [formSvc fetchLastOptionID];
 
@@ -475,33 +478,70 @@
         form.type = FormType_POLL;
         form.status = FormStatus_DRAFT;
         
-        int formId = [formSvc saveForm:form];
-        if (formId > 0) {
-            NSLog(@"Form saved with form_id %i", formId);
-
+        __block NSString *imagefile;
+        __block int index = 0;
+        [formSvc apiSaveForm:form callback:^(PFObject *pfForm) {
+            NSString *formId = pfForm.objectId;
+            int total = surveyOptions.count;
+            
             for (SurveyOptionWithPic* surveyOption in surveyOptions) {
-                
-                lastId += 1;
-                if (surveyOption.roundPic.image != nil) {
-                    imagefile = [NSString stringWithFormat:filename_fmt, formId, lastId];
-                    [formSvc saveFormImage:surveyOption.roundPic.image withName:imagefile];
-                } else {
-                    imagefile = nil;
-                }
+                index++;
+                FormOptionVO *option;
                 
                 option = [[FormOptionVO alloc] init];
+                
+                if (surveyOption.roundPic.image != nil) {
+                    imagefile = [NSString stringWithFormat:filename_fmt, formId, index];
+                    option.photo = surveyOption.roundPic.image;
+                    option.imagefile = imagefile;
+                } else {
+                    option.photo = nil;
+                    option.imagefile = nil;
+                }
+                
                 option.name = surveyOption.input.text;
-                option.form_id = formId;
                 option.type = OptionType_TEXT;
                 option.status = OptionStatus_DRAFT;
-                option.imagefile = imagefile;
-                [formSvc saveOption:option];
-                
+                option.position = index;
+                [formSvc apiSaveFormOption:option formId:formId callback:^(PFObject *object) {
+                    if (index >= total) {
+                        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formSaveCompleteNotification object:nil]];
+                        
+                    }
+                    
+                }];
             }
-
-            [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Survey created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-        }
+            
+            
+        }];
         
+//        int formId = [formSvc saveForm:form];
+//        if (formId > 0) {
+//            NSLog(@"Form saved with form_id %i", formId);
+//
+//            for (SurveyOptionWithPic* surveyOption in surveyOptions) {
+//                
+//                lastId += 1;
+//                if (surveyOption.roundPic.image != nil) {
+//                    imagefile = [NSString stringWithFormat:filename_fmt, formId, lastId];
+//                    [formSvc saveFormImage:surveyOption.roundPic.image withName:imagefile];
+//                } else {
+//                    imagefile = nil;
+//                }
+//                
+//                option = [[FormOptionVO alloc] init];
+//                option.name = surveyOption.input.text;
+//                option.form_id = formId;
+//                option.type = OptionType_TEXT;
+//                option.status = OptionStatus_DRAFT;
+//                option.imagefile = imagefile;
+//                [formSvc saveOption:option];
+//                
+//            }
+//
+//            [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Survey created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+//        }
+//        
     } else {
         NSLog(@"Data fields not complete");
         

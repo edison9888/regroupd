@@ -8,6 +8,7 @@
 
 #import "PollDetailVC.h"
 #import "SQLiteDB.h"
+#import "ParseUtils.h"
 
 @interface PollDetailVC ()
 
@@ -36,8 +37,7 @@
     
     self.subjectLabel.text = [DataModel shared].form.name;
     
-    [self loadFormOptions];
-    
+    [self loadFormData];
     
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
@@ -50,7 +50,7 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePageNumberHandler:)     name:@"updatePageNumber"            object:nil];
 
-    [self performSearch:@""];
+//    [self performSearch:@""];
     
 
 }
@@ -62,6 +62,37 @@
 }
 
 #pragma mark - Form Options handling
+
+- (void) loadFormData {
+    
+    @try {
+        [formSvc apiListFormOptions:[DataModel shared].form.system_id callback:^(NSArray *results) {
+            NSLog(@"Found form options for form %@ count=%i", [DataModel shared].form.system_id, results.count);
+            
+            NSMutableArray *dataArray = [[NSMutableArray alloc] initWithCapacity:results.count];
+            NSMutableDictionary *dict;
+            
+            for (PFObject *result in results) {
+                dict = [ParseUtils readFormOptionDictFromPFObject:result];
+                [dataArray addObject:dict];
+            }
+            self.carouselVC = [[SideScrollVC alloc] initWithData:dataArray];
+            
+            CGRect carouselFrame = CGRectMake(0, 0, 320, 300);
+            self.carouselVC.view.frame = carouselFrame;
+            [self.browseView addSubview:self.carouselVC.view];
+            
+            [self.browseView sendSubviewToBack:self.carouselVC.view];
+        }];
+        
+        
+    }
+    @catch (NSException *exception) {
+        NSLog(@"%@", exception);
+    }
+    
+    
+}
 
 - (void) loadFormOptions {
     

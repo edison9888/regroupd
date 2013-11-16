@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "BrandUILabel.h"
+#import "ChatMessageVO.h"
+
+@class PFImageView;
 
 @interface ChatMessageWidget : UIView {
     UIView *_theView;
@@ -16,7 +19,7 @@
 }
 
 
-- (id)initWithFrame:(CGRect)frame message:(NSString *)msgtext isOwner:(BOOL)owner;
+- (id)initWithFrame:(CGRect)frame message:(ChatMessageVO *)msg isOwner:(BOOL)owner;
 
 @property float dynamicHeight;
 
@@ -26,6 +29,8 @@
 
 @property (nonatomic, strong) IBOutlet UIImageView *rightCallout;
 @property (nonatomic, strong) IBOutlet UIImageView *leftCallout;
+
+@property (nonatomic, strong) PFImageView *photoView;
 
 //@property (nonatomic, strong) IBOutlet UIImageView *calloutImage;
 

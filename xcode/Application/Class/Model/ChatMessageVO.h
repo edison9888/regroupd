@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+//@class PFImageView;
+
 @interface ChatMessageVO : NSObject
 
 @property int message_id;
@@ -27,6 +29,10 @@
 
 @property (nonatomic, retain) NSDate *createdAt;
 @property (nonatomic, retain) NSDate *updatedAt;
+
+// Transient fields
+@property (nonatomic, retain) UIImage *photo;
+@property (nonatomic, retain) PFFile *pfPhoto;
 
 + (ChatMessageVO *) readFromDictionary:(NSDictionary *) dict;
 

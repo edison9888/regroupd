@@ -32,4 +32,12 @@
 - (UIImage *)loadFormImage:(NSString *)filename;
 - (int) fetchLastOptionID;
 
+// API client functions
+- (void) apiSaveForm:(FormVO *)form callback:(void (^)(PFObject *))callback;
+- (void) apiListForms:(NSString *)contactKey callback:(void (^)(NSArray *results))callback;
+
+//- (void) apiSaveFormOptions:(NSMutableArray *)options formId:(NSString *)formId callback:(void (^)(NSMutableArray *))results;
+- (void) apiSaveFormOption:(FormOptionVO *)option formId:(NSString *)formId callback:(void (^)(PFObject *object))callback;
+- (void) apiListFormOptions:(NSString *)formId callback:(void (^)(NSArray *results))callback;
+
 @end

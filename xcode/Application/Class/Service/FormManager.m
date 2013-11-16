@@ -347,4 +347,102 @@
     }
 }
 
+#pragma mark - Form API functions
+
+
+// API client functions
+- (void) apiSaveForm:(FormVO *)form callback:(void (^)(PFObject *))callback {
+    NSLog(@"%s", __FUNCTION__);
+    
+    PFObject *data = [PFObject objectWithClassName:kFormDB];
+    
+    data[@"name"] = form.name;
+    data[@"type"] = [NSNumber numberWithInt:form.type];
+    data[@"user"] = [PFUser currentUser];
+
+    data[@"contact_key"] = [DataModel shared].user.contact_key;
+    
+    [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        NSLog(@"Saved form with objectId %@", data.objectId);
+        callback(data);
+    }];
+}
+
+- (void) apiListForms:(NSString *)contactKey callback:(void (^)(NSArray *results))callback {
+    
+    PFQuery *query = [PFQuery queryWithClassName:kFormDB];
+    if (contactKey == nil) {
+        [query whereKey:@"user" equalTo:[PFUser currentUser]];
+    } else {
+        [query whereKey:@"contact_key" equalTo:contactKey];
+    }
+    [query addDescendingOrder:@"createdAt"];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        callback(results);
+    }];
+    
+}
+
+
+#pragma mark - Form Option API functions
+
+
+- (void)apiSaveFormOption:(FormOptionVO *)option formId:(NSString *)formId callback:(void (^)(PFObject *object))callback
+{
+    if (option.photo == nil) {
+        
+        PFObject *data = [PFObject objectWithClassName:kFormOptionDB];
+        
+        data[@"form"] = [PFObject objectWithoutDataWithClassName:kFormDB objectId:formId];
+        data[@"name"] = option.name;
+        if (option.position > 0) {
+            data[@"position"] = [NSNumber numberWithInt:option.position];
+        }
+        [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            NSLog(@"Saved form option with objectId %@", data.objectId);
+            callback(data);
+        }];
+        
+    } else {
+        NSData *imageData = UIImagePNGRepresentation(option.photo);
+        
+        PFFile *fileObject = [PFFile fileWithName:option.imagefile data:imageData];
+        
+        [fileObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            
+            PFObject *data = [PFObject objectWithClassName:kFormOptionDB];
+            
+            data[@"form"] = [PFObject objectWithoutDataWithClassName:kFormDB objectId:formId];
+            data[@"name"] = option.name;
+            if (option.position > 0) {
+                data[@"position"] = [NSNumber numberWithInt:option.position];
+            }
+            
+            data[@"photo"]=fileObject;
+            
+            [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                NSLog(@"Saved form option with objectId %@", data.objectId);
+                callback(data);
+            }];
+            
+        }];
+        
+    }
+}
+
+- (void) apiListFormOptions:(NSString *)formId callback:(void (^)(NSArray *results))callback {
+    
+    PFQuery *query = [PFQuery queryWithClassName:kFormOptionDB];
+    [query whereKey:@"form" equalTo:[PFObject objectWithoutDataWithClassName:kFormDB objectId:formId]];
+     
+    [query addAscendingOrder:@"position"];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        callback(results);
+    }];
+    
+}
+
+
 @end

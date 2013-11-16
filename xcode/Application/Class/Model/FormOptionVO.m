@@ -65,4 +65,26 @@
     return o;
 }
 
++ (FormOptionVO *) readFromPFObject:(PFObject *)data {
+    FormOptionVO *o = [[FormOptionVO alloc] init];
+    NSString *text;
+    
+    o.system_id = data.objectId;
+    o.createdAt = data.createdAt;
+    o.updatedAt = data.updatedAt;
+    
+    text = [data valueForKey:@"name"];
+    o.name = text;
+    
+//    text = [data valueForKey:@"type"];
+//    o.type = text.integerValue;
+    if (data[@"position"]) {
+        text = [data valueForKey:@"position"];
+        o.position = text.integerValue;
+    }
+    
+    return o;
+}
+
+
 @end

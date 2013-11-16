@@ -72,4 +72,41 @@
 
     return o;
 }
+
+
++ (FormVO *) readFromPFObject:(PFObject *)data {
+    FormVO *o = [[FormVO alloc] init];
+    NSString *text;
+    
+    o.system_id = data.objectId;
+    o.createdAt = data.createdAt;
+    o.updatedAt = data.updatedAt;
+    
+    text = [data valueForKey:@"contact_key"];
+    o.contact_key= text;
+    
+    text = [data valueForKey:@"name"];
+    o.name = text;
+    
+    text = [data valueForKey:@"location"];
+    o.location = text;
+    
+    text = [data valueForKey:@"description"];
+    o.description = text;
+    
+    text = [data valueForKey:@"type"];
+    o.type = text.integerValue;
+
+    text = [data valueForKey:@"allow_public"];
+    o.allow_public = text.integerValue;
+
+    text = [data valueForKey:@"allow_share"];
+    o.allow_share = text.integerValue;
+
+    text = [data valueForKey:@"allow_multiple"];
+    o.allow_multiple = text.integerValue;
+
+    return o;
+}
+
 @end

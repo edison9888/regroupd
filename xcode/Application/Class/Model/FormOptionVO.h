@@ -40,15 +40,26 @@ typedef enum {
 @property int position;
 
 @property (nonatomic, retain) NSString *system_id;
+//@property (nonatomic, retain) NSString *form_key;
+
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *stats;
 @property (nonatomic, retain) NSString *datafile;
 @property (nonatomic, retain) NSString *imagefile;
 @property int type;
 @property int status;
+
+@property (nonatomic, retain) NSDate *createdAt;
+@property (nonatomic, retain) NSDate *updatedAt;
+
 @property (nonatomic, retain) NSString *created;
 @property (nonatomic, retain) NSString *updated;
 
+// Transient fields
+@property (nonatomic, retain) UIImage *photo;
+@property (nonatomic, retain) PFFile *pfPhoto;
+
 + (FormOptionVO *) readFromDictionary:(NSDictionary *) dict;
++ (FormOptionVO *) readFromPFObject:(PFObject *)data;
 
 @end

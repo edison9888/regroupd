@@ -58,8 +58,8 @@
                                                object:nil];
 
     self.addModal.tag = 99;
-    
-    [self performSearch:@""];
+    [self listMyForms];
+//    [self performSearch:@""];
     
     
 }
@@ -169,7 +169,38 @@
     
 }
 
-
+- (void)listMyForms
+{
+    NSLog(@"%s", __FUNCTION__);
+    allForms = [[NSMutableArray alloc] init];
+    
+    if (formSvc == nil) {
+        formSvc = [[FormManager alloc] init];
+    }
+    
+    [formSvc apiListForms:nil callback:^(NSArray *results) {
+        if (results) {
+            FormVO *form;
+            for (PFObject *result in results) {
+                form = [FormVO readFromPFObject:result];
+                [allForms addObject:form];
+            }
+            self.tableData = allForms;
+            [self.theTableView reloadData];
+        }
+    }];
+}
+- (void)listFormsByType:(int)formType
+{
+    self.tableData =[[NSMutableArray alloc]init];
+    
+    for (FormVO *form in allForms) {
+        if (form.type == formType) {
+            [self.tableData addObject:form];
+        }
+    }
+    [self.theTableView reloadData];
+}
 - (void)performSearch:(NSString *)searchText
 {
     

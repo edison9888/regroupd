@@ -42,6 +42,9 @@ typedef enum {
 }
 @property int form_id;
 @property (nonatomic, retain) NSString *system_id;
+
+@property (nonatomic, retain) NSString *contact_key;
+
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *location;
 @property (nonatomic, retain) NSString *description;
@@ -53,12 +56,22 @@ typedef enum {
 @property int allow_public;
 @property int allow_share;
 @property int allow_multiple;
+
+@property (nonatomic, retain) NSDate *createdAt;
+@property (nonatomic, retain) NSDate *updatedAt;
+
 @property (nonatomic, retain) NSString *created;
 @property (nonatomic, retain) NSString *updated;
 
+// Transient fields
+@property (nonatomic, retain) UIImage *photo;
+@property (nonatomic, retain) PFFile *pfPhoto;
+
 @property (nonatomic, retain) NSMutableArray *options;
 
-+ (FormVO *) readFromDictionary:(NSDictionary *) dict;
 
+
++ (FormVO *) readFromDictionary:(NSDictionary *) dict;
++ (FormVO *) readFromPFObject:(PFObject *)data;
 
 @end

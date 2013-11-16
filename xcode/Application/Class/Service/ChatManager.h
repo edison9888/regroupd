@@ -31,18 +31,12 @@
 
 // API functions
 - (void) apiListChats:(NSString *)userId callback:(void (^)(NSArray *results))callback;
-- (void) apiSaveChatMessage:(ChatMessageVO *)msg chatId:(NSString *)chatId callback:(void (^)(PFObject *object))callback;
-
+- (void) apiSaveChatMessage:(ChatMessageVO *)msg callback:(void (^)(PFObject *object))callback;
+- (void)apiSaveChatMessage:(ChatMessageVO *)msg withPhoto:(UIImage *)saveImage callback:(void (^)(PFObject *object))callback;
 // Syncrhonous API functions
 - (ChatVO *) apiLoadChat:(NSString *)objectId;
 - (ChatVO *) apiLoadChat:(NSString *)objectId fetchAll:(BOOL)all;
 - (NSString *) apiSaveChat:(ChatVO *) chat;
-
-- (void) apiDeleteChat:(ChatVO *)chat;
-
-- (ChatMessageVO *) apiLoadChatMessage:(NSString *)objectId;
-- (NSString *) apiSaveChatMessage:(ChatMessageVO *) msg;
-- (void) apiDeleteChatMessage:(ChatMessageVO *)msg;
 
 - (NSMutableArray *) asyncListChatMessages:(NSString *)objectId;
 - (NSMutableArray *) asyncListChatContacts:(NSArray *)objectIds;
