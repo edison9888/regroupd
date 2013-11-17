@@ -14,7 +14,7 @@
     int _index;
 }
 
-@property (nonatomic, strong) IBOutlet UIImageView *roundPic;
+@property (nonatomic, strong) IBOutlet PFImageView *roundPic;
 @property (nonatomic, strong) IBOutlet UIImageView *checkbox;
 @property (nonatomic, strong) IBOutlet UIImageView *divider;
 

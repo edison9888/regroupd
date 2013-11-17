@@ -11,7 +11,7 @@
 #import "FormOptionVO.h"
 #import "FormManager.h"
 
-#define kInitialY   55
+#define kInitialY   67
 #define kEmbedOptionWidth   230
 #define kEmbedOptionHeight  80
 
@@ -22,11 +22,7 @@
 {
     NSLog(@"===== %s", __FUNCTION__);
     self = [super initWithFrame:frame];
-//
-//- (id)initWithOptions:(NSMutableArray *)formOptions
-//{
-//    NSLog(@"===== %s", __FUNCTION__);
-//   self = [super init];
+    
     if (self) {
         options = [[NSMutableArray alloc] initWithCapacity:formOptions.count];
         
@@ -39,7 +35,6 @@
         EmbedPollOption *embedOption = nil;
         CGRect itemFrame;
         int index=0;
-        FormManager *formSvc = [[FormManager alloc]init];
         
         for (FormOptionVO* opt in formOptions) {
             index++;
@@ -49,11 +44,15 @@
             embedOption.tag = k_CHAT_OPTION_BASETAG + index;
             embedOption.userInteractionEnabled = YES;
             
-            if (opt.imagefile != nil) {
-                UIImage *img = nil;
-                img = [formSvc loadFormImage:opt.imagefile];
-                embedOption.roundPic.image =img;
+            if (opt.pfPhoto != nil) {
+                embedOption.roundPic.file = opt.pfPhoto;
+                [embedOption.roundPic loadInBackground];
             }
+//            if (opt.imagefile != nil) {
+//                UIImage *img = nil;
+//                img = [formSvc loadFormImage:opt.imagefile];
+//                embedOption.roundPic.image =img;
+//            }
 
             embedOption.fieldLabel.text = opt.name;
             
@@ -71,9 +70,13 @@
         }
         if (owner) {
             self.doneButton.hidden = YES;
+            self.leftCallout.hidden = YES;
+            self.rightCallout.hidden = NO;
             formLocked = YES;
         } else {
             formLocked = NO;
+            self.rightCallout.hidden = YES;
+            self.leftCallout.hidden = NO;
             
             itemFrame = self.doneView.frame;
             itemFrame.origin.y = ypos;

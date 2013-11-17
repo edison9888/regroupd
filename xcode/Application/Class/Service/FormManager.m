@@ -91,8 +91,8 @@
                    [NSNumber numberWithInt:form.status],
                    form.start_time,
                    form.end_time,
-                   [NSNumber numberWithInt:form.allow_public],
-                   [NSNumber numberWithInt:form.allow_share],
+                   form.allow_public,
+                   form.allow_share,
                    dt,
                    dt
                    ];
@@ -157,9 +157,9 @@
                [NSNumber numberWithInt:form.status],
                form.start_time,
                form.end_time,
-               [NSNumber numberWithInt:form.allow_public],
-               [NSNumber numberWithInt:form.allow_share],
-               [NSNumber numberWithInt:form.allow_multiple],
+               form.allow_public,
+               form.allow_share,
+               form.allow_multiple,
                dt,
                [NSNumber numberWithInt:form.form_id]
                ];
@@ -359,6 +359,21 @@
     data[@"name"] = form.name;
     data[@"type"] = [NSNumber numberWithInt:form.type];
     data[@"user"] = [PFUser currentUser];
+    
+    if (form.location != nil) {
+        data[@"location"] = form.location;
+    }
+    if (form.description != nil) {
+        data[@"description"] = form.description;
+    }
+    if (form.eventStartsAt != nil) {
+        data[@"eventStartsAt"] = form.eventStartsAt;
+    }
+    if (form.eventEndsAt != nil) {
+        data[@"eventEndsAt"] = form.eventEndsAt;
+    }
+    
+    data[@"name"] = form.name;
 
     data[@"contact_key"] = [DataModel shared].user.contact_key;
     
@@ -366,6 +381,41 @@
         NSLog(@"Saved form with objectId %@", data.objectId);
         callback(data);
     }];
+}
+- (void) apiLoadForm:(NSString *)formKey fetchAll:(BOOL)fetchAll callback:(void (^)(FormVO *form))callback {
+    NSLog(@"%s", __FUNCTION__);
+
+    PFQuery *query = [PFQuery queryWithClassName:kFormDB];
+    [query getObjectInBackgroundWithId:formKey block:^(PFObject *pfForm, NSError *error) {
+        FormVO *form;
+        if (pfForm) {
+            form = [FormVO readFromPFObject:pfForm];
+            
+            if (fetchAll) {
+                
+                PFQuery *query = [PFQuery queryWithClassName:kFormOptionDB];
+                [query whereKey:@"form" equalTo:pfForm];
+                [query addAscendingOrder:@"position"];
+                
+                [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+                    NSLog(@"Found form options %i", results.count);
+                    
+                    FormOptionVO *option;
+                    form.options = [[NSMutableArray alloc] init];
+                    for (PFObject *result in results) {
+                        option = [FormOptionVO readFromPFObject:result];
+                        [form.options addObject: option];
+                    }
+                    callback(form);
+                }];
+
+            } else {
+                callback(form);
+            }
+        }
+    }];
+    
+    
 }
 
 - (void) apiListForms:(NSString *)contactKey callback:(void (^)(NSArray *results))callback {

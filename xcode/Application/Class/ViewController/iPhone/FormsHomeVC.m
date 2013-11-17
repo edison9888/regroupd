@@ -85,8 +85,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"%s", __FUNCTION__);
-    // http://stackoverflow.com/questions/413993/loading-a-reusable-uitableviewcell-from-a-nib
     
     static NSString *CellIdentifier = @"FormsTableCell";
     static NSString *CellNib = @"FormsTableViewCell";
@@ -185,6 +183,9 @@
                 form = [FormVO readFromPFObject:result];
                 [allForms addObject:form];
             }
+            
+            [DataModel shared].formsList = allForms;
+            
             self.tableData = allForms;
             [self.theTableView reloadData];
         }
@@ -263,11 +264,12 @@
     
 }
 - (IBAction)tapFormNav:(UIButton*)sender {
-    NSLog(@"button clicked - %d",sender.tag);
+//    NSLog(@"button clicked - %d",sender.tag);
     typeFilter = sender.tag;
     
     [self updateFormsNav];
-    [self performSearch:nil];
+    
+    [self listFormsByType:typeFilter];
 }
 
 - (IBAction)tapPollButton {

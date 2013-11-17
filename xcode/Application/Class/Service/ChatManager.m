@@ -270,8 +270,14 @@
     PFObject *data = [PFObject objectWithClassName:kChatMessageDB];
     
     data[@"chat"] = [PFObject objectWithoutDataWithClassName:kChatDB objectId:msg.chat_key];
-    data[@"message"]=msg.message;
+    
+    if (msg.message) {
+        data[@"message"]=msg.message;
+    }
     data[@"contact_key"] = msg.contact_key;
+    if (msg.form_key) {
+        data[@"form_key"]=msg.form_key;
+    }
     
     [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         NSLog(@"Saved message with objectId %@", data.objectId);
@@ -384,7 +390,56 @@
     return nil;
 }
 
+#pragma mark - ChatForm API
 
+- (void) apiSaveChatForm:(NSString *)chatId formId:(NSString *)formId callback:(void (^)(PFObject *object))callback{
+
+    
+    PFQuery *query = [PFQuery queryWithClassName:kChatFormDB];
+    [query whereKey:@"chat" equalTo:[PFObject objectWithoutDataWithClassName:kChatDB objectId:chatId]];
+    [query whereKey:@"form" equalTo:[PFObject objectWithoutDataWithClassName:kChatDB objectId:formId]];
+    
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *pfObject, NSError *error) {
+        
+        if (pfObject) {
+            callback(pfObject);
+        } else {
+            PFObject *data = [PFObject objectWithClassName:kChatFormDB];
+            
+            data[@"chat"] = [PFObject objectWithoutDataWithClassName:kChatDB objectId:chatId];
+            data[@"form"] = [PFObject objectWithoutDataWithClassName:kFormDB objectId:formId];
+            
+            [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                NSLog(@"Saved chat-form with objectId %@", data.objectId);
+                callback(data);
+            }];
+        }
+        
+    }];
+
+}
+- (void) apiListChatForms:(NSString *)chatId callback:(void (^)(NSArray *results))callback{
+    PFQuery *query = [PFQuery queryWithClassName:kChatFormDB];
+    [query whereKey:@"chat" equalTo:[PFObject objectWithoutDataWithClassName:kChatDB objectId:chatId]];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        callback(results);
+//        int total = results.count;
+//        int index = 0;
+//        NSMutableArray *forms = [[NSMutableArray alloc] init];
+//        FormVO *form;
+//        FormOptionVO *option;
+//        for (PFObject *result in results) {
+//            
+//            form = [FormVO readFromPFObject:result];
+//            
+//            
+//            
+//        }
+    }];
+
+
+}
 #pragma mark - Synchronous API -- to be deprecated
 
 - (ChatVO *) apiLoadChat:(NSString *)objectId {

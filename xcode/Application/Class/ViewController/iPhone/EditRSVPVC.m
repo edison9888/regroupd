@@ -149,6 +149,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                                object:self.view.window];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showImagePickerNotificationHandler:)     name:@"showImagePickerNotification"            object:nil];
+   
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formSaveCompleteNotificationHandler:)     name:k_formSaveCompleteNotification            object:nil];
+    
     
     // Create and initialize a tap gesture
     
@@ -169,6 +172,14 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Notification Handlers
+
+- (void)formSaveCompleteNotificationHandler:(NSNotification*)notification
+{
+    NSLog(@"===== %s", __FUNCTION__);
+    [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Poll created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 }
 
 
@@ -523,8 +534,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 //    }
     if (isOK) {
         FormManager *formSvc = [[FormManager alloc] init];
+
+        NSString *filename_fmt = @"form_%@-%i_photo.png";
         
-        NSString *filename_fmt = @"form_%i_photo.png";
         NSString *imagefile;
         
         int lastId = 0;
@@ -543,9 +555,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         NSLog(@"start date = %@", start_time);
         NSLog(@"end date = %@", end_time);
         
-//        NSDate *date1 = [DateTimeUtils dateFromDBDateString:start_time];
-//        NSDate *date2 = [DateTimeUtils dateFromDBDateString:end_time];
-//        
+        NSDate *date1 = [DateTimeUtils readDateFromFriendlyDateTime:start_time];
+        NSDate *date2 = [DateTimeUtils readDateFromFriendlyDateTime:end_time];
+        
+        NSLog(@"starts at %@", date1);
+        NSLog(@"ends at %@", date2);
+//
 //        // TODO: Convert back to db format
 //        start_time = [DateTimeUtils dbDateStampFromDate:date1];
 //        end_time = [DateTimeUtils dbDateStampFromDate:date2];
@@ -559,20 +574,46 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         form.description = self.descriptionField.text;
         form.start_time = start_time;
         form.end_time = end_time;
-        form.imagefile = imagefile;
         form.type = FormType_RSVP;
         form.status = FormStatus_DRAFT;
+
+        form.eventStartsAt = date1;
+        form.eventEndsAt = date2;
         
-        int formId = [formSvc saveForm:form];
-        if (formId > 0) {
-            NSLog(@"Form saved with form_id %i", formId);
+        [formSvc apiSaveForm:form callback:^(PFObject *pfForm) {
+            NSString *formId = pfForm.objectId;
             
-//            for (FormOptionVO *formOption in formOptions) {
-//                formOption.form_id = formId;
-//                [formSvc saveOption:formOption];
-//            }
-            [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Survey created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-        }
+            NSArray *answers = @[@"Yes", @"No", @"Maybe"];
+            
+            for (int i=1; i<=answers.count; i++) {
+                
+                FormOptionVO *option;
+                
+                option = [[FormOptionVO alloc] init];
+                
+                option.name =[answers objectAtIndex:i-1];
+                option.position = i;
+                
+                [formSvc apiSaveFormOption:option formId:formId callback:^(PFObject *object) {
+                    NSLog(@"Save option %i", i + 1);
+                    if (i == answers.count) {
+                        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formSaveCompleteNotification object:nil]];
+                    }
+                    
+                }];
+            }
+            
+        }];
+//        int formId = [formSvc saveForm:form];
+//        if (formId > 0) {
+//            NSLog(@"Form saved with form_id %i", formId);
+//            
+////            for (FormOptionVO *formOption in formOptions) {
+////                formOption.form_id = formId;
+////                [formSvc saveOption:formOption];
+////            }
+//            [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Survey created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+//        }
         
     } else {
         // Data not complete. 

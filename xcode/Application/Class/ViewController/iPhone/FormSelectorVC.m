@@ -40,7 +40,8 @@
 
     self.tableData =[[NSMutableArray alloc]init];
     // Do any additional setup after loading the view from its nib.
-    [self performSearch:nil];
+    [self listFormsByType:[DataModel shared].formType];
+//    [self performSearch:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -110,9 +111,9 @@
         if (indexPath != nil) {
             NSLog(@"Selected row %i", indexPath.row);
             
-            NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
+//            NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
             
-            FormVO *form = [FormVO readFromDictionary:rowdata];
+            FormVO *form = (FormVO *)[tableData objectAtIndex:indexPath.row];
             
             NSNotification* hideFormSelectorNotification = [NSNotification notificationWithName:@"hideFormSelectorNotification" object:form];
             [[NSNotificationCenter defaultCenter] postNotification:hideFormSelectorNotification];
@@ -124,7 +125,19 @@
     
     
 }
+- (void)listFormsByType:(int)formType
+{
+    self.tableData =[[NSMutableArray alloc]init];
+    
+    for (FormVO *form in [DataModel shared].formsList) {
+        if (form.type == formType) {
+            [self.tableData addObject:form];
+        }
+    }
+    [self.theTableView reloadData];
 
+    
+}
 
 - (void)performSearch:(NSString *)searchText
 {

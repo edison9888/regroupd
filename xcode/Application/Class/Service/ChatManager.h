@@ -41,4 +41,7 @@
 - (NSMutableArray *) asyncListChatMessages:(NSString *)objectId;
 - (NSMutableArray *) asyncListChatContacts:(NSArray *)objectIds;
 
+// ChatForm API
+- (void) apiSaveChatForm:(NSString *)chatId formId:(NSString *)formId callback:(void (^)(PFObject *object))callback;
+- (void) apiListChatForms:(NSString *)chatId callback:(void (^)(NSArray *results))callback;
 @end

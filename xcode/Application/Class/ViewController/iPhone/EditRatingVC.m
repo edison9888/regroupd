@@ -10,6 +10,7 @@
 #import "FormManager.h"
 #import "FormVO.h"
 #import "FormOptionVO.h"
+#import "UIAlertView+Helper.h"
 
 @interface EditRatingVC ()
 
@@ -145,7 +146,9 @@
                                                object:self.view.window];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showImagePickerNotificationHandler:)     name:@"showImagePickerNotification"            object:nil];
-    
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formSaveCompleteNotificationHandler:)     name:k_formSaveCompleteNotification            object:nil];
+
     // Create and initialize a tap gesture
     
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
@@ -166,6 +169,15 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark - Notification Handlers
+
+- (void)formSaveCompleteNotificationHandler:(NSNotification*)notification
+{
+    NSLog(@"===== %s", __FUNCTION__);
+    [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Form created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+}
+
 
 
 #pragma mark - Keyboard event handlers
@@ -507,13 +519,12 @@
     }
 
     if (isOK) {
+
+        
         FormManager *formSvc = [[FormManager alloc] init];
         
-        NSString *filename_fmt = @"option_%i-%i_photo.png";
-        NSString *imagefile;
-        
-        int lastId = 0;
-        lastId = [formSvc fetchLastOptionID];
+        NSString *filename_fmt = @"form_%@-%i_photo.png";
+
         
         FormVO *form = [[FormVO alloc] init];
         
@@ -522,33 +533,71 @@
         form.name = self.subjectField.text;
         form.type = FormType_RATING;
         form.status = FormStatus_DRAFT;
-        
-        int formId = [formSvc saveForm:form];
-        if (formId > 0) {
-            NSLog(@"Form saved with form_id %i", formId);
+
+        __block NSString *imagefile;
+        __block int index = 0;
+        [formSvc apiSaveForm:form callback:^(PFObject *pfForm) {
+            NSString *formId = pfForm.objectId;
+            int total = surveyOptions.count;
             
             for (SurveyOptionWidget* surveyOption in surveyOptions) {
-                
-                lastId += 1;
-                if (surveyOption.roundPic.image != nil) {
-                    imagefile = [NSString stringWithFormat:filename_fmt, formId, lastId];
-                    [formSvc saveFormImage:surveyOption.roundPic.image withName:imagefile];
-                } else {
-                    imagefile = nil;
-                }
+                index++;
+                FormOptionVO *option;
                 
                 option = [[FormOptionVO alloc] init];
+                
+                if (surveyOption.roundPic.image != nil) {
+                    imagefile = [NSString stringWithFormat:filename_fmt, formId, index];
+                    option.photo = surveyOption.roundPic.image;
+                    option.imagefile = imagefile;
+                } else {
+                    option.photo = nil;
+                    option.imagefile = nil;
+                }
+                
                 option.name = surveyOption.input.text;
-                option.form_id = formId;
                 option.type = OptionType_TEXT;
                 option.status = OptionStatus_DRAFT;
-                option.imagefile = imagefile;
-                [formSvc saveOption:option];
-                
+                option.position = index;
+                [formSvc apiSaveFormOption:option formId:formId callback:^(PFObject *object) {
+                    NSLog(@"Save option %i", index);
+                    if (index == total) {
+                        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formSaveCompleteNotification object:nil]];
+                        
+                    }
+                    
+                }];
             }
             
-            [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Survey created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-        }
+            
+        }];
+
+//        int formId = [formSvc saveForm:form];
+//        if (formId > 0) {
+//            NSLog(@"Form saved with form_id %i", formId);
+//            
+//            for (SurveyOptionWidget* surveyOption in surveyOptions) {
+//                
+//                lastId += 1;
+//                if (surveyOption.roundPic.image != nil) {
+//                    imagefile = [NSString stringWithFormat:filename_fmt, formId, lastId];
+//                    [formSvc saveFormImage:surveyOption.roundPic.image withName:imagefile];
+//                } else {
+//                    imagefile = nil;
+//                }
+//                
+//                option = [[FormOptionVO alloc] init];
+//                option.name = surveyOption.input.text;
+//                option.form_id = formId;
+//                option.type = OptionType_TEXT;
+//                option.status = OptionStatus_DRAFT;
+//                option.imagefile = imagefile;
+//                [formSvc saveOption:option];
+//                
+//            }
+//            
+//            [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Survey created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+//        }
         
         
     } else {

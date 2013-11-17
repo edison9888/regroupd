@@ -17,6 +17,7 @@
 //#import ""
 
 #import "ChatManager.h"
+#import "FormManager.h"
 #import "ContactManager.h"
 
 #import "ChatVO.h"
@@ -66,7 +67,10 @@
     NSString *formTitle;
     
     NSDateFormatter *msgTimeFormat;
-    
+    NSMutableArray *attachedFormOptions;
+    NSMutableDictionary *formCache;
+
+    FormManager *formSvc;
     
 }
 

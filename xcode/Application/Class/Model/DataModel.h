@@ -21,6 +21,7 @@
 #define kUserContactDB      @"UserContactDB"
 #define kChatDB             @"ChatDB"
 #define kChatMessageDB      @"ChatMessageDB"
+#define kChatFormDB         @"ChatFormDB"
 #define kFormDB             @"FormDB"
 #define kFormOptionDB       @"FormOptionDB"
 #define kFormResponseDB     @"FormResponseDB"
@@ -39,7 +40,7 @@
     
     UserVO *user;
     ContactVO *contact;
-
+    
 }
 
 @property int contactId;
@@ -49,6 +50,8 @@
 @property (nonatomic, retain) FormVO *form;
 @property (nonatomic, retain) ChatVO *chat;
 @property (nonatomic, retain) GroupVO *group;
+
+@property (nonatomic, retain) NSMutableArray *formsList;
 
 @property (nonatomic, retain) NSMutableDictionary *contactCache;
 @property (nonatomic, retain) NSString *action;

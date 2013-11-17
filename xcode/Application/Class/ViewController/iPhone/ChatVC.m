@@ -17,9 +17,6 @@
 #import "EmbedRSVPWidget.h"
 #import "ChatMessageWidget.h"
 
-#import "FormManager.h"
-//#import "NSDate+Extensions.h"
-
 #import "UIBubbleTableView.h"
 #import "UIBubbleTableViewDataSource.h"
 #import "NSBubbleData.h"
@@ -107,6 +104,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     chatSvc = [[ChatManager alloc] init];
     contactSvc = [[ContactManager alloc] init];
+    formSvc = [[FormManager alloc] init];
     
     // Setup table view
     
@@ -224,7 +222,32 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         [currentInstallation saveInBackground];
 
         NSLog(@"Fetch chat by objectId %@", [DataModel shared].chat.system_id);
-        [chatSvc asyncListChatMessages:[DataModel shared].chat.system_id];
+        [chatSvc apiListChatForms:[DataModel shared].chat.system_id callback:^(NSArray *results) {
+            // Each result is a ChatFormDB object with relational values: form and chat
+            formCache = [[NSMutableDictionary alloc]init];
+            __block int index=0;
+            int total = results.count;
+            
+            for (PFObject *result in results) {
+                if (result[@"form"]) {
+                    PFObject *pfForm = result[@"form"];
+//                    NSLog(@">>>>>>>>>>>>>> Found form %@", pfForm.objectId);
+                    
+                    [formSvc apiLoadForm:pfForm.objectId fetchAll:YES callback:^(FormVO *form) {
+                        if (form) {
+                            [formCache setObject:form forKey:pfForm.objectId];
+                        }
+                        
+                        index++;
+                        if (index==total) {
+                            [chatSvc asyncListChatMessages:[DataModel shared].chat.system_id];
+                        }
+                    }];
+                }
+            }
+        }];
+        
+        
     }
     
     
@@ -283,7 +306,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         NSLog(@"Grouped messages count %i", groupedMessages.count);
         for (ChatMessageVO* msg in groupedMessages) {
             
-            bubble = [self buildMessageBubble:msg];
+            if (msg.form_key == nil) {
+                bubble = [self buildMessageBubble:msg];
+                
+            } else {
+                bubble = [self buildMessageWidget:msg];
+            }
             [tableDataSource addObject:bubble];
         }
     }
@@ -309,6 +337,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
     
 }
+
+#pragma mark - private helper methods
+
 - (NSMutableArray *) consolidateChatMessages:(NSMutableArray *)messages {
     int index = 0;
     NSMutableArray *results = [[NSMutableArray alloc] init];
@@ -331,9 +362,15 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             //                [(ChatMessageVO *)[dialogueMap objectForKey:countKey]].message = currentText;
             lastMessage = msg;
             index++;
+        } else if (msg.form_key != nil) {
+            // Embedded form.
+            lastMessage.message = currentText;
+            [dialogueMap setObject:lastMessage forKey:countKey];
+            //                [(ChatMessageVO *)[dialogueMap objectForKey:countKey]].message = currentText;
+            lastMessage = msg;
+            index++;
 
-        }
-        else if ([msg.contact_key isEqualToString:lastKey]) {
+        } else if ([msg.contact_key isEqualToString:lastKey]) {
             // continue with last speaker
             NSString *addText = nil;
             
@@ -353,7 +390,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 
             } else {
 //                ChatMessageVO *theMsg = (ChatMessageVO *)[dialogueMap objectForKey:countKey];
-                NSLog(@"currentText = %@", currentText);
+//                NSLog(@"currentText = %@", currentText);
                 
                 lastMessage.message = currentText;
                 [dialogueMap setObject:lastMessage forKey:countKey];
@@ -369,7 +406,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         
     }
     
-    NSLog(@"currentText = %@", currentText);
+//    NSLog(@"currentText = %@", currentText);
     lastMessage.message = currentText;
     [dialogueMap setObject:lastMessage forKey:countKey];
 
@@ -381,10 +418,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     return results;
 }
+
 - (NSBubbleData *) buildMessageBubble:(ChatMessageVO *)msg {
     CGRect msgFrame = CGRectMake(0, 0, 240, 80);
     NSBubbleData *bubble;
-    UIImage *img = nil;
+//    UIImage *img = nil;
     NSString *timeValue;
     NSString *nameValue;
 
@@ -399,14 +437,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         msgView.timeLabel.text = [msgTimeFormat stringFromDate:msg.createdAt];
         
         bubble = [NSBubbleData dataWithView:msgView date:msg.createdAt type:BubbleTypeMine insets:UIEdgeInsetsMake(2, 5, 2, 5)];
-        img = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
-        
-        if (img) {
-            NSLog(@"found image for key %@", msg.contact_key);
-        } else {
-            NSLog(@"Missing image for key %@", msg.contact_key);
-            
-        }
         bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
     } else {
         // someone else
@@ -424,16 +454,105 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         msgView.timeLabel.text = timeValue;
         
         bubble = [NSBubbleData dataWithView:msgView date:msg.createdAt type:BubbleTypeSomeoneElse insets:UIEdgeInsetsMake(2, 10, 2, 0)];
-        img = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
-        
-        if (img) {
-            NSLog(@"found image for key %@", msg.contact_key);
-        } else {
-            NSLog(@"Missing image for key %@", msg.contact_key);
-        }
         bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
     }
     return bubble;
+}
+
+- (NSBubbleData *) buildMessageWidget:(ChatMessageVO *)msg {
+    CGRect msgFrame = CGRectMake(0, 0, 240, 80);
+    NSBubbleData *bubble;
+    NSString *timeValue;
+    NSString *nameValue;
+
+    // @@@@@@@@@@@@@@@@@@@@@ RESUME HERE @@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    // GET form_key and lookup in formCache
+    FormVO *theForm = [formCache objectForKey:msg.form_key];
+    if (theForm == nil) {
+        NSLog(@"Cache lookup failed!!! >>>>>>>>>>>> %@", msg.form_key);
+        return nil;
+    }
+    NSBubbleType whoType;
+    BOOL isOwner;
+    UIEdgeInsets widgetInset;
+    
+    if ([msg.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
+        whoType = BubbleTypeMine;
+        isOwner = YES;
+        widgetInset = UIEdgeInsetsMake(5, 5, 5, 5);
+        nameValue = @"Me";
+    } else {
+        whoType = BubbleTypeSomeoneElse;
+        isOwner = NO;
+        widgetInset = UIEdgeInsetsMake(2, 10, 2, 0);
+        nameValue = (NSString *) [[DataModel shared].chat.namesMap objectForKey:msg.contact_key];
+    }
+
+    timeValue = [msgTimeFormat stringFromDate:msg.createdAt];
+
+    if (theForm.type == FormType_POLL) {
+        EmbedPollWidget *embedWidget = [[EmbedPollWidget alloc] initWithFrame:msgFrame andOptions:theForm.options isOwner:isOwner];
+        embedWidget.subjectLabel.text = theForm.name;
+        embedWidget.userInteractionEnabled = YES;
+        embedWidget.tag = 199;
+        
+        NSLog(@"widget height = %f", embedWidget.dynamicHeight);
+        msgFrame.size.height = embedWidget.dynamicHeight;
+        embedWidget.frame = msgFrame;
+
+        embedWidget.nameLabel.text = nameValue;
+        embedWidget.timeLabel.text = timeValue;
+
+        bubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:whoType insets:widgetInset];
+        bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
+        return bubble;
+        
+    } else if (theForm.type == FormType_RATING) {
+        EmbedRatingWidget *embedWidget = [[EmbedRatingWidget alloc] initWithFrame:msgFrame andOptions:theForm.options isOwner:isOwner];
+        embedWidget.subjectLabel.text = theForm.name;
+        embedWidget.userInteractionEnabled = YES;
+        embedWidget.tag = 299;
+        
+        NSLog(@"widget height = %f", embedWidget.dynamicHeight);
+        msgFrame.size.height = embedWidget.dynamicHeight;
+        embedWidget.frame = msgFrame;
+        
+        bubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:whoType insets:widgetInset];
+        bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
+        return bubble;
+        
+    } else if (theForm.type == FormType_RSVP) {
+        EmbedRSVPWidget *embedWidget = [[EmbedRSVPWidget alloc] initWithFrame:msgFrame andOptions:theForm.options isOwner:isOwner];
+        //                    embedWidget.subjectLabel.text = attachedForm.name;
+        embedWidget.whatText.text = theForm.description;
+        embedWidget.whereText.text = theForm.location;
+        
+        NSDate *dt = [DateTimeUtils readDateFromFriendlyDateTime:theForm.start_time];
+        
+        embedWidget.dateLabel.text = [DateTimeUtils printDatePartFromDate:dt];
+        embedWidget.timeLabel.text = [DateTimeUtils printTimePartFromDate:dt];
+        embedWidget.whatText.text = theForm.description;
+        embedWidget.whereText.text = theForm.location;
+        
+//        UIImage *img;
+//        if (attachedForm.imagefile != nil) {
+//            img = [formSvc loadFormImage:attachedForm.imagefile];
+//            embedWidget.roundPic.image = img;
+//        }
+        
+        embedWidget.userInteractionEnabled = YES;
+        embedWidget.tag = 399;
+
+        NSLog(@"widget height = %f", embedWidget.dynamicHeight);
+        msgFrame.size.height = embedWidget.dynamicHeight;
+        embedWidget.frame = msgFrame;
+        
+        bubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:whoType insets:widgetInset];
+        bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
+        return bubble;
+
+    }
+    return nil;
 }
 - (void)hideFormSelectorNotificationHandler:(NSNotification*)notification
 {
@@ -442,7 +561,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         attachmentType = attachedForm.type;
         hasAttachment = YES;
         NSLog(@"Form pick: %@", attachedForm.name);
-        
         
         switch (attachmentType) {
             case FormType_POLL:
@@ -458,10 +576,25 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 break;
         }
         
+        if (formSvc == nil) {
+            formSvc = [[FormManager alloc] init];
+        }
+        [formSvc apiListFormOptions:attachedForm.system_id callback:^(NSArray *results) {
+            attachedFormOptions = [[NSMutableArray alloc] initWithCapacity:results.count];
+            FormOptionVO *option;
+            
+            for (PFObject *result in results) {
+                option = [FormOptionVO readFromPFObject:result];
+                [attachedFormOptions addObject:option];
+            }
+            [self hideFormSelector];
+        }];
+        
+    } else {
+        [self hideFormSelector];
         
     }
     
-    [self hideFormSelector];
 }
 
 #pragma mark - UIBubbleTableViewDataSource implementation
@@ -1213,9 +1346,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     if (hasAttachment) {
         
         if (attachedForm != nil) {
-            FormManager *formSvc = [[FormManager alloc] init];
-            
-            NSMutableArray *formOptions = [formSvc listFormOptions:attachedForm.form_id];
             
             //        UIView *embedForm;
             NSBubbleData *formBubble;
@@ -1224,7 +1354,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             switch (attachmentType) {
                 case FormType_POLL:
                 {
-                    EmbedPollWidget *embedWidget = [[EmbedPollWidget alloc] initWithFrame:embedFrame andOptions:formOptions isOwner:NO];
+
+                    
+                    EmbedPollWidget *embedWidget = [[EmbedPollWidget alloc] initWithFrame:embedFrame andOptions:attachedFormOptions isOwner:NO];
                     embedWidget.subjectLabel.text = attachedForm.name;
                     embedWidget.userInteractionEnabled = YES;
                     embedWidget.tag = 199;
@@ -1235,12 +1367,64 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                     
                     formBubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:BubbleTypeMine insets:UIEdgeInsetsMake(5, 5, 5, 5)];
                     formBubble.avatar = (UIImage *)[self.imageMap objectForKey:[DataModel shared].user.contact_key];
+
+                    
+                    // ################# PARSE SAVE ##################
+                    ChatMessageVO *msg = [[ChatMessageVO alloc] init];
+                    
+                    msg.contact_key = [DataModel shared].user.contact_key;
+                    msg.chat_key = chatId;
+                    msg.form_key = attachedForm.system_id;
+                    
+                    if (self.inputField.text.length > 0) {
+                        msg.message = self.inputField.text;
+                    }
+                    
+                    NSBubbleData *bubble;
+                    
+                    bubble = [self buildMessageBubble:msg];
+                    
+                    [tableDataSource addObject:bubble];
+                    [self.bubbleTable reloadData];
+                    [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+                    [chatSvc apiSaveChatMessage:msg callback:^(PFObject *pfMessage) {
+                        if (pfMessage) {
+                            [chatSvc apiSaveChatForm:msg.chat_key formId:msg.form_key callback:^(PFObject *object) {
+                                // Build a target query: everyone in the chat room except for this device.
+                                // See also: http://blog.parse.com/2012/07/23/targeting-pushes-from-a-device/
+                                PFQuery *query = [PFInstallation query];
+                                [query whereKey:@"channels" equalTo:chatId];
+                                //            [query whereKey:@"installationId" notEqualTo:[PFInstallation currentInstallation].installationId];
+                                
+                                NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                      msg.message, @"alert",
+                                                      msg.contact_key, @"contact",
+                                                      chatId, @"chat",
+                                                      pfMessage.objectId, @"msg",
+                                                      nil];
+                                // Create time interval
+                                NSTimeInterval interval = 60*60*24*7; // 1 week
+                                
+                                // Send push notification with expiration interval
+                                PFPush *push = [[PFPush alloc] init];
+                                [push expireAfterTimeInterval:interval];
+                                [push setQuery:query];
+                                //            [push setChannel:chatId];
+                                //            [push setMessage:chatId];
+                                [push setData:data];
+                                [push sendPushInBackground];
+                            }];
+                        } else {
+                            NSLog(@"Chat message was not saved");
+                        }
+                    }];
+                    
                     
                     break;
                 }
                 case FormType_RATING:
                 {
-                    EmbedRatingWidget *embedWidget = [[EmbedRatingWidget alloc] initWithFrame:embedFrame andOptions:formOptions isOwner:NO];
+                    EmbedRatingWidget *embedWidget = [[EmbedRatingWidget alloc] initWithFrame:embedFrame andOptions:attachedFormOptions isOwner:NO];
                     embedWidget.subjectLabel.text = attachedForm.name;
                     embedWidget.userInteractionEnabled = YES;
                     embedWidget.tag = 299;
@@ -1258,7 +1442,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 }
                 case FormType_RSVP:
                 {
-                    EmbedRSVPWidget *embedWidget = [[EmbedRSVPWidget alloc] initWithFrame:embedFrame andOptions:formOptions isOwner:NO];
+                    EmbedRSVPWidget *embedWidget = [[EmbedRSVPWidget alloc] initWithFrame:embedFrame andOptions:attachedFormOptions isOwner:NO];
                     //                    embedWidget.subjectLabel.text = attachedForm.name;
                     embedWidget.whatText.text = attachedForm.description;
                     embedWidget.whereText.text = attachedForm.location;

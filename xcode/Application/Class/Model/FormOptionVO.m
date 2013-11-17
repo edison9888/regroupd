@@ -82,6 +82,10 @@
         text = [data valueForKey:@"position"];
         o.position = text.integerValue;
     }
+    if (data[@"photo"]) {
+        PFFile *pfPhoto = (PFFile *) [data objectForKey:@"photo"];
+        o.pfPhoto = pfPhoto;
+    }
     
     return o;
 }

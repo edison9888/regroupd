@@ -467,8 +467,6 @@
         FormManager *formSvc = [[FormManager alloc] init];
         
         NSString *filename_fmt = @"form_%@-%i_photo.png";
-        int lastId = 0;
-        lastId = [formSvc fetchLastOptionID];
 
         FormVO *form = [[FormVO alloc] init];
         
@@ -504,9 +502,9 @@
                 option.status = OptionStatus_DRAFT;
                 option.position = index;
                 [formSvc apiSaveFormOption:option formId:formId callback:^(PFObject *object) {
-                    if (index >= total) {
+                    NSLog(@"Save option %i", index);
+                    if (index == total) {
                         [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formSaveCompleteNotification object:nil]];
-                        
                     }
                     
                 }];

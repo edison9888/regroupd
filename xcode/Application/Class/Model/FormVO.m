@@ -24,6 +24,7 @@
 + (FormVO *) readFromDictionary:(NSDictionary *) dict {
     FormVO *o = [[FormVO alloc] init];
     NSString *text;
+    NSNumber *number;
     
     text = [dict valueForKey:@"form_id"];
     o.form_id = text.integerValue;
@@ -55,14 +56,14 @@
     text = [dict valueForKey:@"end_time"];
     o.end_time = text;
 
-    text = [dict valueForKey:@"allow_public"];
-    o.allow_public = text.integerValue;
+    number = [dict valueForKey:@"allow_public"];
+    o.allow_public = number;
     
-    text = [dict valueForKey:@"allow_share"];
-    o.allow_share = text.integerValue;
+    number = [dict valueForKey:@"allow_share"];
+    o.allow_share = number;
     
-    text = [dict valueForKey:@"allow_multiple"];
-    o.allow_multiple = text.integerValue;
+    number = [dict valueForKey:@"allow_multiple"];
+    o.allow_multiple = number;
 
     text = [dict valueForKey:@"created"];
     o.created = text;
@@ -77,7 +78,7 @@
 + (FormVO *) readFromPFObject:(PFObject *)data {
     FormVO *o = [[FormVO alloc] init];
     NSString *text;
-    
+    NSNumber *number;
     o.system_id = data.objectId;
     o.createdAt = data.createdAt;
     o.updatedAt = data.updatedAt;
@@ -97,14 +98,14 @@
     text = [data valueForKey:@"type"];
     o.type = text.integerValue;
 
-    text = [data valueForKey:@"allow_public"];
-    o.allow_public = text.integerValue;
+    number = [data valueForKey:@"allow_public"];
+    o.allow_public = number;
 
-    text = [data valueForKey:@"allow_share"];
-    o.allow_share = text.integerValue;
+    number = [data valueForKey:@"allow_share"];
+    o.allow_share = number;
 
-    text = [data valueForKey:@"allow_multiple"];
-    o.allow_multiple = text.integerValue;
+    number = [data valueForKey:@"allow_multiple"];
+    o.allow_multiple = number;
 
     return o;
 }

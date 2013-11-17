@@ -16,6 +16,7 @@
 @synthesize form;
 @synthesize chat;
 @synthesize group;
+@synthesize formsList;
 
 @synthesize contactCache;
 @synthesize timestampText;

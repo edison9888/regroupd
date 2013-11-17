@@ -85,6 +85,9 @@
     text = [data valueForKey:@"chat_key"];
     o.chat_key = text;
 
+    text = [data valueForKey:@"form_key"];
+    o.form_key = text;
+
     text = [data valueForKey:@"contact_key"];
     o.contact_key = text;
     

@@ -51,11 +51,16 @@ typedef enum {
 @property (nonatomic, retain) NSString *imagefile;
 @property int type;
 @property int status;
+
+@property (nonatomic, retain) NSDate *eventStartsAt;
+@property (nonatomic, retain) NSDate *eventEndsAt;
+
 @property (nonatomic, retain) NSString *start_time;
 @property (nonatomic, retain) NSString *end_time;
-@property int allow_public;
-@property int allow_share;
-@property int allow_multiple;
+
+@property (nonatomic, retain) NSNumber *allow_public;
+@property (nonatomic, retain) NSNumber *allow_share;
+@property (nonatomic, retain) NSNumber *allow_multiple;
 
 @property (nonatomic, retain) NSDate *createdAt;
 @property (nonatomic, retain) NSDate *updatedAt;

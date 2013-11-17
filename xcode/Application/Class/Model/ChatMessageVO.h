@@ -20,6 +20,8 @@
 @property (nonatomic, retain) NSString *chat_key;
 @property (nonatomic, retain) NSString *contact_key;
 @property (nonatomic, retain) NSString *user_key;
+@property (nonatomic, retain) NSString *form_key;
+
 @property (nonatomic, retain) NSString *message;
 @property (nonatomic, retain) NSString *attachment;
 @property int type;
