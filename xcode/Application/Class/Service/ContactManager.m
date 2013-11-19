@@ -624,7 +624,7 @@
         
         NSArray *people = (__bridge_transfer NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
         
-        ContactVO *c;
+        ContactVO *contact;
         NSLog(@"original addressBook count %i", people.count);
         // Only capture users who have mobile phone numbers
         for (int i=0; i<people.count; i++) {
@@ -635,61 +635,57 @@
             @try {
                 ABMultiValueRef phones = ABRecordCopyValue(person, kABPersonPhoneProperty);
                 
-                NSString* mobile=nil;
-                NSString* mobileLabel;
-                for (int i=0; i < ABMultiValueGetCount(phones); i++) {
-                    //NSString *phone = (NSString *)ABMultiValueCopyValueAtIndex(phones, i);
-                    //NSLog(@"%@", phone);
-                    mobileLabel = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phones, i);
-                    if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneIPhoneLabel]) {
-                        mobile = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
-                        continue;
-                        
-                    } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneMobileLabel]) {
-                        mobile = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
-                        continue;
-                    } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneMainLabel]) {
-                        mobile = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
-                        continue;
-                    }
-                }
+//                NSString* mobile=nil;
+                NSString* phonenumber;
                 
-                if (mobile != nil && mobile.length > 10) {
-                    mobile = [self formatPhoneNumberAsE164:mobile];
-//                    mobile = [self makePhoneId:mobile];
-                    c = [[ContactVO alloc] init];
-                    c.phone = mobile;
+//                NSString* mobileLabel;
+                for (int i=0; i < ABMultiValueGetCount(phones); i++) {
+                    phonenumber = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
+                    
+                    phonenumber = [self formatPhoneNumberAsE164:phonenumber];
+                    //                    mobile = [self makePhoneId:mobile];
+                    contact = [[ContactVO alloc] init];
+                    contact.phone = phonenumber;
                     CFStringRef firstName;
                     CFStringRef lastName;
                     
                     firstName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
                     lastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
                     if (firstName) {
-                        c.first_name = (__bridge NSString *)firstName;
+                        contact.first_name = (__bridge NSString *)firstName;
                     } else {
-                        c.first_name = @"";
+                        contact.first_name = @"";
                     }
                     if (lastName) {
-                        c.last_name = (__bridge NSString *)lastName;                        
+                        contact.last_name = (__bridge NSString *)lastName;
                     } else {
-                        c.last_name = @"";
+                        contact.last_name = @"";
                     }
                     
-                    //                if ([c.last_name isEqualToString:kLiteralNull]) {
-                    //                    c.last_name = @"";
-                    //                }
-                    c.record_id = recordId;
-                    [peopleData addObject:c];
+                    contact.record_id = recordId;
+                    [peopleData addObject:contact];
                     
                     if (firstName)
                         CFRelease(firstName);
                     if (lastName)
                         CFRelease(lastName);
                     
-                } else {
-                    // Ignore contact without mobile phone
-                    
+                    //NSString *phone = (NSString *)ABMultiValueCopyValueAtIndex(phones, i);
+                    //NSLog(@"%@", phone);
+//                    mobileLabel = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phones, i);
+//                    if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneIPhoneLabel]) {
+//                        mobile = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
+//                        continue;
+//                        
+//                    } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneMobileLabel]) {
+//                        mobile = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
+//                        continue;
+//                    } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneMainLabel]) {
+//                        mobile = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
+//                        continue;
+//                    }
                 }
+                
                 
             }
             @catch (NSException *exception) {
@@ -702,6 +698,8 @@
     
     return peopleData;
 }
+
+// http://en.wikipedia.org/wiki/E.164
 - (NSString *) formatPhoneNumberAsE164:(NSString *)phone {
     NSString *result = nil;
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];

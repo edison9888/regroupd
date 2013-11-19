@@ -10,10 +10,13 @@
 #import <QuartzCore/QuartzCore.h>
 #import "FormOptionVO.h"
 #import "FormManager.h"
+#import "UIColor+ColorWithHex.h"
 
 #define kInitialY   67
 #define kEmbedOptionWidth   230
 #define kEmbedOptionHeight  80
+#define kDetailsBackFoldWidth   9
+
 
 @implementation EmbedPollWidget
 
@@ -48,11 +51,6 @@
                 embedOption.roundPic.file = opt.pfPhoto;
                 [embedOption.roundPic loadInBackground];
             }
-//            if (opt.imagefile != nil) {
-//                UIImage *img = nil;
-//                img = [formSvc loadFormImage:opt.imagefile];
-//                embedOption.roundPic.image =img;
-//            }
 
             embedOption.fieldLabel.text = opt.name;
             
@@ -72,11 +70,17 @@
             self.doneButton.hidden = YES;
             self.leftCallout.hidden = YES;
             self.rightCallout.hidden = NO;
+            [self.subjectLabel setTextColor:[UIColor whiteColor]];
+            [self.timeLabel setTextColor:[UIColor whiteColor]];
+            [self.nameLabel setTextColor:[UIColor colorWithHexValue:0x28CFEA]];
             formLocked = YES;
         } else {
             formLocked = NO;
             self.rightCallout.hidden = YES;
             self.leftCallout.hidden = NO;
+            [self.subjectLabel setTextColor:[UIColor blackColor]];
+            [self.nameLabel setTextColor:[UIColor colorWithHexValue:0x0d7dac]];
+            [self.timeLabel setTextColor:[UIColor blackColor]];
             
             itemFrame = self.doneView.frame;
             itemFrame.origin.y = ypos;
@@ -123,6 +127,7 @@
 
 }
 - (IBAction)tapDoneButton {
+    NSLog(@"%s", __FUNCTION__);
     self.dynamicHeight -= self.doneButton.frame.size.height;
     self.doneButton.enabled = NO;
     formLocked = YES;

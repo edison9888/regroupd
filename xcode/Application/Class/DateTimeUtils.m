@@ -93,8 +93,9 @@ static NSDateFormatter *shortDateFormatter;
 //2013-10-11 3:30 PM
 + (NSDate *) readDateFromFriendlyDateTime:(NSString *)dbDate {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd h:mm a"];
-    
+    [dateFormatter setDateFormat:@"MMM, d yyyy h:mm a"];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+
     return [dateFormatter dateFromString:dbDate];
 }
 

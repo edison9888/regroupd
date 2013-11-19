@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "FormVO.h"
 #import "FormOptionVO.h"
+#import "FormResponseVO.h"
+
 
 @interface FormManager : NSObject {
     
@@ -37,8 +39,12 @@
 - (void) apiLoadForm:(NSString *)formKey fetchAll:(BOOL)fetchAll callback:(void (^)(FormVO *form))callback;
 - (void) apiListForms:(NSString *)contactKey callback:(void (^)(NSArray *results))callback;
 
-// Form API
+// Form Options API
 - (void) apiSaveFormOption:(FormOptionVO *)option formId:(NSString *)formId callback:(void (^)(PFObject *object))callback;
 - (void) apiListFormOptions:(NSString *)formId callback:(void (^)(NSArray *results))callback;
+
+// Form Response API
+- (void)apiSaveFormResponse:(FormResponseVO *)response formId:(NSString *)formId callback:(void (^)(PFObject *object))callback;
+
 
 @end

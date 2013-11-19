@@ -16,7 +16,6 @@
 @synthesize viewController = _viewController;
 @synthesize networkStatus;
 
-@synthesize hud;
 @synthesize hostReach;
 @synthesize internetReach;
 @synthesize wifiReach;

@@ -147,12 +147,12 @@
     }
     
     [chatSvc apiListChats:[DataModel shared].user.contact_key callback:^(NSArray *results) {
-        NSLog(@"Callback response objectId %i", results.count);
+        NSLog(@"apiListChats response count %i", results.count);
         ChatVO *chat;
-        NSMutableArray *namesArray = [[NSMutableArray alloc] init];
-        NSMutableDictionary *namesMap = [[NSMutableDictionary alloc] init];
-        unknownContactKeys = [[NSMutableArray alloc] init];
         for (PFObject* result in results) {
+            NSMutableArray *namesArray = [[NSMutableArray alloc] init];
+            NSMutableDictionary *namesMap = [[NSMutableDictionary alloc] init];
+            unknownContactKeys = [[NSMutableArray alloc] init];
 //            data = [DataModel readPFObjectAsDictionary:result];
             chat = [ChatVO readFromPFObject:result];
             
@@ -172,7 +172,7 @@
                     } else {
                         contact = (ContactVO *) [resultMap objectForKey:key];
                         if (contact.first_name != nil && contact.last_name != nil) {
-                            name = contact.fullname;
+                            name = contact.fullname;                            
                             [namesArray addObject:name];
                             [namesMap setObject:name forKey:contact.system_id];
                         } else if (contact.phone != nil) {

@@ -535,18 +535,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     if (isOK) {
         FormManager *formSvc = [[FormManager alloc] init];
 
-        NSString *filename_fmt = @"form_%@-%i_photo.png";
-        
-        NSString *imagefile;
-        
-        int lastId = 0;
-        if (formImage != nil) {
-            lastId = [formSvc fetchLastFormID];
-            lastId += 1;
-            imagefile = [NSString stringWithFormat:filename_fmt, lastId];
-            
-            [formSvc saveFormImage:formImage withName:imagefile];
-        }
 
         // Read date fields and combine
         NSString *dtFormat = @"%@ %@";
@@ -572,49 +560,48 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         form.name = self.subjectField.text;
         form.location = self.whereField.text;
         form.description = self.descriptionField.text;
-        form.start_time = start_time;
-        form.end_time = end_time;
+//        form.start_time = start_time;
+//        form.end_time = end_time;
         form.type = FormType_RSVP;
         form.status = FormStatus_DRAFT;
 
         form.eventStartsAt = date1;
         form.eventEndsAt = date2;
         
-        [formSvc apiSaveForm:form callback:^(PFObject *pfForm) {
-            NSString *formId = pfForm.objectId;
-            
-            NSArray *answers = @[@"Yes", @"No", @"Maybe"];
-            
-            for (int i=1; i<=answers.count; i++) {
-                
-                FormOptionVO *option;
-                
-                option = [[FormOptionVO alloc] init];
-                
-                option.name =[answers objectAtIndex:i-1];
-                option.position = i;
-                
-                [formSvc apiSaveFormOption:option formId:formId callback:^(PFObject *object) {
-                    NSLog(@"Save option %i", i + 1);
-                    if (i == answers.count) {
-                        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formSaveCompleteNotification object:nil]];
-                    }
-                    
-                }];
-            }
-            
-        }];
-//        int formId = [formSvc saveForm:form];
-//        if (formId > 0) {
-//            NSLog(@"Form saved with form_id %i", formId);
+        if (formImage != nil) {
+            form.photo = formImage;
+            NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
+            NSString *filename = [NSString stringWithFormat:@"form_rsvp_%f.png", seconds];
+            form.imagefile = filename;
+        }
+
+//        [formSvc apiSaveForm:form callback:^(PFObject *pfForm) {
+//            NSString *formId = pfForm.objectId;
 //            
-////            for (FormOptionVO *formOption in formOptions) {
-////                formOption.form_id = formId;
-////                [formSvc saveOption:formOption];
-////            }
-//            [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Survey created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-//        }
+//            NSArray *answers = @[@"Yes", @"No", @"Maybe"];
+//            
+//            for (int i=1; i<=answers.count; i++) {
+//                
+//                FormOptionVO *option;
+//                
+//                option = [[FormOptionVO alloc] init];
+//                
+//                option.name =[answers objectAtIndex:i-1];
+//                option.position = i;
+//                
+//                [formSvc apiSaveFormOption:option formId:formId callback:^(PFObject *object) {
+//                    NSLog(@"Save option %i", i + 1);
+//                    if (i == answers.count) {
+//                        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formSaveCompleteNotification object:nil]];
+//                    }
+//                    
+//                }];
+//            }
+//            
+//        }];
+
         
+
     } else {
         // Data not complete. 
         [[[UIAlertView alloc] initWithTitle:@"Sorry" message:@"Please complete all fields." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];

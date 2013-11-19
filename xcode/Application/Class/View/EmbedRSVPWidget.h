@@ -26,8 +26,14 @@
 @property float dynamicHeight;
 
 @property (nonatomic, strong) IBOutlet UIView *headerView;
-@property (nonatomic, strong) IBOutlet UIImageView *roundPic;
-@property (nonatomic, strong) IBOutlet BrandUILabel *dateLabel;
+@property (nonatomic, strong) IBOutlet PFImageView *roundPic;
+@property (nonatomic, strong) IBOutlet BrandUILabel *eventDateLabel;
+@property (nonatomic, strong) IBOutlet BrandUILabel *eventTimeLabel;
+
+@property (nonatomic, strong) IBOutlet UIImageView *rightCallout;
+@property (nonatomic, strong) IBOutlet UIImageView *leftCallout;
+
+@property (nonatomic, strong) IBOutlet BrandUILabel *nameLabel;
 @property (nonatomic, strong) IBOutlet BrandUILabel *timeLabel;
 
 

@@ -113,14 +113,24 @@ CREATE TABLE IF NOT EXISTS form_option (
 );
 
 CREATE TABLE IF NOT EXISTS phonebook ( 
-record_id BIGINT PRIMARY KEY,
+id INTEGER PRIMARY KEY,	
+record_id BIGINT,
 contact_key TEXT,
 first_name TEXT,
 last_name TEXT,
 phone TEXT,
 status INT,
-timestamp INTEGER
+timestamp REAL
 );
+
+CREATE TABLE IF NOT EXISTS phonedump ( 
+id INTEGER PRIMARY KEY,	
+record_id BIGINT,
+first_name TEXT,
+last_name TEXT,
+phone TEXT
+);
+
 
 insert into contact (first_name, last_name, phone) values ('Hugh', 'Lang', '1-646-498-6305');
 

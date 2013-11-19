@@ -354,33 +354,73 @@
 - (void) apiSaveForm:(FormVO *)form callback:(void (^)(PFObject *))callback {
     NSLog(@"%s", __FUNCTION__);
     
-    PFObject *data = [PFObject objectWithClassName:kFormDB];
-    
-    data[@"name"] = form.name;
-    data[@"type"] = [NSNumber numberWithInt:form.type];
-    data[@"user"] = [PFUser currentUser];
-    
-    if (form.location != nil) {
-        data[@"location"] = form.location;
-    }
-    if (form.description != nil) {
-        data[@"description"] = form.description;
-    }
-    if (form.eventStartsAt != nil) {
-        data[@"eventStartsAt"] = form.eventStartsAt;
-    }
-    if (form.eventEndsAt != nil) {
-        data[@"eventEndsAt"] = form.eventEndsAt;
-    }
-    
-    data[@"name"] = form.name;
+    if (form.photo == nil) {
 
-    data[@"contact_key"] = [DataModel shared].user.contact_key;
-    
-    [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        NSLog(@"Saved form with objectId %@", data.objectId);
-        callback(data);
-    }];
+        PFObject *data = [PFObject objectWithClassName:kFormDB];
+        
+        data[@"name"] = form.name;
+        data[@"type"] = [NSNumber numberWithInt:form.type];
+        data[@"user"] = [PFUser currentUser];
+        
+        if (form.location != nil) {
+            data[@"location"] = form.location;
+        }
+        if (form.description != nil) {
+            data[@"description"] = form.description;
+        }
+        if (form.eventStartsAt != nil) {
+            data[@"eventStartsAt"] = form.eventStartsAt;
+        }
+        if (form.eventEndsAt != nil) {
+            data[@"eventEndsAt"] = form.eventEndsAt;
+        }
+        
+        data[@"name"] = form.name;
+        
+        data[@"contact_key"] = [DataModel shared].user.contact_key;
+        
+        [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            NSLog(@"Saved form with objectId %@", data.objectId);
+            callback(data);
+        }];
+    } else {
+        
+        NSData *imageData = UIImagePNGRepresentation(form.photo);
+        
+        PFFile *fileObject = [PFFile fileWithName:form.imagefile data:imageData];
+        
+        [fileObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            
+            PFObject *data = [PFObject objectWithClassName:kFormDB];
+
+            data[@"name"] = form.name;
+            data[@"type"] = [NSNumber numberWithInt:form.type];
+            data[@"user"] = [PFUser currentUser];
+            data[@"contact_key"] = [DataModel shared].user.contact_key;
+            
+            data[@"photo"] = fileObject;
+            
+            if (form.location != nil) {
+                data[@"location"] = form.location;
+            }
+            if (form.description != nil) {
+                data[@"description"] = form.description;
+            }
+            if (form.eventStartsAt != nil) {
+                data[@"eventStartsAt"] = form.eventStartsAt;
+            }
+            if (form.eventEndsAt != nil) {
+                data[@"eventEndsAt"] = form.eventEndsAt;
+            }
+            
+            [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                NSLog(@"Saved form with objectId %@", data.objectId);
+                callback(data);
+            }];
+            
+        }];
+
+    }
 }
 - (void) apiLoadForm:(NSString *)formKey fetchAll:(BOOL)fetchAll callback:(void (^)(FormVO *form))callback {
     NSLog(@"%s", __FUNCTION__);
@@ -493,6 +533,30 @@
     }];
     
 }
+
+#pragma mark - Form Response API
+
+- (void)apiSaveFormResponse:(FormResponseVO *)response formId:(NSString *)formId callback:(void (^)(PFObject *object))callback
+{
+    PFObject *data = [PFObject objectWithClassName:kFormResponseDB];
+    
+    data[@"form"] = [PFObject objectWithoutDataWithClassName:kFormDB objectId:response.form_key];
+    data[@"contact"] = [PFObject objectWithoutDataWithClassName:kContactDB objectId:response.contact_key];
+    if (response.option_key != nil) {
+        data[@"option_key"] = response.option_key;
+    }
+    if (response.option_keys != nil) {
+        data[@"option_keys"] = response.option_keys;
+    }
+    if (response.rating != nil) {
+        data[@"rating"] = response.rating;
+    }
+    [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        NSLog(@"Saved form option with objectId %@", data.objectId);
+        callback(data);
+    }];
+}
+
 
 
 @end

@@ -8,6 +8,7 @@
 #import <UIKit/UIKit.h>
 #import "PresentationViewController.h"
 #import "TabBarView.h"
+#import "MBProgressHUD.h"
 
 @interface ViewController : PresentationViewController {
     TabBarView *brandNav;
@@ -26,6 +27,7 @@
 }
 
 @property(nonatomic, strong) TabBarView *brandNav;
+@property (nonatomic, strong) MBProgressHUD *hud;
 
 //@property (nonatomic, strong) IBOutlet UIView *popOverNavigation;
 //@property (nonatomic, strong) UIView *overlayView;

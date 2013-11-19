@@ -105,6 +105,7 @@
 		1E2C7EA817E4FFCB0043E28D /* S1.1_button_enter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E2C7E8717E4FFCB0043E28D /* S1.1_button_enter@2x.png */; };
 		1E2C7EA917E4FFCB0043E28D /* full_bg_aqua@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E2C7E8817E4FFCB0043E28D /* full_bg_aqua@2x.png */; };
 		1E2C7EAC17E501940043E28D /* BrandUILabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C7EAB17E501940043E28D /* BrandUILabel.m */; };
+		1E3026AD1839CB77007AFF1E /* FormResponseVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3026AC1839CB77007AFF1E /* FormResponseVO.m */; };
 		1E37C2A017FE2B8D0029D95F /* SelectedItemWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E37C29F17FE2B8D0029D95F /* SelectedItemWidget.m */; };
 		1E37C2A317FE31080029D95F /* UIView+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E37C2A217FE31080029D95F /* UIView+Resize.m */; };
 		1E3ACA451804E24C00A6E6B2 /* splash-568@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3ACA441804E24C00A6E6B2 /* splash-568@2x.png */; };
@@ -635,6 +636,8 @@
 		1E2C7E8817E4FFCB0043E28D /* full_bg_aqua@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "full_bg_aqua@2x.png"; sourceTree = "<group>"; };
 		1E2C7EAA17E501940043E28D /* BrandUILabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrandUILabel.h; sourceTree = "<group>"; };
 		1E2C7EAB17E501940043E28D /* BrandUILabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrandUILabel.m; sourceTree = "<group>"; };
+		1E3026AB1839CB77007AFF1E /* FormResponseVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormResponseVO.h; sourceTree = "<group>"; };
+		1E3026AC1839CB77007AFF1E /* FormResponseVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormResponseVO.m; sourceTree = "<group>"; };
 		1E37C29E17FE2B8D0029D95F /* SelectedItemWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectedItemWidget.h; sourceTree = "<group>"; };
 		1E37C29F17FE2B8D0029D95F /* SelectedItemWidget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectedItemWidget.m; sourceTree = "<group>"; };
 		1E37C2A117FE31080029D95F /* UIView+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Resize.h"; sourceTree = "<group>"; };
@@ -1848,6 +1851,8 @@
 				1E88804917F4BCF10070116C /* FormVO.m */,
 				1E88804B17F4BD930070116C /* FormOptionVO.h */,
 				1E88804C17F4BD940070116C /* FormOptionVO.m */,
+				1E3026AB1839CB77007AFF1E /* FormResponseVO.h */,
+				1E3026AC1839CB77007AFF1E /* FormResponseVO.m */,
 				1E1A9A9217FE4A4C008D81E6 /* ChatVO.h */,
 				1E1A9A9317FE4A4C008D81E6 /* ChatVO.m */,
 				1E1A9A9517FE4C08008D81E6 /* ChatMessageVO.h */,
@@ -2182,15 +2187,15 @@
 		1EC44C7E18130CE700F4A2C2 /* Contacts */ = {
 			isa = PBXGroup;
 			children = (
+				1EC44C1418130CC000F4A2C2 /* ContactsHomeVC.h */,
+				1EC44C1518130CC000F4A2C2 /* ContactsHomeVC.m */,
+				1EC44C1618130CC100F4A2C2 /* ContactsHomeVC.xib */,
 				1EC44C2C18130CC100F4A2C2 /* GroupInfoVC.h */,
 				1EC44C2D18130CC100F4A2C2 /* GroupInfoVC.m */,
 				1EC44C2E18130CC100F4A2C2 /* GroupInfoVC.xib */,
 				1EC44C1118130CC000F4A2C2 /* ContactInfoVC.h */,
 				1EC44C1218130CC000F4A2C2 /* ContactInfoVC.m */,
 				1EC44C1318130CC000F4A2C2 /* ContactInfoVC.xib */,
-				1EC44C1418130CC000F4A2C2 /* ContactsHomeVC.h */,
-				1EC44C1518130CC000F4A2C2 /* ContactsHomeVC.m */,
-				1EC44C1618130CC100F4A2C2 /* ContactsHomeVC.xib */,
 				1EC44C1A18130CC100F4A2C2 /* EditGroupVC.h */,
 				1EC44C1B18130CC100F4A2C2 /* EditGroupVC.m */,
 				1EC44C1C18130CC100F4A2C2 /* EditGroupVC.xib */,
@@ -2841,6 +2846,7 @@
 				1E802635182ACC31006FA827 /* MyProfileVC.m in Sources */,
 				1E8333D4179792F600B60612 /* GTMNSString+HTML.m in Sources */,
 				1E8333D8179792F600B60612 /* QSFileManager.m in Sources */,
+				1E3026AD1839CB77007AFF1E /* FormResponseVO.m in Sources */,
 				1E8333DA179792F600B60612 /* QSHttpClient.m in Sources */,
 				1E8333DC179792F600B60612 /* QSStrings.m in Sources */,
 				1EC44C7A18130CC100F4A2C2 /* SettingsHomeVC.m in Sources */,

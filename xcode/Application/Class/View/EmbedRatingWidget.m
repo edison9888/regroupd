@@ -10,8 +10,9 @@
 #import <QuartzCore/QuartzCore.h>
 #import "FormOptionVO.h"
 #import "FormManager.h"
+#import "UIColor+ColorWithHex.h"
 
-#define kInitialY   55
+#define kInitialY   67
 #define kEmbedOptionWidth   230
 #define kEmbedOptionHeight  90
 
@@ -29,11 +30,11 @@
 {
     NSLog(@"===== %s", __FUNCTION__);
     self = [super initWithFrame:frame];
-//
-//- (id)initWithOptions:(NSMutableArray *)formOptions
-//{
-//    NSLog(@"===== %s", __FUNCTION__);
-//   self = [super init];
+    //
+    //- (id)initWithOptions:(NSMutableArray *)formOptions
+    //{
+    //    NSLog(@"===== %s", __FUNCTION__);
+    //   self = [super init];
     if (self) {
         options = [[NSMutableArray alloc] initWithCapacity:formOptions.count];
         
@@ -46,7 +47,7 @@
         CGRect itemFrame;
         int index=0;
         FormManager *formSvc = [[FormManager alloc]init];
-
+        
         for (FormOptionVO* opt in formOptions) {
             index++;
             itemFrame = CGRectMake(xpos, ypos, kEmbedOptionWidth, kEmbedOptionHeight);
@@ -54,10 +55,15 @@
             [embedOption setIndex:index];
             embedOption.tag = k_CHAT_OPTION_BASETAG + index;
             embedOption.userInteractionEnabled = YES;
-
+            
             embedOption.fieldLabel.text = opt.name;
             [embedOption setRating:5];
-
+            
+            if (opt.pfPhoto != nil) {
+                embedOption.roundPic.file = opt.pfPhoto;
+                [embedOption.roundPic loadInBackground];
+            }
+            
             if (opt.imagefile != nil) {
                 UIImage *img = nil;
                 img = [formSvc loadFormImage:opt.imagefile];
@@ -78,10 +84,19 @@
         }
         if (owner) {
             self.doneButton.hidden = YES;
+            self.leftCallout.hidden = YES;
+            self.rightCallout.hidden = NO;
+            [self.subjectLabel setTextColor:[UIColor whiteColor]];
+            [self.timeLabel setTextColor:[UIColor whiteColor]];
+            [self.nameLabel setTextColor:[UIColor colorWithHexValue:0x28CFEA]];
             formLocked = YES;
         } else {
             formLocked = NO;
-            self.doneButton.enabled = YES;
+            self.rightCallout.hidden = YES;
+            self.leftCallout.hidden = NO;
+            [self.subjectLabel setTextColor:[UIColor blackColor]];
+            [self.nameLabel setTextColor:[UIColor colorWithHexValue:0x0d7dac]];
+            [self.timeLabel setTextColor:[UIColor blackColor]];
             
             itemFrame = self.doneView.frame;
             itemFrame.origin.y = ypos;
@@ -99,10 +114,10 @@
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
-//    [super touchesBegan:touches withEvent:event];
-//    [self.nextResponder touchesBegan:touches withEvent:event];
+    //    [super touchesBegan:touches withEvent:event];
+    //    [self.nextResponder touchesBegan:touches withEvent:event];
     CGPoint locationPoint = [[touches anyObject] locationInView:self];
-
+    
     float hitY = locationPoint.y;
     float hitX = locationPoint.x;
     float yOffset = 0;
@@ -113,34 +128,36 @@
     
     float leftEdge = kSliderRelativeOriginX - kSliderMargin;
     float rightEdge = kSliderRelativeOriginX + kSliderWidth + kSliderMargin;
-
+    
     float topEdge = 0;
     float bottomEdge = 0;
     
-    
-    if (hitX >= leftEdge && hitX <= rightEdge) {
-        int i=0;
-
-        for (EmbedRatingOption* opt in options) {
-            topEdge = yOffset + kSliderRelativeOriginY - kSliderMargin;
-            bottomEdge = yOffset + kSliderRelativeOriginY + kSliderHeight + kSliderMargin;
-//            NSLog(@"hit zone with left %f, top %f, right %f, bottom %f", leftEdge, topEdge, rightEdge, bottomEdge);
-            
-            if (hitY >= topEdge && hitY <= bottomEdge) {
-                
-                float hitPercent = (hitX - leftEdge) / (rightEdge - leftEdge);
-                NSLog(@"hit success at %f / %f with est. percent %f", hitX, hitY, hitPercent);
-                
-                [opt setRating:(hitPercent * 10)];
-                
-            }
-            yOffset += kEmbedOptionHeight;
-            i++;
-        }
-    } else {
+    if (!formLocked) {
         
+        if (hitX >= leftEdge && hitX <= rightEdge) {
+            int i=0;
+            
+            for (EmbedRatingOption* opt in options) {
+                topEdge = yOffset + kSliderRelativeOriginY - kSliderMargin;
+                bottomEdge = yOffset + kSliderRelativeOriginY + kSliderHeight + kSliderMargin;
+                //            NSLog(@"hit zone with left %f, top %f, right %f, bottom %f", leftEdge, topEdge, rightEdge, bottomEdge);
+                
+                if (hitY >= topEdge && hitY <= bottomEdge) {
+                    
+                    float hitPercent = (hitX - leftEdge) / (rightEdge - leftEdge);
+                    NSLog(@"hit success at %f / %f with est. percent %f", hitX, hitY, hitPercent);
+                    
+                    [opt setRating:(hitPercent * 10)];
+                    
+                }
+                yOffset += kEmbedOptionHeight;
+                i++;
+            }
+        } else {
+            
+        }
     }
-
+    
 }
 - (IBAction)tapDoneButton {
     self.dynamicHeight -= self.doneButton.frame.size.height;

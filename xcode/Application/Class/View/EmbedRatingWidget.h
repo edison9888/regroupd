@@ -23,8 +23,16 @@
 
 @property (nonatomic, strong) IBOutlet BrandUILabel *typeLabel;
 @property (nonatomic, strong) IBOutlet BrandUILabel *subjectLabel;
+
 @property (nonatomic, strong) IBOutlet UIView *doneView;
 @property (nonatomic, strong) IBOutlet UIButton *doneButton;
+
+@property (nonatomic, strong) IBOutlet UIImageView *rightCallout;
+@property (nonatomic, strong) IBOutlet UIImageView *leftCallout;
+
+@property (nonatomic, strong) IBOutlet BrandUILabel *nameLabel;
+@property (nonatomic, strong) IBOutlet BrandUILabel *timeLabel;
+
 
 @property (nonatomic, strong) IBOutlet UIView *inputHolder;
 

@@ -7,6 +7,8 @@
 //
 
 #import "SlideViewController.h"
+#import "MBProgressHUD.h"
+
 #import "FancyCheckbox.h" 
 #import "FancyTextField.h"
 #import "FancyTextView.h"
@@ -79,6 +81,8 @@
 
 @property (nonatomic, retain) UIImagePickerController* imagePickerVC;
 @property (nonatomic, retain) FormSelectorVC* formSelectorVC;
+@property (nonatomic, strong) MBProgressHUD *hud;
+
 
 @property (nonatomic, retain) IBOutlet BrandUILabel *navTitle;
 @property (nonatomic, strong) IBOutlet UIBubbleTableView *bubbleTable;

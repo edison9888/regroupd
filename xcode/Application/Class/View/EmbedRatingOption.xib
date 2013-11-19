@@ -25,7 +25,7 @@
                     <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="14"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="25" userLabel="Image View - thumbnail">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="25" userLabel="Image View - thumbnail" customClass="PFImageView">
                     <rect key="frame" x="8" y="11" width="64" height="64"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>

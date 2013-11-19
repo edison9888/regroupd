@@ -8,6 +8,8 @@
 
 #import "SlideViewController.h"
 #import "SQLiteDB.h"
+#import "MBProgressHUD.h"
+
 #import "CCSearchBar.h"
 #import "ContactVO.h"
 #import "ContactManager.h"
@@ -28,6 +30,7 @@
     ContactManager *contactSvc;
     
 }
+@property (nonatomic, strong) MBProgressHUD *hud;
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
 @property(retain) NSMutableArray *availableContacts;

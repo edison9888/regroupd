@@ -22,7 +22,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="  POLL" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="38" userLabel="BrandUI Label - type" customClass="BrandUILabel">
-                    <rect key="frame" x="7" y="18" width="54" height="20"/>
+                    <rect key="frame" x="7" y="20" width="54" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.15686274509803921" green="0.81176470588235294" blue="0.91764705882352937" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="13"/>
@@ -30,11 +30,11 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="chat_callout_row_left.png" id="GYI-OW-Zkb" userLabel="Image View - callout - left">
-                    <rect key="frame" x="-17" y="43" width="35" height="35"/>
+                    <rect key="frame" x="-20" y="40" width="35" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="chat_callout_row_right.png" id="LT6-h6-pXV" userLabel="Image View - callout - right">
-                    <rect key="frame" x="215" y="43" width="35" height="35"/>
+                    <rect key="frame" x="218" y="40" width="35" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="19.32" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EEM-NQ-JQ6" userLabel="BrandUI Label - time" customClass="BrandUILabel">
@@ -58,11 +58,10 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view tag="66" contentMode="scaleToFill" id="b9w-v1-sFq" userLabel="View - see details view">
-                    <rect key="frame" x="114" y="15" width="126" height="36"/>
+                    <rect key="frame" x="119" y="12" width="126" height="36"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="see_details.png" id="CJX-eg-I0L" userLabel="Image View - see details">

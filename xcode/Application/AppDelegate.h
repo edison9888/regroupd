@@ -17,7 +17,6 @@
 
 - (BOOL)isParseReachable;
 
-@property (nonatomic, strong) MBProgressHUD *hud;
 @property (nonatomic, strong) Reachability *hostReach;
 @property (nonatomic, strong) Reachability *internetReach;
 @property (nonatomic, strong) Reachability *wifiReach;

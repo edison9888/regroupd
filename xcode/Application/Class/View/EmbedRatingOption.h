@@ -17,7 +17,7 @@
 
 @property (nonatomic, strong) IBOutlet UIView *sliderGuide;
 
-@property (nonatomic, strong) IBOutlet UIImageView *roundPic;
+@property (nonatomic, strong) IBOutlet PFImageView *roundPic;
 @property (nonatomic, strong) IBOutlet UIImageView *divider;
 
 @property (nonatomic, strong) IBOutlet BrandUILabel *fieldLabel;

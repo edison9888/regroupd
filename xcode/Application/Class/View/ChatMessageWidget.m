@@ -77,7 +77,7 @@
                 self.photoView.file = msg.pfPhoto;
                 [self.photoView loadInBackground];
             }
-            self.dynamicHeight += kContentHeight + 5;
+            self.dynamicHeight += kContentHeight + 10;
             [self addSubview:self.photoView];
             [self bringSubviewToFront:self.photoView];
         }
