@@ -138,6 +138,9 @@
 {
     NSLog(@"%s", __FUNCTION__);
     self.tableData =[[NSMutableArray alloc]init];
+    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [self.hud setLabelText:@"Loading"];
+    [self.hud setDimBackground:YES];
 
     if (chatSvc == nil) {
         chatSvc = [[ChatManager alloc] init];
@@ -197,11 +200,12 @@
             chat.namesMap = namesMap;
             [tableData addObject:chat];
             
-
+            
             // Finish lookup for unknown contacts and reload when done.
             if (unknownContactKeys.count > 0) {
                 [self lookupUnknownContacts];
             } else {
+                [MBProgressHUD hideHUDForView:self.view animated:NO];
                 [self.theTableView reloadData];
                 
             }

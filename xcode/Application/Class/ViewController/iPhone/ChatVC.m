@@ -312,9 +312,26 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSBubbleData *bubble;
     if (notification.object) {
         ChatVO *theChat = (ChatVO *) notification.object;
+        int index = 0;
+//        for (ChatMessageVO* msg in theChat.messages) {
+//            index++;
+//            NSLog(@"%i grouped message %@", index, msg.message);
+//            if (msg.form_key == nil) {
+//                bubble = [self buildMessageBubble:msg];
+//                
+//            } else {
+//                bubble = [self buildMessageWidget:msg];
+//            }
+//            if (bubble == nil) {
+//                NSLog(@"bubble is nil");
+//            } else {
+//                [tableDataSource addObject:bubble];
+//            }
+//        }
+
+        
         NSMutableArray *groupedMessages = [self consolidateChatMessages:theChat.messages];
         NSLog(@"Grouped messages count %i", groupedMessages.count);
-        int index = 0;
         for (ChatMessageVO* msg in groupedMessages) {
             index++;
             NSLog(@"%i grouped message %@", index, msg.message);
@@ -362,7 +379,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     int index = 0;
     NSMutableArray *results = [[NSMutableArray alloc] init];
     // need array as list of keys
-    NSMutableArray *speakerKeys = [[NSMutableArray alloc] init];
     NSMutableDictionary *dialogueMap = [[NSMutableDictionary alloc] init];
     ChatMessageVO *lastMessage;
     NSString *lastKey = @"";
@@ -372,6 +388,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSString *currentText;
     NSNumber *countKey;
     if (messages.count > 0) {
+        /*
+         capture message text if same speaker.
+         Q: are messages losing createdAt date?
+         
+         Remove whitespace
+         
+         */
         for (ChatMessageVO *msg in messages) {
             countKey = [NSNumber numberWithInt:index];
             if (msg.pfPhoto != nil) {
@@ -402,24 +425,23 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 
             } else {
                 // new speaker. saved currentText for last person
-                
+                // If lastKey == "", then initialize lastMessage
                 if ([lastKey isEqualToString:@""]) {
                     // First pass. initialize lastMessage
-                    lastMessage = [[ChatMessageVO alloc]init];
+                    lastMessage = msg;
+                    currentText = msg.message;
                     
                 } else {
                     //                ChatMessageVO *theMsg = (ChatMessageVO *)[dialogueMap objectForKey:countKey];
                     //                NSLog(@"currentText = %@", currentText);
-                    
                     lastMessage.message = currentText;
                     [dialogueMap setObject:lastMessage forKey:countKey];
                     //                [(ChatMessageVO *)[dialogueMap objectForKey:countKey]].message = currentText;
                     lastMessage = msg;
+                    currentText = msg.message;
                     index++;
                 }
                 lastKey = msg.contact_key;
-                currentText = msg.message;
-                [speakerKeys addObject:msg.contact_key];
                 
             }
             
