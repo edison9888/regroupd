@@ -57,6 +57,8 @@
     o.contact_id = text.integerValue;
 //    text = [data valueForKey:@"record_id"];
 //    o.record_id = [NSNumber numberWithInt:text.integerValue];
+    text = [data valueForKey:@"contact_key"];
+    o.contact_key = text;
     
     text = [data valueForKey:@"system_id"];
     o.system_id = text;

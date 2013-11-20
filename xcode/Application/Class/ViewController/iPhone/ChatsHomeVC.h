@@ -18,6 +18,7 @@
 @interface ChatsHomeVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     BOOL isLoading;
     int selectedIndex;
+    int fetchCount;
     NSMutableArray *tableData;
     ChatManager *chatSvc;
     ContactManager *contactSvc;

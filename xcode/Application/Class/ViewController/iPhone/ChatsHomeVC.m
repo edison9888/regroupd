@@ -40,6 +40,7 @@
     
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
+    fetchCount = 0;
     [self listMyChats];
     
 }
@@ -150,8 +151,14 @@
     }
     
     [chatSvc apiListChats:[DataModel shared].user.contact_key callback:^(NSArray *results) {
+        fetchCount++;
         NSLog(@"apiListChats response count %i", results.count);
         ChatVO *chat;
+        if (results.count == 0) {
+            [MBProgressHUD hideHUDForView:self.view animated:NO];
+            [self.theTableView reloadData];
+            return;
+        }
         for (PFObject* result in results) {
             NSMutableArray *namesArray = [[NSMutableArray alloc] init];
             NSMutableDictionary *namesMap = [[NSMutableDictionary alloc] init];
@@ -203,7 +210,12 @@
             
             // Finish lookup for unknown contacts and reload when done.
             if (unknownContactKeys.count > 0) {
-                [self lookupUnknownContacts];
+                if (fetchCount <= 2) {
+                    [self lookupUnknownContacts];
+                } else {
+                    [MBProgressHUD hideHUDForView:self.view animated:NO];
+                    [self.theTableView reloadData];
+                }
             } else {
                 [MBProgressHUD hideHUDForView:self.view animated:NO];
                 [self.theTableView reloadData];

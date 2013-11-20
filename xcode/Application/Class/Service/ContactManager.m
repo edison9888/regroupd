@@ -238,6 +238,16 @@
     
 }
 
+- (void) apiLoadContact:(NSString *)contactKey callback:(void (^)(PFObject *))callback {
+    NSLog(@"%s", __FUNCTION__);
+    
+    PFQuery *query = [PFQuery queryWithClassName:kContactDB];
+    
+    [query getObjectInBackgroundWithId:contactKey block:^(PFObject *object, NSError *error) {
+        callback(object);
+    }];
+}
+
 - (void) apiLookupContacts:(NSArray *)contactKeys callback:(void (^)(NSArray *))callback {
     NSLog(@"%s", __FUNCTION__);
     
@@ -580,7 +590,7 @@
 }
 - (void)updatePhonebookWithContacts:(NSArray *)contacts;
 {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
     [[SQLiteDB sharedQueue] inTransaction:^(FMDatabase *db, BOOL *rollback) {
         NSString *sql;
@@ -599,6 +609,7 @@
 #pragma mark - Address Book integration
 
 - (NSMutableArray *)readAddressBook {
+    NSMutableSet *phoneSet = [[NSMutableSet alloc] init];
     NSMutableArray *peopleData = [[NSMutableArray alloc] init];
     
     CFErrorRef err;
@@ -643,47 +654,40 @@
                     phonenumber = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
                     
                     phonenumber = [self formatPhoneNumberAsE164:phonenumber];
-                    //                    mobile = [self makePhoneId:mobile];
-                    contact = [[ContactVO alloc] init];
-                    contact.phone = phonenumber;
-                    CFStringRef firstName;
-                    CFStringRef lastName;
                     
-                    firstName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
-                    lastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
-                    if (firstName) {
-                        contact.first_name = (__bridge NSString *)firstName;
-                    } else {
-                        contact.first_name = @"";
+                    if (![phoneSet containsObject:phonenumber]) {
+                        //                    mobile = [self makePhoneId:mobile];
+                        contact = [[ContactVO alloc] init];
+                        contact.phone = phonenumber;
+                        CFStringRef firstName;
+                        CFStringRef lastName;
+                        
+                        firstName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
+                        lastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
+                        if (firstName) {
+                            contact.first_name = (__bridge NSString *)firstName;
+                        } else {
+                            contact.first_name = @"";
+                        }
+                        if (lastName) {
+                            contact.last_name = (__bridge NSString *)lastName;
+                        } else {
+                            contact.last_name = @"";
+                        }
+                        
+                        if (contact.first_name.length == 0 && contact.last_name.length == 0) {
+                            contact.first_name = contact.phone;
+                        }
+                        contact.record_id = recordId;
+                        [peopleData addObject:contact];
+                        [phoneSet addObject:phonenumber];
+                        if (firstName)
+                            CFRelease(firstName);
+                        if (lastName)
+                            CFRelease(lastName);
+                        
                     }
-                    if (lastName) {
-                        contact.last_name = (__bridge NSString *)lastName;
-                    } else {
-                        contact.last_name = @"";
-                    }
                     
-                    contact.record_id = recordId;
-                    [peopleData addObject:contact];
-                    
-                    if (firstName)
-                        CFRelease(firstName);
-                    if (lastName)
-                        CFRelease(lastName);
-                    
-                    //NSString *phone = (NSString *)ABMultiValueCopyValueAtIndex(phones, i);
-                    //NSLog(@"%@", phone);
-//                    mobileLabel = (__bridge NSString*)ABMultiValueCopyLabelAtIndex(phones, i);
-//                    if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneIPhoneLabel]) {
-//                        mobile = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
-//                        continue;
-//                        
-//                    } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneMobileLabel]) {
-//                        mobile = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
-//                        continue;
-//                    } else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneMainLabel]) {
-//                        mobile = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
-//                        continue;
-//                    }
                 }
                 
                 

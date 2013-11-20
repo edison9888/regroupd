@@ -22,8 +22,11 @@
 
 
 // API METHODS
+
 - (void) apiSaveContact:(ContactVO *)contact callback:(void (^)(PFObject *))callback;
 - (void) apiUpdateContact:(ContactVO *)contact callback:(void (^)(PFObject *))callback;
+
+- (void) apiLoadContact:(NSString *)contactKey callback:(void (^)(PFObject *))callback;
 
 - (void) apiLookupContacts:(NSArray *)contactKeys callback:(void (^)(NSArray *))callback;
 

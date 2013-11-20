@@ -42,7 +42,7 @@
                         <action selector="tapBackButton" destination="-1" eventType="touchUpInside" id="mCD-IR-eRl"/>
                     </connections>
                 </button>
-                <imageView userInteractionEnabled="NO" tag="44" contentMode="scaleToFill" id="weh-Ka-DS7" userLabel="Image View - thumbnail">
+                <imageView userInteractionEnabled="NO" tag="44" contentMode="scaleToFill" id="weh-Ka-DS7" userLabel="Image View - thumbnail" customClass="PFImageView">
                     <rect key="frame" x="94" y="73" width="132" height="132"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>

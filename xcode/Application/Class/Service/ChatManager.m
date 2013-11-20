@@ -265,6 +265,32 @@
     }];
     
 }
+
+- (void) apiSaveChat:(ChatVO *)chat callback:(void (^)(PFObject *object))callback{
+    
+    PFObject *data = [PFObject objectWithClassName:kChatDB];
+    
+    if (chat.name != nil) {
+        data[@"name"] = chat.name;
+    }
+    data[@"user"] = [PFUser currentUser];
+    data[@"contact_keys"] = chat.contact_keys;
+    [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        NSLog(@"Saved chat with objectId %@", data.objectId);
+        callback(data);
+    }];
+}
+
+- (void) apiFindChatsByContactKeys:(NSArray *)contactKeys callback:(void (^)(NSArray *results))callback {
+    PFQuery *query = [PFQuery queryWithClassName:kChatDB];
+    [query whereKey:@"contact_keys" containsAllObjectsInArray:contactKeys];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        callback(results);
+    }];
+    
+}
+
 - (void) apiSaveChatMessage:(ChatMessageVO *)msg callback:(void (^)(PFObject *object))callback{
     
     PFObject *data = [PFObject objectWithClassName:kChatMessageDB];
@@ -337,6 +363,7 @@
         PFQuery *query = [PFQuery queryWithClassName:kChatMessageDB];
         [query whereKey:@"chat"
                 equalTo:[PFObject objectWithoutDataWithClassName:kChatDB objectId:objectId]];
+        [query orderByAscending:@"createdAt"];
         
         [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
             NSMutableArray *msgs = [[NSMutableArray alloc] initWithCapacity:results.count];
@@ -461,7 +488,7 @@
         
         query = [PFQuery queryWithClassName:kChatMessageDB];
         [query whereKey:@"chat" equalTo:data];
-        [query orderByAscending:@"created"];
+        [query orderByAscending:@"createdAt"];
         
         NSArray *results = [query findObjects];
         for (PFObject *msgdata in results) {

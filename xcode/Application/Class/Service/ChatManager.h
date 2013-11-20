@@ -31,6 +31,10 @@
 
 // API functions
 - (void) apiListChats:(NSString *)userId callback:(void (^)(NSArray *results))callback;
+- (void) apiSaveChat:(ChatVO *)chat callback:(void (^)(PFObject *object))callback;
+
+- (void) apiFindChatsByContactKeys:(NSArray *)contactKeys callback:(void (^)(NSArray *results))callback;
+
 - (void) apiSaveChatMessage:(ChatMessageVO *)msg callback:(void (^)(PFObject *object))callback;
 - (void)apiSaveChatMessage:(ChatMessageVO *)msg withPhoto:(UIImage *)saveImage callback:(void (^)(PFObject *object))callback;
 // Syncrhonous API functions

@@ -88,7 +88,6 @@
         [numbers addObject:phoneId];
     }
     
-    NSLog(@"numbers %@", numbers);
     [self batchLookupContactsByPhoneNumbers:numbers];
     
     
@@ -115,20 +114,27 @@
         itemsRemaining-=range.length;
         j+=range.length;
     }
-    
-    for (int i=0; i<arrayOfArrays.count; i++) {
-        NSArray *numbers = (NSArray *) [arrayOfArrays objectAtIndex:i];
-        [contactSvc apiLookupContactsByPhoneNumbers:numbers callback:^(NSArray *contacts) {
-            //        NSLog(@"Callback response count %i", contacts.count);
-            if (contacts) {
-                [contactSvc updatePhonebookWithContacts:contacts];
-            }
-            if (i+1 == arrayOfArrays.count) {
-                [MBProgressHUD hideHUDForView:self.view animated:NO];
-
-                [self performSearch:@""];
-            }
-        }];
+    NSLog(@"Total srcArray size %i", srcArray.count);
+    if (srcArray.count > 0) {
+        for (int i=0; i<arrayOfArrays.count; i++) {
+            NSLog(@"batchLookupContactsByPhoneNumbers %i", i);
+            NSArray *numbers = (NSArray *) [arrayOfArrays objectAtIndex:i];
+            [contactSvc apiLookupContactsByPhoneNumbers:numbers callback:^(NSArray *contacts) {
+                //        NSLog(@"Callback response count %i", contacts.count);
+                if (contacts) {
+                    [contactSvc updatePhonebookWithContacts:contacts];
+                }
+                if (i+1 == arrayOfArrays.count) {
+                    [MBProgressHUD hideHUDForView:self.view animated:NO];
+                    
+                    [self performSearch:@""];
+                }
+            }];
+            
+        }
+        
+    } else {
+        [MBProgressHUD hideHUDForView:self.view animated:NO];
         
     }
     
@@ -343,27 +349,26 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-#ifdef DEBUGX
-    NSLog(@"%s", __FUNCTION__);
-#endif
     
-    @try {
-        if (indexPath != nil) {
-            NSLog(@"Selected row %i", indexPath.row);
-            
-            selectedIndex = indexPath.row;
-            NSDictionary *rowdata = [availableContacts objectAtIndex:indexPath.row];
-            
-            [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
-            [_delegate gotoSlideWithName:@"ContactInfo"];
-            
-            
-//            [DataModel shared].action = kActionEDIT;
-//            [_delegate gotoNextSlide];
-            
+    if (indexPath.section == 0) {
+        @try {
+            if (indexPath != nil) {
+                NSLog(@"Selected row %i", indexPath.row);
+                
+                selectedIndex = indexPath.row;
+                NSDictionary *rowdata = [availableContacts objectAtIndex:indexPath.row];
+                
+                [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
+                [_delegate gotoSlideWithName:@"ContactInfo"];
+                
+                
+                //            [DataModel shared].action = kActionEDIT;
+                //            [_delegate gotoNextSlide];
+                
+            }
+        } @catch (NSException * e) {
+            NSLog(@"Exception: %@", e);
         }
-    } @catch (NSException * e) {
-        NSLog(@"Exception: %@", e);
     }
     
     
@@ -411,6 +416,7 @@
         }
         
         status = 0;
+        sqlTemplate = @"select distinct first_name, last_name from phonebook where status=%i order by first_name";
         sql = [NSString stringWithFormat:sqlTemplate, status];
         
         rs = [[SQLiteDB sharedConnection] executeQuery:sql];

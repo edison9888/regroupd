@@ -33,7 +33,7 @@
 @property (nonatomic, retain) NSNumber *record_id;
 
 @property (nonatomic, retain) NSString *system_id;
-//@property (nonatomic, retain) NSString *contact_key;
+@property (nonatomic, retain) NSString *contact_key;
 
 @property (nonatomic, retain) NSString *facebook_id;
 @property (nonatomic, retain) NSString *first_name;
