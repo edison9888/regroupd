@@ -536,17 +536,17 @@
 
 #pragma mark - Form Response API
 
-- (void)apiSaveFormResponse:(FormResponseVO *)response formId:(NSString *)formId callback:(void (^)(PFObject *object))callback
+- (void)apiSaveFormResponse:(FormResponseVO *)response callback:(void (^)(PFObject *object))callback
 {
     PFObject *data = [PFObject objectWithClassName:kFormResponseDB];
     
+    // TODO: Check for previously saved responses and stop / purge if needed.
+    
     data[@"form"] = [PFObject objectWithoutDataWithClassName:kFormDB objectId:response.form_key];
     data[@"contact"] = [PFObject objectWithoutDataWithClassName:kContactDB objectId:response.contact_key];
+    data[@"chat"] = [PFObject objectWithoutDataWithClassName:kChatDB objectId:response.chat_key];
     if (response.option_key != nil) {
-        data[@"option_key"] = response.option_key;
-    }
-    if (response.option_keys != nil) {
-        data[@"option_keys"] = response.option_keys;
+        data[@"option"] =[PFObject objectWithoutDataWithClassName:kFormOptionDB objectId:response.option_key];
     }
     if (response.rating != nil) {
         data[@"rating"] = response.rating;
@@ -556,7 +556,26 @@
         callback(data);
     }];
 }
-
+- (void)apiListFormResponses:(NSString *)formKey contactKey:(NSString *)contactKey callback:(void (^)(NSArray *results))callback
+{
+    PFQuery *query = [PFQuery queryWithClassName:kFormResponseDB];
+    [query whereKey:@"form" equalTo:[PFObject objectWithoutDataWithClassName:kFormDB objectId:formKey]];
+    
+    if (contactKey != nil) {
+        [query whereKey:@"contact" equalTo:[PFObject objectWithoutDataWithClassName:kContactDB objectId:contactKey]];
+    }
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+//        FormResponseVO *response;
+//        NSMutableArray *responses = [[NSMutableArray alloc] init];
+//        
+//        for (PFObject *result in results) {
+//            response = [FormResponseVO readFromPFObject:result];
+//            
+//            
+//        }
+        callback(results);
+    }];
+}
 
 
 @end

@@ -58,6 +58,7 @@ typedef enum {
 // Transient fields
 @property (nonatomic, retain) UIImage *photo;
 @property (nonatomic, retain) PFFile *pfPhoto;
+@property BOOL isSelected;
 
 + (FormOptionVO *) readFromDictionary:(NSDictionary *) dict;
 + (FormOptionVO *) readFromPFObject:(PFObject *)data;

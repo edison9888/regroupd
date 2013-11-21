@@ -44,7 +44,7 @@
 - (void) apiListFormOptions:(NSString *)formId callback:(void (^)(NSArray *results))callback;
 
 // Form Response API
-- (void)apiSaveFormResponse:(FormResponseVO *)response formId:(NSString *)formId callback:(void (^)(PFObject *object))callback;
-
+- (void)apiSaveFormResponse:(FormResponseVO *)response callback:(void (^)(PFObject *object))callback;
+- (void)apiListFormResponses:(NSString *)formKey contactKey:(NSString *)contactKey callback:(void (^)(NSArray *results))callback;
 
 @end

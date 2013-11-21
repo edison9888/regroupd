@@ -15,6 +15,8 @@
     int _index;
 }
 
+@property (nonatomic, strong) NSString *optionKey;
+
 @property (nonatomic, strong) IBOutlet UIView *sliderGuide;
 
 @property (nonatomic, strong) IBOutlet PFImageView *roundPic;

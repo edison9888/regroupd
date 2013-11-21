@@ -504,14 +504,17 @@
             
             if ([rs next]) {
                 contact = [ContactVO readFromPhonebook:[rs resultDictionary]];
+                NSLog(@"Found name %@ -- phone %@ for key %@", contact.first_name, contact.phone, key);
                 [[DataModel shared].contactCache setObject:contact forKey:key];
                 [results setObject:contact forKey:key];
             } else {
+                NSLog(@"Did not find key %@", key);
                 [results setObject:[NSNull null] forKey:key];
             }
             
         } else {
             contact = [[DataModel shared].contactCache objectForKey:key];
+            NSLog(@"Found cached phone %@ for key %@", contact.phone, key);
             [results setObject:contact forKey:key];
         }
     }

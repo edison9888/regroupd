@@ -43,6 +43,7 @@ typedef enum {
 @property int form_id;
 @property (nonatomic, retain) NSString *system_id;
 
+@property (nonatomic, retain) NSString *user_key;
 @property (nonatomic, retain) NSString *contact_key;
 
 @property (nonatomic, retain) NSString *name;
@@ -73,6 +74,8 @@ typedef enum {
 @property (nonatomic, retain) PFFile *pfPhoto;
 
 @property (nonatomic, retain) NSMutableArray *options;
+
+@property (nonatomic, retain) NSMutableDictionary *responsesMap;
 
 
 

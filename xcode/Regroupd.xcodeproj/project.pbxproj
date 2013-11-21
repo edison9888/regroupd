@@ -168,6 +168,7 @@
 		1E5CABD817BA8DF0000D8759 /* RecentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5CABD617BA8DF0000D8759 /* RecentTableViewCell.m */; };
 		1E5CABD917BA8DF0000D8759 /* RecentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E5CABD717BA8DF0000D8759 /* RecentTableViewCell.xib */; };
 		1E5CB6CC1825B2F7002FE4FA /* GroupManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5CB6CB1825B2F7002FE4FA /* GroupManager.m */; };
+		1E6A1018183E536E00F63666 /* ChatFormVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E6A1017183E536E00F63666 /* ChatFormVO.m */; };
 		1E751B2C179C4B11003AB13D /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E751B2B179C4B11003AB13D /* UserManager.m */; };
 		1E76F4A417960BE1007EF5B0 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA4B1782638200A294C0 /* Default-568h@2x.png */; };
 		1E76F4A617961169007EF5B0 /* CCTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E76F4A517961169007EF5B0 /* CCTableViewCell.xib */; };
@@ -711,6 +712,8 @@
 		1E5CABD717BA8DF0000D8759 /* RecentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecentTableViewCell.xib; sourceTree = "<group>"; };
 		1E5CB6CA1825B2F7002FE4FA /* GroupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupManager.h; sourceTree = "<group>"; };
 		1E5CB6CB1825B2F7002FE4FA /* GroupManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupManager.m; sourceTree = "<group>"; };
+		1E6A1016183E536E00F63666 /* ChatFormVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatFormVO.h; sourceTree = "<group>"; };
+		1E6A1017183E536E00F63666 /* ChatFormVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatFormVO.m; sourceTree = "<group>"; };
 		1E751B2A179C4B11003AB13D /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserManager.h; sourceTree = "<group>"; };
 		1E751B2B179C4B11003AB13D /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserManager.m; sourceTree = "<group>"; };
 		1E76F4941795EE3E007EF5B0 /* AppIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon@2x.png"; sourceTree = "<group>"; };
@@ -1857,6 +1860,8 @@
 				1E1A9A9317FE4A4C008D81E6 /* ChatVO.m */,
 				1E1A9A9517FE4C08008D81E6 /* ChatMessageVO.h */,
 				1E1A9A9617FE4C08008D81E6 /* ChatMessageVO.m */,
+				1E6A1016183E536E00F63666 /* ChatFormVO.h */,
+				1E6A1017183E536E00F63666 /* ChatFormVO.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2757,6 +2762,7 @@
 				1E928255177FB690008A583C /* Constants.m in Sources */,
 				1E7A6E311806EF5F004B62CE /* RatingMeterSlider.m in Sources */,
 				1E928258177FB690008A583C /* DataModel.m in Sources */,
+				1E6A1018183E536E00F63666 /* ChatFormVO.m in Sources */,
 				1E92825B177FB690008A583C /* HelpCopy.m in Sources */,
 				1E1A9A9417FE4A4C008D81E6 /* ChatVO.m in Sources */,
 				1E92825C177FB690008A583C /* HelpModel.m in Sources */,

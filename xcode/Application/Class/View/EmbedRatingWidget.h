@@ -19,6 +19,9 @@
 
 - (id)initWithFrame:(CGRect)frame andOptions:(NSMutableArray *)formOptions isOwner:(BOOL)owner;
 
+@property (nonatomic, retain) NSString *form_key;
+@property (nonatomic, retain) NSString *chat_key;
+
 @property float dynamicHeight;
 
 @property (nonatomic, strong) IBOutlet BrandUILabel *typeLabel;

@@ -17,6 +17,8 @@
 #define k_chatPushNotificationReceived @"chatPushNotificationReceived"
 #define k_formSaveCompleteNotification @"formSaveCompleteNotification"
 
+#define k_formResponseEntered @"formResponseEntered"
+
 
 extern uint const kLabelDarkGrey444242;
 extern uint const kLabelLightBlue02c1ff;

@@ -9,7 +9,8 @@
 #import "EmbedPollWidget.h"
 #import <QuartzCore/QuartzCore.h>
 #import "FormOptionVO.h"
-#import "FormManager.h"
+#import "ChatFormVO.h"
+#import "FormResponseVO.h"
 #import "UIColor+ColorWithHex.h"
 
 #define kInitialY   67
@@ -21,17 +22,22 @@
 @implementation EmbedPollWidget
 
 
-- (id)initWithFrame:(CGRect)frame andOptions:(NSMutableArray *)formOptions isOwner:(BOOL)owner
+- (id)initWithFrame:(CGRect)frame andOptions:(NSMutableArray *)formOptions andResponses:(NSMutableDictionary *)responseMap isOwner:(BOOL)owner
 {
     NSLog(@"===== %s", __FUNCTION__);
     self = [super initWithFrame:frame];
     
     if (self) {
-        options = [[NSMutableArray alloc] initWithCapacity:formOptions.count];
+        _formOptions = formOptions;
+        self.optionKeys = [[NSMutableArray alloc] init];
+        
+        _optionViews = [[NSMutableArray alloc] initWithCapacity:formOptions.count];
+        self.allowMultiple = NO;
         
         _theView = [[[NSBundle mainBundle] loadNibNamed:@"EmbedPollWidget" owner:self options:nil] objectAtIndex:0];
         _theView.backgroundColor = [UIColor clearColor];
         self.doneButton.enabled = NO;
+        self.optionIndex = -1;
         
         float xpos = 0;
         float ypos = kInitialY;
@@ -39,10 +45,13 @@
         CGRect itemFrame;
         int index=0;
         
+        
         for (FormOptionVO* opt in formOptions) {
             index++;
             itemFrame = CGRectMake(xpos, ypos, kEmbedOptionWidth, kEmbedOptionHeight);
             embedOption = [[EmbedPollOption alloc] initWithFrame:itemFrame];
+            embedOption.optionKey = opt.system_id;
+            
             [embedOption setIndex:index];
             embedOption.tag = k_CHAT_OPTION_BASETAG + index;
             embedOption.userInteractionEnabled = YES;
@@ -62,8 +71,14 @@
                 ypos += kEmbedOptionHeight;
             }
             
+            if ([responseMap objectForKey:opt.system_id] != nil) {
+                [embedOption selected];
+            } else {
+                [embedOption unselected];
+            }
+            
             [self addSubview:embedOption];
-            [options addObject:embedOption];
+            [_optionViews addObject:embedOption];
             
         }
         if (owner) {
@@ -88,6 +103,12 @@
             ypos += self.doneView.frame.size.height;
         }
         
+        if (responseMap != nil && responseMap.count > 0) {
+            formLocked = YES;
+            
+        }
+
+        
         self.dynamicHeight = ypos + 10;
         
         [self addSubview:_theView];
@@ -98,31 +119,102 @@
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
+    if (formLocked) {
+        return;
+    }
 //    [super touchesBegan:touches withEvent:event];
 //    [self.nextResponder touchesBegan:touches withEvent:event];
     CGPoint locationPoint = [[touches anyObject] locationInView:self];
 
     float hitY = locationPoint.y;
     float hitNum = (hitY - kInitialY) / kEmbedOptionHeight;
-    NSLog(@"y = %f", hitNum);
+//    NSLog(@"y = %f", hitNum);
+//    NSLog(@"Done button range = %f to %f", self.doneView.frame.origin.y, self.doneView.frame.origin.y + self.doneView.frame.size.height);
     
-    if (hitNum > 0 && hitNum < options.count) {
+    if (hitNum > 0 && hitNum < _optionViews.count) {
         if (!formLocked) {
             self.doneButton.enabled = YES;
             
-            int optionIndex = ((int) hitNum);
-            NSLog(@"option index = %i", optionIndex);
+            self.optionIndex = ((int) hitNum);
+            NSLog(@"option index = %i", self.optionIndex);
+//            NSString *optionKey =
+            ((FormOptionVO *)[_optionViews objectAtIndex:self.optionIndex]).isSelected = YES;
             
-            int i = 0;
-            for (EmbedPollOption* opt in options) {
-                if (i == optionIndex) {
-                    [opt selected];
-                } else {
-                    [opt unselected];
+            if (self.allowMultiple) {
+                int i = 0;
+                for (EmbedPollOption* opt in _optionViews) {
+                    if (i == self.optionIndex) {
+                        if (![self.optionKeys containsObject:opt.optionKey]) {
+                            [self.optionKeys addObject:opt.optionKey];
+                        }
+                        [opt selected];
+                    } else {
+                        [opt unselected];
+                    }
+                    i++;
                 }
-                i++;
+                
+                
+            } else {
+                int i = 0;
+                [self.optionKeys removeAllObjects];
+                for (EmbedPollOption* opt in _optionViews) {
+                    if (i == self.optionIndex) {
+                        [self.optionKeys addObject:opt.optionKey];
+                        [opt selected];
+                    } else {
+                        [opt unselected];
+                    }
+                    i++;
+                }
+                
             }
         }
+    } else if (hitY >= self.doneView.frame.origin.y && hitY <= self.doneView.frame.origin.y + self.doneView.frame.size.height) {
+        if (self.doneButton.enabled) {
+            NSLog(@"Hit done button at hitY %f", hitY);
+            self.doneButton.enabled = NO;
+            formLocked = YES;
+            
+            UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            CGFloat halfButtonHeight = self.doneButton.bounds.size.height / 2;
+            CGFloat buttonWidth = self.doneButton.bounds.size.width;
+            indicator.center = CGPointMake(buttonWidth - halfButtonHeight , halfButtonHeight);
+            [self.doneButton addSubview:indicator];
+            [indicator startAnimating];
+            
+            
+            if (formSvc == nil) {
+                formSvc = [[FormManager alloc] init];
+            }
+            
+            FormResponseVO *response;
+            int index = 0;
+            int total = self.optionKeys.count;
+            
+            for (NSString *key in self.optionKeys) {
+                response = [[FormResponseVO alloc] init];
+                response.contact_key = [DataModel shared].user.contact_key;
+                response.form_key = self.form_key;
+                response.chat_key = self.chat_key;
+                response.option_key = key;
+                
+                index ++;
+                [formSvc apiSaveFormResponse:response callback:^(PFObject *object) {
+                    if (index == total) {
+                        [indicator stopAnimating];
+                        [indicator removeFromSuperview];
+                        if (object) {
+                            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formResponseEntered object:nil]];
+                        }
+                    }
+                }];
+                
+            }
+            
+        }
+        
+        
     }
 
 }

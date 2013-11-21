@@ -68,10 +68,11 @@
 + (FormOptionVO *) readFromPFObject:(PFObject *)data {
     FormOptionVO *o = [[FormOptionVO alloc] init];
     NSString *text;
-    
+
     o.system_id = data.objectId;
     o.createdAt = data.createdAt;
     o.updatedAt = data.updatedAt;
+    o.isSelected = YES;
     
     text = [data valueForKey:@"name"];
     o.name = text;

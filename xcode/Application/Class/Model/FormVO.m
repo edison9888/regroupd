@@ -82,7 +82,14 @@
     o.system_id = data.objectId;
     o.createdAt = data.createdAt;
     o.updatedAt = data.updatedAt;
-    
+
+    if (data[@"user"]) {
+        PFObject *pfUser = data[@"user"];
+        o.user_key = pfUser.objectId;
+    }
+    text = [data valueForKey:@"contact_key"];
+    o.contact_key= text;
+
     text = [data valueForKey:@"contact_key"];
     o.contact_key= text;
     

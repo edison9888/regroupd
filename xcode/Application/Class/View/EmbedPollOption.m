@@ -57,12 +57,14 @@
 }
 
 - (void) selected {
+    self.isSelected = YES;
     self.inputHolder.backgroundColor = [UIColor colorWithHexValue:kSelectedColor];
     self.checkbox.image = [UIImage imageNamed:kCheckboxOnImage];
     self.fieldLabel.alpha = 1.0;
     
 }
 - (void) unselected {
+    self.isSelected = NO;
     self.inputHolder.backgroundColor = [UIColor colorWithHexValue:kUnselectedColor];
     self.checkbox.image = [UIImage imageNamed:kCheckboxOffImage];
     self.fieldLabel.alpha = kFadedAlpha;

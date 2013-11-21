@@ -9,15 +9,27 @@
 #import <UIKit/UIKit.h>
 #import "BrandUILabel.h"
 #import "EmbedPollOption.h"
+#import "FormManager.h"
 
 @interface EmbedPollWidget : UIView {
     UIView *_theView;
-    NSMutableArray *options;
+    NSMutableArray *_optionViews;
+    
+    NSMutableArray *_formOptions;
     BOOL formLocked;
+    FormManager *formSvc;
 }
 
+- (id)initWithFrame:(CGRect)frame andOptions:(NSMutableArray *)formOptions andResponses:(NSMutableDictionary *)responseMap isOwner:(BOOL)owner;
 
-- (id)initWithFrame:(CGRect)frame andOptions:(NSMutableArray *)formOptions isOwner:(BOOL)owner;
+@property (nonatomic, retain) NSString *form_key;
+@property (nonatomic, retain) NSString *chat_key;
+
+@property BOOL allowMultiple;
+
+@property (nonatomic, retain) NSMutableArray *optionKeys;
+
+@property int optionIndex;
 
 @property float dynamicHeight;
 

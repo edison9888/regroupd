@@ -147,7 +147,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(showImagePickerNotificationHandler:)     name:@"showImagePickerNotification"
+                                             selector:@selector(formResponseEnteredHandler:)     name:k_formResponseEntered
                                                object:nil];
     
     // Create and initialize a tap gesture
@@ -238,14 +238,70 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                         NSLog(@">>>>>>>>>>>>>> Found form %@", pfForm.objectId);
                         
                         [formSvc apiLoadForm:pfForm.objectId fetchAll:YES callback:^(FormVO *form) {
-                            if (form) {
-                                [formCache setObject:form forKey:pfForm.objectId];
+                            NSString *contactKey = nil;
+                            if ([form.user_key isEqualToString:[PFUser currentUser].objectId]) {
+                                contactKey = nil;
+                            } else {
+                                contactKey = [DataModel shared].user.contact_key;
                             }
                             
-                            index++;
-                            if (index==total) {
-                                [chatSvc asyncListChatMessages:[DataModel shared].chat.system_id];
+                            
+                            if (form) {
+                                [formSvc apiListFormResponses:pfForm.objectId contactKey:contactKey callback:^(NSArray *results) {
+                                    form.responsesMap = [[NSMutableDictionary alloc] init];
+                                    if (results.count == 0) {
+                                        // Not results
+                                    } else {
+                                        FormResponseVO *response;
+                                        if (contactKey == nil) {
+                                            // not form owner. other recipient (left side)
+                                            
+                                            for (PFObject *result in results) {
+                                                response = [FormResponseVO readFromPFObject:result];
+                                                response.answerTotal = [NSNumber numberWithInt:1];
+                                                response.ratingCount = [NSNumber numberWithInt:1];
+                                                response.ratingTotal = response.rating;
+                                                
+                                                [form.responsesMap setObject:response forKey:response.option_key];
+                                            }
+                                            
+                                        } else {
+                                            // Form owner. That means aggregate result stats.
+                                            for (PFObject *result in results) {
+                                                response = [FormResponseVO readFromPFObject:result];
+                                                
+                                                if ([form.responsesMap objectForKey:response.option_key] == nil) {
+                                                    response.answerTotal = [NSNumber numberWithInt:1];
+                                                    response.ratingCount = [NSNumber numberWithInt:1];
+                                                    response.ratingTotal = response.rating;
+                                                    
+                                                    [form.responsesMap setObject:response forKey:response.option_key];
+                                                    
+                                                } else {
+                                                    
+                                                    ((FormResponseVO *)[form.responsesMap objectForKey:response.option_key]).answerTotal = [NSNumber numberWithInt:[response.answerTotal intValue] + 1];;
+                                                    if (response.rating) {
+                                                        
+                                                        FormResponseVO *_resp = (FormResponseVO *)[form.responsesMap objectForKey:response.option_key];
+                                                        ((FormResponseVO *)[form.responsesMap objectForKey:response.option_key]).ratingTotal = [NSNumber numberWithInt:(_resp.ratingTotal.intValue + response.rating.intValue)];
+                                                        ((FormResponseVO *)[form.responsesMap objectForKey:response.option_key]).ratingCount = [NSNumber numberWithInt:[response.ratingCount intValue] + 1];;
+                                                        
+                                                    }
+                                                    
+                                                }
+                                            }
+                                        }
+                                    }
+                                    // Finish up. List chat messages now that we have the forms, options and responses
+                                    [formCache setObject:form forKey:pfForm.objectId];
+                                    index++;
+                                    if (index==total) {
+                                        [chatSvc asyncListChatMessages:[DataModel shared].chat.system_id];
+                                    }
+                                }];
+                                
                             }
+                            
                         }];
                     }
                 }
@@ -265,6 +321,49 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 
 #pragma mark - Notifications
+
+- (void)formResponseEnteredHandler:(NSNotification*)notification
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    @try {
+        if (notification.object != nil) {
+//            ChatVO *theChat = (ChatVO *) notification.object;
+//            
+//            tableDataSource = [[NSMutableArray alloc] init];
+//            self.imageMap = [[NSMutableDictionary alloc] initWithCapacity:theChat.contact_keys.count];
+//            
+//            
+//            int keycount = theChat.contact_keys.count;
+//            __block int counter = 0;
+//            //            theChat.contactMap.ke
+//            for (NSString *key in theChat.contact_keys) {
+//                
+//                [contactSvc asyncLoadCachedPhoto:key callback:^(UIImage *img) {
+//                    if (img) {
+//                        NSLog(@"Setting image for key %@", key);
+//                        [self.imageMap setObject:img forKey:key];
+//                    } else {
+//                        NSLog(@"No image for key %@", key);
+//                    }
+//                    counter++;
+//                    if (counter == keycount) {
+//                        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatContactsLoaded object:theChat]];
+//                        //                            [self.bubbleTable reloadData];
+//                    }
+//                }];
+//            }
+            
+            
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"########### Exception %@", exception);
+    }
+    
+    
+}
+
 - (void)chatMessagesLoadedHandler:(NSNotification*)notification
 {
     NSLog(@"%s", __FUNCTION__);
@@ -313,26 +412,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     if (notification.object) {
         ChatVO *theChat = (ChatVO *) notification.object;
         int index = 0;
-//        for (ChatMessageVO* msg in theChat.messages) {
-//            index++;
-//            NSLog(@"%i grouped message %@", index, msg.message);
-//            if (msg.form_key == nil) {
-//                bubble = [self buildMessageBubble:msg];
-//                
-//            } else {
-//                bubble = [self buildMessageWidget:msg];
-//            }
-//            if (bubble == nil) {
-//                NSLog(@"bubble is nil");
-//            } else {
-//                [tableDataSource addObject:bubble];
-//            }
-//        }
-
-        
-        NSMutableArray *groupedMessages = [self consolidateChatMessages:theChat.messages];
-        NSLog(@"Grouped messages count %i", groupedMessages.count);
-        for (ChatMessageVO* msg in groupedMessages) {
+        for (ChatMessageVO* msg in theChat.messages) {
             index++;
             NSLog(@"%i grouped message %@", index, msg.message);
             if (msg.form_key == nil) {
@@ -347,6 +427,25 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 [tableDataSource addObject:bubble];
             }
         }
+
+        
+//        NSMutableArray *groupedMessages = [self consolidateChatMessages:theChat.messages];
+//        NSLog(@"Grouped messages count %i", groupedMessages.count);
+//        for (ChatMessageVO* msg in groupedMessages) {
+//            index++;
+//            NSLog(@"%i grouped message %@", index, msg.message);
+//            if (msg.form_key == nil) {
+//                bubble = [self buildMessageBubble:msg];
+//                
+//            } else {
+//                bubble = [self buildMessageWidget:msg];
+//            }
+//            if (bubble == nil) {
+//                NSLog(@"bubble is nil");
+//            } else {
+//                [tableDataSource addObject:bubble];
+//            }
+//        }
     }
     [MBProgressHUD hideHUDForView:self.view animated:NO];
     NSLog(@"Ready to reload table");
@@ -554,10 +653,16 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     timeValue = [msgTimeFormat stringFromDate:msg.createdAt];
     
+    
     if (theForm.type == FormType_POLL) {
-        EmbedPollWidget *embedWidget = [[EmbedPollWidget alloc] initWithFrame:msgFrame andOptions:theForm.options isOwner:isOwner];
+        EmbedPollWidget *embedWidget = [[EmbedPollWidget alloc] initWithFrame:msgFrame andOptions:theForm.options andResponses:theForm.responsesMap  isOwner:isOwner];
         embedWidget.subjectLabel.text = theForm.name;
         embedWidget.userInteractionEnabled = YES;
+
+        // Save keys in widget for when user submits response data
+        embedWidget.chat_key = [DataModel shared].chat.system_id;
+        embedWidget.form_key = theForm.system_id;
+        
         embedWidget.tag = 199;
         
         NSLog(@"widget height = %f", embedWidget.dynamicHeight);
@@ -577,6 +682,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         embedWidget.userInteractionEnabled = YES;
         embedWidget.tag = 299;
         
+        // Save keys in widget for when user submits response data
+        embedWidget.chat_key = [DataModel shared].chat.system_id;
+        embedWidget.form_key = theForm.system_id;
+
         NSLog(@"widget height = %f", embedWidget.dynamicHeight);
         msgFrame.size.height = embedWidget.dynamicHeight;
         embedWidget.frame = msgFrame;

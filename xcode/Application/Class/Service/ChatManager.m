@@ -383,22 +383,28 @@
             //            NSLog(@"userKeys %@", userKeys);
             
             chat.messages = msgs;
-            PFQuery *query = [PFQuery queryWithClassName:kContactDB];
-            [query whereKey:@"objectId" containedIn:chat.contact_keys];
+
+            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatMessagesLoaded
+                                                                                                 object:chat]];
+
+            // IGNORE: This code was a mistake. It was overwriting the contactCache with pfContact data that does not have first/last name
             
-            [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
-                NSMutableDictionary *contactMap = [[NSMutableDictionary alloc] initWithCapacity:results.count];
-                ContactVO *contact;
-                for (PFObject *result in results) {
-                    contact = [ContactVO readFromPFObject:result];
-                    [contactMap setObject:contact forKey:contact.system_id];
-                }
-                chat.contactMap = contactMap;
-                
-                [DataModel shared].contactCache = contactMap;
-                [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatMessagesLoaded
-                                                                                                     object:chat]];
-            }];
+//            PFQuery *query = [PFQuery queryWithClassName:kContactDB];
+//            [query whereKey:@"objectId" containedIn:chat.contact_keys];
+//            
+//            [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+//                NSMutableDictionary *contactMap = [[NSMutableDictionary alloc] initWithCapacity:results.count];
+//                ContactVO *contact;
+//                for (PFObject *result in results) {
+//                    contact = [ContactVO readFromPFObject:result];
+//                    [contactMap setObject:contact forKey:contact.system_id];
+//                }
+//                chat.contactMap = contactMap;
+//                
+//                [DataModel shared].contactCache = contactMap;
+//                [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatMessagesLoaded
+//                                                                                                     object:chat]];
+//            }];
             
             
         }];

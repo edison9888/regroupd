@@ -25,6 +25,9 @@
 
 @property float dynamicHeight;
 
+@property (nonatomic, retain) NSString *form_key;
+@property (nonatomic, retain) NSString *chat_key;
+
 @property (nonatomic, strong) IBOutlet UIView *headerView;
 @property (nonatomic, strong) IBOutlet PFImageView *roundPic;
 @property (nonatomic, strong) IBOutlet BrandUILabel *eventDateLabel;

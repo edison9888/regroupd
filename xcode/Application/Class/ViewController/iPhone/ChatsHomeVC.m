@@ -41,10 +41,13 @@
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
     fetchCount = 0;
-    [self listMyChats];
     
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+    [self listMyChats];
+    
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

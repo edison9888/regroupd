@@ -14,20 +14,31 @@
     FormResponseVO *o = [[FormResponseVO alloc] init];
     NSString *text;
     NSNumber *number;
+    
     o.system_id = data.objectId;
     o.createdAt = data.createdAt;
     o.updatedAt = data.updatedAt;
-    
-    text = [data valueForKey:@"contact_key"];
-    o.contact_key = text;
-    text = [data valueForKey:@"form_key"];
-    o.form_key = text;
-    text = [data valueForKey:@"option_key"];
-    o.option_key = text;
 
-    if (data[@"option_keys"]) {
-        o.option_keys = (NSArray *)[data valueForKey:@"option_keys"];
+    if (data[@"contact"]) {
+        o.contact_key = ((PFObject *) data[@"contact"]).objectId;
     }
+    if (data[@"form"]) {
+        o.form_key = ((PFObject *) data[@"form"]).objectId;
+    }
+    if (data[@"chat"]) {
+        o.chat_key = ((PFObject *) data[@"chat"]).objectId;
+    }
+    if (data[@"option"]) {
+        o.option_key = ((PFObject *) data[@"option"]).objectId;
+    }
+//    text = [data valueForKey:@"contact_key"];
+//    o.contact_key = text;
+//    text = [data valueForKey:@"form_key"];
+//    o.form_key = text;
+//    text = [data valueForKey:@"chat_key"];
+//    o.chat_key = text;
+//    text = [data valueForKey:@"option_key"];
+//    o.option_key = text;
 
     if (data[@"status"]) {
         text = [data valueForKey:@"status"];

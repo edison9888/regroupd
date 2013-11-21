@@ -14,12 +14,15 @@
     int _index;
 }
 
+@property (nonatomic, strong) NSString *optionKey;
+
 @property (nonatomic, strong) IBOutlet PFImageView *roundPic;
 @property (nonatomic, strong) IBOutlet UIImageView *checkbox;
 @property (nonatomic, strong) IBOutlet UIImageView *divider;
 
 @property (nonatomic, strong) IBOutlet UIView *inputHolder;
 @property (nonatomic, strong) IBOutlet BrandUILabel *fieldLabel;
+@property BOOL isSelected;
 //@property (nonatomic, strong) IBOutlet FancyTextView *input;
 
 - (void) setIndex:(int)index;
