@@ -936,7 +936,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         frame.size.height -= kbSize.height;
         
         self.bubbleTable.frame = frame;
-        [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+        [self.bubbleTable scrollBubbleViewToBottomAnimated:NO];
         
     }];
 }

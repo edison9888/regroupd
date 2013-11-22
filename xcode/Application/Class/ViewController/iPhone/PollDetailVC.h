@@ -32,7 +32,8 @@
 
     NSMutableArray *optionKeys;
     NSMutableArray *contactKeys;
-    
+
+    NSMutableArray *dataArray;
     NSMutableArray *tableData;
     NSMutableArray *allResponses;
     
@@ -45,6 +46,7 @@
 @property (nonatomic, strong) IBOutlet BrandUILabel *counterLabel;
 @property (nonatomic, strong) IBOutlet BrandUILabel *responsesLabel;
 
+@property (nonatomic, strong) IBOutlet BrandUILabel *optionTitle;
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
 @property(retain) NSMutableArray *tableData;

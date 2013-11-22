@@ -60,6 +60,7 @@
         [self.view addSubview:self.totalRatingSlider];
     }
 
+    self.totalRatingSlider.hidden = YES;
     self.optionTitle.text = @"";
     self.starRatingBG.hidden = YES;
     self.starRatingLabel.hidden = YES;
@@ -217,6 +218,7 @@
     avgRatingText = [NSString formatDoubleWithMaxDecimals:avgRating minDecimals:0 maxDecimals:0];
     self.starRatingLabel.text = avgRatingText;
     
+    self.totalRatingSlider.hidden = NO;
     self.starRatingBG.hidden = NO;
     self.starRatingLabel.hidden = NO;
 
@@ -311,18 +313,17 @@
         if (cell == nil) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:CellNib owner:self options:nil];
             cell = (RatingResponseCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleGray;
-            [cell.roundPic.layer setCornerRadius:23.0f];
-            [cell.roundPic.layer setMasksToBounds:YES];
-            [cell.roundPic.layer setBorderWidth:1.0f];
-            [cell.roundPic.layer setBorderColor:[UIColor whiteColor].CGColor];
-            cell.roundPic.clipsToBounds = YES;
-            cell.roundPic.contentMode = UIViewContentModeScaleAspectFill;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         FormResponseVO *response = (FormResponseVO *) [tableData objectAtIndex:indexPath.row];
         
         cell.titleLabel.text = response.contact.fullname;
+        NSString *ratingText = [NSString formatDoubleWithMaxDecimals:[response.rating doubleValue]
+                                                         minDecimals:0 maxDecimals:0];
         
+        cell.ratingLabel.text = ratingText;
+        
+        [cell.ratingSlider setRatingBar:response.rating.floatValue];
         
         cell.roundPic.file = response.contact.pfPhoto;
         [cell.roundPic loadInBackground];

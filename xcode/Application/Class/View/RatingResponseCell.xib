@@ -15,43 +15,44 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Contact Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="5" customClass="BrandUILabel">
-                        <rect key="frame" x="69" y="7" width="240" height="24"/>
+                        <rect key="frame" x="69" y="9" width="200" height="24"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="12"/>
                         <color key="textColor" red="0.050980392156862744" green="0.49019607843137253" blue="0.67450980392156867" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </label>
-                    <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Chose this option" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="p8L-mi-WFf">
-                        <rect key="frame" x="89" y="22" width="210" height="30"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
-                        <color key="textColor" red="0.15686274509803921" green="0.81176470588235294" blue="0.91764705882352937" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="1zI-Ub-8I5" userLabel="Image View - thumbnail" customClass="PFImageView">
                         <rect key="frame" x="14" y="5" width="46" height="46"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="checkbox_aqua.png" id="AYY-Jm-bjg" userLabel="Image View - checkmark" customClass="PFImageView">
-                        <rect key="frame" x="69" y="30" width="14" height="14"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="rating_circle_bg_aqua.png" id="AYY-Jm-bjg" userLabel="Image View - checkmark" customClass="PFImageView">
+                        <rect key="frame" x="275" y="14" width="27" height="27"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="hbar_96x2.png" id="Af8-J2-XAV" userLabel="Image View - divider">
                         <rect key="frame" x="0.0" y="56" width="320" height="1"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
+                    <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="10" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="p8L-mi-WFf" userLabel="Label - ratingLabel" customClass="BrandUILabel">
+                        <rect key="frame" x="276" y="16" width="24" height="24"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
+                        <color key="textColor" red="0.15686274509803921" green="0.81176470588235294" blue="0.91764705882352937" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </label>
                 </subviews>
             </tableViewCellContentView>
             <connections>
+                <outlet property="ratingLabel" destination="p8L-mi-WFf" id="8Kt-VD-Awc"/>
                 <outlet property="roundPic" destination="1zI-Ub-8I5" id="Xgo-8M-yo6"/>
                 <outlet property="titleLabel" destination="5" id="12"/>
             </connections>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="checkbox_aqua.png" width="13" height="13"/>
         <image name="hbar_96x2.png" width="96" height="2"/>
+        <image name="rating_circle_bg_aqua.png" width="27" height="27"/>
     </resources>
 </document>

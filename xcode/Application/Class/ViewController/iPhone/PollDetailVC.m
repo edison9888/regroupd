@@ -44,7 +44,8 @@
     contactKeys = [[NSMutableArray alloc] init];
     
     self.subjectLabel.text = [DataModel shared].form.name;
-    
+    self.optionTitle.text = @"";
+
     
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
@@ -127,7 +128,7 @@
         [formSvc apiListFormOptions:[DataModel shared].form.system_id callback:^(NSArray *results) {
             NSLog(@"Found form options for form %@ count=%i", [DataModel shared].form.system_id, results.count);
             
-            NSMutableArray *dataArray = [[NSMutableArray alloc] initWithCapacity:results.count];
+            dataArray = [[NSMutableArray alloc] initWithCapacity:results.count];
             NSMutableDictionary *dict;
             optionKeys = [[NSMutableArray alloc] init];
             
@@ -230,6 +231,9 @@
         self.counterLabel.text = pageCounter;
         currentKey = [optionKeys objectAtIndex:pageIndex.intValue];
         [self filterResponsesByOption:currentKey];
+
+        NSMutableDictionary *pageData = (NSMutableDictionary *) [dataArray objectAtIndex:pageIndex.intValue];
+        self.optionTitle.text = (NSString *) [pageData objectForKey:@"name"];
     }
 }
 

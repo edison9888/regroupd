@@ -13,7 +13,17 @@
 
 @synthesize titleLabel;
 
-
+-(id)initWithCoder:(NSCoder *)aDecoder
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    self = [super initWithCoder: aDecoder];
+    if (self)
+    {
+        
+    }
+    return self;
+}
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     NSLog(@"%s", __FUNCTION__);
@@ -26,7 +36,7 @@
         [self.roundPic.layer setMasksToBounds:YES];
         [self.roundPic.layer setBorderWidth:1.0f];
         [self.roundPic.layer setBorderColor:[UIColor whiteColor].CGColor];
-        self.roundPic.clipsToBounds = YES;
+//        self.roundPic.clipsToBounds = YES;
         self.roundPic.contentMode = UIViewContentModeScaleAspectFill;
         
         self.roundPic.layer.shadowColor = [UIColor lightGrayColor].CGColor;
