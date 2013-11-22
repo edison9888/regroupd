@@ -71,7 +71,6 @@
     NSDateFormatter *msgTimeFormat;
     NSMutableArray *attachedFormOptions;
     NSMutableDictionary *formCache;
-    NSMutableDictionary *formResponsesCache;
 
     FormManager *formSvc;
     

@@ -193,7 +193,7 @@
 }
 - (void)listFormsByType:(int)formType
 {
-    self.tableData =[[NSMutableArray alloc]init];
+    [self.tableData removeAllObjects];
     
     for (FormVO *form in allForms) {
         if (form.type == formType) {

@@ -19,6 +19,8 @@
 @synthesize formsList;
 
 @synthesize contactCache;
+@synthesize chatCache;
+
 @synthesize timestampText;
 @synthesize needsLookup, needsRefresh;
 @synthesize stageHeight, stageWidth;

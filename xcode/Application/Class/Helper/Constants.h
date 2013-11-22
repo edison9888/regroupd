@@ -18,6 +18,7 @@
 #define k_formSaveCompleteNotification @"formSaveCompleteNotification"
 
 #define k_formResponseEntered @"formResponseEntered"
+#define k_showFormDetails @"showFormDetails"
 
 
 extern uint const kLabelDarkGrey444242;

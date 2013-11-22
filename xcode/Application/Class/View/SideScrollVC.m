@@ -9,7 +9,6 @@
 
 #define kPhotoWidth 320
 #define kPhotoHeight 300
-#define kPageCounter @"%@ / %@"
 
 @implementation SideScrollVC
 
@@ -130,13 +129,9 @@
     previousView = aView;
     
     
-    NSString *pageCounter = [NSString stringWithFormat:kPageCounter,
-                             [NSNumber numberWithInt:currentIndex + 1],
-                             [NSNumber numberWithInt:viewCount]];
-    
     [[NSNotificationCenter defaultCenter] postNotification:[NSNotification
-                                                            notificationWithName:@"updatePageNumber"
-                                                            object:pageCounter]];
+                                                            notificationWithName:@"pageUpdateNotification"
+                                                            object:[NSNumber numberWithInt:currentIndex]]];
 
 }
 

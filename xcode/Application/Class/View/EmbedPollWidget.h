@@ -15,7 +15,6 @@
     UIView *_theView;
     NSMutableArray *_optionViews;
     
-    NSMutableArray *_formOptions;
     BOOL formLocked;
     FormManager *formSvc;
 }
@@ -37,6 +36,7 @@
 @property (nonatomic, strong) IBOutlet BrandUILabel *subjectLabel;
 @property (nonatomic, strong) IBOutlet UIView *doneView;
 @property (nonatomic, strong) IBOutlet UIButton *doneButton;
+@property (nonatomic, strong) IBOutlet UIView *seeDetailsView;
 
 @property (nonatomic, strong) IBOutlet UIImageView *rightCallout;
 @property (nonatomic, strong) IBOutlet UIImageView *leftCallout;

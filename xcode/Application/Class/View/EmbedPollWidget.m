@@ -28,7 +28,6 @@
     self = [super initWithFrame:frame];
     
     if (self) {
-        _formOptions = formOptions;
         self.optionKeys = [[NSMutableArray alloc] init];
         
         _optionViews = [[NSMutableArray alloc] initWithCapacity:formOptions.count];
@@ -119,17 +118,17 @@
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
-    if (formLocked) {
-        return;
-    }
 //    [super touchesBegan:touches withEvent:event];
 //    [self.nextResponder touchesBegan:touches withEvent:event];
     CGPoint locationPoint = [[touches anyObject] locationInView:self];
 
+    float hitX = locationPoint.x;
     float hitY = locationPoint.y;
     float hitNum = (hitY - kInitialY) / kEmbedOptionHeight;
-//    NSLog(@"y = %f", hitNum);
-//    NSLog(@"Done button range = %f to %f", self.doneView.frame.origin.y, self.doneView.frame.origin.y + self.doneView.frame.size.height);
+    CGRect detailsFrame = self.seeDetailsView.frame;
+
+    NSLog(@"hit point = %f / %f", hitX, hitY);
+
     
     if (hitNum > 0 && hitNum < _optionViews.count) {
         if (!formLocked) {
@@ -137,7 +136,6 @@
             
             self.optionIndex = ((int) hitNum);
             NSLog(@"option index = %i", self.optionIndex);
-//            NSString *optionKey =
             ((FormOptionVO *)[_optionViews objectAtIndex:self.optionIndex]).isSelected = YES;
             
             if (self.allowMultiple) {
@@ -170,8 +168,15 @@
                 
             }
         }
+    } else if (hitY >= detailsFrame.origin.y && hitY <= detailsFrame.origin.y + detailsFrame.size.height
+               && hitX >= detailsFrame.origin.x && hitX <= detailsFrame.origin.x + detailsFrame.size.width) {
+//        [DataModel shared].form = self.theForm;
+        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_showFormDetails object:self.form_key]];
+
+        
+        
     } else if (hitY >= self.doneView.frame.origin.y && hitY <= self.doneView.frame.origin.y + self.doneView.frame.size.height) {
-        if (self.doneButton.enabled) {
+        if (!formLocked) {
             NSLog(@"Hit done button at hitY %f", hitY);
             self.doneButton.enabled = NO;
             formLocked = YES;
@@ -210,12 +215,12 @@
                     }
                 }];
                 
-            }
+            } // end for loop
             
-        }
+        } // !formLocked
         
         
-    }
+    } // doneView hit test
 
 }
 - (IBAction)tapDoneButton {

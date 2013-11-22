@@ -7,19 +7,34 @@
 //
 
 #import "SlideViewController.h"
-#import "SQLiteDB.h"
-#import "CCTableViewCell.h"
-#import "ContactVO.h"
 #import "FormManager.h"
+#import "ChatManager.h"
+#import "ContactManager.h"
+
+#import "SQLiteDB.h"
+#import "PollResponseCell.h"
+#import "ContactVO.h"
 #import "FormVO.h"
 #import "FormOptionVO.h"
+#import "FormResponseVO.h"
+
 #import "SideScrollVC.h"
 
 @interface PollDetailVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
+    FormManager *formSvc;
+    ChatManager *chatSvc;
+    ContactManager *contactSvc;
+    
     BOOL isLoading;
     int selectedIndex;
+    NSString *currentKey;
+    int contactTotal;
+
+    NSMutableArray *optionKeys;
+    NSMutableArray *contactKeys;
+    
     NSMutableArray *tableData;
-    FormManager *formSvc;
+    NSMutableArray *allResponses;
     
 }
 
@@ -28,6 +43,7 @@
 @property (nonatomic, retain) IBOutlet UIView *browseView;
 @property (nonatomic, strong) IBOutlet BrandUILabel *subjectLabel;
 @property (nonatomic, strong) IBOutlet BrandUILabel *counterLabel;
+@property (nonatomic, strong) IBOutlet BrandUILabel *responsesLabel;
 
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;

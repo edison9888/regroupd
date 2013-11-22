@@ -451,24 +451,19 @@
     }];
 
 }
-- (void) apiListChatForms:(NSString *)chatId callback:(void (^)(NSArray *results))callback{
+- (void) apiListChatForms:(NSString *)chatId formKey:(NSString *)formId callback:(void (^)(NSArray *results))callback{
     PFQuery *query = [PFQuery queryWithClassName:kChatFormDB];
-    [query whereKey:@"chat" equalTo:[PFObject objectWithoutDataWithClassName:kChatDB objectId:chatId]];
+    
+    if (chatId) {
+        [query whereKey:@"chat" equalTo:[PFObject objectWithoutDataWithClassName:kChatDB objectId:chatId]];
+    }
+    if (formId) {
+        [query whereKey:@"form" equalTo:[PFObject objectWithoutDataWithClassName:kFormDB objectId:formId]];
+    }
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        
         callback(results);
-//        int total = results.count;
-//        int index = 0;
-//        NSMutableArray *forms = [[NSMutableArray alloc] init];
-//        FormVO *form;
-//        FormOptionVO *option;
-//        for (PFObject *result in results) {
-//            
-//            form = [FormVO readFromPFObject:result];
-//            
-//            
-//            
-//        }
     }];
 
 

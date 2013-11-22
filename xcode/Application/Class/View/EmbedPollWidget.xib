@@ -12,6 +12,7 @@
                 <outlet property="leftCallout" destination="GYI-OW-Zkb" id="bhI-vE-6CS"/>
                 <outlet property="nameLabel" destination="Pc3-0R-kpp" id="iie-Vo-Ad1"/>
                 <outlet property="rightCallout" destination="LT6-h6-pXV" id="drP-Jf-cbc"/>
+                <outlet property="seeDetailsView" destination="b9w-v1-sFq" id="NaQ-6S-hBs"/>
                 <outlet property="subjectLabel" destination="kkn-bL-MMu" id="bg4-rv-dPN"/>
                 <outlet property="timeLabel" destination="EEM-NQ-JQ6" id="baE-uz-cR8"/>
             </connections>

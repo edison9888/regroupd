@@ -54,6 +54,8 @@
 @property (nonatomic, retain) NSMutableArray *formsList;
 
 @property (nonatomic, retain) NSMutableDictionary *contactCache;
+@property (nonatomic, retain) NSMutableDictionary *chatCache;
+
 @property (nonatomic, retain) NSString *action;
 @property (nonatomic, retain) NSString *timestampText;
 

@@ -169,6 +169,8 @@
 		1E5CABD917BA8DF0000D8759 /* RecentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E5CABD717BA8DF0000D8759 /* RecentTableViewCell.xib */; };
 		1E5CB6CC1825B2F7002FE4FA /* GroupManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5CB6CB1825B2F7002FE4FA /* GroupManager.m */; };
 		1E6A1018183E536E00F63666 /* ChatFormVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E6A1017183E536E00F63666 /* ChatFormVO.m */; };
+		1E6A101D183EF66400F63666 /* PollResponseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E6A101B183EF66400F63666 /* PollResponseCell.m */; };
+		1E6A101E183EF66400F63666 /* PollResponseCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E6A101C183EF66400F63666 /* PollResponseCell.xib */; };
 		1E751B2C179C4B11003AB13D /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E751B2B179C4B11003AB13D /* UserManager.m */; };
 		1E76F4A417960BE1007EF5B0 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA4B1782638200A294C0 /* Default-568h@2x.png */; };
 		1E76F4A617961169007EF5B0 /* CCTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E76F4A517961169007EF5B0 /* CCTableViewCell.xib */; };
@@ -714,6 +716,9 @@
 		1E5CB6CB1825B2F7002FE4FA /* GroupManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupManager.m; sourceTree = "<group>"; };
 		1E6A1016183E536E00F63666 /* ChatFormVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatFormVO.h; sourceTree = "<group>"; };
 		1E6A1017183E536E00F63666 /* ChatFormVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatFormVO.m; sourceTree = "<group>"; };
+		1E6A101A183EF66400F63666 /* PollResponseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PollResponseCell.h; sourceTree = "<group>"; };
+		1E6A101B183EF66400F63666 /* PollResponseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PollResponseCell.m; sourceTree = "<group>"; };
+		1E6A101C183EF66400F63666 /* PollResponseCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PollResponseCell.xib; sourceTree = "<group>"; };
 		1E751B2A179C4B11003AB13D /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserManager.h; sourceTree = "<group>"; };
 		1E751B2B179C4B11003AB13D /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserManager.m; sourceTree = "<group>"; };
 		1E76F4941795EE3E007EF5B0 /* AppIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon@2x.png"; sourceTree = "<group>"; };
@@ -1418,6 +1423,33 @@
 			name = Scroller;
 			sourceTree = "<group>";
 		};
+		1E6A1019183EF65100F63666 /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				1E6A101A183EF66400F63666 /* PollResponseCell.h */,
+				1E6A101B183EF66400F63666 /* PollResponseCell.m */,
+				1E6A101C183EF66400F63666 /* PollResponseCell.xib */,
+				1E59F12117FC873900EE2902 /* ChatTableViewCell.h */,
+				1E59F12217FC873900EE2902 /* ChatTableViewCell.m */,
+				1E59F12317FC873900EE2902 /* ChatTableViewCell.xib */,
+				1EC3DE1F180F204C008E2D3F /* ContactTableViewCell.h */,
+				1EC3DE20180F204C008E2D3F /* ContactTableViewCell.m */,
+				1EC3DE21180F204C008E2D3F /* ContactTableViewCell.xib */,
+				1E928165177FB68F008A583C /* CCSearchBar.h */,
+				1E928166177FB68F008A583C /* CCSearchBar.m */,
+				1E928167177FB68F008A583C /* CCTableViewCell.h */,
+				1E928168177FB68F008A583C /* CCTableViewCell.m */,
+				1E76F4A517961169007EF5B0 /* CCTableViewCell.xib */,
+				1E8BFAE117F78D750053BEE3 /* FormsTableViewCell.h */,
+				1E8BFAE217F78D750053BEE3 /* FormsTableViewCell.m */,
+				1E8BFAE317F78D750053BEE3 /* FormsTableViewCell.xib */,
+				1E5CABD517BA8DF0000D8759 /* RecentTableViewCell.h */,
+				1E5CABD617BA8DF0000D8759 /* RecentTableViewCell.m */,
+				1E5CABD717BA8DF0000D8759 /* RecentTableViewCell.xib */,
+			);
+			name = TableViewCells;
+			sourceTree = "<group>";
+		};
 		1E79B70A1815BB39002E417A /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -1889,23 +1921,7 @@
 				1E59F10C17FA5E8D00EE2902 /* Scroller */,
 				1E1E25BF17F32F450079416C /* Widget */,
 				1E0CAA3F178253CE00A294C0 /* UI */,
-				1E59F12117FC873900EE2902 /* ChatTableViewCell.h */,
-				1E59F12217FC873900EE2902 /* ChatTableViewCell.m */,
-				1E59F12317FC873900EE2902 /* ChatTableViewCell.xib */,
-				1EC3DE1F180F204C008E2D3F /* ContactTableViewCell.h */,
-				1EC3DE20180F204C008E2D3F /* ContactTableViewCell.m */,
-				1EC3DE21180F204C008E2D3F /* ContactTableViewCell.xib */,
-				1E928165177FB68F008A583C /* CCSearchBar.h */,
-				1E928166177FB68F008A583C /* CCSearchBar.m */,
-				1E928167177FB68F008A583C /* CCTableViewCell.h */,
-				1E928168177FB68F008A583C /* CCTableViewCell.m */,
-				1E76F4A517961169007EF5B0 /* CCTableViewCell.xib */,
-				1E8BFAE117F78D750053BEE3 /* FormsTableViewCell.h */,
-				1E8BFAE217F78D750053BEE3 /* FormsTableViewCell.m */,
-				1E8BFAE317F78D750053BEE3 /* FormsTableViewCell.xib */,
-				1E5CABD517BA8DF0000D8759 /* RecentTableViewCell.h */,
-				1E5CABD617BA8DF0000D8759 /* RecentTableViewCell.m */,
-				1E5CABD717BA8DF0000D8759 /* RecentTableViewCell.xib */,
+				1E6A1019183EF65100F63666 /* TableViewCells */,
 				1E0AEC631793860D00710FDE /* TabBarView.h */,
 				1E0AEC641793860D00710FDE /* TabBarView.m */,
 				1E928169177FB68F008A583C /* TabBarView.xib */,
@@ -2664,6 +2680,7 @@
 				1E8BFAC517F738540053BEE3 /* navbtn_done.png in Resources */,
 				1E8BFAE017F767290053BEE3 /* BSKeyboardControls.strings in Resources */,
 				1E8BFAE517F78D750053BEE3 /* FormsTableViewCell.xib in Resources */,
+				1E6A101E183EF66400F63666 /* PollResponseCell.xib in Resources */,
 				1E8BFAE717F78DB10053BEE3 /* icon_send_arrow_purple@2x.png in Resources */,
 				1E8BFAF017F7A82E0053BEE3 /* navbtn_forms_ratings_off@2x.png in Resources */,
 				1E3ACA451804E24C00A6E6B2 /* splash-568@2x.png in Resources */,
@@ -2873,6 +2890,7 @@
 				1E1E25C717F342190079416C /* FancyTextField.m in Sources */,
 				1E1E25CC17F348D60079416C /* SurveyOptionWithPic.m in Sources */,
 				1E88804A17F4BCF20070116C /* FormVO.m in Sources */,
+				1E6A101D183EF66400F63666 /* PollResponseCell.m in Sources */,
 				1EC44C5C18130CC100F4A2C2 /* EditPollVC.m in Sources */,
 				1E88804D17F4BD950070116C /* FormOptionVO.m in Sources */,
 				1E1A9A9717FE4C08008D81E6 /* ChatMessageVO.m in Sources */,

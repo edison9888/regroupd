@@ -17,6 +17,10 @@
 #import "EmbedRSVPWidget.h"
 #import "ChatMessageWidget.h"
 
+#import "PollDetailVC.h"
+#import "RatingDetailVC.h"
+#import "RSVPDetailVC.h"
+
 #import "UIBubbleTableView.h"
 #import "UIBubbleTableViewDataSource.h"
 #import "NSBubbleData.h"
@@ -149,6 +153,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(formResponseEnteredHandler:)     name:k_formResponseEntered
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(showFormDetailsHandler:)     name:k_showFormDetails
+                                               object:nil];
     
     // Create and initialize a tap gesture
     
@@ -225,7 +232,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         [currentInstallation saveInBackground];
         
         NSLog(@"Fetch chat by objectId %@", [DataModel shared].chat.system_id);
-        [chatSvc apiListChatForms:[DataModel shared].chat.system_id callback:^(NSArray *results) {
+//        - (void) apiListChatForms:(NSString *)chatId formKey:(NSString *)formId callback:(void (^)(NSArray *results))callback
+        [chatSvc apiListChatForms:[DataModel shared].chat.system_id formKey:nil callback:^(NSArray *results) {
             // Each result is a ChatFormDB object with relational values: form and chat
             formCache = [[NSMutableDictionary alloc]init];
             __block int index=0;
@@ -247,6 +255,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                             
                             
                             if (form) {
+                                NSLog(@"Getting form responses");
                                 [formSvc apiListFormResponses:pfForm.objectId contactKey:contactKey callback:^(NSArray *results) {
                                     form.responsesMap = [[NSMutableDictionary alloc] init];
                                     if (results.count == 0) {
@@ -327,38 +336,58 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSLog(@"%s", __FUNCTION__);
     
     @try {
-        if (notification.object != nil) {
-//            ChatVO *theChat = (ChatVO *) notification.object;
+        
+        [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Response submitted." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+
+//        if (notification.object != nil) {
 //            
-//            tableDataSource = [[NSMutableArray alloc] init];
-//            self.imageMap = [[NSMutableDictionary alloc] initWithCapacity:theChat.contact_keys.count];
 //            
-//            
-//            int keycount = theChat.contact_keys.count;
-//            __block int counter = 0;
-//            //            theChat.contactMap.ke
-//            for (NSString *key in theChat.contact_keys) {
-//                
-//                [contactSvc asyncLoadCachedPhoto:key callback:^(UIImage *img) {
-//                    if (img) {
-//                        NSLog(@"Setting image for key %@", key);
-//                        [self.imageMap setObject:img forKey:key];
-//                    } else {
-//                        NSLog(@"No image for key %@", key);
-//                    }
-//                    counter++;
-//                    if (counter == keycount) {
-//                        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatContactsLoaded object:theChat]];
-//                        //                            [self.bubbleTable reloadData];
-//                    }
-//                }];
-//            }
-            
-            
-        }
+//        }
     }
     @catch (NSException *exception) {
         NSLog(@"########### Exception %@", exception);
+    }
+    
+    
+}
+
+- (void)showFormDetailsHandler:(NSNotification*)notification
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    if (notification.object) {
+        NSString *formKey = (NSString *) notification.object;
+        
+        if ([formCache objectForKey:formKey]) {
+            FormVO *theForm = (FormVO *) [formCache objectForKey:formKey];
+            [DataModel shared].form = theForm;
+            
+            switch (theForm.type) {
+                case FormType_POLL:
+                {
+                    [DataModel shared].action = @"popup";
+                    PollDetailVC *pollDetailVC = [[PollDetailVC alloc] initWithNibName:@"PollDetailVC" bundle:nil];
+                    [self presentViewController:pollDetailVC animated:YES completion:nil];
+                    
+                    break;
+                }
+                case FormType_RATING:
+                {
+                    [DataModel shared].action = @"popup";
+                    RatingDetailVC *detailsVC = [[RatingDetailVC alloc] init];
+                    [self presentViewController:detailsVC animated:YES completion:nil];
+
+                    break;
+                }
+                case FormType_RSVP:
+                {
+                    break;
+                }
+            }
+        } else {
+            NSLog(@"formKey not recognized in cache %@", formKey);
+        }
+        
     }
     
     
@@ -677,7 +706,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         return bubble;
         
     } else if (theForm.type == FormType_RATING) {
-        EmbedRatingWidget *embedWidget = [[EmbedRatingWidget alloc] initWithFrame:msgFrame andOptions:theForm.options isOwner:isOwner];
+        EmbedRatingWidget *embedWidget = [[EmbedRatingWidget alloc] initWithFrame:msgFrame andOptions:theForm.options andResponses:theForm.responsesMap isOwner:isOwner];
         embedWidget.subjectLabel.text = theForm.name;
         embedWidget.userInteractionEnabled = YES;
         embedWidget.tag = 299;
@@ -1315,7 +1344,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         CGPoint loc = [sender locationInView:view];
         UIView* subview = [view hitTest:loc withEvent:nil];
         CGPoint subloc = [sender locationInView:subview];
-        NSLog(@"hit tag = %i at point %f / %f", subview.tag, subloc.x, subloc.y);
+//        NSLog(@"hit tag = %i at point %f / %f", subview.tag, subloc.x, subloc.y);
         
         if (keyboardIsShown && subview.tag != kTagSendButton) {
             [self.inputField resignFirstResponder];

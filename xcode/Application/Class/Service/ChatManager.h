@@ -47,5 +47,5 @@
 
 // ChatForm API
 - (void) apiSaveChatForm:(NSString *)chatId formId:(NSString *)formId callback:(void (^)(PFObject *object))callback;
-- (void) apiListChatForms:(NSString *)chatId callback:(void (^)(NSArray *results))callback;
+- (void) apiListChatForms:(NSString *)chatId formKey:(NSString *)formId callback:(void (^)(NSArray *results))callback;
 @end

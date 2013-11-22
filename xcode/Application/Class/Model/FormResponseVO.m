@@ -14,6 +14,7 @@
     FormResponseVO *o = [[FormResponseVO alloc] init];
     NSString *text;
     NSNumber *number;
+//    PFObject *pfObject;
     
     o.system_id = data.objectId;
     o.createdAt = data.createdAt;
@@ -21,6 +22,9 @@
 
     if (data[@"contact"]) {
         o.contact_key = ((PFObject *) data[@"contact"]).objectId;
+//        pfObject = data[@"contact"];
+//        [pfObject fetchIfNeeded];
+//        o.contact = [ContactVO readFromPFObject:pfObject];
     }
     if (data[@"form"]) {
         o.form_key = ((PFObject *) data[@"form"]).objectId;
@@ -31,14 +35,6 @@
     if (data[@"option"]) {
         o.option_key = ((PFObject *) data[@"option"]).objectId;
     }
-//    text = [data valueForKey:@"contact_key"];
-//    o.contact_key = text;
-//    text = [data valueForKey:@"form_key"];
-//    o.form_key = text;
-//    text = [data valueForKey:@"chat_key"];
-//    o.chat_key = text;
-//    text = [data valueForKey:@"option_key"];
-//    o.option_key = text;
 
     if (data[@"status"]) {
         text = [data valueForKey:@"status"];

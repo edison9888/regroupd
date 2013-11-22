@@ -113,25 +113,39 @@
     o.createdAt = data.createdAt;
     o.updatedAt = data.updatedAt;
     
-    text = [data valueForKey:@"record_id"];
-    o.record_id = [NSNumber numberWithInt:text.integerValue];
+    if (data[@"phone"]) {
+        text = [data valueForKey:@"phone"];
+        o.phone = text;
+    }
+//    text = [data valueForKey:@"record_id"];
+//    o.record_id = [NSNumber numberWithInt:text.integerValue];
     
-    text = [data valueForKey:@"facebook_id"];
-    o.facebook_id = text;
-    text = [data valueForKey:@"first_name"];
-    o.first_name = text;
-    text = [data valueForKey:@"last_name"];
-    o.last_name = text;
-    text = [data valueForKey:@"phone"];
-    o.phone = text;
-    text = [data valueForKey:@"email"];
-    o.email = text;
-    text = [data valueForKey:@"imagefile"];
-    o.imagefile = text;
-    text = [data valueForKey:@"type"];
-    o.type = text.intValue;
-    text = [data valueForKey:@"status"];
-    o.status = text.intValue;
+//    text = [data valueForKey:@"facebook_id"];
+//    o.facebook_id = text;
+    if (data[@"first_name"]) {
+        text = [data valueForKey:@"first_name"];
+        o.first_name = text;
+    }
+    if (data[@"last_name"]) {
+        text = [data valueForKey:@"last_name"];
+        o.last_name = text;
+    }
+
+    if (data[@"email"]) {
+        text = [data valueForKey:@"email"];
+        o.email = text;
+    }
+    
+    if (data[@"photo"]) {
+        o.pfPhoto = (PFFile *) [data objectForKey:@"photo"];
+    }
+
+//    text = [data valueForKey:@"imagefile"];
+//    o.imagefile = text;
+//    text = [data valueForKey:@"type"];
+//    o.type = text.intValue;
+//    text = [data valueForKey:@"status"];
+//    o.status = text.intValue;
     return o;
 }
 

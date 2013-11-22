@@ -10,6 +10,10 @@
 #import "SQLiteDB.h"
 #import "ParseUtils.h"
 
+
+#define kPageCounter @"%@ / %@"
+#define kResponseCaption @"%i/%i people chose this"
+
 @interface PollDetailVC ()
 
 @end
@@ -34,10 +38,13 @@
     [super viewDidLoad];
     
     formSvc = [[FormManager alloc] init];
+    chatSvc = [[ChatManager alloc] init];
+    contactSvc = [[ContactManager alloc] init];
+    allResponses = [[NSMutableArray alloc] init];
+    contactKeys = [[NSMutableArray alloc] init];
     
     self.subjectLabel.text = [DataModel shared].form.name;
     
-    [self loadFormData];
     
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
@@ -48,7 +55,10 @@
     
     self.tableData =[[NSMutableArray alloc]init];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePageNumberHandler:)     name:@"updatePageNumber"            object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pageUpdateNotificationHandler:)     name:@"pageUpdateNotification"            object:nil];
+
+    isLoading = YES;
+    [self preloadFormData];
 
 //    [self performSearch:@""];
     
@@ -63,27 +73,89 @@
 
 #pragma mark - Form Options handling
 
-- (void) loadFormData {
-    
-    @try {
-        [formSvc apiListFormOptions:[DataModel shared].form.system_id callback:^(NSArray *results) {
-            NSLog(@"Found form options for form %@ count=%i", [DataModel shared].form.system_id, results.count);
+- (void) preloadFormData {
+    contactTotal = 0;
+    [formSvc apiListFormResponses:[DataModel shared].form.system_id contactKey:nil callback:^(NSArray *results) {
+        FormResponseVO *response;
+        for (PFObject *pfResponse in results) {
+            response = [FormResponseVO readFromPFObject:pfResponse];
             
-            NSMutableArray *dataArray = [[NSMutableArray alloc] initWithCapacity:results.count];
-            NSMutableDictionary *dict;
-            
-            for (PFObject *result in results) {
-                dict = [ParseUtils readFormOptionDictFromPFObject:result];
-                [dataArray addObject:dict];
+            if (![contactKeys containsObject:response.contact_key]) {
+                [contactKeys addObject:response.contact_key];
             }
-            self.carouselVC = [[SideScrollVC alloc] initWithData:dataArray];
+            NSLog(@"Response: optionKey %@ contactKey %@", response.option_key, response.contact_key);
+            [allResponses addObject:response];
+                        
+        }
+        [contactSvc apiLookupContacts:[contactKeys copy] callback:^(NSArray *results) {
             
-            CGRect carouselFrame = CGRectMake(0, 0, 320, 300);
-            self.carouselVC.view.frame = carouselFrame;
-            [self.browseView addSubview:self.carouselVC.view];
+            NSLog(@"Lookup contacts found %@", results);
             
-            [self.browseView sendSubviewToBack:self.carouselVC.view];
+            [chatSvc apiListChatForms:nil formKey:[DataModel shared].form.system_id callback:^(NSArray *results) {
+                __block int index = 0;
+                int total = results.count;
+                if (total == 0) {
+                    [self loadFormData];
+                } else {
+                    
+                    for (PFObject *result in results) {
+                        PFObject *pfChat = result[@"chat"];
+                        [pfChat fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+                            if (pfChat[@"contact_keys"]) {
+                                NSArray *keys = pfChat[@"contact_keys"];
+                                contactTotal += keys.count;
+                            }
+                            index ++;
+                            if (index == total) {
+                                [self loadFormData];
+                            }
+                        }];
+                    }
+                    contactTotal-= results.count;
+                }
+                
+            }];
         }];
+        
+    }];
+
+}
+- (void) loadFormData {
+    @try {
+        contactTotal = 0;
+        
+
+            
+            [formSvc apiListFormOptions:[DataModel shared].form.system_id callback:^(NSArray *results) {
+                NSLog(@"Found form options for form %@ count=%i", [DataModel shared].form.system_id, results.count);
+                
+                NSMutableArray *dataArray = [[NSMutableArray alloc] initWithCapacity:results.count];
+                NSMutableDictionary *dict;
+                optionKeys = [[NSMutableArray alloc] init];
+                
+                for (PFObject *result in results) {
+                    dict = [ParseUtils readFormOptionDictFromPFObject:result];
+                    [dataArray addObject:dict];
+                    [optionKeys addObject:[dict objectForKey:@"system_id"]];
+                    // Set currentKey to filter table results
+                }
+                self.carouselVC = [[SideScrollVC alloc] initWithData:dataArray];
+                
+                CGRect carouselFrame = CGRectMake(0, 0, 320, 300);
+                self.carouselVC.view.frame = carouselFrame;
+                [self.browseView addSubview:self.carouselVC.view];
+                
+                [self.browseView sendSubviewToBack:self.carouselVC.view];
+                currentKey = [optionKeys objectAtIndex:0];
+                [self filterResponsesByOption:currentKey];
+                
+                /*
+                 Need to display:
+                 -- how many responses received out of total chat contacts
+                 --
+                 */
+            }];
+            
         
         
     }
@@ -92,6 +164,25 @@
     }
     
     
+}
+
+- (void)filterResponsesByOption:(NSString *)optionKey
+{
+    NSLog(@"%s", __FUNCTION__);
+
+    [self.tableData removeAllObjects];
+    for (FormResponseVO *response in allResponses) {
+        if ([response.option_key isEqualToString:optionKey]) {
+            if ([[DataModel shared].contactCache objectForKey:response.contact_key]) {
+                response.contact = (ContactVO *) [[DataModel shared].contactCache objectForKey:response.contact_key];
+            }
+            [self.tableData addObject:response];
+        }
+    }
+    NSString *caption = [NSString stringWithFormat:kResponseCaption, self.tableData.count, contactTotal];
+    self.responsesLabel.text = caption;
+    
+    [self.theTableView reloadData];
 }
 
 - (void) loadFormOptions {
@@ -130,10 +221,18 @@
     
 }
 
-- (void)updatePageNumberHandler:(NSNotification*)notification
+- (void)pageUpdateNotificationHandler:(NSNotification*)notification
 {
-    NSString *text = (NSString *) notification.object;
-    self.counterLabel.text = text;
+    NSLog(@"%s", __FUNCTION__);
+    if (notification.object) {
+        NSNumber *pageIndex = (NSNumber *) notification.object;
+        NSString *pageCounter = [NSString stringWithFormat:kPageCounter,
+                                 [NSNumber numberWithInt:pageIndex.intValue + 1],
+                                 [NSNumber numberWithInt:optionKeys.count]];
+        self.counterLabel.text = pageCounter;
+        currentKey = [optionKeys objectAtIndex:pageIndex.intValue];
+        [self filterResponsesByOption:currentKey];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -151,23 +250,23 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"%s", __FUNCTION__);
-    // http://stackoverflow.com/questions/413993/loading-a-reusable-uitableviewcell-from-a-nib
     
-    static NSString *CellIdentifier = @"CCTableCell";
-    static NSString *CellNib = @"CCTableViewCell";
+    static NSString *CellIdentifier = @"PollResponseCell";
+    static NSString *CellNib = @"PollResponseCell";
     
-    CCTableViewCell *cell = (CCTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    PollResponseCell *cell = (PollResponseCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     @try {
         
         if (cell == nil) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:CellNib owner:self options:nil];
-            cell = (CCTableViewCell *)[nib objectAtIndex:0];
+            cell = (PollResponseCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
         }
+        FormResponseVO *response = (FormResponseVO *) [tableData objectAtIndex:indexPath.row];
         
-        NSDictionary *rowData = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
-        cell.rowdata = rowData;
+        cell.titleLabel.text = response.contact.fullname;
+        cell.roundPic.file = response.contact.pfPhoto;
+        [cell.roundPic loadInBackground];
         
     } @catch (NSException * e) {
         NSLog(@"Exception: %@", e);
@@ -179,32 +278,29 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 54;
+    return 57;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-#ifdef DEBUGX
-    NSLog(@"%s", __FUNCTION__);
-#endif
-    
-    @try {
-        if (indexPath != nil) {
-            NSLog(@"Selected row %i", indexPath.row);
-            
-            selectedIndex = indexPath.row;
-            NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
-            
-            [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
-            
-            [DataModel shared].action = kActionEDIT;
-            [_delegate gotoNextSlide];
-            
-        }
-    } @catch (NSException * e) {
-        NSLog(@"Exception: %@", e);
-    }
-    
+    return;
+//    @try {
+//        if (indexPath != nil) {
+//            NSLog(@"Selected row %i", indexPath.row);
+//            
+//            selectedIndex = indexPath.row;
+//            NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
+//            
+//            [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
+//            
+//            [DataModel shared].action = kActionEDIT;
+//            [_delegate gotoNextSlide];
+//            
+//        }
+//    } @catch (NSException * e) {
+//        NSLog(@"Exception: %@", e);
+//    }
+//    
     
 }
 
@@ -258,7 +354,11 @@
 
 - (IBAction)tapCloseButton
 {
-    [_delegate gotoSlideWithName:@"FormsHome"];
+    if ([[DataModel shared].action isEqualToString:@"popup"]) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        [_delegate gotoSlideWithName:@"FormsHome"];
+    }
     
 }
 

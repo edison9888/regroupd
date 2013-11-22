@@ -9,15 +9,18 @@
 #import <UIKit/UIKit.h>
 #import "BrandUILabel.h"
 #import "EmbedRatingOption.h"
+#import "FormManager.h"
+#import "FormVO.h"
 
 @interface EmbedRatingWidget : UIView {
     UIView *_theView;
-    NSMutableArray *options;
+    NSMutableArray *optionViews;
     BOOL formLocked;
+    FormManager *formSvc;
 }
 
+- (id)initWithFrame:(CGRect)frame andOptions:(NSMutableArray *)formOptions andResponses:(NSMutableDictionary *)responseMap isOwner:(BOOL)owner;
 
-- (id)initWithFrame:(CGRect)frame andOptions:(NSMutableArray *)formOptions isOwner:(BOOL)owner;
 
 @property (nonatomic, retain) NSString *form_key;
 @property (nonatomic, retain) NSString *chat_key;
@@ -29,6 +32,7 @@
 
 @property (nonatomic, strong) IBOutlet UIView *doneView;
 @property (nonatomic, strong) IBOutlet UIButton *doneButton;
+@property (nonatomic, strong) IBOutlet UIView *seeDetailsView;
 
 @property (nonatomic, strong) IBOutlet UIImageView *rightCallout;
 @property (nonatomic, strong) IBOutlet UIImageView *leftCallout;

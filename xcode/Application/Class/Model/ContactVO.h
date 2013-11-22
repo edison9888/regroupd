@@ -53,7 +53,7 @@
 
 // Transient fields
 @property (nonatomic, retain) UIImage *photo;
-
+@property (nonatomic, retain) PFFile *pfPhoto;
 
 - (NSString *) fullname;
 

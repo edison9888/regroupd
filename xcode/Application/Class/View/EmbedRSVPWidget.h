@@ -25,6 +25,8 @@
 
 @property float dynamicHeight;
 
+@property (nonatomic, retain) FormVO *form;
+
 @property (nonatomic, retain) NSString *form_key;
 @property (nonatomic, retain) NSString *chat_key;
 
