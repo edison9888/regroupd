@@ -22,10 +22,9 @@
         _theView = [[[NSBundle mainBundle] loadNibNamed:@"ScrollOptionView" owner:self options:nil] objectAtIndex:0];
         _theView.backgroundColor = [UIColor clearColor];
 
-        NSString *name = (NSString *)[self.data objectForKey:@"name"];
-
+//        NSString *name = (NSString *)[self.data objectForKey:@"name"];
 //        NSLog(@"option = %@", name);
-        self.optionLabel.text = name;
+//        self.optionLabel.text = name;
         
 
         [self.roundPic.layer setCornerRadius:96.0f];

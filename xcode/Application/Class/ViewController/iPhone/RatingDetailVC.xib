@@ -9,6 +9,10 @@
             <connections>
                 <outlet property="browseView" destination="34" id="mxN-m9-QH7"/>
                 <outlet property="counterLabel" destination="MY3-HR-zUp" id="JPb-ta-8d2"/>
+                <outlet property="optionTitle" destination="Hiz-e9-YlA" id="Fei-Jd-rzs"/>
+                <outlet property="responsesLabel" destination="36" id="OYu-kS-PBp"/>
+                <outlet property="starRatingBG" destination="LOL-w1-jc0" id="EGE-zz-JFx"/>
+                <outlet property="starRatingLabel" destination="bh3-5q-Tf8" id="pm1-Vn-oup"/>
                 <outlet property="subjectLabel" destination="xVa-Qj-OpM" id="PqC-NU-3HI"/>
                 <outlet property="theTableView" destination="30" id="31"/>
                 <outlet property="view" destination="1" id="3"/>
@@ -47,11 +51,11 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" id="34">
-                    <rect key="frame" x="0.0" y="30" width="320" height="305"/>
+                    <rect key="frame" x="0.0" y="30" width="320" height="340"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Pizza, burgers, or burritos?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xVa-Qj-OpM" userLabel="BrandUI Label - subject" customClass="BrandUILabel">
-                            <rect key="frame" x="10" y="5" width="300" height="28"/>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="subject line" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xVa-Qj-OpM" userLabel="BrandUI Label - subject" customClass="BrandUILabel">
+                            <rect key="frame" x="10" y="1" width="300" height="28"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="16"/>
@@ -59,7 +63,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="1/3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="MY3-HR-zUp" userLabel="BrandUI Label - count" customClass="BrandUILabel">
-                            <rect key="frame" x="62" y="32" width="197" height="20"/>
+                            <rect key="frame" x="62" y="26" width="197" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="16"/>
@@ -98,11 +102,33 @@
                                 <action selector="tapRightArrow" destination="-1" eventType="touchUpInside" id="xOP-oH-rEY"/>
                             </connections>
                         </button>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Hiz-e9-YlA" userLabel="BrandUI Label - optionTitle" customClass="BrandUILabel">
+                            <rect key="frame" x="30" y="250" width="260" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <string key="text" base64-UTF8="YES">
+TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIANjb25zZWN0ZXR1ciBhZGlwaXNjaW5nIGVsaXQuA
+</string>
+                            <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="16"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="icon_star_purple.png" id="LOL-w1-jc0">
+                            <rect key="frame" x="262" y="284" width="48" height="48"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="10" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bh3-5q-Tf8" userLabel="BrandUI Label - starRatingLabel" customClass="BrandUILabel">
+                            <rect key="frame" x="273" y="299" width="26" height="22"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="16"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
-                    <color key="backgroundColor" red="0.40784313729999999" green="0.4549019608" blue="0.4823529412" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.53333333333333333" green="0.58039215686274515" blue="0.60784313725490191" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="4/12 people chose this" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="36" customClass="BrandUILabel">
-                    <rect key="frame" x="0.0" y="335" width="320" height="32"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="4/12 people chose this" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="36" userLabel="BrandUI Label - responsesLabel" customClass="BrandUILabel">
+                    <rect key="frame" x="0.0" y="370" width="320" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.050980392159999999" green="0.49019607840000001" blue="0.67450980390000004" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="15"/>
@@ -110,7 +136,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="59" sectionHeaderHeight="22" sectionFooterHeight="22" id="30">
-                    <rect key="frame" x="0.0" y="367" width="320" height="240"/>
+                    <rect key="frame" x="0.0" y="402" width="320" height="240"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -124,6 +150,7 @@
         <image name="browse_left_arrow.png" width="23" height="44"/>
         <image name="browse_right_arrow.png" width="23" height="44"/>
         <image name="btn_close_x.png" width="11" height="11"/>
+        <image name="icon_star_purple.png" width="50" height="47"/>
         <image name="topnav_aqua_bg.png" width="320" height="50"/>
     </resources>
 </document>

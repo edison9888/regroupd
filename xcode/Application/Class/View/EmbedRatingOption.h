@@ -13,6 +13,7 @@
 @interface EmbedRatingOption : UIView {
     UIView *_theView;
     int _index;
+    float _rating;
 }
 
 @property (nonatomic, strong) NSString *optionKey;
@@ -28,6 +29,7 @@
 
 - (void) setIndex:(int)index;
 - (void) setRating:(float)value;
+- (float) getRating;
 
 - (void) resizeHeight:(float)height;
 

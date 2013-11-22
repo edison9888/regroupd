@@ -25,9 +25,6 @@
 @property (nonatomic, retain) NSDate *createdAt;
 @property (nonatomic, retain) NSDate *updatedAt;
 
-@property (nonatomic, retain) NSNumber *answerTotal;
-@property (nonatomic, retain) NSNumber *ratingTotal;
-@property (nonatomic, retain) NSNumber *ratingCount;
 
 // Transient fields
 @property (nonatomic, retain) UIImage *photo;
@@ -36,6 +33,9 @@
 @property (nonatomic, retain) ContactVO *contact;
 @property (nonatomic, retain) ChatVO *chat;
 
+@property (nonatomic, retain) NSNumber *answerTotal;
+@property (nonatomic, retain) NSNumber *ratingTotal;
+@property (nonatomic, retain) NSNumber *ratingCount;
 
 //@property (nonatomic, retain) NSString *form_key;
 + (FormResponseVO *) readFromPFObject:(PFObject *)data;

@@ -9,7 +9,7 @@
 #import "PollDetailVC.h"
 #import "SQLiteDB.h"
 #import "ParseUtils.h"
-
+#import <QuartzCore/QuartzCore.h>
 
 #define kPageCounter @"%@ / %@"
 #define kResponseCaption @"%i/%i people chose this"
@@ -54,15 +54,15 @@
     self.theTableView.backgroundColor = [UIColor clearColor];
     
     self.tableData =[[NSMutableArray alloc]init];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pageUpdateNotificationHandler:)     name:@"pageUpdateNotification"            object:nil];
-
+    
     isLoading = YES;
     [self preloadFormData];
-
-//    [self performSearch:@""];
     
-
+    //    [self performSearch:@""];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -85,7 +85,7 @@
             }
             NSLog(@"Response: optionKey %@ contactKey %@", response.option_key, response.contact_key);
             [allResponses addObject:response];
-                        
+            
         }
         [contactSvc apiLookupContacts:[contactKeys copy] callback:^(NSArray *results) {
             
@@ -103,7 +103,7 @@
                         [pfChat fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
                             if (pfChat[@"contact_keys"]) {
                                 NSArray *keys = pfChat[@"contact_keys"];
-                                contactTotal += keys.count;
+                                contactTotal += keys.count - 1;
                             }
                             index ++;
                             if (index == total) {
@@ -111,51 +111,49 @@
                             }
                         }];
                     }
-                    contactTotal-= results.count;
                 }
                 
             }];
         }];
         
     }];
-
+    
 }
 - (void) loadFormData {
     @try {
-        contactTotal = 0;
         
-
+        
+        
+        [formSvc apiListFormOptions:[DataModel shared].form.system_id callback:^(NSArray *results) {
+            NSLog(@"Found form options for form %@ count=%i", [DataModel shared].form.system_id, results.count);
             
-            [formSvc apiListFormOptions:[DataModel shared].form.system_id callback:^(NSArray *results) {
-                NSLog(@"Found form options for form %@ count=%i", [DataModel shared].form.system_id, results.count);
-                
-                NSMutableArray *dataArray = [[NSMutableArray alloc] initWithCapacity:results.count];
-                NSMutableDictionary *dict;
-                optionKeys = [[NSMutableArray alloc] init];
-                
-                for (PFObject *result in results) {
-                    dict = [ParseUtils readFormOptionDictFromPFObject:result];
-                    [dataArray addObject:dict];
-                    [optionKeys addObject:[dict objectForKey:@"system_id"]];
-                    // Set currentKey to filter table results
-                }
-                self.carouselVC = [[SideScrollVC alloc] initWithData:dataArray];
-                
-                CGRect carouselFrame = CGRectMake(0, 0, 320, 300);
-                self.carouselVC.view.frame = carouselFrame;
-                [self.browseView addSubview:self.carouselVC.view];
-                
-                [self.browseView sendSubviewToBack:self.carouselVC.view];
-                currentKey = [optionKeys objectAtIndex:0];
-                [self filterResponsesByOption:currentKey];
-                
-                /*
-                 Need to display:
-                 -- how many responses received out of total chat contacts
-                 --
-                 */
-            }];
+            NSMutableArray *dataArray = [[NSMutableArray alloc] initWithCapacity:results.count];
+            NSMutableDictionary *dict;
+            optionKeys = [[NSMutableArray alloc] init];
             
+            for (PFObject *result in results) {
+                dict = [ParseUtils readFormOptionDictFromPFObject:result];
+                [dataArray addObject:dict];
+                [optionKeys addObject:[dict objectForKey:@"system_id"]];
+                // Set currentKey to filter table results
+            }
+            self.carouselVC = [[SideScrollVC alloc] initWithData:dataArray];
+            
+            CGRect carouselFrame = CGRectMake(0, 0, 320, 300);
+            self.carouselVC.view.frame = carouselFrame;
+            [self.browseView addSubview:self.carouselVC.view];
+            
+            [self.browseView sendSubviewToBack:self.carouselVC.view];
+            currentKey = [optionKeys objectAtIndex:0];
+            [self filterResponsesByOption:currentKey];
+            
+            /*
+             Need to display:
+             -- how many responses received out of total chat contacts
+             --
+             */
+        }];
+        
         
         
     }
@@ -169,7 +167,7 @@
 - (void)filterResponsesByOption:(NSString *)optionKey
 {
     NSLog(@"%s", __FUNCTION__);
-
+    
     [self.tableData removeAllObjects];
     for (FormResponseVO *response in allResponses) {
         if ([response.option_key isEqualToString:optionKey]) {
@@ -261,10 +259,18 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:CellNib owner:self options:nil];
             cell = (PollResponseCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
+            [cell.roundPic.layer setCornerRadius:23.0f];
+            [cell.roundPic.layer setMasksToBounds:YES];
+            [cell.roundPic.layer setBorderWidth:1.0f];
+            [cell.roundPic.layer setBorderColor:[UIColor whiteColor].CGColor];
+            cell.roundPic.clipsToBounds = YES;
+            cell.roundPic.contentMode = UIViewContentModeScaleAspectFill;
         }
         FormResponseVO *response = (FormResponseVO *) [tableData objectAtIndex:indexPath.row];
         
         cell.titleLabel.text = response.contact.fullname;
+        
+        
         cell.roundPic.file = response.contact.pfPhoto;
         [cell.roundPic loadInBackground];
         
@@ -284,23 +290,23 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return;
-//    @try {
-//        if (indexPath != nil) {
-//            NSLog(@"Selected row %i", indexPath.row);
-//            
-//            selectedIndex = indexPath.row;
-//            NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
-//            
-//            [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
-//            
-//            [DataModel shared].action = kActionEDIT;
-//            [_delegate gotoNextSlide];
-//            
-//        }
-//    } @catch (NSException * e) {
-//        NSLog(@"Exception: %@", e);
-//    }
-//    
+    //    @try {
+    //        if (indexPath != nil) {
+    //            NSLog(@"Selected row %i", indexPath.row);
+    //
+    //            selectedIndex = indexPath.row;
+    //            NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
+    //
+    //            [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
+    //
+    //            [DataModel shared].action = kActionEDIT;
+    //            [_delegate gotoNextSlide];
+    //
+    //        }
+    //    } @catch (NSException * e) {
+    //        NSLog(@"Exception: %@", e);
+    //    }
+    //
     
 }
 

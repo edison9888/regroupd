@@ -25,7 +25,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="25" userLabel="Image View - round pic" customClass="PFImageView">
-                    <rect key="frame" x="64" y="60" width="192" height="192"/>
+                    <rect key="frame" x="64" y="54" width="192" height="192"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
             </subviews>

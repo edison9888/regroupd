@@ -87,6 +87,7 @@
 
 - (void) setBGColor:(UIColor *)color {
     bgColor = color;
+    self.sliderBG.backgroundColor = bgColor;
 }
 - (void) setSliderColor:(UIColor *)color {
     sliderColor = color;
@@ -112,7 +113,7 @@
 {
     UIBezierPath* rounded = [UIBezierPath bezierPathWithRoundedRect:view.bounds
                                                   byRoundingCorners:corners
-                                                        cornerRadii:CGSizeMake(6.0, 6.0)];
+                                                        cornerRadii:CGSizeMake(radius, radius)];
     
     CAShapeLayer* shape = [[CAShapeLayer alloc] init];
     [shape setPath:rounded.CGPath];

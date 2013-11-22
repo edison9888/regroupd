@@ -171,6 +171,8 @@
 		1E6A1018183E536E00F63666 /* ChatFormVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E6A1017183E536E00F63666 /* ChatFormVO.m */; };
 		1E6A101D183EF66400F63666 /* PollResponseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E6A101B183EF66400F63666 /* PollResponseCell.m */; };
 		1E6A101E183EF66400F63666 /* PollResponseCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E6A101C183EF66400F63666 /* PollResponseCell.xib */; };
+		1E6A1022183F154800F63666 /* RatingResponseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E6A1020183F154800F63666 /* RatingResponseCell.m */; };
+		1E6A1023183F154800F63666 /* RatingResponseCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E6A1021183F154800F63666 /* RatingResponseCell.xib */; };
 		1E751B2C179C4B11003AB13D /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E751B2B179C4B11003AB13D /* UserManager.m */; };
 		1E76F4A417960BE1007EF5B0 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA4B1782638200A294C0 /* Default-568h@2x.png */; };
 		1E76F4A617961169007EF5B0 /* CCTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E76F4A517961169007EF5B0 /* CCTableViewCell.xib */; };
@@ -719,6 +721,9 @@
 		1E6A101A183EF66400F63666 /* PollResponseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PollResponseCell.h; sourceTree = "<group>"; };
 		1E6A101B183EF66400F63666 /* PollResponseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PollResponseCell.m; sourceTree = "<group>"; };
 		1E6A101C183EF66400F63666 /* PollResponseCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PollResponseCell.xib; sourceTree = "<group>"; };
+		1E6A101F183F154800F63666 /* RatingResponseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RatingResponseCell.h; sourceTree = "<group>"; };
+		1E6A1020183F154800F63666 /* RatingResponseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RatingResponseCell.m; sourceTree = "<group>"; };
+		1E6A1021183F154800F63666 /* RatingResponseCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RatingResponseCell.xib; sourceTree = "<group>"; };
 		1E751B2A179C4B11003AB13D /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserManager.h; sourceTree = "<group>"; };
 		1E751B2B179C4B11003AB13D /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserManager.m; sourceTree = "<group>"; };
 		1E76F4941795EE3E007EF5B0 /* AppIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon@2x.png"; sourceTree = "<group>"; };
@@ -1426,6 +1431,9 @@
 		1E6A1019183EF65100F63666 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
+				1E6A101F183F154800F63666 /* RatingResponseCell.h */,
+				1E6A1020183F154800F63666 /* RatingResponseCell.m */,
+				1E6A1021183F154800F63666 /* RatingResponseCell.xib */,
 				1E6A101A183EF66400F63666 /* PollResponseCell.h */,
 				1E6A101B183EF66400F63666 /* PollResponseCell.m */,
 				1E6A101C183EF66400F63666 /* PollResponseCell.xib */,
@@ -2481,6 +2489,7 @@
 				1E92824C177FB690008A583C /* trend_bubble_guide@2x.png in Resources */,
 				1E92824D177FB690008A583C /* trend_dot.png in Resources */,
 				1EA0B46718087CFD004C4DDA /* btn_rsvp_yes_off@2x.png in Resources */,
+				1E6A1023183F154800F63666 /* RatingResponseCell.xib in Resources */,
 				1E92824E177FB690008A583C /* trend_dot_dark.png in Resources */,
 				1E7A6E2E1806EDED004B62CE /* icon_star_purple@2x.png in Resources */,
 				1E7A6E201806EA21004B62CE /* EmbedRatingWidget.xib in Resources */,
@@ -2782,6 +2791,7 @@
 				1E6A1018183E536E00F63666 /* ChatFormVO.m in Sources */,
 				1E92825B177FB690008A583C /* HelpCopy.m in Sources */,
 				1E1A9A9417FE4A4C008D81E6 /* ChatVO.m in Sources */,
+				1E6A1022183F154800F63666 /* RatingResponseCell.m in Sources */,
 				1E92825C177FB690008A583C /* HelpModel.m in Sources */,
 				1E37C2A017FE2B8D0029D95F /* SelectedItemWidget.m in Sources */,
 				1E3ACA4E1804E5B200A6E6B2 /* EmbedPollOption.m in Sources */,

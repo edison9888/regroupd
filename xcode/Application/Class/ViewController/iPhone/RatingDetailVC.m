@@ -8,7 +8,13 @@
 
 #import "RatingDetailVC.h"
 #import "SQLiteDB.h"
+
 #import "ParseUtils.h"
+#import "UIColor+ColorWithHex.h"
+#import "NSString+NumberFormat.h"
+
+#define kPageCounter @"%@ / %@"
+#define kResponseCaption @"Average rating: %@"
 
 @interface RatingDetailVC ()
 
@@ -34,11 +40,29 @@
     [super viewDidLoad];
     
     formSvc = [[FormManager alloc] init];
+    chatSvc = [[ChatManager alloc] init];
+    contactSvc = [[ContactManager alloc] init];
+    allResponses = [[NSMutableArray alloc] init];
+    contactKeys = [[NSMutableArray alloc] init];
+    recipientKeySet = [[NSMutableSet alloc] init];
     
     self.subjectLabel.text = [DataModel shared].form.name;
     
-    [self loadFormData];
+    if (self.totalRatingSlider == nil) {
+        CGRect sliderFrame = self.responsesLabel.frame;
+        sliderFrame.origin.y -= 40;
+        sliderFrame.origin.x = 18;
+        sliderFrame.size.width = 240;
+        sliderFrame.size.height = 20;
+        self.totalRatingSlider = [[RatingMeterSlider alloc] initWithFrame:sliderFrame];
+        [self.totalRatingSlider setSliderColor:[UIColor colorWithHexValue:kSelectedColor]];
+        [self.totalRatingSlider setDotColor:[UIColor colorWithHexValue:kDotColor]];
+        [self.view addSubview:self.totalRatingSlider];
+    }
 
+    self.optionTitle.text = @"";
+    self.starRatingBG.hidden = YES;
+    self.starRatingLabel.hidden = YES;
     
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
@@ -49,9 +73,10 @@
     
     self.tableData =[[NSMutableArray alloc]init];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePageNumberHandler:)     name:@"updatePageNumber"            object:nil];
-
-//    [self performSearch:@""];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pageUpdateNotificationHandler:)     name:@"pageUpdateNotification"            object:nil];
+    
+    isLoading = YES;
+    [self preloadFormData];
     
 
 }
@@ -64,18 +89,75 @@
 
 #pragma mark - Form Options handling
 
-- (void) loadFormData {
+- (void) preloadFormData {
+    contactTotal = 0;
+    [formSvc apiListFormResponses:[DataModel shared].form.system_id contactKey:nil callback:^(NSArray *results) {
+        FormResponseVO *response;
+        for (PFObject *pfResponse in results) {
+            response = [FormResponseVO readFromPFObject:pfResponse];
+            
+            if (![contactKeys containsObject:response.contact_key]) {
+                [contactKeys addObject:response.contact_key];
+            }
+            NSLog(@"Response: optionKey %@ contactKey %@", response.option_key, response.contact_key);
+            [allResponses addObject:response];
+            
+        }
+        [contactSvc apiLookupContacts:[contactKeys copy] callback:^(NSArray *results) {
+            
+            NSLog(@"Lookup contacts found %@", results);
+            
+            [chatSvc apiListChatForms:nil formKey:[DataModel shared].form.system_id callback:^(NSArray *results) {
+                __block int index = 0;
+                int total = results.count;
+                if (total == 0) {
+                    [self loadFormData];
+                } else {
+                    
+                    for (PFObject *result in results) {
+                        PFObject *pfChat = result[@"chat"];
+                        [pfChat fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+                            if (pfChat[@"contact_keys"]) {
+                                NSArray *keys = pfChat[@"contact_keys"];
+                                
+                                for (NSString *k in keys) {
+                                    if (![k isEqualToString:[DataModel shared].user.contact_key]) {
+                                        [recipientKeySet addObject:k];
+                                    }
+                                }
+                            }
+                            index ++;
+                            if (index == total) {
+                                [self loadFormData];
+                            }
+                        }];
+                    }
+                }
+                
+            }];
+        }];
+        
+    }];
     
+}
+- (void) loadFormData {
     @try {
+        
+        
+        contactTotal = recipientKeySet.count;
+        
         [formSvc apiListFormOptions:[DataModel shared].form.system_id callback:^(NSArray *results) {
             NSLog(@"Found form options for form %@ count=%i", [DataModel shared].form.system_id, results.count);
             
-            NSMutableArray *dataArray = [[NSMutableArray alloc] initWithCapacity:results.count];
+            dataArray = [[NSMutableArray alloc] initWithCapacity:results.count];
             NSMutableDictionary *dict;
+            optionKeys = [[NSMutableArray alloc] init];
             
             for (PFObject *result in results) {
                 dict = [ParseUtils readFormOptionDictFromPFObject:result];
                 [dataArray addObject:dict];
+                [optionKeys addObject:[dict objectForKey:@"system_id"]];
+                // Set currentKey to filter table results
             }
             self.carouselVC = [[SideScrollVC alloc] initWithData:dataArray];
             
@@ -84,7 +166,16 @@
             [self.browseView addSubview:self.carouselVC.view];
             
             [self.browseView sendSubviewToBack:self.carouselVC.view];
+            currentKey = [optionKeys objectAtIndex:0];
+            [self filterResponsesByOption:currentKey];
+            
+            /*
+             Need to display:
+             -- how many responses received out of total chat contacts
+             --
+             */
         }];
+        
         
         
     }
@@ -94,6 +185,44 @@
     
     
 }
+
+
+- (void)filterResponsesByOption:(NSString *)optionKey
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    double ratingTotal = 0;
+    
+    [self.tableData removeAllObjects];
+    for (FormResponseVO *response in allResponses) {
+        if ([response.option_key isEqualToString:optionKey]) {
+            if ([[DataModel shared].contactCache objectForKey:response.contact_key]) {
+                response.contact = (ContactVO *) [[DataModel shared].contactCache objectForKey:response.contact_key];
+            }
+            if (response.rating) {
+                ratingTotal += response.rating.floatValue;
+            }
+            [self.tableData addObject:response];
+        }
+    }
+    double avgRating = ratingTotal / (double) self.tableData.count;
+    NSString *avgRatingText = [NSString formatDoubleWithMaxDecimals:avgRating minDecimals:1 maxDecimals:1];
+    
+    NSLog(@"Rating total is %f with avg %@", ratingTotal, avgRatingText);
+    
+    NSString *caption = [NSString stringWithFormat:kResponseCaption, avgRatingText];
+    self.responsesLabel.text = caption;
+    
+    [self.totalRatingSlider setRatingBar:(float) avgRating];
+    avgRatingText = [NSString formatDoubleWithMaxDecimals:avgRating minDecimals:0 maxDecimals:0];
+    self.starRatingLabel.text = avgRatingText;
+    
+    self.starRatingBG.hidden = NO;
+    self.starRatingLabel.hidden = NO;
+
+    [self.theTableView reloadData];
+}
+
 
 - (void) loadFormOptions {
     
@@ -134,10 +263,25 @@
     
 }
 
-- (void)updatePageNumberHandler:(NSNotification*)notification
+#pragma mark - Notifications
+
+- (void)pageUpdateNotificationHandler:(NSNotification*)notification
 {
-    NSString *text = (NSString *) notification.object;
-    self.counterLabel.text = text;
+    NSLog(@"%s", __FUNCTION__);
+    if (notification.object) {
+        NSNumber *pageIndex = (NSNumber *) notification.object;
+        NSString *pageCounter = [NSString stringWithFormat:kPageCounter,
+                                 [NSNumber numberWithInt:pageIndex.intValue + 1],
+                                 [NSNumber numberWithInt:optionKeys.count]];
+        self.counterLabel.text = pageCounter;
+        currentKey = [optionKeys objectAtIndex:pageIndex.intValue];
+        
+        
+        NSMutableDictionary *pageData = (NSMutableDictionary *) [dataArray objectAtIndex:pageIndex.intValue];
+        self.optionTitle.text = (NSString *) [pageData objectForKey:@"name"];
+        
+        [self filterResponsesByOption:currentKey];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -158,20 +302,33 @@
     NSLog(@"%s", __FUNCTION__);
     // http://stackoverflow.com/questions/413993/loading-a-reusable-uitableviewcell-from-a-nib
     
-    static NSString *CellIdentifier = @"CCTableCell";
-    static NSString *CellNib = @"CCTableViewCell";
+    static NSString *CellIdentifier = @"RatingResponseCell";
+    static NSString *CellNib = @"RatingResponseCell";
     
-    CCTableViewCell *cell = (CCTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    RatingResponseCell *cell = (RatingResponseCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     @try {
         
         if (cell == nil) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:CellNib owner:self options:nil];
-            cell = (CCTableViewCell *)[nib objectAtIndex:0];
+            cell = (RatingResponseCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
+            [cell.roundPic.layer setCornerRadius:23.0f];
+            [cell.roundPic.layer setMasksToBounds:YES];
+            [cell.roundPic.layer setBorderWidth:1.0f];
+            [cell.roundPic.layer setBorderColor:[UIColor whiteColor].CGColor];
+            cell.roundPic.clipsToBounds = YES;
+            cell.roundPic.contentMode = UIViewContentModeScaleAspectFill;
         }
+        FormResponseVO *response = (FormResponseVO *) [tableData objectAtIndex:indexPath.row];
         
-        NSDictionary *rowData = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
-        cell.rowdata = rowData;
+        cell.titleLabel.text = response.contact.fullname;
+        
+        
+        cell.roundPic.file = response.contact.pfPhoto;
+        [cell.roundPic loadInBackground];
+//        
+//        NSDictionary *rowData = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
+//        cell.rowdata = rowData;
         
     } @catch (NSException * e) {
         NSLog(@"Exception: %@", e);
@@ -183,32 +340,12 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 54;
+    return 57;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-#ifdef DEBUGX
-    NSLog(@"%s", __FUNCTION__);
-#endif
-    
-    @try {
-        if (indexPath != nil) {
-            NSLog(@"Selected row %i", indexPath.row);
-            
-            selectedIndex = indexPath.row;
-            NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
-            
-            [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
-            
-            [DataModel shared].action = kActionEDIT;
-            [_delegate gotoNextSlide];
-            
-        }
-    } @catch (NSException * e) {
-        NSLog(@"Exception: %@", e);
-    }
-    
+    return;
     
 }
 
@@ -262,7 +399,11 @@
 
 - (IBAction)tapCloseButton
 {
-    [_delegate gotoSlideWithName:@"FormsHome"];
+    if ([[DataModel shared].action isEqualToString:@"popup"]) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        [_delegate gotoSlideWithName:@"FormsHome"];
+    }
     
 }
 

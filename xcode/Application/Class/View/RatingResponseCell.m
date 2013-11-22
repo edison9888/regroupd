@@ -6,10 +6,10 @@
 //
 //
 
-#import "PollResponseCell.h"
+#import "RatingResponseCell.h"
 #import <QuartzCore/QuartzCore.h>
 
-@implementation PollResponseCell
+@implementation RatingResponseCell
 
 @synthesize titleLabel;
 
@@ -29,17 +29,18 @@
         self.roundPic.clipsToBounds = YES;
         self.roundPic.contentMode = UIViewContentModeScaleAspectFill;
         
-        self.roundPic.layer.shadowColor = [UIColor lightGrayColor].CGColor;
-        self.roundPic.layer.shadowOffset = CGSizeMake(1, 1);
+        self.roundPic.layer.shadowColor = [UIColor grayColor].CGColor;
+        self.roundPic.layer.shadowOffset = CGSizeMake(0, 1);
         self.roundPic.layer.shadowOpacity = 1;
         self.roundPic.layer.shadowRadius = 1.0;
         self.roundPic.clipsToBounds = NO;
+        
     }
     return self;
 }
 
 - (NSString *) reuseIdentifier {
-    return @"PollResponseCell";
+    return @"RatingResponseCell";
 }
 
 

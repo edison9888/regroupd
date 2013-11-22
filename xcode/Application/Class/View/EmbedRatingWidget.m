@@ -106,6 +106,10 @@
                 }
             }
             
+            if (!owner) {
+                [embedOption.slider setBGColor:[UIColor lightGrayColor]];
+            }
+            
             [self addSubview:embedOption];
             [optionViews addObject:embedOption];
             
@@ -132,6 +136,10 @@
             ypos += self.doneView.frame.size.height;
         }
         
+        if (responseMap != nil && responseMap.count > 0) {
+            formLocked = YES;
+            self.doneButton.enabled = NO;
+        }
         
         self.dynamicHeight = ypos + 10;
         
@@ -150,9 +158,9 @@
     float hitY = locationPoint.y;
     float hitX = locationPoint.x;
     float yOffset = kInitialY;
-
+    
     // Offset by inital Y
-//    hitY = (hitY - kInitialY);
+    //    hitY = (hitY - kInitialY);
     
     NSLog(@"hit point = %f / %f", hitX, hitY);
     
@@ -163,91 +171,95 @@
     float bottomEdge = 0;
     CGRect detailsFrame = self.seeDetailsView.frame;
     
-    if (!formLocked) {
-        NSLog(@"Done button range = %f to %f", self.doneView.frame.origin.y, self.doneView.frame.origin.y + self.doneView.frame.size.height);
-        if (hitY >= kInitialY && hitY <= self.doneView.frame.origin.y - 20) {
-            if (hitX >= leftEdge && hitX <= rightEdge) {
+    NSLog(@"Done button range = %f to %f", self.doneView.frame.origin.y, self.doneView.frame.origin.y + self.doneView.frame.size.height);
+    if (hitY >= kInitialY && hitY <= self.doneView.frame.origin.y - 20) {
+        if (hitX >= leftEdge && hitX <= rightEdge) {
+            if (!formLocked) {
                 int i=0;
                 
                 for (EmbedRatingOption* opt in optionViews) {
                     topEdge = yOffset + kSliderRelativeOriginY - kSliderMargin;
                     bottomEdge = yOffset + kSliderRelativeOriginY + kSliderHeight + kSliderMargin;
-
+                    
                     //            NSLog(@"hit zone with left %f, top %f, right %f, bottom %f", leftEdge, topEdge, rightEdge, bottomEdge);
-
+                    
                     if (hitY >= topEdge && hitY <= bottomEdge) {
                         
                         float hitPercent = (hitX - leftEdge) / (rightEdge - leftEdge);
                         NSLog(@"hit success at %f / %f with est. percent %f", hitX, hitY, hitPercent);
                         
-                        [opt setRating:(hitPercent * 10)];
+                        int ratingNumber = [NSNumber numberWithFloat:(hitPercent * 10)].intValue;
+                        [opt setRating:(float) ratingNumber];
                         
                     }
                     yOffset += kEmbedOptionHeight;
                     i++;
                 }
-            
             }
-        } else if (hitY >= detailsFrame.origin.y && hitY <= detailsFrame.origin.y + detailsFrame.size.height
-                   && hitX >= detailsFrame.origin.x && hitX <= detailsFrame.origin.x + detailsFrame.size.width) {
             
-            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_showFormDetails object:self.form_key]];
-
+        }
+    } else if (hitY >= detailsFrame.origin.y && hitY <= detailsFrame.origin.y + detailsFrame.size.height
+               && hitX >= detailsFrame.origin.x && hitX <= detailsFrame.origin.x + detailsFrame.size.width) {
         
-        } else if (hitY >= self.doneView.frame.origin.y && hitY <= self.doneView.frame.origin.y + self.doneView.frame.size.height) {
-            if (self.doneButton.enabled) {
-                NSLog(@"Hit done button at hitY %f", hitY);
-                self.doneButton.enabled = NO;
-                formLocked = YES;
+        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_showFormDetails object:self.form_key]];
+        
+        
+    } else if (hitY >= self.doneView.frame.origin.y && hitY <= self.doneView.frame.origin.y + self.doneView.frame.size.height) {
+        if (!formLocked) {
+            NSLog(@"Hit done button at hitY %f", hitY);
+            self.doneButton.enabled = NO;
+            formLocked = YES;
+            
+            UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            CGFloat halfButtonHeight = self.doneButton.bounds.size.height / 2;
+            CGFloat buttonWidth = self.doneButton.bounds.size.width;
+            indicator.center = CGPointMake(buttonWidth - halfButtonHeight , halfButtonHeight);
+            [self.doneButton addSubview:indicator];
+            [indicator startAnimating];
+            
+            
+            if (formSvc == nil) {
+                formSvc = [[FormManager alloc] init];
+            }
+            
+            FormResponseVO *response;
+            int index = 0;
+            int total = optionViews.count;
+            for (EmbedRatingOption *optionView in optionViews) {
+                response = [[FormResponseVO alloc] init];
+                response.contact_key = [DataModel shared].user.contact_key;
+                response.form_key = self.form_key;
+                response.chat_key = self.chat_key;
+                response.option_key = optionView.optionKey;
+                response.rating = [NSNumber numberWithFloat:[optionView getRating]];
                 
-                UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-                CGFloat halfButtonHeight = self.doneButton.bounds.size.height / 2;
-                CGFloat buttonWidth = self.doneButton.bounds.size.width;
-                indicator.center = CGPointMake(buttonWidth - halfButtonHeight , halfButtonHeight);
-                [self.doneButton addSubview:indicator];
-                [indicator startAnimating];
+                NSLog(@"Ready to save option_key %@ with rating %@", response.option_key, optionView.ratingValue.text);
                 
-                
-                if (formSvc == nil) {
-                    formSvc = [[FormManager alloc] init];
-                }
-                
-                FormResponseVO *response;
-                int index = 0;
-                int total = optionViews.count;
-                for (EmbedRatingOption *optionView in optionViews) {
-                    response = [[FormResponseVO alloc] init];
-                    response.contact_key = [DataModel shared].user.contact_key;
-                    response.form_key = self.form_key;
-                    response.chat_key = self.chat_key;
-                    response.option_key = optionView.optionKey;
-                    NSLog(@"Ready to save option_key %@ with rating %@", response.option_key, optionView.ratingValue.text);
-                    
-                    index ++;
-                    [formSvc apiSaveFormResponse:response callback:^(PFObject *object) {
-                        if (index == total) {
-                            [indicator stopAnimating];
-                            [indicator removeFromSuperview];
-                            if (object) {
-                                [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formResponseEntered object:nil]];
-                            }
+                index ++;
+                [formSvc apiSaveFormResponse:response callback:^(PFObject *object) {
+                    if (index == total) {
+                        [indicator stopAnimating];
+                        [indicator removeFromSuperview];
+                        if (object) {
+                            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formResponseEntered object:nil]];
                         }
-                    }];
-                    
-                }
+                    }
+                }];
                 
-            } else {
-                // Done button not enabled
             }
             
         } else {
-            NSLog(@"No hit");
+            // Done button not enabled
         }
         
     } else {
-        // Form locked
-        NSLog(@"Form locked");
+        NSLog(@"No hit");
     }
+    
+    //    } else {
+    //        // Form locked
+    //        NSLog(@"Form locked");
+    //    }
     
 }
 - (IBAction)tapDoneButton {

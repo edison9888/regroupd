@@ -337,12 +337,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     @try {
         
-        [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Response submitted." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        [[[UIAlertView alloc] initWithTitle:@"Thanks!" message:@"Response sent" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 
-//        if (notification.object != nil) {
-//            
-//            
-//        }
     }
     @catch (NSException *exception) {
         NSLog(@"########### Exception %@", exception);

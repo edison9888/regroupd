@@ -10,10 +10,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor+ColorWithHex.h"
 
-#define kSelectedColor      0x8755a2   //purple
-#define kDotColor           0x613976  // dark purple
-#define kUnselectedColor    0x68747b  // grey
-#define kFadedAlpha     0.8f
 
 @implementation EmbedRatingOption
 
@@ -42,6 +38,7 @@
 }
 
 - (void) setRating:(float)value {
+    _rating = value;
     self.ratingValue.text = [NSString stringWithFormat:@"%i",
     [NSNumber numberWithFloat:value].intValue];
     
@@ -57,6 +54,10 @@
         [self.slider setRatingBar:value];
     }
     
+}
+
+- (float) getRating {
+    return _rating;
 }
 - (void) setIndex:(int)index {
     _index = index;

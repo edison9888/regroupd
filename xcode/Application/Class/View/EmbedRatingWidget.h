@@ -11,6 +11,7 @@
 #import "EmbedRatingOption.h"
 #import "FormManager.h"
 #import "FormVO.h"
+#import "RatingMeterSlider.h"
 
 @interface EmbedRatingWidget : UIView {
     UIView *_theView;
