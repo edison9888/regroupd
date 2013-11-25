@@ -14,6 +14,76 @@
 @implementation ChatManager
 
 
+- (ChatVO *) loadChatByKey:(NSString *)chatKey {
+    NSString *sql = nil;
+    sql = @"select * from chat where system_id=?";
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
+                       chatKey];
+    
+    ChatVO *result;
+    NSDictionary *dict;
+    if ([rs next]) {
+        dict = [rs resultDictionary];
+        result = [ChatVO readFromDictionary:dict];
+    }
+    return result;
+
+}
+
+- (void) updateChatStatus:(NSString *)chatKey name:(NSString *)name readtime:(NSNumber *)readtime  {
+    NSString *sql;
+    BOOL success;
+    NSLog(@"%@ update readtime = %f",chatKey, readtime.doubleValue);
+    
+    @try {
+        sql = @"UPDATE chat set name=?, read_timestamp=? where system_id=?";
+//        sql = [NSString stringWithFormat:sql, chatKey];
+        success = [[SQLiteDB sharedConnection] executeUpdate:sql,
+                   name,
+                   readtime,
+                   chatKey
+                   ];
+        
+        if (!success) {
+            NSLog(@"####### SQL Update failed #######");
+        } else {
+            NSLog(@"====== SQL UPDATE SUCCESS ======");
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"EXCEPTION %@", exception);
+    }
+    
+}
+
+- (void) updateClearTimestamp:(NSString *)chatKey cleartime:(NSNumber *)cleartime {
+    NSString *sql;
+    BOOL success;
+    NSDate *now = [NSDate date];
+    NSString *dt = [DateTimeUtils dbDateTimeStampFromDate:now];
+    NSLog(@"dt %@", dt);
+    
+    @try {
+        sql = @"UPDATE chat set clear_timestamp=? where system_id=?";
+        success = [[SQLiteDB sharedConnection] executeUpdate:sql,
+                   cleartime,
+                   chatKey
+                   ];
+        
+        if (!success) {
+            NSLog(@"####### SQL Update failed #######");
+        } else {
+            NSLog(@"====== SQL UPDATE SUCCESS ======");
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"EXCEPTION %@", exception);
+    }
+    
+}
+
+
 - (ChatVO *) loadChat:(int)_chatId {
     return [self loadChat:_chatId fetchAll:NO];
 }
@@ -74,14 +144,16 @@
     NSDate *now = [NSDate date];
     NSString *dt = [DateTimeUtils dbDateTimeStampFromDate:now];
     NSLog(@"dt %@", dt);
-    
+
     @try {
-        sql = @"INSERT into chat (system_id, name, type, status, created, updated) values (?, ?, ?, ?, ?, ?);";
+        sql = @"INSERT into chat (system_id, name, type, status, clear_timestamp, read_timestamp, created, updated) values (?, ?, ?, ?, ?, ?, ?, ?);";
         success = [[SQLiteDB sharedConnection] executeUpdate:sql,
                    chat.system_id,
                    chat.name,
                    [NSNumber numberWithInt:chat.type],
                    [NSNumber numberWithInt:chat.status],
+                   [NSNumber numberWithDouble:0],
+                   [NSNumber numberWithDouble:0],
                    dt,
                    dt
                    ];
@@ -265,7 +337,6 @@
     }];
     
 }
-
 - (void) apiSaveChat:(ChatVO *)chat callback:(void (^)(PFObject *object))callback{
     
     PFObject *data = [PFObject objectWithClassName:kChatDB];
@@ -278,6 +349,16 @@
     [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         NSLog(@"Saved chat with objectId %@", data.objectId);
         callback(data);
+    }];
+}
+- (void) apiUpdateChatCounter:(NSString *)chatKey {
+    
+    PFQuery *query = [PFQuery queryWithClassName:kChatDB];
+    [query getObjectInBackgroundWithId:chatKey block:^(PFObject *pfChat, NSError *error) {
+        if (pfChat) {
+            [pfChat incrementKey:@"counter"];
+            [pfChat saveInBackground];
+        }
     }];
 }
 
@@ -307,6 +388,7 @@
     
     [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         NSLog(@"Saved message with objectId %@", data.objectId);
+        [self apiUpdateChatCounter:msg.chat_key];
         callback(data);
     }];
 }
@@ -340,6 +422,7 @@
         
         [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             NSLog(@"Saved message with objectId %@", data.objectId);
+            [self apiUpdateChatCounter:msg.chat_key];
             callback(data);
         }];
         
@@ -352,7 +435,7 @@
  -- Get list of unique contact_key values and query for list of matching contacts
  
  */
-- (NSMutableArray *) asyncListChatMessages:(NSString *)objectId {
+- (NSMutableArray *) asyncListChatMessages:(NSString *)objectId afterDate:(NSDate *)date {
     __block ChatVO *chat = [[ChatVO alloc] init];
     
     
@@ -363,6 +446,10 @@
         PFQuery *query = [PFQuery queryWithClassName:kChatMessageDB];
         [query whereKey:@"chat"
                 equalTo:[PFObject objectWithoutDataWithClassName:kChatDB objectId:objectId]];
+        if (date) {
+            NSLog(@"Date filter is %@", date);
+            [query whereKey:@"createdAt" greaterThan:date];
+        }
         [query orderByAscending:@"createdAt"];
         
         [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {

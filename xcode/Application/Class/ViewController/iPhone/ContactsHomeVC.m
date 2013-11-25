@@ -54,9 +54,6 @@
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
     
     [self preparePhonebook];
-//    [self performSearch:@""];
-    
-//    [self listMyContacts];
 }
 
 - (void)didReceiveMemoryWarning
@@ -137,21 +134,6 @@
         [MBProgressHUD hideHUDForView:self.view animated:NO];
         
     }
-    
-}
-- (void) listMyContacts {
-    if (contactSvc == nil) {
-        contactSvc = [[ContactManager alloc] init];
-    }
-    isLoading = YES;
-    [contactSvc apiListUserContacts:nil callback:^(NSArray *contacts) {
-//        NSLog(@"Callback response count %i", contacts.count);
-        if (contacts) {
-            self.availableContacts = [contacts mutableCopy];
-            isLoading = NO;
-            [self.theTableView reloadData];
-        }
-    }];
     
 }
 #pragma mark - UITableViewDataSource

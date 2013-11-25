@@ -53,6 +53,17 @@
         }
     }
     
+    CGRect viewframe = self.view.frame;
+    NSLog(@"viewframe ypos = %f", viewframe.origin.y);
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        
+    } else {
+        viewframe.origin.y=20;
+        self.view.frame = viewframe;
+        
+    }
+
+    
     // register for keyboard notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
@@ -82,6 +93,11 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
 }
 
 

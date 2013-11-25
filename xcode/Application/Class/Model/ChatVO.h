@@ -21,6 +21,10 @@
 @property (nonatomic, retain) NSDate *createdAt;
 @property (nonatomic, retain) NSDate *updatedAt;
 
+@property (nonatomic, retain) NSNumber *clear_timestamp;
+@property (nonatomic, retain) NSNumber *read_timestamp;
+@property (nonatomic, retain) NSNumber *message_timestamp;
+
 @property (nonatomic, retain) NSString *created;
 @property (nonatomic, retain) NSString *updated;
 
@@ -33,8 +37,10 @@
 @property (nonatomic, retain) NSMutableArray *contacts;
 @property (nonatomic, retain) NSMutableDictionary *contactMap;
 @property (nonatomic, retain) NSMutableDictionary *namesMap;
+@property (nonatomic, retain) NSDate *cutoffDate;
 
 @property (nonatomic, retain) PFObject *pf_chat;
+@property BOOL hasNew;
 
 + (ChatVO *) readFromDictionary:(NSDictionary *) dict;
 + (ChatVO *) readFromPFObject:(PFObject *)data;

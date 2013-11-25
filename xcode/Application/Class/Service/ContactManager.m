@@ -376,85 +376,6 @@
     }
 }
 
-#pragma mark - UserContactDB
-- (void) apiSaveUserContact:(ContactVO *)contact callback:(void (^)(NSString *))callback {
-    PFQuery *query = [PFQuery queryWithClassName:kUserContactDB];
-    [query whereKey:@"user" equalTo:[PFUser currentUser]];
-    [query whereKey:@"contact_key" equalTo:contact.system_id];
-    
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *data, NSError *error){
-        //    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
-        if (data) {
-            // object exists
-            NSLog(@"Found UserContact with objectId %@", data.objectId);
-            callback(data.objectId);
-        } else {
-            
-            data[@"user"] = [PFUser currentUser];
-            data = [PFObject objectWithClassName:kUserContactDB];
-            data[@"contact_key"] = contact.system_id;
-            
-            if (contact.first_name != nil) {
-                data[@"first_name"] = contact.first_name;
-            }
-            
-            if (contact.last_name != nil) {
-                data[@"last_name"] = contact.last_name;
-            }
-            [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if (error) {
-                    // Error auto-logged
-                    
-                } else {
-                    NSLog(@"Saved UserContact with objectId %@", data.objectId);
-                    callback(data.objectId);
-                }
-            }];
-        }
-    }];
-}
-
-
-// Usage. null userKey means use PFUser
-- (void) apiListUserContacts:(NSString *)userKey callback:(void (^)(NSArray *))callback {
-    
-    PFQuery *query = [PFQuery queryWithClassName:kUserContactDB];
-    [query whereKey:@"user" equalTo:[PFUser currentUser]];
-    //    [query whereKey:@"user" equalTo:[PFObject objectWithoutDataWithClassName:[PFUser parseClassName] objectId:userKey]];
-    
-    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
-        NSMutableArray *contacts = [[NSMutableArray alloc] init];
-        ContactVO *contact;
-        for (PFObject *result in results) {
-            if ([[DataModel shared].contactCache objectForKey:contact.system_id] == nil) {
-                contact = [ContactVO readFromPFUserContact:result];
-                [[DataModel shared].contactCache setObject:contact forKey:result.objectId];
-            } else {
-                contact = [[DataModel shared].contactCache objectForKey:result.objectId];
-            }
-            [contacts addObject:contact];
-        }
-        callback([contacts copy]);
-    }];
-    
-}
-
-#pragma mark - OLD Non-async methods
-- (PFObject *) apiSaveUserContact:(PFObject *) pfContact {
-    NSLog(@"%s", __FUNCTION__);
-    
-    PFObject *data = [PFObject objectWithClassName:kUserContactDB];
-    
-    data[@"user"] = [PFUser currentUser];
-    data[@"contact"] = pfContact;
-    
-    [data save];
-    
-    NSLog(@"Saved user_contact with objectId %@", data.objectId);
-    return data;
-    
-}
-
 #pragma mark - Phonebook DAO
 
 - (NSDictionary *) findPersonByPhone:(NSString *)phone {
@@ -488,7 +409,20 @@
     return results;
     
 }
+- (ContactVO *) lookupContactKeyInPhonebook:(NSArray *)key {
+    NSString *sql = @"select * from phonebook where contact_key=?";
+    ContactVO *contact;
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
+                       key];
+    
+    if ([rs next]) {
+        contact = [ContactVO readFromPhonebook:[rs resultDictionary]];
+        return contact;
+    }
+    return nil;
 
+}
 - (NSMutableDictionary *) lookupContactsFromPhonebook:(NSArray *)contactKeys {
     
     NSMutableDictionary *results = [[NSMutableDictionary alloc] init];
@@ -498,14 +432,14 @@
     
     for (NSString *key in contactKeys) {
         NSLog(@"Lookup for contactKey %@", key);
-        if ([[DataModel shared].contactCache objectForKey:key] == nil) {
+        if ([[DataModel shared].phonebookCache objectForKey:key] == nil) {
             FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
                                key];
             
             if ([rs next]) {
                 contact = [ContactVO readFromPhonebook:[rs resultDictionary]];
                 NSLog(@"Found name %@ -- phone %@ for key %@", contact.first_name, contact.phone, key);
-                [[DataModel shared].contactCache setObject:contact forKey:key];
+                [[DataModel shared].phonebookCache setObject:contact forKey:key];
                 [results setObject:contact forKey:key];
             } else {
                 NSLog(@"Did not find key %@", key);
@@ -513,7 +447,7 @@
             }
             
         } else {
-            contact = [[DataModel shared].contactCache objectForKey:key];
+            contact = [[DataModel shared].phonebookCache objectForKey:key];
             NSLog(@"Found cached phone %@ for key %@", contact.phone, key);
             [results setObject:contact forKey:key];
         }

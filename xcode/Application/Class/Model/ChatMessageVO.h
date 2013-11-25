@@ -24,6 +24,8 @@
 
 @property (nonatomic, retain) NSString *message;
 @property (nonatomic, retain) NSString *attachment;
+@property (nonatomic, retain) NSNumber *timestamp;
+
 @property int type;
 @property int status;
 

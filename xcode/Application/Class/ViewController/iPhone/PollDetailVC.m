@@ -90,8 +90,9 @@
         }
         [contactSvc apiLookupContacts:[contactKeys copy] callback:^(NSArray *results) {
             
-            NSLog(@"Lookup contacts found %@", results);
-            
+//            NSLog(@"Lookup contacts found %@", results);
+            [contactSvc lookupContactsFromPhonebook:contactKeys];
+
             [chatSvc apiListChatForms:nil formKey:[DataModel shared].form.system_id callback:^(NSArray *results) {
                 __block int index = 0;
                 int total = results.count;
@@ -272,7 +273,13 @@
         }
         FormResponseVO *response = (FormResponseVO *) [tableData objectAtIndex:indexPath.row];
         
-        cell.titleLabel.text = response.contact.fullname;
+        if ([[DataModel shared].phonebookCache objectForKey:response.contact_key]) {
+            ContactVO *pbcontact = [[DataModel shared].phonebookCache objectForKey:response.contact_key];
+            cell.titleLabel.text = pbcontact.fullname;
+        } else {
+            cell.titleLabel.text = response.contact.phone;
+        }
+//        cell.titleLabel.text = response.contact.fullname;
         
         
         cell.roundPic.file = response.contact.pfPhoto;

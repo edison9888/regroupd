@@ -28,6 +28,7 @@
 
 @interface ChatVC : SlideViewController<UIBubbleTableViewDataSource, UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate, UIGestureRecognizerDelegate> {
     
+    ChatVO *dbChat;
     NSString *chatId;
     
     int fieldIndex;

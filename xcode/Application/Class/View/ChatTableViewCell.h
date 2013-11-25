@@ -15,9 +15,12 @@
     
 }
 
+@property (nonatomic, retain) IBOutlet UIImageView *iconStatus;
+
 @property (nonatomic, retain) IBOutlet UILabel *titleLabel;
 
 @property (nonatomic, retain) ChatVO *rowdata;
 
+- (void) setStatus:(int)status;
 
 @end

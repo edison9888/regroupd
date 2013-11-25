@@ -86,6 +86,11 @@
         
         ChatVO *rowData = (ChatVO *) [tableData objectAtIndex:indexPath.row];
         cell.rowdata = rowData;
+        if (rowData.hasNew) {
+            [cell setStatus:1];
+        } else {
+            [cell setStatus:0];
+        }
         
     } @catch (NSException * e) {
         NSLog(@"Exception: %@", e);
@@ -145,7 +150,8 @@
     self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [self.hud setLabelText:@"Loading"];
     [self.hud setDimBackground:YES];
-
+    contactKeySet = [[NSMutableSet alloc] init];  // collect full set of contact keys
+    
     if (chatSvc == nil) {
         chatSvc = [[ChatManager alloc] init];
     }
@@ -162,6 +168,8 @@
             [self.theTableView reloadData];
             return;
         }
+        
+        
         for (PFObject* result in results) {
             NSMutableArray *namesArray = [[NSMutableArray alloc] init];
             NSMutableDictionary *namesMap = [[NSMutableDictionary alloc] init];
@@ -169,8 +177,29 @@
 //            data = [DataModel readPFObjectAsDictionary:result];
             chat = [ChatVO readFromPFObject:result];
             
+            ChatVO *lookup = [chatSvc loadChatByKey:chat.system_id];
+            if (lookup == nil) {
+                // need to add
+                [chatSvc saveChat:chat];
+                chat.hasNew = YES;
+            } else {
+                // ignore
+                
+                NSTimeInterval serverTime = [chat.updatedAt timeIntervalSince1970];
+                
+                NSLog(@"Compare localTime %f vs. serverTime %f", lookup.read_timestamp.doubleValue, serverTime);
+                
+                if (lookup.read_timestamp.doubleValue < serverTime) {
+                    chat.hasNew = YES;
+                } else {
+                    chat.hasNew = NO;
+                }
+            }
+            
             NSArray *keys = [result objectForKey:@"contact_keys"];
             NSLog(@"contact keys = %@", keys);
+            [contactKeySet addObjectsFromArray:keys];
+            
             NSString *name;
             NSMutableDictionary *resultMap = [contactSvc lookupContactsFromPhonebook:keys];
             ContactVO *contact = nil;
@@ -181,6 +210,9 @@
                         [unknownContactKeys addObject:key];
                     } else if ([resultMap objectForKey:key] == [NSNull null]) {
                         // Null object indicates not in phonebook
+                        name = contact.phone;
+                        [namesArray addObject:name];
+                        [namesMap setObject:name forKey:contact.system_id];
                         [unknownContactKeys addObject:key];
                     } else {
                         contact = (ContactVO *) [resultMap objectForKey:key];

@@ -8,6 +8,9 @@
 
 #import "ChatTableViewCell.h"
 
+#define kIconChatOff @"icon_chat_off.png"
+#define kIconChatOn @"icon_chat_on.png"
+
 @implementation ChatTableViewCell
 
 @synthesize titleLabel;
@@ -32,7 +35,15 @@
     rowdata = chat;
     self.titleLabel.text = chat.names;
 }
-
+- (void) setStatus:(int)status {
+    
+    if (status == 0) {
+        self.iconStatus.image = [UIImage imageNamed:kIconChatOff];
+        
+    } else {
+        self.iconStatus.image = [UIImage imageNamed:kIconChatOn];
+    }
+}
 
 ////http://stackoverflow.com/questions/11920156/custom-uitableviewcell-selection-style
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated

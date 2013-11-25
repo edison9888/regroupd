@@ -19,26 +19,35 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                     <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Names" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="5" customClass="BrandUILabel">
-                        <rect key="frame" x="35" y="10" width="280" height="30"/>
+                        <rect key="frame" x="35" y="6" width="280" height="23"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="15"/>
-                        <color key="textColor" red="0.2666666667" green="0.25882352939999997" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
+                        <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="19"/>
+                        <color key="textColor" red="0.050980392156862744" green="0.49019607843137253" blue="0.67450980392156867" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="cell_arrow_teal.png" id="17">
-                        <rect key="frame" x="287" y="17" width="15" height="16"/>
+                    <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Available" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="6xw-9f-yE3" customClass="AltLabel">
+                        <rect key="frame" x="35" y="24" width="280" height="23"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="13"/>
+                        <color key="textColor" red="0.57647058823529407" green="0.63137254901960782" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="icon_chat_off.png" id="17">
+                        <rect key="frame" x="10" y="19" width="12" height="12"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                 </subviews>
             </tableViewCellContentView>
             <connections>
+                <outlet property="iconStatus" destination="17" id="JwT-BH-uGA"/>
                 <outlet property="titleLabel" destination="5" id="12"/>
             </connections>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="cell_arrow_teal.png" width="15" height="16"/>
+        <image name="icon_chat_off.png" width="12" height="12"/>
         <image name="tablecell_opaque_bg.png" width="315" height="50"/>
     </resources>
 </document>

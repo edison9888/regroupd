@@ -53,19 +53,26 @@
 
     [DataModel shared].needsLookup = YES;
     [DataModel shared].contactCache = [[NSMutableDictionary alloc] init];
+    [DataModel shared].phonebookCache = [[NSMutableDictionary alloc] init];
     
     UIImage *image = [UIImage imageNamed:@"tabbar_bg"];
     [[UINavigationBar appearance] setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
     
     [SQLiteDB installDatabase];
+
+    [DataModel shared].stageWidth = [[UIScreen mainScreen] bounds].size.width;
+    [DataModel shared].stageHeight = [[UIScreen mainScreen] bounds].size.height;
     
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
         // code here
-        [DataModel shared].stageWidth = [[UIScreen mainScreen] bounds].size.width;
-        [DataModel shared].stageHeight = [[UIScreen mainScreen] bounds].size.height;
+        self.window.clipsToBounds =YES;
+        self.window.frame =  CGRectMake(0,0,self.window.frame.size.width,self.window.frame.size.height);
     } else {
-        [DataModel shared].stageWidth = [[UIScreen mainScreen] applicationFrame].size.width;
-        [DataModel shared].stageHeight = [[UIScreen mainScreen] applicationFrame].size.height;
+        self.window.clipsToBounds =NO;
+        
+        self.window.frame =  CGRectMake(0,20,self.window.frame.size.width,self.window.frame.size.height);
+        
+        
     }
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];

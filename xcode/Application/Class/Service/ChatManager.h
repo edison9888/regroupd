@@ -12,11 +12,14 @@
 
 @interface ChatManager : NSObject
 
+- (ChatVO *) loadChatByKey:(NSString *)chatKey;
 - (ChatVO *) loadChat:(int)_chatId;
 - (ChatVO *) loadChat:(int)_chatId fetchAll:(BOOL)all;
 - (int) saveChat:(ChatVO *) chat;
 - (void) deleteChat:(ChatVO *)chat;
 - (void) updateChat:(ChatVO *)chat;
+- (void) updateChatStatus:(NSString *)chatKey name:(NSString *)name readtime:(NSNumber *)readtime;
+- (void) updateClearTimestamp:(NSString *)chatKey cleartime:(NSNumber *)cleartime;
 - (NSMutableArray *) listChats:(int)type;
 
 - (ChatMessageVO *) loadChatMessage:(int)_msgId;
@@ -32,17 +35,19 @@
 // API functions
 - (void) apiListChats:(NSString *)userId callback:(void (^)(NSArray *results))callback;
 - (void) apiSaveChat:(ChatVO *)chat callback:(void (^)(PFObject *object))callback;
+- (void) apiUpdateChatCounter:(NSString *)chatId callback:(void (^)(PFObject *object))callback;
 
 - (void) apiFindChatsByContactKeys:(NSArray *)contactKeys callback:(void (^)(NSArray *results))callback;
 
 - (void) apiSaveChatMessage:(ChatMessageVO *)msg callback:(void (^)(PFObject *object))callback;
 - (void)apiSaveChatMessage:(ChatMessageVO *)msg withPhoto:(UIImage *)saveImage callback:(void (^)(PFObject *object))callback;
+
 // Syncrhonous API functions
 - (ChatVO *) apiLoadChat:(NSString *)objectId;
 - (ChatVO *) apiLoadChat:(NSString *)objectId fetchAll:(BOOL)all;
 - (NSString *) apiSaveChat:(ChatVO *) chat;
 
-- (NSMutableArray *) asyncListChatMessages:(NSString *)objectId;
+- (NSMutableArray *) asyncListChatMessages:(NSString *)objectId afterDate:(NSDate *)date;
 - (NSMutableArray *) asyncListChatContacts:(NSArray *)objectIds;
 
 // ChatForm API

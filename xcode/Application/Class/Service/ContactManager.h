@@ -30,10 +30,6 @@
 
 - (void) apiLookupContacts:(NSArray *)contactKeys callback:(void (^)(NSArray *))callback;
 
-- (void) apiListUserContacts:(NSString *)userKey callback:(void (^)(NSArray *))callback;
-
-- (void) apiSaveUserContact:(ContactVO *)contact callback:(void (^)(NSString *))callback;
-
 
 - (void) apiLookupContactsByPhoneNumbers:(NSArray *)numbers callback:(void (^)(NSArray *))callback;
 
@@ -45,6 +41,7 @@
 - (NSDictionary *) findPersonByPhone:(NSString *)phone;
 - (NSMutableArray *) listPhonebookByStatus:(int)status;
 - (NSMutableDictionary *) lookupContactsFromPhonebook:(NSArray *)contactKeys;
+- (ContactVO *) lookupContactKeyInPhonebook:(NSArray *)key;
 
 - (void)bulkLoadPhonebook:(NSArray *)contacts;
 - (void)purgePhonebook;

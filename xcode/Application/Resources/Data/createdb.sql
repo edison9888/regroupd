@@ -52,26 +52,27 @@ CREATE TABLE IF NOT EXISTS group_contact (
 );
 
 CREATE TABLE IF NOT EXISTS chat ( 
-    chat_id INTEGER PRIMARY KEY,  
-    user_key TEXT,  
-    system_id TEXT,
-    name TEXT, 	
-    type INT DEFAULT 1, 
-    status INT DEFAULT 0,
-    created TEXT,
-    updated TEXT
+chat_id INTEGER PRIMARY KEY,  
+user_key TEXT,  
+system_id TEXT,
+name TEXT, 
+type INT DEFAULT 1, 
+status INT DEFAULT 0,
+clear_timestamp REAL,
+read_timestamp REAL,
+created TEXT,
+updated TEXT
 );
 CREATE TABLE IF NOT EXISTS chat_message (
-    message_id INTEGER PRIMARY KEY,  
-    chat_id INTEGER,
-    contact_id INTEGER,
-    form_id INTEGER,
-    system_id TEXT,
-    message TEXT, 	
-    attachment TEXT, 	
-    type INT DEFAULT 1, 
-    status INT DEFAULT 0,
-    created TEXT
+message_id INTEGER PRIMARY KEY,  
+system_id TEXT,
+chat_key TEXT,
+contact_key TEXT,
+form_key TEXT,
+message TEXT, 	
+type INT DEFAULT 1, 
+status INT DEFAULT 0,
+timestamp REAL
 );
 CREATE TABLE IF NOT EXISTS chat_contact ( 
     chat_id INTEGER,  

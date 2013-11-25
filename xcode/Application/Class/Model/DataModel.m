@@ -20,6 +20,7 @@
 
 @synthesize contactCache;
 @synthesize chatCache;
+@synthesize phonebookCache;
 
 @synthesize timestampText;
 @synthesize needsLookup, needsRefresh;

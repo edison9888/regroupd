@@ -27,27 +27,25 @@
 + (ChatMessageVO *) readFromDictionary:(NSDictionary *) data {
     ChatMessageVO *o = [[ChatMessageVO alloc] init];
     NSString *text;
+    NSNumber *number;
     
     text = [data valueForKey:@"message_id"];
     o.message_id = text.integerValue;
-    
-    text = [data valueForKey:@"chat_id"];
-    o.chat_id = text.integerValue;
 
-    text = [data valueForKey:@"contact_id"];
-    o.contact_id = text.integerValue;
-
-    text = [data valueForKey:@"form_id"];
-    o.form_id = text.integerValue;
-    
     text = [data valueForKey:@"system_id"];
     o.system_id = text;
     
+    text = [data valueForKey:@"chat_key"];
+    o.chat_key = text;
+
+    text = [data valueForKey:@"contact_key"];
+    o.contact_key = text;
+
+    text = [data valueForKey:@"form_key"];
+    o.form_key = text;
+    
     text = [data valueForKey:@"message"];
     o.message = text;
-    
-    text = [data valueForKey:@"attachment"];
-    o.attachment = text;
     
     text = [data valueForKey:@"type"];
     o.type = text.integerValue;
@@ -55,8 +53,8 @@
     text = [data valueForKey:@"status"];
     o.status = text.integerValue;
     
-    text = [data valueForKey:@"created"];
-    o.created = text;
+    number = [data valueForKey:@"timestamp"];
+    o.timestamp = number;
     
     return o;
     

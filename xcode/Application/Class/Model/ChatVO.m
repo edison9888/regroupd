@@ -23,6 +23,7 @@
 + (ChatVO *) readFromDictionary:(NSDictionary *) data {
     ChatVO *o = [[ChatVO alloc] init];    
     NSString *text;
+    NSNumber *number;
     
     text = [data valueForKey:@"chat_id"];
     o.chat_id = text.integerValue;
@@ -48,6 +49,18 @@
     text = [data valueForKey:@"updated"];
     o.updated = text;
 
+    number = [data valueForKey:@"read_timestamp"];
+    o.read_timestamp = number;
+    
+    number = [data valueForKey:@"clear_timestamp"];
+    o.clear_timestamp = number;
+    
+    if (number && number.doubleValue > 100) {
+        NSLog(@"clear timestamp %@", o.clear_timestamp);
+        NSTimeInterval timestamp = (NSTimeInterval)number.doubleValue;
+        o.cutoffDate = [NSDate dateWithTimeIntervalSince1970:timestamp];
+    }
+    
     return o;
 }
 

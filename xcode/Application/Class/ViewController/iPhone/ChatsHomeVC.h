@@ -23,6 +23,7 @@
     ChatManager *chatSvc;
     ContactManager *contactSvc;
     NSMutableArray *unknownContactKeys;
+    NSMutableSet *contactKeySet;
 }
 
 @property (nonatomic, strong) MBProgressHUD *hud;
