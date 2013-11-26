@@ -11,6 +11,8 @@
 #import "Constants.h"
 
 #import "UIAlertView+Helper.h"
+#import "UIImage+Resize.h"
+
 #import "DateTimeUtils.h"
 #import "EmbedPollWidget.h"
 #import "EmbedRatingWidget.h"
@@ -1433,12 +1435,20 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void)imagePickerController:(UIImagePickerController *)Picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     NSLog(@"%s", __FUNCTION__);
-	UIImage *original = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
-    NSLog(@"original size = %f / %f", original.size.width, original.size.height);
+
     
-    attachedPhoto = [UIImage imageWithCGImage:original.CGImage scale:0.25 orientation:original.imageOrientation];
+    UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
+    
+    CGSize resize;
+    
+    resize = CGSizeMake(kMinimumImageDimension, kMinimumImageDimension);
+    
+    attachedPhoto = [tmpImage resizedImageWithContentMode:UIViewContentModeScaleAspectFill bounds:resize interpolationQuality:kCGInterpolationMedium];
+    
+    tmpImage = nil;
     
     NSLog(@"photo size = %f / %f", attachedPhoto.size.width, attachedPhoto.size.height);
+    
     attachmentType = 0;
     hasAttachment = YES;
     
@@ -1449,10 +1459,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     //    self.attachButton.imageView.image = [UIImage imageNamed:kAttachPhotoIcon];
     [self.attachButton setImage:[UIImage imageNamed:kAttachPhotoIconAqua] forState:UIControlStateNormal];
-    //    [self.attachButton setImage:[UIImage imageNamed:kAttachPhotoIconAqua] forState:UIControlStateSelected];
-    original = nil;
     
-    //    [self setupButtonsForEdit];
     
 }
 

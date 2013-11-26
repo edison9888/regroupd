@@ -7,9 +7,11 @@
 //
 
 #import "SlideViewController.h"
-#import "BrandUILabel.h"
+#import "MBProgressHUD.h"
+
 #import "UserManager.h"
 #import "ContactManager.h"
+#import "BrandUILabel.h"
 
 @interface ProfileStart5VC : SlideViewController<UIAlertViewDelegate>
 {
@@ -17,6 +19,8 @@
     UserManager *userSvc;
     ContactManager *contactSvc;
 }
+
+@property (nonatomic, retain) MBProgressHUD *hud;
 
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
 
