@@ -20,10 +20,13 @@
     int selectedIndex;
     int fetchCount;
     NSMutableArray *tableData;
+//    NSMutableArray *chatsArray;
+    
     ChatManager *chatSvc;
     ContactManager *contactSvc;
     NSMutableArray *unknownContactKeys;
     NSMutableSet *contactKeySet;
+    
 }
 
 @property (nonatomic, strong) MBProgressHUD *hud;
