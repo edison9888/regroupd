@@ -16,6 +16,8 @@
 #import "BrandUITextField.h"
 #import "UIBubbleTableViewDataSource.h"
 #import "FormSelectorVC.h"
+#import "NameWidget.h"
+
 //#import ""
 
 #import "ChatManager.h"
@@ -25,6 +27,7 @@
 #import "ChatVO.h"
 #import "ChatMessageVO.h"
 #import "FormVO.h"
+
 
 @interface ChatVC : SlideViewController<UIBubbleTableViewDataSource, UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate, UIGestureRecognizerDelegate> {
     
@@ -70,8 +73,8 @@
     NSString *formTitle;
     
     NSDateFormatter *msgTimeFormat;
-    NSMutableArray *attachedFormOptions;
     NSMutableDictionary *formCache;
+    NSMutableArray *contactsArray;
 
     FormManager *formSvc;
     
@@ -89,6 +92,9 @@
 @property (nonatomic, strong) IBOutlet UIBubbleTableView *bubbleTable;
 
 @property (nonatomic, strong) IBOutlet UIView *topDrawer;
+@property (nonatomic, strong) IBOutlet UIView *drawerContents;
+@property (nonatomic, strong) IBOutlet UIImageView *drawerPull;
+
 @property (nonatomic, strong) IBOutlet UIView *chatBar;
 @property (nonatomic, strong) IBOutlet UIButton *attachButton;
 @property (nonatomic, strong) IBOutlet UIButton *sendButton;

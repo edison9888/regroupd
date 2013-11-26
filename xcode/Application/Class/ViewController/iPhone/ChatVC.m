@@ -33,6 +33,7 @@
 #define kAlertClearMessages 2
 
 
+
 @interface ChatVC ()
 {
     //    IBOutlet UIBubbleTableView *bubbleTable;
@@ -47,9 +48,13 @@
 @synthesize tableDataSource;
 @synthesize bubbleTable;
 
+
 #define kFirstOptionId  1
 #define kScrollViewTop 50
 #define kChatBarHeight 50
+#define kDrawerHeight 180
+#define kDrawerItemsStartX 10
+#define kDrawerItemsStartY 55
 
 #define kTagTopDrawer   13
 #define kTagSendButton   33
@@ -103,7 +108,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     
     inputHeight = 0;
-    theFont = [UIFont fontWithName:@"Raleway-Regular" size:13];
     
     self.inputField.delegate = self;
     self.detachButton.hidden = YES;
@@ -130,7 +134,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     inputFrame = self.inputField.frame;
     [self.inputField setContentInset:UIEdgeInsetsMake(0.0, 4.0, 0.0, -10.0)];
     
-    
+
     // Keyboard events
     // Setup notifications
     
@@ -176,6 +180,77 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     /*
      http://stackoverflow.com/questions/6672677/how-to-use-uipangesturerecognizer-to-move-object-iphone-ipad
      */
+    [self setupTopDrawer];
+    
+    [self loadChatMessages];
+}
+
+- (void) setupTopDrawer {
+    
+    [self.bubbleTable setContentInset:UIEdgeInsetsMake(20,0,0,0)];
+    theFont = [UIFont fontWithName:@"Raleway-Regular" size:13];
+    UIImage *icon = [UIImage imageNamed:@"name_widget_arrow"];
+    
+    ContactVO* contact;
+    contactsArray = [[NSMutableArray alloc] initWithCapacity:[DataModel shared].chat.contact_keys.count];
+    NSString *name;
+    int index = 0;
+    int xpos = kDrawerItemsStartX;
+    int ypos = kDrawerItemsStartY;
+    
+    WidgetStyle *style = [[WidgetStyle alloc] init];
+    style.fontcolor = 0xFFFFFF;
+    style.bgcolor = 0x28CFEA;
+    style.bordercolor = 0x09a1bd;
+    style.corner = 0;
+    style.font = theFont;
+
+    float itemWidth = 0;
+    for (NSString *key in [DataModel shared].chat.contact_keys) {
+        contact = [[DataModel shared].contactCache objectForKey:key];
+        name = contact.fullname;
+//        name = [[DataModel shared].chat.
+        CGSize txtSize = [name sizeWithFont:theFont];
+        itemWidth = txtSize.width + 25;
+        
+        if (xpos + itemWidth > self.drawerContents.frame.size.width - kDrawerItemsStartX * 2) {
+            xpos = 0;
+            ypos += kNameWidgetRowHeight;
+            
+        }
+        
+        CGRect itemFrame = CGRectMake(xpos, ypos, itemWidth, 25);
+        
+        NameWidget *item = [[NameWidget alloc] initWithFrame:itemFrame andStyle:style];
+        
+        [item setFieldLabel:name];
+        xpos += itemWidth + kNameWidgetGap;
+        [item setIcon:icon];
+        
+        [self.drawerContents addSubview:item];
+        
+    }
+
+    ypos += kNameWidgetRowHeight + 10;
+    float delta = 0;
+    
+    CGRect frame = self.drawerContents.frame;
+//    float originalY = self.topDrawer.frame.origin.y;
+    float originalHeight = frame.size.height;
+
+    delta = originalHeight - ypos;
+    frame.size.height -= delta;
+    self.drawerContents.frame = frame;
+    
+    frame = self.drawerPull.frame;
+    frame.origin.y -= delta;
+    self.drawerPull.frame = frame;
+    
+    frame = self.topDrawer.frame;
+    frame.size.height -= delta;
+    frame.origin.y = -1 * frame.size.height + 70;
+    self.topDrawer.frame = frame;
+    
     UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc]
                                              initWithTarget:self action:@selector(handlePull:)];
     
@@ -188,7 +263,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     drawerMinTop = self.topDrawer.frame.origin.y;
     drawerMaxTop = 0;
     
-    [self loadChatMessages];
+
+    
+
 }
 
 - (void)didReceiveMemoryWarning

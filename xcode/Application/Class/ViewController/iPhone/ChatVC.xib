@@ -25,6 +25,8 @@
                 <outlet property="cancelHotspot" destination="60" id="IH5-Cg-dxn"/>
                 <outlet property="chatBar" destination="VL9-59-RBu" id="oCj-cg-eIn"/>
                 <outlet property="detachButton" destination="aCq-zV-oCj" id="vSn-3G-XMh"/>
+                <outlet property="drawerContents" destination="m6t-xP-xVt" id="CwE-lR-ghA"/>
+                <outlet property="drawerPull" destination="0T6-j3-0mA" id="LVi-RZ-JqO"/>
                 <outlet property="inputField" destination="5JB-Ai-Vv9" id="PXM-2z-8LL"/>
                 <outlet property="navTitle" destination="bvZ-1b-PBc" id="HDH-cb-EiW"/>
                 <outlet property="photoModal" destination="lHV-BO-JO1" id="MBM-Nt-cLQ"/>
@@ -103,6 +105,11 @@
                     </subviews>
                     <color key="backgroundColor" red="0.51764705882352946" green="0.58823529411764708" blue="0.62745098039215685" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
+                <view contentMode="scaleToFill" id="IoV-Lv-aap" userLabel="View - nav mask">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="0.15686274510000001" green="0.81176470590000005" blue="0.91764705879999997" alpha="1" colorSpace="calibratedRGB"/>
+                </view>
                 <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="20">
                     <rect key="frame" x="254" y="8" width="60" height="36"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -143,7 +150,7 @@
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
-            <color key="backgroundColor" red="0.90196078431372551" green="0.92156862745098034" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.8666666666666667" green="0.88235294117647056" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
         </view>
         <view autoresizesSubviews="NO" contentMode="scaleToFill" id="lHV-BO-JO1" userLabel="View - photoModal">

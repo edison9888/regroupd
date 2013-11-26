@@ -13,7 +13,7 @@
 #import "ChatManager.h"
 #import "ChatVO.h"
 #import "ContactVO.h"
-#import "SelectedItemWidget.h"
+#import "NameWidget.h"
 
 @interface EditChatVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     BOOL isLoading;

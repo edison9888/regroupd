@@ -201,7 +201,7 @@
             }
             
             CGRect itemFrame = CGRectMake(xpos, ypos, estWidth, 24);
-            SelectedItemWidget *item = [[SelectedItemWidget alloc] initWithFrame:itemFrame];
+            NameWidget *item = [[NameWidget alloc] initWithFrame:itemFrame];
             
             [item setFieldLabel:fullname];
             

@@ -54,6 +54,133 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - Data Load
+
+- (void)listMyChats
+{
+    NSLog(@"%s", __FUNCTION__);
+    self.tableData =[[NSMutableArray alloc]init];
+    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [self.hud setLabelText:@"Loading"];
+    [self.hud setDimBackground:YES];
+    contactKeySet = [[NSMutableSet alloc] init];  // collect full set of contact keys
+    
+    if (chatSvc == nil) {
+        chatSvc = [[ChatManager alloc] init];
+    }
+    if (contactSvc == nil) {
+        contactSvc = [[ContactManager alloc] init];
+    }
+    
+    
+    [chatSvc apiListChats:[DataModel shared].user.contact_key callback:^(NSArray *results) {
+        fetchCount++;
+        NSLog(@"apiListChats response count %i", results.count);
+        if (results.count == 0) {
+            [MBProgressHUD hideHUDForView:self.view animated:NO];
+            [self.theTableView reloadData];
+            return;
+        }
+        
+        NSMutableArray *chatsArray = [[NSMutableArray alloc] initWithCapacity:results.count];
+        ChatVO *chat;
+        
+        for (PFObject* result in results) {
+            unknownContactKeys = [[NSMutableArray alloc] init];
+            
+            chat = [ChatVO readFromPFObject:result];
+            
+            ChatVO *lookup = [chatSvc loadChatByKey:chat.system_id];
+            if (lookup == nil) {
+                // need to add
+                [chatSvc saveChat:chat];
+                chat.hasNew = YES;
+                
+            } else {
+                // ignore
+                
+                NSTimeInterval serverTime = [chat.updatedAt timeIntervalSince1970];
+                
+                NSLog(@"Compare localTime %f vs. serverTime %f", lookup.read_timestamp.doubleValue, serverTime);
+                
+                if (lookup.read_timestamp.doubleValue < serverTime) {
+                    chat.hasNew = YES;
+                } else {
+                    chat.hasNew = NO;
+                }
+            }
+            
+            [chatsArray addObject:chat];
+            
+            NSArray *keys = [result objectForKey:@"contact_keys"];
+            NSLog(@"contact keys = %@", keys);
+            [contactKeySet addObjectsFromArray:keys];
+            
+            
+        }
+        
+        [contactSvc lookupContactsFromPhonebook:[contactKeySet allObjects]];
+        
+        [contactSvc apiLookupContacts:[contactKeySet allObjects] callback:^(NSArray *results) {
+            NSMutableArray *namesArray = [[NSMutableArray alloc] init];
+            NSMutableDictionary *namesMap = [[NSMutableDictionary alloc] init];
+            ContactVO *contact;
+            NSString *name;
+            
+            for (ChatVO *chat in chatsArray) {
+                
+                for (NSString *key in chat.contact_keys) {
+                    if (![key isEqualToString:[DataModel shared].user.contact_key]) {
+                        if ([[DataModel shared].phonebookCache objectForKey:key]) {
+                            contact = (ContactVO *) [[DataModel shared].phonebookCache objectForKey:key];
+                            if (contact.first_name != nil && contact.last_name != nil) {
+                                name = contact.fullname;
+                                [namesArray addObject:name];
+                                
+                                ((ContactVO *) [[DataModel shared].contactCache objectForKey:key]).first_name = contact.first_name;
+                                ((ContactVO *) [[DataModel shared].contactCache objectForKey:key]).last_name = contact.last_name;
+                                
+                            } else if (contact.phone != nil) {
+                                name = contact.phone;
+                                [namesArray addObject:name];
+                            } else {
+                                // This is unlikely. Contact results are from address book
+                                NSLog(@"Unexpected condition: contact has no name or phone");
+                            }
+                        } else {
+                            if ([[DataModel shared].contactCache objectForKey:key]) {
+                                contact = (ContactVO *) [[DataModel shared].contactCache objectForKey:key];
+                                name = contact.phone;
+                                [namesArray addObject:name];
+                            } else {
+                                NSLog(@"Unexpected condition: contact not in any cache");
+                                name = key;
+                                [namesArray addObject:name];
+                            }
+                        }
+                    } else {
+                        // Ignore current user
+                    }
+                    
+                    
+                }
+                NSString *names = [namesArray componentsJoinedByString:@", "];
+                chat.names = names;
+                
+                chat.namesMap = namesMap;
+                [tableData addObject:chat];
+                
+            }
+            [MBProgressHUD hideHUDForView:self.view animated:NO];
+            [self.theTableView reloadData];
+            isLoading = NO;
+            
+        }];
+        
+    }];
+}
+
+
 #pragma mark - UITableViewDataSource
 
 
@@ -142,125 +269,6 @@
     
 }
 
-- (void)listMyChats
-{
-    NSLog(@"%s", __FUNCTION__);
-    self.tableData =[[NSMutableArray alloc]init];
-    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [self.hud setLabelText:@"Loading"];
-    [self.hud setDimBackground:YES];
-    contactKeySet = [[NSMutableSet alloc] init];  // collect full set of contact keys
-    
-    if (chatSvc == nil) {
-        chatSvc = [[ChatManager alloc] init];
-    }
-    if (contactSvc == nil) {
-        contactSvc = [[ContactManager alloc] init];
-    }
-    
-    
-    [chatSvc apiListChats:[DataModel shared].user.contact_key callback:^(NSArray *results) {
-        fetchCount++;
-        NSLog(@"apiListChats response count %i", results.count);
-        if (results.count == 0) {
-            [MBProgressHUD hideHUDForView:self.view animated:NO];
-            [self.theTableView reloadData];
-            return;
-        }
-        
-        NSMutableArray *chatsArray = [[NSMutableArray alloc] initWithCapacity:results.count];
-        ChatVO *chat;
-        
-        for (PFObject* result in results) {
-            unknownContactKeys = [[NSMutableArray alloc] init];
-            
-            chat = [ChatVO readFromPFObject:result];
-            
-            ChatVO *lookup = [chatSvc loadChatByKey:chat.system_id];
-            if (lookup == nil) {
-                // need to add
-                [chatSvc saveChat:chat];
-                chat.hasNew = YES;
-                
-            } else {
-                // ignore
-                
-                NSTimeInterval serverTime = [chat.updatedAt timeIntervalSince1970];
-                
-                NSLog(@"Compare localTime %f vs. serverTime %f", lookup.read_timestamp.doubleValue, serverTime);
-                
-                if (lookup.read_timestamp.doubleValue < serverTime) {
-                    chat.hasNew = YES;
-                } else {
-                    chat.hasNew = NO;
-                }
-            }
-            
-            [chatsArray addObject:chat];
-            
-            NSArray *keys = [result objectForKey:@"contact_keys"];
-            NSLog(@"contact keys = %@", keys);
-            [contactKeySet addObjectsFromArray:keys];
-            
-
-        }
-        
-        [contactSvc lookupContactsFromPhonebook:[contactKeySet allObjects]];
-
-        [contactSvc apiLookupContacts:[contactKeySet allObjects] callback:^(NSArray *results) {
-            NSMutableArray *namesArray = [[NSMutableArray alloc] init];
-            NSMutableDictionary *namesMap = [[NSMutableDictionary alloc] init];
-            ContactVO *contact;
-            NSString *name;
-            
-            for (ChatVO *chat in chatsArray) {
-                
-                for (NSString *key in chat.contact_keys) {
-                    if (![key isEqualToString:[DataModel shared].user.contact_key]) {
-                        if ([[DataModel shared].phonebookCache objectForKey:key]) {
-                            contact = (ContactVO *) [[DataModel shared].phonebookCache objectForKey:key];
-                            if (contact.first_name != nil && contact.last_name != nil) {
-                                name = contact.fullname;
-                                [namesArray addObject:name];
-                            } else if (contact.phone != nil) {
-                                name = contact.phone;
-                                [namesArray addObject:name];
-                            } else {
-                                // This is unlikely. Contact results are from address book
-                                NSLog(@"Unexpected condition: contact has no name or phone");
-                            }
-                        } else {
-                            if ([[DataModel shared].contactCache objectForKey:key]) {
-                                contact = (ContactVO *) [[DataModel shared].contactCache objectForKey:key];
-                                name = contact.phone;
-                                [namesArray addObject:name];
-                            } else {
-                                NSLog(@"Unexpected condition: contact not in any cache");
-                                name = key;
-                                [namesArray addObject:name];
-                            }
-                        }
-                    } else {
-                        // Ignore current user
-                    }
-                    
-                    
-                }
-                NSString *names = [namesArray componentsJoinedByString:@", "];
-                chat.names = names;
-
-                chat.namesMap = namesMap;
-                [tableData addObject:chat];
-                
-            }
-            [MBProgressHUD hideHUDForView:self.view animated:NO];
-            [self.theTableView reloadData];
-            isLoading = NO;
-            
-        }];
-        
-    }];
-}
 
 #pragma mark - Action handlers
 

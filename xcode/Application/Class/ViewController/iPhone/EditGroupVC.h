@@ -15,7 +15,7 @@
 
 #import "ChatVO.h"
 #import "ContactVO.h"
-#import "SelectedItemWidget.h"
+#import "NameWidget.h"
 #import "BrandUILabel.h"
 #import "BrandUITextField.h"
 
