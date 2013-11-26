@@ -196,15 +196,23 @@
             //            if (![contactKeys containsObject:contact.system_id]) {
             [contactKeys addObject:contactKey];
             
-            float estWidth = 100;
+            float estWidth = fullname.length * 8 + 10;
             if (xpos + estWidth + 10 > self.selectionsView.frame.size.width) {
                 xpos = 0;
-                ypos +=30;
+                ypos +=kNameWidgetRowHeight;
             }
-            if (ypos + 30 > self.selectionsView.frame.size.height) {
+            
+            if (ypos + kNameWidgetRowHeight > self.selectionsView.frame.size.height) {
                 CGRect sframe = self.selectionsView.frame;
-                sframe.size.height += 30;
+                sframe.size.height += kNameWidgetRowHeight;
                 self.selectionsView.frame = sframe;
+                
+                CGRect searchFrame = self.searchView.frame;
+                if (sframe.origin.y + sframe.size.height > searchFrame.origin.y) {
+                    searchFrame.origin.y += kNameWidgetRowHeight;
+                    searchFrame.size.height -= kNameWidgetRowHeight;
+                    self.searchView.frame = searchFrame;
+                }
             }
             
             CGRect itemFrame = CGRectMake(xpos, ypos, estWidth, 24);
@@ -212,9 +220,8 @@
             
             [item setFieldLabel:fullname];
             
-            
+            xpos += estWidth + 10;
             [self.selectionsView addSubview:item];
-            
             
         }
     } @catch (NSException * e) {

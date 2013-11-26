@@ -119,17 +119,19 @@
             
         }
         
-        [contactSvc lookupContactsFromPhonebook:[contactKeySet allObjects]];
+        NSMutableDictionary *pbMap = [contactSvc lookupContactsFromPhonebook:[contactKeySet allObjects]];
         
         [contactSvc apiLookupContacts:[contactKeySet allObjects] callback:^(NSArray *results) {
-            NSMutableArray *namesArray = [[NSMutableArray alloc] init];
-            NSMutableDictionary *namesMap = [[NSMutableDictionary alloc] init];
             ContactVO *contact;
             NSString *name;
             
             for (ChatVO *chat in chatsArray) {
+                NSMutableArray *namesArray = [[NSMutableArray alloc] init];
                 
                 for (NSString *key in chat.contact_keys) {
+                    contact = nil;
+                    name = nil;
+                    NSLog(@"Current user is %@", [DataModel shared].user.contact_key);
                     if (![key isEqualToString:[DataModel shared].user.contact_key]) {
                         if ([[DataModel shared].phonebookCache objectForKey:key]) {
                             contact = (ContactVO *) [[DataModel shared].phonebookCache objectForKey:key];
@@ -167,7 +169,6 @@
                 NSString *names = [namesArray componentsJoinedByString:@", "];
                 chat.names = names;
                 
-                chat.namesMap = namesMap;
                 [tableData addObject:chat];
                 
             }

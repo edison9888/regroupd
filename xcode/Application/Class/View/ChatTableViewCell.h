@@ -9,15 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "ContactVO.h"
 #import "ChatVO.h"
+#import "AltLabel.h"
 
 @interface ChatTableViewCell : UITableViewCell {
-    UILabel *titleLabel;
     
 }
 
 @property (nonatomic, retain) IBOutlet UIImageView *iconStatus;
 
-@property (nonatomic, retain) IBOutlet UILabel *titleLabel;
+@property (nonatomic, retain) IBOutlet AltLabel *titleLabel;
 
 @property (nonatomic, retain) ChatVO *rowdata;
 

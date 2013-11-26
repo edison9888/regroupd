@@ -27,12 +27,12 @@
                 <outlet property="detachButton" destination="aCq-zV-oCj" id="vSn-3G-XMh"/>
                 <outlet property="drawerContents" destination="m6t-xP-xVt" id="CwE-lR-ghA"/>
                 <outlet property="drawerPull" destination="0T6-j3-0mA" id="LVi-RZ-JqO"/>
+                <outlet property="drawerView" destination="2b7-SW-YnZ" id="lLX-LL-beq"/>
                 <outlet property="inputField" destination="5JB-Ai-Vv9" id="PXM-2z-8LL"/>
                 <outlet property="navTitle" destination="bvZ-1b-PBc" id="HDH-cb-EiW"/>
                 <outlet property="photoModal" destination="lHV-BO-JO1" id="MBM-Nt-cLQ"/>
                 <outlet property="plusIconsView" destination="v9D-BJ-uId" id="ePy-76-ZQr"/>
                 <outlet property="sendButton" destination="2x0-BK-fQF" id="wJW-Q6-reg"/>
-                <outlet property="topDrawer" destination="2b7-SW-YnZ" id="8nl-vC-G7V"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>

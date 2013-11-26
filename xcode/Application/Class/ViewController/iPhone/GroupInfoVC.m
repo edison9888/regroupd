@@ -62,6 +62,59 @@
 }
 - (IBAction)tapMessageButton {
     
+    return;
+    
+    if (chatSvc == nil) {
+        chatSvc = [[ChatManager alloc] init];
+        
+    }
+    NSArray *contactKeys = @[[DataModel shared].user.contact_key, [DataModel shared].contact.contact_key];
+    
+    [chatSvc apiFindChatsByContactKeys:contactKeys callback:^(NSArray *results) {
+        BOOL chatExists = NO;
+        ChatVO *chat;
+        if (results && results.count > 0) {
+            for (PFObject *pfChat in results) {
+                if (pfChat[@"contact_keys"]) {
+                    NSArray *keys =pfChat[@"contact_keys"];
+                    if (keys.count == contactKeys.count) {
+                        // exact match.
+                        chat = [ChatVO readFromPFObject:pfChat];
+                        chatExists = YES;
+                        break;
+                    }
+                }
+            }
+        }
+        if (chatExists) {
+            
+            [DataModel shared].chat = chat;
+            [_delegate gotoSlideWithName:@"Chat" andOverrideTransition:kPresentationTransitionFade];
+            
+        } else {
+            ChatVO *chat = [[ChatVO alloc] init];
+            
+            chat.contact_keys = contactKeys;
+            
+            [chatSvc apiSaveChat:chat callback:^(PFObject *pfChat) {
+                
+                // Adding push notifications subscription
+                
+                PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+                [currentInstallation addUniqueObject:pfChat.objectId forKey:@"channels"];
+                [currentInstallation saveInBackground];
+                
+                chat.system_id = pfChat.objectId;
+                
+                [chatSvc saveChat:chat];
+                
+                [DataModel shared].chat = chat;
+                
+                [_delegate gotoSlideWithName:@"Chat"];
+            }];
+        }
+    }];
+    
 }
 - (IBAction)tapManageButton {
     

@@ -225,7 +225,9 @@
     }
     if (isOk) {
         UserVO *user = [DataModel shared].user;
-        user.password = self.tf1.text;
+        user.password = @"123456";
+
+//        user.password = self.tf1.text;
         
         // TODO: Validate that code is correct
         

@@ -9,7 +9,7 @@
 
 #define k_CHAT_OPTION_BASETAG   2000
 #define kFullNameFormat @"%@ %@"
-
+#define kMinimumImageDimension 240
 
 #define k_contactSavedNotification @"contactSavedNotification"
 #define k_chatMessagesLoaded @"chatMessagesLoaded"

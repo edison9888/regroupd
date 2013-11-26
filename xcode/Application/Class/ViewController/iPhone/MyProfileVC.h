@@ -7,6 +7,9 @@
 //
 
 #import "SlideViewController.h"
+
+#import "MBProgressHUD.h"
+
 #import "UserManager.h"
 #import "ContactManager.h"
 
@@ -20,6 +23,7 @@
 
 }
 @property (nonatomic, retain) UIImagePickerController* imagePickerVC;
+@property (nonatomic, strong) MBProgressHUD *hud;
 
 @property (nonatomic, strong) IBOutlet UIImageView *roundPic;
 @property (nonatomic, strong) IBOutlet BrandUILabel *nameLabel;

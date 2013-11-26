@@ -504,6 +504,7 @@
 		1EC44C881813118B00F4A2C2 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EC44C861813118B00F4A2C2 /* EventKitUI.framework */; };
 		1EEA97631844343D00D726C4 /* WidgetStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEA97621844343D00D726C4 /* WidgetStyle.m */; };
 		1EEA9765184437F500D726C4 /* name_widget_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EEA9764184437F500D726C4 /* name_widget_arrow@2x.png */; };
+		1EEA976818444B8900D726C4 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEA976718444B8900D726C4 /* UIImage+Resize.m */; };
 		1EF463341783AE1C00D38DBB /* UserVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF463331783AE1C00D38DBB /* UserVO.m */; };
 		1EFEA23F182FB97300FEE9E4 /* NBAsYouTypeFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EFEA22F182FB97300FEE9E4 /* NBAsYouTypeFormatter.m */; };
 		1EFEA240182FB97300FEE9E4 /* NBNumberFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EFEA231182FB97300FEE9E4 /* NBNumberFormat.m */; };
@@ -1174,6 +1175,8 @@
 		1EEA97611844343D00D726C4 /* WidgetStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetStyle.h; sourceTree = "<group>"; };
 		1EEA97621844343D00D726C4 /* WidgetStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WidgetStyle.m; sourceTree = "<group>"; };
 		1EEA9764184437F500D726C4 /* name_widget_arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "name_widget_arrow@2x.png"; sourceTree = "<group>"; };
+		1EEA976618444B8900D726C4 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
+		1EEA976718444B8900D726C4 /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
 		1EF463321783AE1C00D38DBB /* UserVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserVO.h; sourceTree = "<group>"; };
 		1EF463331783AE1C00D38DBB /* UserVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserVO.m; sourceTree = "<group>"; };
 		1EFEA22E182FB97300FEE9E4 /* NBAsYouTypeFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NBAsYouTypeFormatter.h; sourceTree = "<group>"; };
@@ -1856,6 +1859,8 @@
 		1E92812C177FB68F008A583C /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				1EEA976618444B8900D726C4 /* UIImage+Resize.h */,
+				1EEA976718444B8900D726C4 /* UIImage+Resize.m */,
 				1E8BFAC817F73B3C0053BEE3 /* NSArray+Random.h */,
 				1E8BFAC917F73B3C0053BEE3 /* NSArray+Random.m */,
 				1E8BFACA17F73B3C0053BEE3 /* NSDate+Extensions.h */,
@@ -2866,6 +2871,7 @@
 				1E9282AE177FB690008A583C /* NSObject+SBJson.m in Sources */,
 				1E59F10B17FA544C00EE2902 /* PageScrollView.m in Sources */,
 				1EC44C5218130CC100F4A2C2 /* ChatVC.m in Sources */,
+				1EEA976818444B8900D726C4 /* UIImage+Resize.m in Sources */,
 				1EC44C5618130CC100F4A2C2 /* ContactsHomeVC.m in Sources */,
 				1E9282AF177FB690008A583C /* SBJsonParser.m in Sources */,
 				1E0F8EFD18109B9C00B6C6AF /* FancyToggle.m in Sources */,

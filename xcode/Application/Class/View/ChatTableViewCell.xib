@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="315" height="50"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
-                    <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Names" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="5" customClass="BrandUILabel">
+                    <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Names" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="5" customClass="AltLabel">
                         <rect key="frame" x="35" y="6" width="280" height="23"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -42,7 +42,7 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="iconStatus" destination="17" id="JwT-BH-uGA"/>
-                <outlet property="titleLabel" destination="5" id="12"/>
+                <outlet property="titleLabel" destination="5" id="8uX-g0-Skd"/>
             </connections>
         </tableViewCell>
     </objects>

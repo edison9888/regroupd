@@ -94,7 +94,7 @@
             self.rightCallout.hidden = YES;
             [self.msgView setTextColor:[UIColor blackColor]];
             [self.nameLabel setTextColor:[UIColor colorWithHexValue:0x0d7dac]];
-            [self.timeLabel setTextColor:[UIColor blackColor]];
+            [self.timeLabel setTextColor:[UIColor colorWithHexValue:0x8496a0]];
         }
         
         [self addSubview:_theView];

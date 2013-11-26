@@ -62,7 +62,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <view tag="66" contentMode="scaleToFill" id="b9w-v1-sFq" userLabel="View - see details view">
-                    <rect key="frame" x="119" y="12" width="126" height="36"/>
+                    <rect key="frame" x="119" y="14" width="126" height="36"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="see_details.png" id="CJX-eg-I0L" userLabel="Image View - see details">

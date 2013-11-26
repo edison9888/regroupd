@@ -443,7 +443,7 @@
                 [results setObject:contact forKey:key];
             } else {
                 NSLog(@"Did not find key %@", key);
-                [results setObject:[NSNull null] forKey:key];
+//                [results setObject:[NSNull null] forKey:key];
             }
             
         } else {

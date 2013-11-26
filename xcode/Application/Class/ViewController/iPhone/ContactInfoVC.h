@@ -22,6 +22,7 @@
 @property (nonatomic, strong) IBOutlet BrandUILabel *nameLabel;
 @property (nonatomic, strong) IBOutlet BrandUIButton *messageButton;
 @property (nonatomic, strong) IBOutlet BrandUIButton *phoneButton;
+@property (nonatomic, strong) IBOutlet BrandUIButton *backButton;
 
 - (IBAction)tapBackButton;
 - (IBAction)tapMessageButton;

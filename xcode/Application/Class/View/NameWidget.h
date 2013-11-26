@@ -25,6 +25,8 @@
 @property (nonatomic, retain) UIButton *clearButton;
 @property (nonatomic, retain) NSString *itemKey;
 
+- (void) setupButton:(NSString *)key;
+
 - (void) setFieldLabel:(NSString *)label;
 - (void) setIcon:(UIImage *)image;
 - (void) setBGColor:(UIColor *)bgcolor;

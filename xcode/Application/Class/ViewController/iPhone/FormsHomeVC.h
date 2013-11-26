@@ -28,7 +28,6 @@
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *tableData;
-    NSMutableArray *allForms;
     
     UIView *bgLayer;
     
@@ -40,7 +39,9 @@
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
-@property(retain) NSMutableArray *tableData;
+@property (retain) NSMutableArray *tableData;
+@property (nonatomic,retain) NSMutableArray *allForms;
+
 - (void)performSearch:(NSString *)searchText;
 
 @property (nonatomic, strong) IBOutlet UILabel *navTitle;

@@ -32,6 +32,7 @@
 #define kAlertClearMessages 2
 #define kAlertClearMessages 2
 
+#define kBaseTagForNameWidget   900
 
 
 @interface ChatVC ()
@@ -104,7 +105,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     
     msgTimeFormat = [[NSDateFormatter alloc] init];
-    [msgTimeFormat setDateFormat:@"hh:mm"];
+    [msgTimeFormat setDateFormat:@"h:mm a"];
+//    [msgTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm"];
     
     
     inputHeight = 0;
@@ -194,7 +196,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     ContactVO* contact;
     contactsArray = [[NSMutableArray alloc] initWithCapacity:[DataModel shared].chat.contact_keys.count];
     NSString *name;
-    int index = 0;
     int xpos = kDrawerItemsStartX;
     int ypos = kDrawerItemsStartY;
     
@@ -202,13 +203,19 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     style.fontcolor = 0xFFFFFF;
     style.bgcolor = 0x28CFEA;
     style.bordercolor = 0x09a1bd;
-    style.corner = 0;
+    style.corner = 2;
     style.font = theFont;
-
+    
+    int index = 0;
     float itemWidth = 0;
     for (NSString *key in [DataModel shared].chat.contact_keys) {
-        contact = [[DataModel shared].contactCache objectForKey:key];
-        name = contact.fullname;
+        
+        if ([key isEqualToString:[DataModel shared].user.contact_key]) {
+            name = @"Me";
+        } else {
+            contact = [[DataModel shared].contactCache objectForKey:key];
+            name = contact.fullname;
+        }
 //        name = [[DataModel shared].chat.
         CGSize txtSize = [name sizeWithFont:theFont];
         itemWidth = txtSize.width + 25;
@@ -222,6 +229,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         CGRect itemFrame = CGRectMake(xpos, ypos, itemWidth, 25);
         
         NameWidget *item = [[NameWidget alloc] initWithFrame:itemFrame andStyle:style];
+        item.userInteractionEnabled = YES;
+        item.tag = kBaseTagForNameWidget + index;
+//        [item setupButton:key];
         
         [item setFieldLabel:name];
         xpos += itemWidth + kNameWidgetGap;
@@ -246,10 +256,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     frame.origin.y -= delta;
     self.drawerPull.frame = frame;
     
-    frame = self.topDrawer.frame;
+    frame = self.drawerView.frame;
     frame.size.height -= delta;
     frame.origin.y = -1 * frame.size.height + 70;
-    self.topDrawer.frame = frame;
+    self.drawerView.frame = frame;
     
     UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc]
                                              initWithTarget:self action:@selector(handlePull:)];
@@ -258,9 +268,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [panRecognizer setMinimumNumberOfTouches:1];
     
     panRecognizer.cancelsTouchesInView = YES;
-    [self.topDrawer addGestureRecognizer:panRecognizer];
+    [self.drawerView addGestureRecognizer:panRecognizer];
     
-    drawerMinTop = self.topDrawer.frame.origin.y;
+    drawerMinTop = self.drawerView.frame.origin.y;
     drawerMaxTop = 0;
     
 
@@ -723,7 +733,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             viewInset = UIEdgeInsetsMake(5, 10, 5, 0);
         }
         
-        nameValue = (NSString *) [[DataModel shared].chat.namesMap objectForKey:msg.contact_key];
+        nameValue = ((ContactVO *) [[DataModel shared].contactCache objectForKey:msg.contact_key]).fullname;
         
         ChatMessageWidget *msgView = [[ChatMessageWidget alloc] initWithFrame:msgFrame message:msg isOwner:NO];
         msgView.tag = 188;
@@ -775,6 +785,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
     
     timeValue = [msgTimeFormat stringFromDate:msg.createdAt];
+    NSLog(@"createdAt %@ -- timeValue %@", msg.createdAt, timeValue);
     
     
     if (theForm.type == FormType_POLL) {
@@ -791,11 +802,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         NSLog(@"widget height = %f", embedWidget.dynamicHeight);
         msgFrame.size.height = embedWidget.dynamicHeight;
         embedWidget.frame = msgFrame;
+
+        nameValue = ((ContactVO *) [[DataModel shared].contactCache objectForKey:msg.contact_key]).fullname;
         
         embedWidget.nameLabel.text = nameValue;
         embedWidget.timeLabel.text = timeValue;
         
-        bubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:whoType insets:viewInset];
+        bubble = [NSBubbleData dataWithView:embedWidget date:msg.createdAt type:whoType insets:viewInset];
         bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
         return bubble;
         
@@ -813,10 +826,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         msgFrame.size.height = embedWidget.dynamicHeight;
         embedWidget.frame = msgFrame;
         
+        nameValue = ((ContactVO *) [[DataModel shared].contactCache objectForKey:msg.contact_key]).fullname;
+
         embedWidget.nameLabel.text = nameValue;
         embedWidget.timeLabel.text = timeValue;
         
-        bubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:whoType insets:viewInset];
+        bubble = [NSBubbleData dataWithView:embedWidget date:msg.createdAt type:whoType insets:viewInset];
         bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
         return bubble;
         
@@ -826,6 +841,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         
         NSDate *dt = [DateTimeUtils readDateFromFriendlyDateTime:theForm.start_time];
         
+        nameValue = ((ContactVO *) [[DataModel shared].contactCache objectForKey:msg.contact_key]).fullname;
         embedWidget.nameLabel.text = nameValue;
         embedWidget.timeLabel.text = timeValue;
         
@@ -846,7 +862,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         msgFrame.size.height = embedWidget.dynamicHeight;
         embedWidget.frame = msgFrame;
         
-        bubble = [NSBubbleData dataWithView:embedWidget date:[NSDate dateWithTimeIntervalSinceNow:0] type:whoType insets:viewInset];
+        bubble = [NSBubbleData dataWithView:embedWidget date:msg.createdAt type:whoType insets:viewInset];
         bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
         return bubble;
         
@@ -906,7 +922,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (NSBubbleData *)bubbleTableView:(UIBubbleTableView *)tableView dataForRow:(NSInteger)row
 {
-    NSLog(@"bubbleTableView dataForRow %i",row);
+//    NSLog(@"bubbleTableView dataForRow %i",row);
     return [tableDataSource objectAtIndex:row];
 }
 
@@ -1465,8 +1481,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         UIView* view = sender.view;
         CGPoint loc = [sender locationInView:view];
         UIView* subview = [view hitTest:loc withEvent:nil];
-//        CGPoint subloc = [sender locationInView:subview];
-        //        NSLog(@"hit tag = %i at point %f / %f", subview.tag, subloc.x, subloc.y);
+        CGPoint subloc = [sender locationInView:subview];
+        NSLog(@"hit tag = %i at point %f / %f", subview.tag, subloc.x, subloc.y);
         
         if (keyboardIsShown && subview.tag != kTagSendButton) {
             [self.inputField resignFirstResponder];
@@ -1486,6 +1502,23 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                     [self hideFormSelector];
                     break;
                     
+            }
+            int nameIndex = subview.tag - kBaseTagForNameWidget;
+            if (nameIndex >= 0 && nameIndex <= 99) {
+                @try {
+                    NSString *key = (NSString *) [[DataModel shared].chat.contact_keys objectAtIndex:nameIndex];
+                    ContactVO *contact = (ContactVO *) [[DataModel shared].contactCache objectForKey:key];
+                    [DataModel shared].contact = contact;
+                    self.contactInfoVC = [[ContactInfoVC alloc] initWithNibName:@"ContactInfoVC" bundle:nil];
+                    [DataModel shared].action = @"popup";
+                    [self presentViewController:self.contactInfoVC animated:YES completion:nil];
+                    
+                }
+                @catch (NSException *exception) {
+                    NSLog(@"ERROR >>>>>>>> %@", exception);
+                }
+                
+                
             }
         }
     }

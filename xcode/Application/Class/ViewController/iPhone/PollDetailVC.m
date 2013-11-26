@@ -372,6 +372,7 @@
 - (IBAction)tapCloseButton
 {
     if ([[DataModel shared].action isEqualToString:@"popup"]) {
+        [DataModel shared].action = @"";
         [self dismissViewControllerAnimated:YES completion:nil];
     } else {
         [_delegate gotoSlideWithName:@"FormsHome"];

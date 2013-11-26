@@ -19,6 +19,7 @@
 #import "NameWidget.h"
 
 //#import ""
+#import "ContactInfoVC.h"
 
 #import "ChatManager.h"
 #import "FormManager.h"
@@ -85,13 +86,15 @@
 
 @property (nonatomic, retain) UIImagePickerController* imagePickerVC;
 @property (nonatomic, retain) FormSelectorVC* formSelectorVC;
+@property (nonatomic, retain) ContactInfoVC* contactInfoVC;
+
 @property (nonatomic, strong) MBProgressHUD *hud;
 
 
 @property (nonatomic, retain) IBOutlet BrandUILabel *navTitle;
 @property (nonatomic, strong) IBOutlet UIBubbleTableView *bubbleTable;
 
-@property (nonatomic, strong) IBOutlet UIView *topDrawer;
+@property (nonatomic, strong) IBOutlet UIView *drawerView;
 @property (nonatomic, strong) IBOutlet UIView *drawerContents;
 @property (nonatomic, strong) IBOutlet UIImageView *drawerPull;
 

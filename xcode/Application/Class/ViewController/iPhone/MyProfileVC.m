@@ -7,6 +7,7 @@
 //
 
 #import "MyProfileVC.h"
+#import "UIImage+Resize.h"
 
 @interface MyProfileVC ()
 
@@ -206,22 +207,39 @@
 
 - (void)imagePickerController:(UIImagePickerController *)Picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     NSLog(@"%s", __FUNCTION__);
-	UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
-
-    // FIXME: downsize image
     
+    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [self.hud setLabelText:@"Saving"];
+
+	UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
+    
+    NSLog(@"Original size %f, %f", tmpImage.size.width, tmpImage.size.height);
+    float aspectRatio = tmpImage.size.width / tmpImage.size.height;
+    CGSize resize;
+    if (aspectRatio >= 1) {
+        resize = CGSizeMake(aspectRatio * kMinimumImageDimension, kMinimumImageDimension);
+    } else {
+        resize = CGSizeMake(kMinimumImageDimension, aspectRatio * kMinimumImageDimension);
+    }
+    
+    UIImage *resizeImage = [tmpImage resizedImage:resize interpolationQuality:kCGInterpolationDefault];
+    // FIXME: downsize image
+    self.roundPic.image = resizeImage;
+    
+    NSLog(@"Original size %f, %f", resizeImage.size.width, resizeImage.size.height);
     if (userSvc == nil) {
         userSvc = [[UserManager alloc] init];
     }
     NSString *filename;
     filename = [NSString stringWithFormat:@"%@.png", [DataModel shared].user.contact_key];
-    [userSvc savePhoto:tmpImage filename:filename callback:^(NSString *imageUrl) {
+    [userSvc savePhoto:resizeImage filename:filename callback:^(NSString *imageUrl) {
         if (imageUrl != nil) {
-            self.roundPic.image = tmpImage;
             [DataModel shared].user.photoUrl = imageUrl;
         } else {
             
         }
+        [MBProgressHUD hideHUDForView:self.view animated:NO];
+
     }];
     
 //    SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:optionIndex - 1];

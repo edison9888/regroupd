@@ -29,7 +29,12 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
+    if ([[DataModel shared].action isEqualToString:@"popup"]) {
+        self.backButton.titleLabel.text = @"Back";
+    } else {
+        self.backButton.titleLabel.text = @"All Contacts";
+    }
+
     
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
@@ -79,7 +84,13 @@
 #pragma mark - IBActions
 
 - (IBAction)tapBackButton {
-    [_delegate gotoSlideWithName:@"ContactsHome" andOverrideTransition:kPresentationTransitionAuto];
+    if ([[DataModel shared].action isEqualToString:@"popup"]) {
+        [DataModel shared].action = @"";
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        [_delegate gotoSlideWithName:@"ContactsHome"];
+    }
+//    [_delegate gotoSlideWithName:@"ContactsHome" andOverrideTransition:kPresentationTransitionAuto];
     
 }
 - (IBAction)tapMessageButton {

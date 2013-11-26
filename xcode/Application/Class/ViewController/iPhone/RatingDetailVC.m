@@ -326,9 +326,10 @@
         
         cell.roundPic.file = response.contact.pfPhoto;
         [cell.roundPic loadInBackground];
-        
-        if ([[DataModel shared].phonebookCache objectForKey:response.contact_key]) {
-            ContactVO *pbcontact = [[DataModel shared].phonebookCache objectForKey:response.contact_key];
+        if ([response.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
+            cell.titleLabel.text = @"Me";
+        } else if ([[DataModel shared].contactCache objectForKey:response.contact_key]) {
+            ContactVO *pbcontact = [[DataModel shared].contactCache objectForKey:response.contact_key];
             cell.titleLabel.text = pbcontact.fullname;
         } else {
             cell.titleLabel.text = response.contact.phone;
@@ -411,6 +412,7 @@
 - (IBAction)tapCloseButton
 {
     if ([[DataModel shared].action isEqualToString:@"popup"]) {
+        [DataModel shared].action = @"";
         [self dismissViewControllerAnimated:YES completion:nil];
     } else {
         [_delegate gotoSlideWithName:@"FormsHome"];

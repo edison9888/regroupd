@@ -170,7 +170,7 @@
 - (void)listMyForms
 {
     NSLog(@"%s", __FUNCTION__);
-    allForms = [[NSMutableArray alloc] init];
+    self.allForms = [[NSMutableArray alloc] init];
     
     if (formSvc == nil) {
         formSvc = [[FormManager alloc] init];
@@ -181,12 +181,12 @@
             FormVO *form;
             for (PFObject *result in results) {
                 form = [FormVO readFromPFObject:result];
-                [allForms addObject:form];
+                [self.allForms addObject:form];
             }
             
-            [DataModel shared].formsList = allForms;
+            [DataModel shared].formsList = self.allForms;
             
-            self.tableData = allForms;
+            self.tableData = [self.allForms mutableCopy];
             [self.theTableView reloadData];
         }
     }];
@@ -195,8 +195,10 @@
 {
     [self.tableData removeAllObjects];
     
-    for (FormVO *form in allForms) {
-        if (form.type == formType) {
+    for (FormVO *form in self.allForms) {
+        if (formType == 0) {
+            [self.tableData addObject:form];
+        } else if (form.type == formType) {
             [self.tableData addObject:form];
         }
     }
@@ -264,7 +266,7 @@
     
 }
 - (IBAction)tapFormNav:(UIButton*)sender {
-//    NSLog(@"button clicked - %d",sender.tag);
+    NSLog(@"button clicked - %d",sender.tag);
     typeFilter = sender.tag;
     
     [self updateFormsNav];
@@ -338,39 +340,6 @@
     }
 }
 
-//- (void) updateFormsNav {
-//    
-//    switch (typeFilter) {
-//        case 0:
-//            [self.navBtnAll setImage:[self lookupImage:0 withState:1] forState:UIControlStateNormal];
-//            [self.navBtnPolls setImage:[self lookupImage:1 withState:0] forState:UIControlStateNormal];
-//            [self.navBtnRatings setImage:[self lookupImage:2 withState:0] forState:UIControlStateNormal];
-//            [self.navBtnRSVPs setImage:[self lookupImage:3 withState:0] forState:UIControlStateNormal];
-//            break;
-//            
-//        case FormType_POLL:
-//            [self.navBtnAll setImage:[self lookupImage:0 withState:0] forState:UIControlStateNormal];
-//            [self.navBtnPolls setImage:[self lookupImage:1 withState:1] forState:UIControlStateNormal];
-//            [self.navBtnRatings setImage:[self lookupImage:2 withState:0] forState:UIControlStateNormal];
-//            [self.navBtnRSVPs setImage:[self lookupImage:3 withState:0] forState:UIControlStateNormal];
-//            break;
-//            
-//        case FormType_RATING:
-//            [self.navBtnAll setImage:[self lookupImage:0 withState:0] forState:UIControlStateNormal];
-//            [self.navBtnPolls setImage:[self lookupImage:1 withState:0] forState:UIControlStateNormal];
-//            [self.navBtnRatings setImage:[self lookupImage:2 withState:1] forState:UIControlStateNormal];
-//            [self.navBtnRSVPs setImage:[self lookupImage:3 withState:0] forState:UIControlStateNormal];
-//            break;
-//            
-//        case FormType_RSVP:
-//            [self.navBtnAll setImage:[self lookupImage:0 withState:0] forState:UIControlStateNormal];
-//            [self.navBtnPolls setImage:[self lookupImage:1 withState:0] forState:UIControlStateNormal];
-//            [self.navBtnRatings setImage:[self lookupImage:2 withState:0] forState:UIControlStateNormal];
-//            [self.navBtnRSVPs setImage:[self lookupImage:3 withState:1] forState:UIControlStateNormal];
-//            break;
-//            
-//    }
-//}
 
 /*
  Helper method for lazy-loading images
