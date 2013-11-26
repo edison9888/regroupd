@@ -10,6 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "FormVO.h"
 #import "UIColor+ColorWithHex.h"
+#import "NSDate+Extensions.h"
 
 @interface FormsHomeVC ()
 
@@ -69,6 +70,12 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
+
 
 #pragma mark - UITableViewDataSource
 

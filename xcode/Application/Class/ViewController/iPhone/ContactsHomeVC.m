@@ -61,6 +61,14 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
+#pragma mark - Data Load
+
 - (void) preparePhonebook {
     
     self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];

@@ -11,6 +11,7 @@
 #import "FormVO.h"
 #import "FormOptionVO.h"
 #import "UIAlertView+Helper.h"
+#import "UIImage+Resize.h"
 
 @interface EditRatingVC ()
 
@@ -170,10 +171,17 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
+
 #pragma mark - Notification Handlers
 
 - (void)formSaveCompleteNotificationHandler:(NSNotification*)notification
 {
+    [MBProgressHUD hideHUDForView:self.view animated:NO];
     NSLog(@"===== %s", __FUNCTION__);
     [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Form created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 }
@@ -510,7 +518,7 @@
         isOK = NO;
     }
 
-    FormOptionVO *option;
+//    FormOptionVO *option;
     for (SurveyOptionWidget* surveyOption in surveyOptions) {
         if (surveyOption.input.text.length == 0) {
             NSLog(@"Empty field: %i", surveyOption.index);
@@ -520,6 +528,8 @@
 
     if (isOK) {
 
+        self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [self.hud setLabelText:@"Saving"];
         
         FormManager *formSvc = [[FormManager alloc] init];
         
@@ -676,10 +686,18 @@
 - (void)imagePickerController:(UIImagePickerController *)Picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     NSLog(@"%s", __FUNCTION__);
 	UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
+
+    CGSize resize;
+    
+    resize = CGSizeMake(kMinimumImageDimension, kMinimumImageDimension);
+    
+    UIImage *resizeImage = [tmpImage resizedImageWithContentMode:UIViewContentModeScaleAspectFill bounds:resize interpolationQuality:kCGInterpolationMedium];
+    
+    tmpImage = nil;
     
     SurveyOptionWidget *currentOption = [surveyOptions objectAtIndex:optionIndex - 1];
     
-    [currentOption setPhoto:tmpImage];
+    [currentOption setPhoto:resizeImage];
 //    currentOption.roundPic.image = tmpImage;
     
     // NSLog(@"downsizing image");

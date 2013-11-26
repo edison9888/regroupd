@@ -114,6 +114,13 @@
     number = [data valueForKey:@"allow_multiple"];
     o.allow_multiple = number;
 
+    if (data[@"counter"]) {
+        number = [data valueForKey:@"counter"];
+    } else {
+        number = [NSNumber numberWithInt:0];
+    }
+    o.counter = number;
+
     return o;
 }
 

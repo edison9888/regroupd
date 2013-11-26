@@ -83,6 +83,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
 
 #pragma mark - Modal
 
@@ -214,17 +219,21 @@
 	UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
     
     NSLog(@"Original size %f, %f", tmpImage.size.width, tmpImage.size.height);
-    float aspectRatio = tmpImage.size.width / tmpImage.size.height;
+    //    float aspectRatio = tmpImage.size.width / tmpImage.size.height;
+    //    if (aspectRatio >= 1) {
+    //        resize = CGSizeMake(aspectRatio * kMinimumImageDimension, kMinimumImageDimension);
+    //    } else {
+    //        resize = CGSizeMake(kMinimumImageDimension, aspectRatio * kMinimumImageDimension);
+    //    }
+    //    UIImage *resizeImage = [tmpImage resizedImage:resize interpolationQuality:kCGInterpolationDefault];
     CGSize resize;
-    if (aspectRatio >= 1) {
-        resize = CGSizeMake(aspectRatio * kMinimumImageDimension, kMinimumImageDimension);
-    } else {
-        resize = CGSizeMake(kMinimumImageDimension, aspectRatio * kMinimumImageDimension);
-    }
     
-    UIImage *resizeImage = [tmpImage resizedImage:resize interpolationQuality:kCGInterpolationDefault];
+    resize = CGSizeMake(kMinimumImageDimension, kMinimumImageDimension);
+    
+    UIImage *resizeImage = [tmpImage resizedImageWithContentMode:UIViewContentModeScaleAspectFill bounds:resize interpolationQuality:kCGInterpolationMedium];
     // FIXME: downsize image
     self.roundPic.image = resizeImage;
+    tmpImage = nil;
     
     NSLog(@"Original size %f, %f", resizeImage.size.width, resizeImage.size.height);
     if (userSvc == nil) {
@@ -242,9 +251,6 @@
 
     }];
     
-//    SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:optionIndex - 1];
-//    
-//    [currentOption setPhoto:tmpImage];
     
 	[self dismissViewControllerAnimated:YES completion:nil];
     self.imagePickerVC = nil;

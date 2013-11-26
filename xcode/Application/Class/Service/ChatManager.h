@@ -35,7 +35,7 @@
 // API functions
 - (void) apiListChats:(NSString *)userId callback:(void (^)(NSArray *results))callback;
 - (void) apiSaveChat:(ChatVO *)chat callback:(void (^)(PFObject *object))callback;
-- (void) apiUpdateChatCounter:(NSString *)chatId callback:(void (^)(PFObject *object))callback;
+- (void) apiUpdateChatCounter:(NSString *)chatId;
 
 - (void) apiFindChatsByContactKeys:(NSArray *)contactKeys callback:(void (^)(NSArray *results))callback;
 

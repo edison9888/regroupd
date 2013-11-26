@@ -58,7 +58,7 @@
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
         
     } else {
-        viewframe.origin.y=20;
+        viewframe.origin.y=0;
         self.view.frame = viewframe;
         
     }

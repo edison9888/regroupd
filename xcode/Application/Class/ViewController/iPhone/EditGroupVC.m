@@ -90,6 +90,13 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
+
 #pragma mark - UISearchBar
 /*
  SOURCE: http://jduff.github.com/2010/03/01/building-a-searchview-with-uisearchbar-and-uitableview/

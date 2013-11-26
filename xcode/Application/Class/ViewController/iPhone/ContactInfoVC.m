@@ -59,8 +59,14 @@
             }
         }];
     }
-    
-    self.nameLabel.text = [DataModel shared].contact.fullname;
+    if ([[DataModel shared].contact.system_id isEqualToString:[DataModel shared].user.contact_key]) {
+        
+    } else if ([DataModel shared].contact.first_name != nil && [DataModel shared].contact.last_name != nil) {
+        self.nameLabel.text = [DataModel shared].contact.fullname;
+    } else {
+        self.nameLabel.text = [DataModel shared].contact.phone;
+    }
+
     
     NSString *phoneText = [NSString stringWithFormat:@"Phone %@", [DataModel shared].contact.phone];
     self.phoneButton.titleLabel.text = phoneText;
@@ -78,6 +84,11 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
 
 
 

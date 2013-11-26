@@ -7,6 +7,9 @@
 //
 
 #import "SlideViewController.h"
+
+#import "MBProgressHUD.h"
+
 #import "FancyCheckbox.h" 
 #import "FancyTextField.h"
 #import "BrandUITextField.h"
@@ -24,6 +27,8 @@
     NSMutableArray *surveyOptions;
     UIView *bgLayer;
 }
+
+@property (nonatomic, retain) MBProgressHUD *hud;
 
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, retain) IBOutlet UIView *lowerForm;

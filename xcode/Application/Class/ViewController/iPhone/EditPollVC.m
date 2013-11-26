@@ -11,6 +11,8 @@
 #import "FormVO.h"
 #import "FormOptionVO.h"
 #import "UIAlertView+Helper.h"
+#import "UIImage+Resize.h"
+
 @interface EditPollVC ()
 
 @end
@@ -150,7 +152,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showImagePickerNotificationHandler:)     name:@"showImagePickerNotification"            object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formSaveCompleteNotificationHandler:)     name:k_formSaveCompleteNotification            object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pollSaveCompleteNotificationHandler:)     name:k_pollSaveCompleteNotification            object:nil];
     
     // Create and initialize a tap gesture
     
@@ -173,13 +175,21 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
+
 #pragma mark - Notification Handlers
 
-- (void)formSaveCompleteNotificationHandler:(NSNotification*)notification
+- (void)pollSaveCompleteNotificationHandler:(NSNotification*)notification
 {
+    [MBProgressHUD hideHUDForView:self.view animated:NO];
     NSLog(@"===== %s", __FUNCTION__);
     [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Poll created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 }
+
 
 #pragma mark - Keyboard event handlers
 
@@ -464,6 +474,10 @@
     }
 
     if (isOK) {
+        
+        self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [self.hud setLabelText:@"Saving"];
+
         FormManager *formSvc = [[FormManager alloc] init];
         
         NSString *filename_fmt = @"form_%@-%i_photo.png";
@@ -504,7 +518,7 @@
                 [formSvc apiSaveFormOption:option formId:formId callback:^(PFObject *object) {
                     NSLog(@"Save option %i", index);
                     if (index == total) {
-                        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formSaveCompleteNotification object:nil]];
+                        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_pollSaveCompleteNotification object:nil]];
                     }
                     
                 }];
@@ -616,10 +630,17 @@
 - (void)imagePickerController:(UIImagePickerController *)Picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     NSLog(@"%s", __FUNCTION__);
 	UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
+    CGSize resize;
+    
+    resize = CGSizeMake(kMinimumImageDimension, kMinimumImageDimension);
+    
+    UIImage *resizeImage = [tmpImage resizedImageWithContentMode:UIViewContentModeScaleAspectFill bounds:resize interpolationQuality:kCGInterpolationMedium];
+    
+    tmpImage = nil;
     
     SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:optionIndex - 1];
     
-    [currentOption setPhoto:tmpImage];
+    [currentOption setPhoto:resizeImage];
 //    currentOption.roundPic.image = tmpImage;
     
     // NSLog(@"downsizing image");

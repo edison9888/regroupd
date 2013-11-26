@@ -7,7 +7,10 @@
 //
 
 #import "SlideViewController.h"
-#import "FancyCheckbox.h" 
+
+#import "MBProgressHUD.h"
+
+#import "FancyCheckbox.h"
 #import "FancyTextField.h"
 #import "BrandUITextField.h"
 #import "SurveyOptionWidget.h"
@@ -28,6 +31,8 @@
     float inputHeight;
     
 }
+
+@property (nonatomic, retain) MBProgressHUD *hud;
 
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, retain) IBOutlet UIView *lowerForm;

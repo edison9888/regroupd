@@ -214,7 +214,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             name = @"Me";
         } else {
             contact = [[DataModel shared].contactCache objectForKey:key];
-            name = contact.fullname;
+            
+            if (contact.first_name != nil && contact.last_name != nil) {
+                name = contact.fullname;
+            } else {
+                name = contact.phone;
+            }
         }
 //        name = [[DataModel shared].chat.
         CGSize txtSize = [name sizeWithFont:theFont];
@@ -733,8 +738,17 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             viewInset = UIEdgeInsetsMake(5, 10, 5, 0);
         }
         
-        nameValue = ((ContactVO *) [[DataModel shared].contactCache objectForKey:msg.contact_key]).fullname;
-        
+        ContactVO *contact = (ContactVO *) [[DataModel shared].contactCache objectForKey:msg.contact_key];
+        if (contact) {
+            if (contact.first_name != nil && contact.last_name != nil) {
+                nameValue = contact.fullname;
+            } else {
+                nameValue = contact.phone;
+            }
+        } else {
+            nameValue = @"";
+        }
+
         ChatMessageWidget *msgView = [[ChatMessageWidget alloc] initWithFrame:msgFrame message:msg isOwner:NO];
         msgView.tag = 188;
         
@@ -781,7 +795,17 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         whoType = BubbleTypeSomeoneElse;
         isOwner = NO;
         viewInset = UIEdgeInsetsMake(5, 15, 5, -5);
-        nameValue = (NSString *) [[DataModel shared].chat.namesMap objectForKey:msg.contact_key];
+        
+        ContactVO *contact = (ContactVO *) [[DataModel shared].contactCache objectForKey:msg.contact_key];
+        if (contact) {
+            if (contact.first_name != nil && contact.last_name != nil) {
+                nameValue = contact.fullname;
+            } else {
+                nameValue = contact.phone;
+            }
+        } else {
+            nameValue = @"";
+        }
     }
     
     timeValue = [msgTimeFormat stringFromDate:msg.createdAt];
@@ -803,8 +827,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         msgFrame.size.height = embedWidget.dynamicHeight;
         embedWidget.frame = msgFrame;
 
-        nameValue = ((ContactVO *) [[DataModel shared].contactCache objectForKey:msg.contact_key]).fullname;
-        
         embedWidget.nameLabel.text = nameValue;
         embedWidget.timeLabel.text = timeValue;
         
@@ -826,8 +848,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         msgFrame.size.height = embedWidget.dynamicHeight;
         embedWidget.frame = msgFrame;
         
-        nameValue = ((ContactVO *) [[DataModel shared].contactCache objectForKey:msg.contact_key]).fullname;
-
         embedWidget.nameLabel.text = nameValue;
         embedWidget.timeLabel.text = timeValue;
         
@@ -841,7 +861,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         
         NSDate *dt = [DateTimeUtils readDateFromFriendlyDateTime:theForm.start_time];
         
-        nameValue = ((ContactVO *) [[DataModel shared].contactCache objectForKey:msg.contact_key]).fullname;
         embedWidget.nameLabel.text = nameValue;
         embedWidget.timeLabel.text = timeValue;
         

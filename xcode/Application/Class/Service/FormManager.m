@@ -466,12 +466,28 @@
     } else {
         [query whereKey:@"contact_key" equalTo:contactKey];
     }
-    [query addDescendingOrder:@"createdAt"];
+    [query addDescendingOrder:@"updatedAt"];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
         callback(results);
     }];
     
+}
+
+- (void) apiUpdateFormCounter:(NSString *)formKey withCount:(NSNumber *)count {
+    
+    PFQuery *query = [PFQuery queryWithClassName:kFormDB];
+    [query getObjectInBackgroundWithId:formKey block:^(PFObject *pfChat, NSError *error) {
+        if (pfChat) {
+            if (count) {
+                pfChat[@"counter"] = count;
+                [pfChat saveInBackground];
+            } else {
+                [pfChat incrementKey:@"counter"];
+                [pfChat saveInBackground];
+            }
+        }
+    }];
 }
 
 
@@ -553,6 +569,7 @@
     }
     [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         NSLog(@"Saved form option with objectId %@", data.objectId);
+        [self apiUpdateFormCounter:response.form_key withCount:nil];
         callback(data);
     }];
 }

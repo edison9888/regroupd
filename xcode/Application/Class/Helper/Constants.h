@@ -15,7 +15,10 @@
 #define k_chatMessagesLoaded @"chatMessagesLoaded"
 #define k_chatContactsLoaded @"chatContactsLoaded"
 #define k_chatPushNotificationReceived @"chatPushNotificationReceived"
+
 #define k_formSaveCompleteNotification @"formSaveCompleteNotification"
+#define k_pollSaveCompleteNotification @"pollSaveCompleteNotification"
+#define k_rsvpSaveCompleteNotification @"rsvpSaveCompleteNotification"
 
 #define k_formResponseEntered @"formResponseEntered"
 #define k_showFormDetails @"showFormDetails"

@@ -47,6 +47,8 @@
     recipientKeySet = [[NSMutableSet alloc] init];
     
     self.subjectLabel.text = [DataModel shared].form.name;
+    self.responsesLabel.text = @"";
+    self.optionTitle.text = @"";
     
     if (self.totalRatingSlider == nil) {
         CGRect sliderFrame = self.responsesLabel.frame;
@@ -61,7 +63,6 @@
     }
 
     self.totalRatingSlider.hidden = YES;
-    self.optionTitle.text = @"";
     self.starRatingBG.hidden = YES;
     self.starRatingLabel.hidden = YES;
     
@@ -87,6 +88,12 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
+
 
 #pragma mark - Form Options handling
 
@@ -104,6 +111,13 @@
             [allResponses addObject:response];
             
         }
+        
+        if ([DataModel shared].form.counter.intValue != results.count) {
+            NSLog(@"Form response counter out of sync. Counter %i vs actual %i",[DataModel shared].form.counter.intValue, results.count );
+            NSLog(@"FIXING COUNTER NOW. Runs in background.");
+            [formSvc apiUpdateFormCounter:[DataModel shared].form.system_id withCount:[NSNumber numberWithInt:results.count]];
+        }
+        
         [contactSvc apiLookupContacts:[contactKeys copy] callback:^(NSArray *results) {
             
 //            NSLog(@"Lookup contacts found %@", results);
@@ -153,31 +167,27 @@
         [formSvc apiListFormOptions:[DataModel shared].form.system_id callback:^(NSArray *results) {
             NSLog(@"Found form options for form %@ count=%i", [DataModel shared].form.system_id, results.count);
             
-            dataArray = [[NSMutableArray alloc] initWithCapacity:results.count];
-            NSMutableDictionary *dict;
-            optionKeys = [[NSMutableArray alloc] init];
-            
-            for (PFObject *result in results) {
-                dict = [ParseUtils readFormOptionDictFromPFObject:result];
-                [dataArray addObject:dict];
-                [optionKeys addObject:[dict objectForKey:@"system_id"]];
-                // Set currentKey to filter table results
+            if (results.count > 0) {
+                dataArray = [[NSMutableArray alloc] initWithCapacity:results.count];
+                NSMutableDictionary *dict;
+                optionKeys = [[NSMutableArray alloc] init];
+                
+                for (PFObject *result in results) {
+                    dict = [ParseUtils readFormOptionDictFromPFObject:result];
+                    [dataArray addObject:dict];
+                    [optionKeys addObject:[dict objectForKey:@"system_id"]];
+                    // Set currentKey to filter table results
+                }
+                self.carouselVC = [[SideScrollVC alloc] initWithData:dataArray];
+                
+                CGRect carouselFrame = CGRectMake(0, 0, 320, 300);
+                self.carouselVC.view.frame = carouselFrame;
+                [self.browseView addSubview:self.carouselVC.view];
+                
+                [self.browseView sendSubviewToBack:self.carouselVC.view];
+                currentKey = [optionKeys objectAtIndex:0];
+                [self filterResponsesByOption:currentKey];
             }
-            self.carouselVC = [[SideScrollVC alloc] initWithData:dataArray];
-            
-            CGRect carouselFrame = CGRectMake(0, 0, 320, 300);
-            self.carouselVC.view.frame = carouselFrame;
-            [self.browseView addSubview:self.carouselVC.view];
-            
-            [self.browseView sendSubviewToBack:self.carouselVC.view];
-            currentKey = [optionKeys objectAtIndex:0];
-            [self filterResponsesByOption:currentKey];
-            
-            /*
-             Need to display:
-             -- how many responses received out of total chat contacts
-             --
-             */
         }];
         
         
@@ -198,28 +208,34 @@
     double ratingTotal = 0;
     
     [self.tableData removeAllObjects];
-    for (FormResponseVO *response in allResponses) {
-        if ([response.option_key isEqualToString:optionKey]) {
-            if ([[DataModel shared].contactCache objectForKey:response.contact_key]) {
-                response.contact = (ContactVO *) [[DataModel shared].contactCache objectForKey:response.contact_key];
+    
+    if (allResponses.count > 0) {
+        for (FormResponseVO *response in allResponses) {
+            if ([response.option_key isEqualToString:optionKey]) {
+                if ([[DataModel shared].contactCache objectForKey:response.contact_key]) {
+                    response.contact = (ContactVO *) [[DataModel shared].contactCache objectForKey:response.contact_key];
+                }
+                if (response.rating) {
+                    ratingTotal += response.rating.floatValue;
+                }
+                [self.tableData addObject:response];
             }
-            if (response.rating) {
-                ratingTotal += response.rating.floatValue;
-            }
-            [self.tableData addObject:response];
         }
+        double avgRating = ratingTotal / (double) self.tableData.count;
+        NSString *avgRatingText = [NSString formatDoubleWithMaxDecimals:avgRating minDecimals:1 maxDecimals:1];
+        
+        NSLog(@"Rating total is %f with avg %@", ratingTotal, avgRatingText);
+        NSString *caption = [NSString stringWithFormat:kResponseCaption, avgRatingText];
+        self.responsesLabel.text = caption;
+        [self.totalRatingSlider setRatingBar:(float) avgRating];
+        avgRatingText = [NSString formatDoubleWithMaxDecimals:avgRating minDecimals:0 maxDecimals:0];
+        self.starRatingLabel.text = avgRatingText;
+        
+    } else {
+        self.responsesLabel.text = @"No responses yet";
+        self.starRatingLabel.text = @"";
+        [self.totalRatingSlider setRatingBar:0];
     }
-    double avgRating = ratingTotal / (double) self.tableData.count;
-    NSString *avgRatingText = [NSString formatDoubleWithMaxDecimals:avgRating minDecimals:1 maxDecimals:1];
-    
-    NSLog(@"Rating total is %f with avg %@", ratingTotal, avgRatingText);
-    
-    NSString *caption = [NSString stringWithFormat:kResponseCaption, avgRatingText];
-    self.responsesLabel.text = caption;
-    
-    [self.totalRatingSlider setRatingBar:(float) avgRating];
-    avgRatingText = [NSString formatDoubleWithMaxDecimals:avgRating minDecimals:0 maxDecimals:0];
-    self.starRatingLabel.text = avgRatingText;
     
     self.totalRatingSlider.hidden = NO;
     self.starRatingBG.hidden = NO;

@@ -29,8 +29,6 @@
 
 - (void) setFieldLabel:(NSString *)label;
 - (void) setIcon:(UIImage *)image;
-- (void) setBGColor:(UIColor *)bgcolor;
-- (void) setTextColor:(UIColor *)color;
 
 
 @end

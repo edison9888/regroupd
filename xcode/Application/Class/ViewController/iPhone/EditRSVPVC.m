@@ -12,6 +12,8 @@
 #import "FormOptionVO.h"
 #import "UIAlertView+Helper.h"
 #import "DateTimeUtils.h"
+#import "UIImage+Resize.h"
+
 //#import "NSDate+Extensions.h"
 
 @interface EditRSVPVC ()
@@ -173,6 +175,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
 
 #pragma mark - Notification Handlers
 
@@ -533,7 +541,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 //        [errorIds addObject:[NSNumber numberWithInt:kTagAllowOthersYes]];
 //    }
     if (isOK) {
-        FormManager *formSvc = [[FormManager alloc] init];
+//        FormManager *formSvc = [[FormManager alloc] init];
 
 
         // Read date fields and combine
@@ -805,9 +813,18 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void)imagePickerController:(UIImagePickerController *)Picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     NSLog(@"%s", __FUNCTION__);
-	formImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
     
-    [self setPhoto:formImage];
+	UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
+    
+    CGSize resize;
+    
+    resize = CGSizeMake(kMinimumImageDimension, kMinimumImageDimension);
+    
+    UIImage *resizeImage = [tmpImage resizedImageWithContentMode:UIViewContentModeScaleAspectFill bounds:resize interpolationQuality:kCGInterpolationMedium];
+    
+    tmpImage = nil;
+    
+    [self setPhoto:resizeImage];
     
 //    currentOption.roundPic.image = tmpImage;
     

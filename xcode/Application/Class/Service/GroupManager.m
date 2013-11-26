@@ -51,7 +51,7 @@
         GroupVO *result = [GroupVO readFromDictionary:dict];
         
         if (all) {
-            NSMutableArray *contacts = [[NSMutableArray alloc] init];
+//            NSMutableArray *contacts = [[NSMutableArray alloc] init];
             
             //            sql = @"select * from group_contact where group_id=? order by Contact_id";
             //            rs = [[SQLiteDB sharedConnection] executeQuery:sql,

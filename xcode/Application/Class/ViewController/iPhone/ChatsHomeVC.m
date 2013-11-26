@@ -54,6 +54,12 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
+
 #pragma mark - Data Load
 
 - (void)listMyChats
@@ -119,6 +125,7 @@
             
         }
         
+        // Loads phonebookCache
         NSMutableDictionary *pbMap = [contactSvc lookupContactsFromPhonebook:[contactKeySet allObjects]];
         
         [contactSvc apiLookupContacts:[contactKeySet allObjects] callback:^(NSArray *results) {

@@ -45,7 +45,7 @@
     
     self.subjectLabel.text = [DataModel shared].form.name;
     self.optionTitle.text = @"";
-
+    self.responsesLabel.text = @"";
     
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
@@ -72,6 +72,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
+
+
 #pragma mark - Form Options handling
 
 - (void) preloadFormData {
@@ -88,9 +95,15 @@
             [allResponses addObject:response];
             
         }
+        
+        if ([DataModel shared].form.counter.intValue != results.count) {
+            NSLog(@"Form response counter out of sync. Counter %i vs actual %i",[DataModel shared].form.counter.intValue, results.count );
+            NSLog(@"FIXING COUNTER NOW. Runs in background.");
+            [formSvc apiUpdateFormCounter:[DataModel shared].form.system_id withCount:[NSNumber numberWithInt:results.count]];
+        }
+        
         [contactSvc apiLookupContacts:[contactKeys copy] callback:^(NSArray *results) {
             
-//            NSLog(@"Lookup contacts found %@", results);
             [contactSvc lookupContactsFromPhonebook:contactKeys];
 
             [chatSvc apiListChatForms:nil formKey:[DataModel shared].form.system_id callback:^(NSArray *results) {
@@ -127,28 +140,32 @@
         
         
         [formSvc apiListFormOptions:[DataModel shared].form.system_id callback:^(NSArray *results) {
+            
             NSLog(@"Found form options for form %@ count=%i", [DataModel shared].form.system_id, results.count);
             
-            dataArray = [[NSMutableArray alloc] initWithCapacity:results.count];
-            NSMutableDictionary *dict;
-            optionKeys = [[NSMutableArray alloc] init];
-            
-            for (PFObject *result in results) {
-                dict = [ParseUtils readFormOptionDictFromPFObject:result];
-                [dataArray addObject:dict];
-                [optionKeys addObject:[dict objectForKey:@"system_id"]];
-                // Set currentKey to filter table results
+            if (results.count > 0) {
+                dataArray = [[NSMutableArray alloc] initWithCapacity:results.count];
+                NSMutableDictionary *dict;
+                optionKeys = [[NSMutableArray alloc] init];
+                
+                for (PFObject *result in results) {
+                    dict = [ParseUtils readFormOptionDictFromPFObject:result];
+                    [dataArray addObject:dict];
+                    [optionKeys addObject:[dict objectForKey:@"system_id"]];
+                    // Set currentKey to filter table results
+                }
+                self.carouselVC = [[SideScrollVC alloc] initWithData:dataArray];
+                
+                CGRect carouselFrame = CGRectMake(0, 0, 320, 300);
+                self.carouselVC.view.frame = carouselFrame;
+                [self.browseView addSubview:self.carouselVC.view];
+                
+                [self.browseView sendSubviewToBack:self.carouselVC.view];
+                
+                
+                currentKey = [optionKeys objectAtIndex:0];
+                [self filterResponsesByOption:currentKey];
             }
-            self.carouselVC = [[SideScrollVC alloc] initWithData:dataArray];
-            
-            CGRect carouselFrame = CGRectMake(0, 0, 320, 300);
-            self.carouselVC.view.frame = carouselFrame;
-            [self.browseView addSubview:self.carouselVC.view];
-            
-            [self.browseView sendSubviewToBack:self.carouselVC.view];
-            currentKey = [optionKeys objectAtIndex:0];
-            [self filterResponsesByOption:currentKey];
-            
             /*
              Need to display:
              -- how many responses received out of total chat contacts
@@ -169,19 +186,28 @@
 - (void)filterResponsesByOption:(NSString *)optionKey
 {
     NSLog(@"%s", __FUNCTION__);
-    
     [self.tableData removeAllObjects];
-    for (FormResponseVO *response in allResponses) {
-        if ([response.option_key isEqualToString:optionKey]) {
-            if ([[DataModel shared].contactCache objectForKey:response.contact_key]) {
-                response.contact = (ContactVO *) [[DataModel shared].contactCache objectForKey:response.contact_key];
+
+    if (allResponses.count > 0) {
+        for (FormResponseVO *response in allResponses) {
+            if ([response.option_key isEqualToString:optionKey]) {
+//                if ([response.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
+//                    
+//                } else
+                if ([[DataModel shared].contactCache objectForKey:response.contact_key]) {
+                    response.contact = (ContactVO *) [[DataModel shared].contactCache objectForKey:response.contact_key];
+                }
+                [self.tableData addObject:response];
             }
-            [self.tableData addObject:response];
         }
+        NSString *caption = [NSString stringWithFormat:kResponseCaption, self.tableData.count, contactTotal];
+        self.responsesLabel.text = caption;
+        
+    } else {
+        self.responsesLabel.text = @"No responses yet";
+//        self.starRatingLabel.text = @"";
     }
-    NSString *caption = [NSString stringWithFormat:kResponseCaption, self.tableData.count, contactTotal];
-    self.responsesLabel.text = caption;
-    
+
     [self.theTableView reloadData];
 }
 
@@ -272,8 +298,9 @@
             cell.roundPic.contentMode = UIViewContentModeScaleAspectFill;
         }
         FormResponseVO *response = (FormResponseVO *) [tableData objectAtIndex:indexPath.row];
-        
-        if ([[DataModel shared].phonebookCache objectForKey:response.contact_key]) {
+        if ([response.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
+            cell.titleLabel.text = @"Me";
+        } else if ([[DataModel shared].phonebookCache objectForKey:response.contact_key]) {
             ContactVO *pbcontact = [[DataModel shared].phonebookCache objectForKey:response.contact_key];
             cell.titleLabel.text = pbcontact.fullname;
         } else {

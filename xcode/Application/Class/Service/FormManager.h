@@ -39,6 +39,8 @@
 - (void) apiLoadForm:(NSString *)formKey fetchAll:(BOOL)fetchAll callback:(void (^)(FormVO *form))callback;
 - (void) apiListForms:(NSString *)contactKey callback:(void (^)(NSArray *results))callback;
 
+- (void) apiUpdateFormCounter:(NSString *)formKey withCount:(NSNumber *)count;
+
 // Form Options API
 - (void) apiSaveFormOption:(FormOptionVO *)option formId:(NSString *)formId callback:(void (^)(PFObject *object))callback;
 - (void) apiListFormOptions:(NSString *)formId callback:(void (^)(NSArray *results))callback;

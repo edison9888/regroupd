@@ -59,6 +59,7 @@
     rowdata = form;
     self.titleField.text = form.name;
     UIImage *icon;
+    self.dateField.text = [form.updatedAt formatShortDate].uppercaseString;
     
     if (form.type == FormType_POLL) {
         icon = [UIImage imageNamed:kIconPoll];

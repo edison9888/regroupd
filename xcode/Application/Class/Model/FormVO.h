@@ -53,6 +53,8 @@ typedef enum {
 @property int type;
 @property int status;
 
+@property (nonatomic, retain) NSNumber *counter;
+
 @property (nonatomic, retain) NSDate *eventStartsAt;
 @property (nonatomic, retain) NSDate *eventEndsAt;
 
