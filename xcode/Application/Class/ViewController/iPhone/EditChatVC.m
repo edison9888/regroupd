@@ -178,6 +178,10 @@
         if (indexPath != nil) {
             NSLog(@"Selected row %i", indexPath.row);
             
+            UIFont *theFont = [UIFont fontWithName:@"Raleway-Regular" size:13];
+            float itemWidth = 0;
+            UIImage *icon = [UIImage imageNamed:@"name_widget_arrow"];
+
             selectedIndex = indexPath.row;
             NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
             
@@ -188,13 +192,15 @@
             //            if (![contactKeys containsObject:contact.system_id]) {
             [contactKeys addObject:contactKey];
             
-            float estWidth = fullname.length * 8 + 10;
-            if (xpos + estWidth + 10 > self.selectionsView.frame.size.width) {
+            CGSize txtSize = [fullname sizeWithFont:theFont];
+            itemWidth = txtSize.width + 25;
+            if (xpos + itemWidth > self.selectionsView.frame.size.width - 20) {
                 xpos = 0;
-                ypos +=kcontactsRowHeight;
+                ypos += kNameWidgetRowHeight;
+                
             }
             
-            if (ypos + kcontactsRowHeight > self.selectionsView.frame.size.height) {
+            if (ypos + kNameWidgetRowHeight > self.selectionsView.frame.size.height) {
                 CGRect sframe = self.selectionsView.frame;
                 sframe.size.height += kcontactsRowHeight;
                 self.selectionsView.frame = sframe;
@@ -207,12 +213,12 @@
                 }
             }
             
-            CGRect itemFrame = CGRectMake(xpos, ypos, estWidth, 24);
+            CGRect itemFrame = CGRectMake(xpos, ypos, itemWidth, 24);
             NameWidget *item = [[NameWidget alloc] initWithFrame:itemFrame];
             
             [item setFieldLabel:fullname];
             
-            xpos += estWidth + 10;
+            xpos += txtSize.width + 10;
             [self.selectionsView addSubview:item];
             
             //            }

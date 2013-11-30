@@ -18,6 +18,7 @@
 #import "NameWidget.h"
 #import "BrandUILabel.h"
 #import "BrandUITextField.h"
+#import "WidgetStyle.h"
 
 @interface EditGroupVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     BOOL isLoading;
@@ -26,10 +27,17 @@
     CCSearchBar *ccSearchBar;
     NSMutableDictionary *contactsMap;
     NSMutableArray *contactKeys;
+    NSMutableArray *contactsArray;
+    NSMutableArray *nameWidgets;
+
     float ypos;
     float xpos;
     ChatManager *chatSvc;
     GroupManager *groupSvc;
+    
+    WidgetStyle *widgetStyle;
+    UIImage *xicon;
+    UIFont *theFont;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;

@@ -174,6 +174,7 @@
 		1E6A1022183F154800F63666 /* RatingResponseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E6A1020183F154800F63666 /* RatingResponseCell.m */; };
 		1E6A1023183F154800F63666 /* RatingResponseCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E6A1021183F154800F63666 /* RatingResponseCell.xib */; };
 		1E6A1026183FFA3200F63666 /* AltLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E6A1025183FFA3200F63666 /* AltLabel.m */; };
+		1E6BA031184A69390005B8BF /* name_widget_x@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E6BA030184A69390005B8BF /* name_widget_x@2x.png */; };
 		1E751B2C179C4B11003AB13D /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E751B2B179C4B11003AB13D /* UserManager.m */; };
 		1E76F4A417960BE1007EF5B0 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA4B1782638200A294C0 /* Default-568h@2x.png */; };
 		1E76F4A617961169007EF5B0 /* CCTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E76F4A517961169007EF5B0 /* CCTableViewCell.xib */; };
@@ -730,6 +731,7 @@
 		1E6A1021183F154800F63666 /* RatingResponseCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RatingResponseCell.xib; sourceTree = "<group>"; };
 		1E6A1024183FFA3200F63666 /* AltLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AltLabel.h; sourceTree = "<group>"; };
 		1E6A1025183FFA3200F63666 /* AltLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AltLabel.m; sourceTree = "<group>"; };
+		1E6BA030184A69390005B8BF /* name_widget_x@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "name_widget_x@2x.png"; sourceTree = "<group>"; };
 		1E751B2A179C4B11003AB13D /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserManager.h; sourceTree = "<group>"; };
 		1E751B2B179C4B11003AB13D /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserManager.m; sourceTree = "<group>"; };
 		1E76F4941795EE3E007EF5B0 /* AppIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon@2x.png"; sourceTree = "<group>"; };
@@ -1594,6 +1596,7 @@
 		1E9280E9177FB68F008A583C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1E6BA030184A69390005B8BF /* name_widget_x@2x.png */,
 				1EEA9764184437F500D726C4 /* name_widget_arrow@2x.png */,
 				1E0D0FA31819343600B8174B /* group_roundpic@2x.png */,
 				1E0D0FA41819343600B8174B /* icon_search_aqua@2x.png */,
@@ -2237,15 +2240,9 @@
 				1EC44C1418130CC000F4A2C2 /* ContactsHomeVC.h */,
 				1EC44C1518130CC000F4A2C2 /* ContactsHomeVC.m */,
 				1EC44C1618130CC100F4A2C2 /* ContactsHomeVC.xib */,
-				1EC44C2C18130CC100F4A2C2 /* GroupInfoVC.h */,
-				1EC44C2D18130CC100F4A2C2 /* GroupInfoVC.m */,
-				1EC44C2E18130CC100F4A2C2 /* GroupInfoVC.xib */,
 				1EC44C1118130CC000F4A2C2 /* ContactInfoVC.h */,
 				1EC44C1218130CC000F4A2C2 /* ContactInfoVC.m */,
 				1EC44C1318130CC000F4A2C2 /* ContactInfoVC.xib */,
-				1EC44C1A18130CC100F4A2C2 /* EditGroupVC.h */,
-				1EC44C1B18130CC100F4A2C2 /* EditGroupVC.m */,
-				1EC44C1C18130CC100F4A2C2 /* EditGroupVC.xib */,
 			);
 			name = Contacts;
 			sourceTree = "<group>";
@@ -2287,6 +2284,12 @@
 				1EC44C2F18130CC100F4A2C2 /* GroupsHomeVC.h */,
 				1EC44C3018130CC100F4A2C2 /* GroupsHomeVC.m */,
 				1EC44C3118130CC100F4A2C2 /* GroupsHomeVC.xib */,
+				1EC44C2C18130CC100F4A2C2 /* GroupInfoVC.h */,
+				1EC44C2D18130CC100F4A2C2 /* GroupInfoVC.m */,
+				1EC44C2E18130CC100F4A2C2 /* GroupInfoVC.xib */,
+				1EC44C1A18130CC100F4A2C2 /* EditGroupVC.h */,
+				1EC44C1B18130CC100F4A2C2 /* EditGroupVC.m */,
+				1EC44C1C18130CC100F4A2C2 /* EditGroupVC.xib */,
 			);
 			name = Groups;
 			sourceTree = "<group>";
@@ -2683,6 +2686,7 @@
 				1EBA5DD717E9425800E46FFF /* icon_poll_purple@2x.png in Resources */,
 				1EBA5DD817E9425800E46FFF /* icon_event_purple@2x.png in Resources */,
 				1E1E25C417F3319F0079416C /* FancyCheckbox.xib in Resources */,
+				1E6BA031184A69390005B8BF /* name_widget_x@2x.png in Resources */,
 				1E1E25C917F347D70079416C /* icon_photo_default@2x.png in Resources */,
 				1E1E25CE17F349020079416C /* SurveyOptionWithPic.xib in Resources */,
 				1E59F11617FB0EF500EE2902 /* tabbar_with_arc@2x.png in Resources */,
@@ -3035,7 +3039,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Appetizer Mobile LLC (283U9AE89W)";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3048,8 +3052,8 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Application/Regroupd-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = regroupd;
-				PROVISIONING_PROFILE = "70C81426-6D00-4624-A62E-E2CB499D769F";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "70C81426-6D00-4624-A62E-E2CB499D769F";
+				PROVISIONING_PROFILE = "4ECCAF19-3D01-44B9-8B23-045215A1F627";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4ECCAF19-3D01-44B9-8B23-045215A1F627";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -3144,8 +3148,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_NAME = regroupd;
-				PROVISIONING_PROFILE = "70C81426-6D00-4624-A62E-E2CB499D769F";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "70C81426-6D00-4624-A62E-E2CB499D769F";
+				PROVISIONING_PROFILE = "3B553EC6-552A-4738-9774-BCF87EE63451";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3B553EC6-552A-4738-9774-BCF87EE63451";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -3156,7 +3160,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Appetizer Mobile LLC (283U9AE89W)";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3169,8 +3173,8 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Application/Regroupd-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = regroupd;
-				PROVISIONING_PROFILE = "70C81426-6D00-4624-A62E-E2CB499D769F";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "70C81426-6D00-4624-A62E-E2CB499D769F";
+				PROVISIONING_PROFILE = "4ECCAF19-3D01-44B9-8B23-045215A1F627";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4ECCAF19-3D01-44B9-8B23-045215A1F627";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

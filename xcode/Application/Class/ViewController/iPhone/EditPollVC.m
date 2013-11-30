@@ -491,13 +491,11 @@
         form.status = FormStatus_DRAFT;
         
         __block NSString *imagefile;
-        __block int index = 0;
         [formSvc apiSaveForm:form callback:^(PFObject *pfForm) {
             NSString *formId = pfForm.objectId;
             int total = surveyOptions.count;
-            
+            __block int index = 1;
             for (SurveyOptionWithPic* surveyOption in surveyOptions) {
-                index++;
                 FormOptionVO *option;
                 
                 option = [[FormOptionVO alloc] init];
@@ -516,8 +514,9 @@
                 option.status = OptionStatus_DRAFT;
                 option.position = index;
                 [formSvc apiSaveFormOption:option formId:formId callback:^(PFObject *object) {
+                    index++;
                     NSLog(@"Save option %i", index);
-                    if (index == total) {
+                    if (index > total) {
                         [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_pollSaveCompleteNotification object:nil]];
                     }
                     

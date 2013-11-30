@@ -30,7 +30,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
     
@@ -55,6 +54,22 @@
 - (BOOL)prefersStatusBarHidden
 {
     return YES;
+}
+
+
+#pragma mark - UIAlertView
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    
+    if (buttonIndex == 1) {
+        if (groupSvc == nil) {
+            groupSvc = [[GroupManager alloc] init];
+        }
+        
+//        int groupId = [DataModel shared].group.group_id;
+        [groupSvc deleteGroup:[DataModel shared].group];
+        [_delegate goBack];
+    }
 }
 
 
@@ -124,6 +139,13 @@
     
 }
 - (IBAction)tapDeleteButton {
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Please confirm"
+                                                    message:@"Do you want to delete this group?"
+                                                   delegate:self
+                                          cancelButtonTitle:@"No"
+                                          otherButtonTitles:@"Yes", nil];
+    
+    [alert show];
     
 }
 

@@ -137,7 +137,7 @@
     NSLog(@"%s: %@", __FUNCTION__, searchText);
     
     if (searchText.length > 0) {
-        NSString *sqlTemplate = @"select * from db_group where name like '%%%@%%' limit 20";
+        NSString *sqlTemplate = @"select * from groups where name like '%%%@%%' limit 20";
         
         isLoading = YES;
         
@@ -154,7 +154,7 @@
         [self.theTableView reloadData];
         
     } else {
-        NSString *sqlTemplate = @"select * from db_group order by name";
+        NSString *sqlTemplate = @"select * from groups order by name";
         
         isLoading = YES;
         

@@ -19,7 +19,7 @@
     NSLog(@"%s", __FUNCTION__);
     
     NSString *sql = nil;
-    sql = @"SELECT MAX(group_id) AS max_id FROM db_group";
+    sql = @"SELECT MAX(group_id) AS max_id FROM groups";
     
     FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
     int maxId = 0;
@@ -37,7 +37,7 @@
     NSLog(@"%s", __FUNCTION__);
     
     NSString *sql = nil;
-    sql = @"select * from db_group where group_id=?";
+    sql = @"select * from groups where group_id=?";
     
     FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
                        [NSNumber numberWithInt:_groupId]];
@@ -81,11 +81,13 @@
     NSLog(@"dt %@", dt);
     
     @try {
-        sql = @"INSERT into db_group (user_key, system_id, name) values (?, ?, ?);";
+        sql = @"INSERT into groups (name, type, status, created, updated) values (?, ?, ?, ?, ?);";
         success = [[SQLiteDB sharedConnection] executeUpdate:sql,
-                   [DataModel shared].user.user_key,
-                   group.system_id,
-                   group.name
+                   group.name,
+                   [NSNumber numberWithInt:1],
+                   [NSNumber numberWithInt:1],
+                   dt,
+                   dt
                    ];
         
         if (!success) {
@@ -117,18 +119,23 @@
     NSString *sql;
     BOOL success;
     
-    sql = @"delete from db_group where group_id=?";
+    sql = @"delete from groups where group_id=?";
     
     success = [[SQLiteDB sharedConnection] executeUpdate:sql,
-               group.group_id
+               [NSNumber numberWithInt:group.group_id]
                ];
     
     if (!success) {
         NSLog(@"####### SQL Delete failed #######");
     } else {
         NSLog(@"====== SQL DELETE SUCCESS ======");
+        
+        sql = @"delete from group_contact where group_id=?";
+
+        success = [[SQLiteDB sharedConnection] executeUpdate:sql,
+                   [NSNumber numberWithInt:group.group_id]
+                   ];
     }
-    
 }
 - (void) updateGroup:(GroupVO *) group{
     NSString *sql;
@@ -137,7 +144,7 @@
     NSString *dt = [DateTimeUtils dbDateTimeStampFromDate:now];
     NSLog(@"dt %@", dt);
     
-    sql = @"UPDATE db_group set system_id=?, name=?, type=?, status=?, updated=? where group_id=?";
+    sql = @"UPDATE groups set system_id=?, name=?, type=?, status=?, updated=? where group_id=?";
     success = [[SQLiteDB sharedConnection] executeUpdate:sql,
                group.system_id,
                group.name,
@@ -157,7 +164,7 @@
 - (NSMutableArray *) listGroups:(int)typeFilter {
     NSMutableArray *results = [[NSMutableArray alloc] init];
     
-    NSString *sql = @"select * from db_group order by updated desc";
+    NSString *sql = @"select * from groups order by updated desc";
     
     FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
     GroupVO *row;
@@ -170,6 +177,32 @@
 }
 
 #pragma mark - group_contact DAO
+
+- (void) saveGroupContact:(int)groupId contactKey:(NSString *)contactKey {
+    
+    NSString *sql;
+    BOOL success;
+    
+    @try {
+        sql = @"INSERT into group_contact (group_id, contact_key) values (?, ?);";
+        
+        success = [[SQLiteDB sharedConnection] executeUpdate:sql,
+                   [NSNumber numberWithInt:groupId],
+                   contactKey
+                   ];
+        
+        if (!success) {
+            NSLog(@"####### SQL Insert failed #######");
+        } else {
+            NSLog(@"====== SQL INSERT SUCCESS ======");
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"EXCEPTION %@", exception);
+    }
+}
+
+
 - (NSMutableArray *) listGroupContacts:(int)groupId {
     NSMutableArray *results = [[NSMutableArray alloc] init];
     

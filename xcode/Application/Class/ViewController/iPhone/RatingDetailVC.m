@@ -76,11 +76,13 @@
     self.tableData =[[NSMutableArray alloc]init];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pageUpdateNotificationHandler:)     name:@"pageUpdateNotification"            object:nil];
-    
+        
+
+}
+- (void)viewWillAppear:(BOOL)animated {
     isLoading = YES;
     [self preloadFormData];
     
-
 }
 
 - (void)didReceiveMemoryWarning

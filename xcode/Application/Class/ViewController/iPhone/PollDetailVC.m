@@ -58,14 +58,16 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pageUpdateNotificationHandler:)     name:@"pageUpdateNotification"            object:nil];
     
-    isLoading = YES;
-    [self preloadFormData];
     
     //    [self performSearch:@""];
     
     
 }
-
+- (void)viewWillAppear:(BOOL)animated {
+    isLoading = YES;
+    [self preloadFormData];
+    
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

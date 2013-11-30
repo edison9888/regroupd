@@ -18,8 +18,9 @@
     GroupVO *o = [[GroupVO alloc] init];
     NSString *text;
     
-    text = [dict valueForKey:@"contact_id"];
-    o.group_id = text.integerValue;
+    text = [dict valueForKey:@"group_id"];
+    o.group_id = text.intValue;
+    
     text = [dict valueForKey:@"system_id"];
     o.system_id = text;
     text = [dict valueForKey:@"name"];

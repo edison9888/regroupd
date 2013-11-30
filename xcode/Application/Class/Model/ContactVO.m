@@ -53,8 +53,9 @@
     ContactVO *o = [[ContactVO alloc] init];
     NSString *text;
     
+    
     text = [data valueForKey:@"contact_id"];
-    o.contact_id = text.integerValue;
+    o.contact_id = text.intValue;
 //    text = [data valueForKey:@"record_id"];
 //    o.record_id = [NSNumber numberWithInt:text.integerValue];
     text = [data valueForKey:@"contact_key"];

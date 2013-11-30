@@ -49,7 +49,6 @@
         self.nameLabel.textColor = [UIColor colorWithHexValue:style.fontcolor];
         
         [self.nameLabel setBackgroundColor:[UIColor clearColor]];
-        
         self.nameLabel.textAlignment = NSTextAlignmentLeft;
         [self addSubview:self.nameLabel];
         
@@ -58,6 +57,8 @@
     return self;
 }
 - (void) setupButton:(NSString *)key {
+    NSLog(@"%s", __FUNCTION__);
+    
     self.itemKey = key;
     self.clearButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.clearButton.frame = self.frame;
