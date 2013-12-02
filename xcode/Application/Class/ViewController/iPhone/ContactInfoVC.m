@@ -109,7 +109,7 @@
         chatSvc = [[ChatManager alloc] init];
         
     }
-    NSArray *contactKeys = @[[DataModel shared].user.contact_key, [DataModel shared].contact.contact_key];
+    NSArray *contactKeys = @[[DataModel shared].user.contact_key, [DataModel shared].contact.system_id];
     
     [chatSvc apiFindChatsByContactKeys:contactKeys callback:^(NSArray *results) {
         BOOL chatExists = NO;
@@ -140,9 +140,10 @@
             [chatSvc apiSaveChat:chat callback:^(PFObject *pfChat) {
                 
                 // Adding push notifications subscription
-                
+                NSString *channelId = [@"chat_" stringByAppendingString:pfChat.objectId];
+
                 PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-                [currentInstallation addUniqueObject:pfChat.objectId forKey:@"channels"];
+                [currentInstallation addUniqueObject:channelId forKey:@"channels"];
                 [currentInstallation saveInBackground];
                 
                 chat.system_id = pfChat.objectId;

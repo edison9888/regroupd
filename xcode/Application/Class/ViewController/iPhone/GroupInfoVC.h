@@ -9,6 +9,7 @@
 #import "SlideViewController.h"
 #import "ChatManager.h"
 #import "GroupManager.h"
+#import "ContactManager.h"
 
 #import "BrandUILabel.h"
 #import "BrandUIButton.h"
@@ -16,6 +17,7 @@
 @interface GroupInfoVC : SlideViewController {
     ChatManager *chatSvc;
     GroupManager *groupSvc;
+    ContactManager *contactSvc;
 }
 
 @property (nonatomic, strong) IBOutlet UIImageView *roundPic;

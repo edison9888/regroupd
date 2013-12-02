@@ -1,17 +1,18 @@
 //
-//  ChatTableViewCell.m
+//  GroupTableViewCell.m
 //  Blocpad
 //
 //  Created by Hugh Lang on 4/8/13.
 //
 //
 
-#import "ChatTableViewCell.h"
+#import "GroupTableViewCell.h"
+#import "DateTimeUtils.h"
 
 #define kIconChatOff @"icon_chat_off.png"
 #define kIconChatOn @"icon_chat_on.png"
 
-@implementation ChatTableViewCell
+@implementation GroupTableViewCell
 
 @synthesize titleLabel;
 @synthesize rowdata;
@@ -28,12 +29,18 @@
 }
 
 - (NSString *) reuseIdentifier {
-    return @"ChatTableCell";
+    return @"GroupTableCell";
 }
-- (void)setRowdata:(ChatVO *)chat
+
+- (void)setRowdata:(NSDictionary *)data
 {
-    rowdata = chat;
-    self.titleLabel.text = chat.names;
+    rowdata = data;
+    self.titleLabel.text = [data objectForKey:@"name"];
+    NSString *datetext = (NSString *) [data objectForKey:@"updated"];
+    NSDate *updatedAt = [DateTimeUtils dateFromDBDateStringNoOffset:datetext];
+    datetext = [DateTimeUtils formatDecimalDate:updatedAt];
+    self.dateLabel.text = datetext;
+
 }
 - (void) setStatus:(int)status {
     

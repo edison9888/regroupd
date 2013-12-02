@@ -35,9 +35,9 @@ created TEXT,
 updated TEXT
 );
 
-CREATE TABLE IF NOT EXISTS db_group ( 
+
+CREATE TABLE IF NOT EXISTS groups ( 
 group_id INTEGER PRIMARY KEY,  
-user_key TEXT,  
 system_id TEXT,
 name TEXT, 
 type INT DEFAULT 1, 
@@ -48,7 +48,7 @@ updated TEXT
 
 CREATE TABLE IF NOT EXISTS group_contact ( 
     group_id INTEGER,  
-    contact_id INTEGER
+    contact_key TEXT
 );
 
 CREATE TABLE IF NOT EXISTS chat ( 

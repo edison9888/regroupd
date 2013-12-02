@@ -10,7 +10,6 @@
 
 @implementation DateTimeUtils
 
-static NSString *simpleTimeFormat = @"h:mm a";
 
 static NSDateFormatter *dbDateTimeFormatter;
 static NSDateFormatter *dbDateFormatter;
@@ -21,7 +20,7 @@ static NSDateFormatter *shortDateFormatter;
 + (NSDateFormatter *) getShortDateFormatter {
     if (shortDateFormatter == nil) {
         shortDateFormatter = [[NSDateFormatter alloc]init];
-        [shortDateFormatter setDateFormat:@"M/d/yy"];
+        [shortDateFormatter setDateFormat:kShortDateOnlyFormat];
     }
     return shortDateFormatter;
 }
@@ -45,16 +44,16 @@ static NSDateFormatter *shortDateFormatter;
     return dbDateFormatter;
 }
 
-
-+ (NSString *) readKeyValue:(NSString *)key data:(NSDictionary *)dict 
-{
-    if ([dict valueForKey:key] == [NSNull null]) {
-        return @"";
-    } else {
-        return [dict valueForKey:key];
-    }
++ (NSString *) formatDecimalDate:(NSDate *)date {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:kDecimalDateFormat];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
     
+    return [dateFormatter stringFromDate:date];
 }
+
+#pragma mark - OLD SHIT
+
 + (NSDate *) dateFromDBDateString:(NSString *)dbDate {
     
     return [self.sharedDbDateTimeFormatter dateFromString:dbDate];
@@ -63,7 +62,7 @@ static NSDateFormatter *shortDateFormatter;
 + (NSString *) simpleTimeLabelFromDate:(NSDate *)date{
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:simpleTimeFormat];
+    [dateFormatter setDateFormat:kSimpleTimeFormat];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
 
     return [dateFormatter stringFromDate:date];
@@ -102,7 +101,7 @@ static NSDateFormatter *shortDateFormatter;
 
 + (NSString *) printTimePartFromDate:(NSDate *)date {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:simpleTimeFormat];
+    [dateFormatter setDateFormat:kSimpleTimeFormat];
     
     return [dateFormatter stringFromDate:date];
     
@@ -115,10 +114,6 @@ static NSDateFormatter *shortDateFormatter;
     
 }
 
-+ (int) readSelectedIndex:(NSString *)key data:(NSMutableDictionary *)dict 
-{
-    return 0;
-}
 
 //- (NSData*) encryptString:(NSString*)plaintext withKey:(NSString*)key {
 //	return [[plaintext dataUsingEncoding:NSUTF8StringEncoding] AES256EncryptWithKey:key];

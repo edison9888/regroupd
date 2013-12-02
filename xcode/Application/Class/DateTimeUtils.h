@@ -9,25 +9,28 @@
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonCryptor.h>
 
+#define kSimpleTimeFormat  @"h:mm a"
+#define kShortDateOnlyFormat @"M/d/yy"
+#define kDecimalDateFormat @"MM.dd.yy"
+
 @interface DateTimeUtils : NSObject
-
-+ (NSString *) readKeyValue:(NSString *)key data:(NSDictionary *)dict;
-
-+ (int) readSelectedIndex:(NSString *)key data:(NSMutableDictionary *)dict;
 
 + (NSDateFormatter *) sharedDbDateTimeFormatter;
 + (NSDateFormatter *) sharedDbDateFormatter;
 + (NSDateFormatter *) getShortDateFormatter;
 
+// Convert string to date
 + (NSDate *) dateFromDBDateString:(NSString *)dbDate;
 + (NSDate *) dateFromDBDateStringNoOffset:(NSString *)dbDate;
++ (NSDate *) readDateFromFriendlyDateTime:(NSString *)dbDate;
+
+// Convert date to String
 + (NSString *) simpleTimeLabelFromDate:(NSDate *)date;
++ (NSString *) formatDecimalDate:(NSDate *)date;
 + (NSString *) dbDateTimeStampFromDate:(NSDate *)date;
 + (NSString *) dbDateStampFromDate:(NSDate *)date;
-
 + (NSString *) dbTimeStampFromDateNoOffset:(NSDate *)date;
 
-+ (NSDate *) readDateFromFriendlyDateTime:(NSString *)dbDate;
 + (NSString *) printTimePartFromDate:(NSDate *)date;
 + (NSString *) printDatePartFromDate:(NSDate *)date;
 

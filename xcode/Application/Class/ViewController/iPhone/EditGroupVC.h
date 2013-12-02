@@ -25,16 +25,16 @@
     int selectedIndex;
     NSMutableArray *tableData;
     CCSearchBar *ccSearchBar;
-    NSMutableDictionary *contactsMap;
-    NSMutableArray *contactKeys;
-    NSMutableArray *contactsArray;
-    NSMutableArray *nameWidgets;
 
     float ypos;
     float xpos;
     ChatManager *chatSvc;
     GroupManager *groupSvc;
     
+    NSMutableDictionary *contactsMap;
+    NSMutableArray *contactKeys;
+    NSMutableArray *contactsArray;
+    NSMutableArray *nameWidgets;
     WidgetStyle *widgetStyle;
     UIImage *xicon;
     UIFont *theFont;

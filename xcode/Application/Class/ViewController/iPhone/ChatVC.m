@@ -245,6 +245,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         [item setIcon:icon];
         
         [self.drawerContents addSubview:item];
+        index++;
         
     }
 
@@ -342,7 +343,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         
         // Auto subscribe user to push notifications for this chat objectId
         PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-        [currentInstallation addUniqueObject:[DataModel shared].chat.system_id forKey:@"channels"];
+        
+        NSString *channelId = [@"chat_" stringByAppendingString:[DataModel shared].chat.system_id];
+//        [currentInstallation addUniqueObject:[DataModel shared].chat.system_id forKey:@"channels"];
+        [currentInstallation addUniqueObject:channelId forKey:@"channels"];
         [currentInstallation saveInBackground];
         
         NSLog(@"Fetch chat by objectId %@", [DataModel shared].chat.system_id);
@@ -1712,7 +1716,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 // Build a target query: everyone in the chat room except for this device.
                 // See also: http://blog.parse.com/2012/07/23/targeting-pushes-from-a-device/
                 PFQuery *query = [PFInstallation query];
-                [query whereKey:@"channels" equalTo:chatId];
+                
+                NSString *channelId = [@"chat_" stringByAppendingString:chatId];
+                [query whereKey:@"channels" equalTo:channelId];
                 //            [query whereKey:@"installationId" notEqualTo:[PFInstallation currentInstallation].installationId];
                 
                 
@@ -1781,7 +1787,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                         // Build a target query: everyone in the chat room except for this device.
                         // See also: http://blog.parse.com/2012/07/23/targeting-pushes-from-a-device/
                         PFQuery *query = [PFInstallation query];
-                        [query whereKey:@"channels" equalTo:chatId];
+                        NSString *channelId = [@"chat_" stringByAppendingString:chatId];
+                        [query whereKey:@"channels" equalTo:channelId];
                         //            [query whereKey:@"installationId" notEqualTo:[PFInstallation currentInstallation].installationId];
                         
                         NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -1844,7 +1851,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 // Build a target query: everyone in the chat room except for this device.
                 // See also: http://blog.parse.com/2012/07/23/targeting-pushes-from-a-device/
                 PFQuery *query = [PFInstallation query];
-                [query whereKey:@"channels" equalTo:chatId];
+                NSString *channelId = [@"chat_" stringByAppendingString:chatId];
+                [query whereKey:@"channels" equalTo:channelId];
                 //            [query whereKey:@"installationId" notEqualTo:[PFInstallation currentInstallation].installationId];
                 
                 NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:

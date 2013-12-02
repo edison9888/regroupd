@@ -126,7 +126,7 @@
         }
         
         // Loads phonebookCache
-        NSMutableDictionary *pbMap = [contactSvc lookupContactsFromPhonebook:[contactKeySet allObjects]];
+        [contactSvc lookupContactsFromPhonebook:[contactKeySet allObjects]];
         
         [contactSvc apiLookupContacts:[contactKeySet allObjects] callback:^(NSArray *results) {
             ContactVO *contact;
@@ -138,7 +138,6 @@
                 for (NSString *key in chat.contact_keys) {
                     contact = nil;
                     name = nil;
-                    NSLog(@"Current user is %@", [DataModel shared].user.contact_key);
                     if (![key isEqualToString:[DataModel shared].user.contact_key]) {
                         if ([[DataModel shared].phonebookCache objectForKey:key]) {
                             contact = (ContactVO *) [[DataModel shared].phonebookCache objectForKey:key];
@@ -204,8 +203,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"%s", __FUNCTION__);
-    // http://stackoverflow.com/questions/413993/loading-a-reusable-uitableviewcell-from-a-nib
     
     static NSString *CellIdentifier = @"ChatTableCell";
     static NSString *CellNib = @"ChatTableViewCell";

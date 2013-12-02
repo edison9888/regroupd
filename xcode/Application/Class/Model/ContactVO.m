@@ -20,8 +20,11 @@
 
 - (NSString *) fullname {
     
-    if (self.first_name != nil && self.last_name == nil) {
+    if (self.first_name == nil && self.last_name == nil) {
+        return self.phone;
+    } else if (self.first_name != nil && self.last_name == nil) {
         return self.first_name;
+
     } else if (self.first_name == nil && self.last_name != nil) {
         return self.last_name;
     } else {

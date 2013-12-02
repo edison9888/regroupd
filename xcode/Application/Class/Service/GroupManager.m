@@ -203,20 +203,22 @@
 }
 
 
-- (NSMutableArray *) listGroupContacts:(int)groupId {
+- (NSMutableArray *) listGroupContactKeys:(int)groupId {
     NSMutableArray *results = [[NSMutableArray alloc] init];
     
-    NSString *sql = @"select c.* from contact as c join group_contact as gc on c.contact_id=gc.contact_id where gc.group_id=? order by c.first_name?";
+    NSString *sql = @"select * from group_contact where group_id=?";
     
     FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
                        [NSNumber numberWithInt:groupId]];
-    ContactVO *row;
-    
+    NSDictionary *dict;
+    NSString *key;
     while ([rs next]) {
-        row = [ContactVO readFromDictionary:[rs resultDictionary]];
-        [results addObject:row];
+        dict = [rs resultDictionary];
+        if ([dict objectForKey:@"contact_key"]) {
+            key = (NSString *) [dict objectForKey:@"contact_key"];
+            [results addObject:key];
+        }
     }
-    
     return results;
 }
 

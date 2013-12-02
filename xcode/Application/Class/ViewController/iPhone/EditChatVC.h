@@ -14,18 +14,25 @@
 #import "ChatVO.h"
 #import "ContactVO.h"
 #import "NameWidget.h"
+#import "WidgetStyle.h"
 
 @interface EditChatVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *tableData;
     CCSearchBar *ccSearchBar;
-    NSMutableDictionary *contactsMap;
-    NSMutableArray *contactKeys;
     float ypos;
     float xpos;
     ChatManager *chatSvc;
-    
+
+    NSMutableDictionary *contactsMap;
+    NSMutableArray *contactKeys;
+    NSMutableArray *contactsArray;
+    NSMutableArray *nameWidgets;
+    WidgetStyle *widgetStyle;
+    UIImage *xicon;
+    UIFont *theFont;
+
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;

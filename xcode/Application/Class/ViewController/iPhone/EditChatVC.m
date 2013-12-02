@@ -13,6 +13,8 @@
 #define kcontactsRowHeight  25
 #define kcontactsGap  5
 
+#define kBaseTagForNameWidget 900
+
 @interface EditChatVC ()
 
 @end
@@ -39,6 +41,19 @@
     
     chatSvc = [[ChatManager alloc] init];
     
+    // Setup styles for name widgets
+    theFont = [UIFont fontWithName:@"Raleway-Regular" size:13];
+    xicon = [UIImage imageNamed:@"name_widget_x"];
+    
+    widgetStyle = [[WidgetStyle alloc] init];
+    widgetStyle.fontcolor = 0xFFFFFF;
+    widgetStyle.bgcolor = 0x28CFEA;
+    widgetStyle.bordercolor = 0x09a1bd;
+    widgetStyle.corner = 2;
+    widgetStyle.font = theFont;
+    
+    nameWidgets = [[NSMutableArray alloc] init];
+
     // Do any additional setup after loading the view from its nib.
     
     xpos = 0;
@@ -46,6 +61,7 @@
     
     contactsMap = [[NSMutableDictionary alloc] init];
     contactKeys = [[NSMutableArray alloc] init];
+    contactsArray = [[NSMutableArray alloc] init];
     
     CGRect searchFrame = CGRectMake(5, 5, 300, 36);
     ccSearchBar = [[CCSearchBar alloc] initWithFrame:searchFrame];
@@ -68,8 +84,18 @@
     
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
+
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
+                                             
+                                             initWithTarget:self action:@selector(singleTap:)];
     
-    [self performSearch:@""];
+    // Specify that the gesture must be a single tap
+    
+    tapRecognizer.numberOfTapsRequired = 1;
+    tapRecognizer.cancelsTouchesInView = NO;
+    [self.view addGestureRecognizer:tapRecognizer];
+
+//    [self performSearch:@""];
     
     
 }
@@ -178,23 +204,19 @@
         if (indexPath != nil) {
             NSLog(@"Selected row %i", indexPath.row);
             
-            UIFont *theFont = [UIFont fontWithName:@"Raleway-Regular" size:13];
-            float itemWidth = 0;
-            UIImage *icon = [UIImage imageNamed:@"name_widget_arrow"];
-
             selectedIndex = indexPath.row;
             NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
             
-            //            [contactsMap setObject:contact forKey:[NSNumber numberWithInt:contact.contact_id]];
-            NSString *contactKey = (NSString *) [rowdata objectForKey:@"contact_key"];
-            NSString *fullname = [NSString stringWithFormat:kFullNameFormat, [rowdata objectForKey:@"first_name"], [rowdata objectForKey:@"last_name"]];
+            ContactVO *contact = [ContactVO readFromPhonebook:rowdata];
+            [contactsArray addObject:contact];
             
-            //            if (![contactKeys containsObject:contact.system_id]) {
-            [contactKeys addObject:contactKey];
+            [contactKeys addObject:contact.system_id];
             
-            CGSize txtSize = [fullname sizeWithFont:theFont];
+            CGSize txtSize = [contact.fullname sizeWithFont:theFont];
+            float itemWidth = 0;
             itemWidth = txtSize.width + 25;
-            if (xpos + itemWidth > self.selectionsView.frame.size.width - 20) {
+            
+            if (xpos + itemWidth > self.selectionsView.frame.size.width) {
                 xpos = 0;
                 ypos += kNameWidgetRowHeight;
                 
@@ -202,25 +224,26 @@
             
             if (ypos + kNameWidgetRowHeight > self.selectionsView.frame.size.height) {
                 CGRect sframe = self.selectionsView.frame;
-                sframe.size.height += kcontactsRowHeight;
+                sframe.size.height += kNameWidgetRowHeight;
                 self.selectionsView.frame = sframe;
                 
                 CGRect searchFrame = self.searchView.frame;
                 if (sframe.origin.y + sframe.size.height > searchFrame.origin.y) {
-                    searchFrame.origin.y += kcontactsRowHeight;
-                    searchFrame.size.height -= kcontactsRowHeight;
+                    searchFrame.origin.y += kNameWidgetRowHeight;
+                    searchFrame.size.height -= kNameWidgetRowHeight;
                     self.searchView.frame = searchFrame;
                 }
             }
+            CGRect itemFrame = CGRectMake(xpos, ypos, itemWidth, 25);
+            NameWidget *item = [[NameWidget alloc] initWithFrame:itemFrame andStyle:widgetStyle];
             
-            CGRect itemFrame = CGRectMake(xpos, ypos, itemWidth, 24);
-            NameWidget *item = [[NameWidget alloc] initWithFrame:itemFrame];
+            item.itemKey = contact.contact_key;
+            [item setFieldLabel:contact.fullname];
+            [item setIcon:xicon];
             
-            [item setFieldLabel:fullname];
-            
-            xpos += txtSize.width + 10;
+            item.tag = kBaseTagForNameWidget + contactsArray.count - 1;
+            xpos += itemWidth + kNameWidgetGap;
             [self.selectionsView addSubview:item];
-            
             //            }
             
             
@@ -232,41 +255,117 @@
     
 }
 
+#pragma mark - Private Helpers
+
+- (void) reloadNameWidgets
+{
+    xpos = 3;
+    ypos = 3;
+    for (UIView *view in self.selectionsView.subviews) {
+        [view removeFromSuperview];
+    }
+    
+    for (ContactVO *contact in contactsArray) {
+        CGSize txtSize = [contact.fullname sizeWithFont:theFont];
+        float itemWidth = 0;
+        itemWidth = txtSize.width + 25;
+        
+        if (xpos + itemWidth > self.selectionsView.frame.size.width) {
+            xpos = 0;
+            ypos += kNameWidgetRowHeight;
+            
+        }
+        
+        if (ypos + kNameWidgetRowHeight > self.selectionsView.frame.size.height) {
+            CGRect sframe = self.selectionsView.frame;
+            sframe.size.height += kNameWidgetRowHeight;
+            self.selectionsView.frame = sframe;
+            
+            CGRect searchFrame = self.searchView.frame;
+            if (sframe.origin.y + sframe.size.height > searchFrame.origin.y) {
+                searchFrame.origin.y += kNameWidgetRowHeight;
+                searchFrame.size.height -= kNameWidgetRowHeight;
+                self.searchView.frame = searchFrame;
+            }
+        }
+        CGRect itemFrame = CGRectMake(xpos, ypos, itemWidth, 25);
+        NameWidget *item = [[NameWidget alloc] initWithFrame:itemFrame andStyle:widgetStyle];
+        
+        item.itemKey = contact.contact_key;
+        [item setFieldLabel:contact.fullname];
+        [item setIcon:xicon];
+        
+        item.tag = kBaseTagForNameWidget + contactsArray.count - 1;
+        xpos += itemWidth + kNameWidgetGap;
+        [self.selectionsView addSubview:item];
+        
+        
+    }
+    
+    
+}
+
+-(void)singleTap:(UITapGestureRecognizer*)sender
+{
+    NSLog(@"%s", __FUNCTION__);
+    if (UIGestureRecognizerStateEnded == sender.state)
+    {
+        UIView* view = sender.view;
+        CGPoint loc = [sender locationInView:view];
+        UIView* subview = [view hitTest:loc withEvent:nil];
+        //        CGPoint subloc = [sender locationInView:subview];
+        NSLog(@"hit tag = %i or subview.tag %i", view.tag, subview.tag);
+        
+        
+        //            switch (subview.tag) {
+        int nameIndex = subview.tag - kBaseTagForNameWidget;
+        
+        if (nameIndex >= 0 && nameIndex <= 99) {
+            [contactsArray removeObjectAtIndex:nameIndex];
+            [contactKeys removeObjectAtIndex:nameIndex];
+            
+            NSLog(@"contacts count now %i", contactsArray.count);
+            [self reloadNameWidgets];
+        }
+    }
+}
 
 - (void)performSearch:(NSString *)searchText
 {
     NSLog(@"%s: %@", __FUNCTION__, searchText);
     
     if (searchText.length > 0) {
-        NSString *sqlTemplate = @"select * from phonebook where status=1 and (first_name like '%%%@%%' or last_name like '%%%@%%') limit 20";
+        NSString *sqlTemplate = @"select * from phonebook where status=1 and contact_key<>'%@' and (first_name like '%%%@%%' or last_name like '%%%@%%') limit 20";
         
         isLoading = YES;
         
-        NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText, searchText];
+        NSString *sql = [NSString stringWithFormat:sqlTemplate, [DataModel shared].user.contact_key, searchText, searchText];
+        NSLog(@"sql=%@", sql);
         
-        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-        [tableData removeAllObjects];
-        
-        while ([rs next]) {
-            [tableData addObject:[rs resultDictionary]];
-        }
-        isLoading = NO;
-        
-        [self.theTableView reloadData];
-        
-    } else {
-        NSString *sql = @"select * from phonebook where status=1 order by name";
-        
-        isLoading = YES;
-        
-//        NSString *sql = [NSString stringWithFormat:sqlTemplate];
         
         FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
         [tableData removeAllObjects];
         
         while ([rs next]) {
             NSDictionary *dict =[rs resultDictionary];
-            NSLog(@"Result %@", [dict objectForKey:@"name"]);
+            
+            [tableData addObject:dict];
+        }
+        isLoading = NO;
+        [self.theTableView reloadData];
+        
+    } else {
+        NSString *sqlTemplate = @"select * from phonebook where status=1 and contact_key<>'%@' order by last_name";
+        
+        isLoading = YES;
+        
+        NSString *sql = [NSString stringWithFormat:sqlTemplate, [DataModel shared].user.contact_key, searchText];
+        
+        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+        [tableData removeAllObjects];
+        
+        while ([rs next]) {
+            NSDictionary *dict =[rs resultDictionary];
             
             [tableData addObject:dict];
         }
@@ -274,7 +373,6 @@
         
         [self.theTableView reloadData];
     }
-    
     
 }
 
@@ -300,9 +398,10 @@
         chat.contact_keys = [contactKeys copy];
         
         NSString *objectId = [chatSvc apiSaveChat:chat];
+        NSString *channelId = [@"chat_" stringByAppendingString:objectId];
         
         PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-        [currentInstallation addUniqueObject:objectId forKey:@"channels"];
+        [currentInstallation addUniqueObject:channelId forKey:@"channels"];
         [currentInstallation saveInBackground];
         
         chat.system_id = objectId;

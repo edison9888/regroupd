@@ -8,8 +8,7 @@
 
 #import "SlideViewController.h"
 #import "SQLiteDB.h"
-#import "CCSearchBar.h"
-#import "CCTableViewCell.h"
+#import "GroupTableViewCell.h"
 #import "ContactVO.h"
 
 @interface GroupsHomeVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {

@@ -77,15 +77,15 @@
     NSLog(@"%s", __FUNCTION__);
     // http://stackoverflow.com/questions/413993/loading-a-reusable-uitableviewcell-from-a-nib
     
-    static NSString *CellIdentifier = @"CCTableCell";
-    static NSString *CellNib = @"CCTableViewCell";
+    static NSString *CellIdentifier = @"GroupTableCell";
+    static NSString *CellNib = @"GroupTableViewCell";
     
-    CCTableViewCell *cell = (CCTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    GroupTableViewCell *cell = (GroupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     @try {
         
         if (cell == nil) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:CellNib owner:self options:nil];
-            cell = (CCTableViewCell *)[nib objectAtIndex:0];
+            cell = (GroupTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
         }
         
