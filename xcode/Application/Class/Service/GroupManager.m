@@ -206,28 +206,24 @@
 - (NSMutableArray *) listGroupContactKeys:(int)groupId {
     NSMutableArray *results = [[NSMutableArray alloc] init];
     
-    NSString *sql = @"select * from group_contact where group_id=?";
+    NSString *sql = @"select contact_key from group_contact where group_id=?";
     
     FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
                        [NSNumber numberWithInt:groupId]];
-    NSDictionary *dict;
     NSString *key;
     while ([rs next]) {
-        dict = [rs resultDictionary];
-        if ([dict objectForKey:@"contact_key"]) {
-            key = (NSString *) [dict objectForKey:@"contact_key"];
-            [results addObject:key];
-        }
+        key = [rs stringForColumnIndex:0];
+        [results addObject:key];
     }
     return results;
 }
 
-- (BOOL) checkGroupContact:(int)groupId contactId:(int)contactId {
-    NSString *sql = @"select * from group_contact where group_id=? and contact_id=?";
+- (BOOL) checkGroupContact:(int)groupId contacKey:(NSString *)contactKey {
+    NSString *sql = @"select * from group_contact where group_id=? and contact_key=?";
     
     FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
                        [NSNumber numberWithInt:groupId],
-                       [NSNumber numberWithInt:contactId]
+                       contactKey
                        ];
     if ([rs next]) {
         return YES;
@@ -258,15 +254,16 @@
     
 }
 
-- (void) removeGroupContact:(int)groupId contactId:(int)contactId {
+- (void) removeGroupContact:(int)groupId contactKey:(NSString *)contactKey
+{
     NSString *sql;
     BOOL success;
     
-    sql = @"delete from group_contact where group_id=? and contact_id=?";
+    sql = @"delete from group_contact where group_id=? and contact_key=?";
     
     success = [[SQLiteDB sharedConnection] executeUpdate:sql,
                [NSNumber numberWithInt:groupId],
-               [NSNumber numberWithInt:contactId]
+               contactKey
                ];
     
 }

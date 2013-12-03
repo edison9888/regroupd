@@ -348,7 +348,7 @@
                 selectedIndex = indexPath.row;
                 NSDictionary *rowdata = [availableContacts objectAtIndex:indexPath.row];
                 
-                [DataModel shared].contact = [ContactVO readFromDictionary:rowdata];
+                [DataModel shared].contact = [ContactVO readFromPhonebook:rowdata];
                 [_delegate gotoSlideWithName:@"ContactInfo"];
                 
                 

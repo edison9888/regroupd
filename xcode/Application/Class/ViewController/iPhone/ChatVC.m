@@ -344,7 +344,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         // Auto subscribe user to push notifications for this chat objectId
         PFInstallation *currentInstallation = [PFInstallation currentInstallation];
         
-        NSString *channelId = [@"chat_" stringByAppendingString:[DataModel shared].chat.system_id];
+        NSString *channelId = [@"chat_" stringByAppendingString:chatId];
 //        [currentInstallation addUniqueObject:[DataModel shared].chat.system_id forKey:@"channels"];
         [currentInstallation addUniqueObject:channelId forKey:@"channels"];
         [currentInstallation saveInBackground];

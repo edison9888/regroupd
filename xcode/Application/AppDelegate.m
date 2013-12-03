@@ -25,6 +25,8 @@
 {
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
 
+    NSLog(@"Fonts: %@", [UIFont fontNamesForFamilyName:@"NotoSans"] );
+    
     //  #################### PARSE SETUP #####################
     //    https://www.parse.com/apps/quickstart#ios/native/existing
     

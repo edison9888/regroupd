@@ -25,10 +25,18 @@
 @property (nonatomic, strong) IBOutlet BrandUIButton *messageButton;
 @property (nonatomic, strong) IBOutlet BrandUIButton *phoneButton;
 
+@property (nonatomic, strong) IBOutlet UIView *actionsheet;
+@property (nonatomic, strong) IBOutlet BrandUIButton *deleteYesButton;
+@property (nonatomic, strong) IBOutlet BrandUIButton *deleteNoButton;
+
+
 - (IBAction)tapBackButton;
 - (IBAction)tapMessageButton;
 - (IBAction)tapManageButton;
 - (IBAction)tapDeleteButton;
+
+- (IBAction)tapDeleteYesButton;
+- (IBAction)tapDeleteNoButton;
 
 
 @end

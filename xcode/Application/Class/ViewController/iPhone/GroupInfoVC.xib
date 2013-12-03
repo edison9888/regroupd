@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GroupInfoVC">
             <connections>
+                <outlet property="actionsheet" destination="ier-AH-Gib" id="XVt-BE-IcW"/>
                 <outlet property="messageButton" destination="Qcz-if-xpA" id="geT-m6-9yv"/>
                 <outlet property="nameLabel" destination="w4a-bA-3Vd" id="TL9-Kr-IrX"/>
                 <outlet property="roundPic" destination="weh-Ka-DS7" id="8KF-PG-4nk"/>
@@ -94,8 +95,58 @@
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
+        <view autoresizesSubviews="NO" contentMode="scaleToFill" id="ier-AH-Gib" userLabel="View - actionsheet">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="440"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="a7i-58-U4i" userLabel="BrandUI Label - name" customClass="BrandUILabel">
+                    <rect key="frame" x="43" y="65" width="217" height="108"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <string key="text" base64-UTF8="YES">
+QXJlIHlvdSBzdXJlIHlvdSADd2FudCB0byBjbGVhciBhbGwgY2hhdHMgaW4gdGhpcyBncm91cD8
+</string>
+                    <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="22"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button autoresizesSubviews="NO" opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Wl6-Jv-jRx" customClass="BrandUIButton">
+                    <rect key="frame" x="89" y="209" width="143" height="37"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="20"/>
+                    <state key="normal" title="yes" backgroundImage="actionsheet_button_bg_aqua.png">
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="highlighted">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="tapDeleteYesButton" destination="-1" eventType="touchUpInside" id="DV7-L4-4tq"/>
+                    </connections>
+                </button>
+                <button autoresizesSubviews="NO" opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hkh-1V-cTR" customClass="BrandUIButton">
+                    <rect key="frame" x="89" y="259" width="143" height="37"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="20"/>
+                    <state key="normal" title="no" backgroundImage="actionsheet_button_bg_gray.png">
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="highlighted">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="tapDeleteNoButton" destination="-1" eventType="touchUpInside" id="FW0-2v-4i9"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.1803921568627451" green="0.22352941176470589" blue="0.25098039215686274" alpha="1" colorSpace="calibratedRGB"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+        </view>
     </objects>
     <resources>
+        <image name="actionsheet_button_bg_aqua.png" width="142" height="37"/>
+        <image name="actionsheet_button_bg_gray.png" width="142" height="37"/>
         <image name="btn_aqua_medium.png" width="94" height="37"/>
         <image name="contact_btn_bg_aqua_large.png" width="200" height="37"/>
         <image name="contact_btn_bg_gray_large.png" width="200" height="37"/>

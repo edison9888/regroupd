@@ -160,6 +160,9 @@
 }
 - (IBAction)tapManageButton {
     
+    
+    [_delegate gotoSlideWithName:@"ManageGroup"];
+    
 }
 - (IBAction)tapDeleteButton {
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Please confirm"
@@ -171,5 +174,10 @@
     [alert show];
     
 }
-
+- (IBAction)tapDeleteYesButton {
+    
+}
+- (IBAction)tapDeleteNoButton {
+    
+}
 @end

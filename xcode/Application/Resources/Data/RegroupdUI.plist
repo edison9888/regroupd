@@ -136,6 +136,54 @@
 			<key>nextSlideName</key>
 			<string></string>
 		</dict>
+		<dict>
+			<key>slideData</key>
+			<dict/>
+			<key>allowLeftSlide</key>
+			<false/>
+			<key>allowRightSlide</key>
+			<false/>
+			<key>category</key>
+			<string>Groups</string>
+			<key>name</key>
+			<string>GroupInfo</string>
+			<key>controllerName</key>
+			<string>GroupInfoVC</string>
+			<key>nextSlideName</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>slideData</key>
+			<dict/>
+			<key>allowLeftSlide</key>
+			<false/>
+			<key>allowRightSlide</key>
+			<false/>
+			<key>category</key>
+			<string>Groups</string>
+			<key>name</key>
+			<string>EditGroup</string>
+			<key>controllerName</key>
+			<string>EditGroupVC</string>
+			<key>nextSlideName</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>slideData</key>
+			<dict/>
+			<key>allowLeftSlide</key>
+			<false/>
+			<key>allowRightSlide</key>
+			<false/>
+			<key>category</key>
+			<string>Groups</string>
+			<key>name</key>
+			<string>ManageGroup</string>
+			<key>controllerName</key>
+			<string>ManageGroupVC</string>
+			<key>nextSlideName</key>
+			<string></string>
+		</dict>
 		<!-- ########## Chats ########### -->
 		<dict>
 			<key>slideData</key>
@@ -328,38 +376,6 @@
 			<string>ContactInfo</string>
 			<key>controllerName</key>
 			<string>ContactInfoVC</string>
-			<key>nextSlideName</key>
-			<string></string>
-		</dict>
-		<dict>
-			<key>slideData</key>
-			<dict/>
-			<key>allowLeftSlide</key>
-			<false/>
-			<key>allowRightSlide</key>
-			<false/>
-			<key>category</key>
-			<string>Contacts</string>
-			<key>name</key>
-			<string>GroupInfo</string>
-			<key>controllerName</key>
-			<string>GroupInfoVC</string>
-			<key>nextSlideName</key>
-			<string></string>
-		</dict>
-		<dict>
-			<key>slideData</key>
-			<dict/>
-			<key>allowLeftSlide</key>
-			<false/>
-			<key>allowRightSlide</key>
-			<false/>
-			<key>category</key>
-			<string>Contacts</string>
-			<key>name</key>
-			<string>EditGroup</string>
-			<key>controllerName</key>
-			<string>EditGroupVC</string>
 			<key>nextSlideName</key>
 			<string></string>
 		</dict>

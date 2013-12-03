@@ -60,6 +60,7 @@
         }];
     }
     if ([[DataModel shared].contact.system_id isEqualToString:[DataModel shared].user.contact_key]) {
+        self.nameLabel.text = @"Me";
         
     } else if ([DataModel shared].contact.first_name != nil && [DataModel shared].contact.last_name != nil) {
         self.nameLabel.text = [DataModel shared].contact.fullname;

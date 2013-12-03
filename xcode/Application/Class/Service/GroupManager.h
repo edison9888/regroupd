@@ -20,10 +20,10 @@
 - (NSMutableArray *) listGroups:(int)type;
 - (int) fetchLastGroupID;
 
+- (BOOL) checkGroupContact:(int)groupId contacKey:(NSString *)contactKey;
 - (void) saveGroupContact:(int)groupId contactKey:(NSString *)contactKey;
+- (void) removeGroupContact:(int)groupId contactKey:(NSString *)contactKey;
 - (NSMutableArray *) listGroupContactKeys:(int)groupId;
-- (BOOL) checkGroupContact:(int)groupId contactId:(int)contactId;
-- (void) addGroupContact:(int)groupId contactId:(int)contactId;
-- (void) removeGroupContact:(int)groupId contactId:(int)contactId;
+
 
 @end

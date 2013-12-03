@@ -134,6 +134,10 @@
 		1E3E85F9184AECD700BB7171 /* groups_cell_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3E85F7184AECD700BB7171 /* groups_cell_arrow@2x.png */; };
 		1E3E85FA184AECD700BB7171 /* groups_cell_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3E85F8184AECD700BB7171 /* groups_cell_icon@2x.png */; };
 		1E3E85FD184AEE0D00BB7171 /* AltBoldLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3E85FC184AEE0D00BB7171 /* AltBoldLabel.m */; };
+		1E3E8602184D0D2800BB7171 /* actionsheet_button_bg_gray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3E85FE184D0D2700BB7171 /* actionsheet_button_bg_gray@2x.png */; };
+		1E3E8603184D0D2800BB7171 /* actionsheet_no_gray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3E85FF184D0D2700BB7171 /* actionsheet_no_gray@2x.png */; };
+		1E3E8604184D0D2800BB7171 /* actionsheet_button_bg_aqua@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3E8600184D0D2700BB7171 /* actionsheet_button_bg_aqua@2x.png */; };
+		1E3E8605184D0D2800BB7171 /* actionsheet_yes_gray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3E8601184D0D2800BB7171 /* actionsheet_yes_gray@2x.png */; };
 		1E4B78491803535900A8812D /* modal_vertical_divider@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E4B783A1803535800A8812D /* modal_vertical_divider@2x.png */; };
 		1E4B784A1803535900A8812D /* icon_attach_plus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E4B783B1803535800A8812D /* icon_attach_plus@2x.png */; };
 		1E4B784C1803535900A8812D /* icon_attach_rsvp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E4B783D1803535800A8812D /* icon_attach_rsvp@2x.png */; };
@@ -442,6 +446,12 @@
 		1EBA5DD617E9425800E46FFF /* icon_rating_purple@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DC917E9425800E46FFF /* icon_rating_purple@2x.png */; };
 		1EBA5DD717E9425800E46FFF /* icon_poll_purple@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DCA17E9425800E46FFF /* icon_poll_purple@2x.png */; };
 		1EBA5DD817E9425800E46FFF /* icon_event_purple@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBA5DCB17E9425800E46FFF /* icon_event_purple@2x.png */; };
+		1EBB5942184D11F900CE084D /* ManageGroupVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBB5940184D11F900CE084D /* ManageGroupVC.m */; };
+		1EBB5943184D11F900CE084D /* ManageGroupVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EBB5941184D11F900CE084D /* ManageGroupVC.xib */; };
+		1EBB5946184D136C00CE084D /* group_check_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBB5944184D136C00CE084D /* group_check_off@2x.png */; };
+		1EBB5947184D136C00CE084D /* group_check_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EBB5945184D136C00CE084D /* group_check_on@2x.png */; };
+		1EBB594B184D2CCE00CE084D /* GroupContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBB5949184D2CCE00CE084D /* GroupContactCell.m */; };
+		1EBB594C184D2CCE00CE084D /* GroupContactCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EBB594A184D2CCE00CE084D /* GroupContactCell.xib */; };
 		1EC20D9318180DD1001B112F /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EC20D9218180DD1001B112F /* Parse.framework */; };
 		1EC20D9618180EDE001B112F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EC20D9418180EDE001B112F /* AudioToolbox.framework */; };
 		1EC20D9718180EDE001B112F /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EC20D9518180EDE001B112F /* CFNetwork.framework */; };
@@ -687,6 +697,10 @@
 		1E3E85F8184AECD700BB7171 /* groups_cell_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "groups_cell_icon@2x.png"; sourceTree = "<group>"; };
 		1E3E85FB184AEE0D00BB7171 /* AltBoldLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AltBoldLabel.h; sourceTree = "<group>"; };
 		1E3E85FC184AEE0D00BB7171 /* AltBoldLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AltBoldLabel.m; sourceTree = "<group>"; };
+		1E3E85FE184D0D2700BB7171 /* actionsheet_button_bg_gray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "actionsheet_button_bg_gray@2x.png"; sourceTree = "<group>"; };
+		1E3E85FF184D0D2700BB7171 /* actionsheet_no_gray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "actionsheet_no_gray@2x.png"; sourceTree = "<group>"; };
+		1E3E8600184D0D2700BB7171 /* actionsheet_button_bg_aqua@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "actionsheet_button_bg_aqua@2x.png"; sourceTree = "<group>"; };
+		1E3E8601184D0D2800BB7171 /* actionsheet_yes_gray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "actionsheet_yes_gray@2x.png"; sourceTree = "<group>"; };
 		1E4B783A1803535800A8812D /* modal_vertical_divider@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "modal_vertical_divider@2x.png"; sourceTree = "<group>"; };
 		1E4B783B1803535800A8812D /* icon_attach_plus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_attach_plus@2x.png"; sourceTree = "<group>"; };
 		1E4B783D1803535800A8812D /* icon_attach_rsvp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_attach_rsvp@2x.png"; sourceTree = "<group>"; };
@@ -1096,6 +1110,14 @@
 		1EBA5DC917E9425800E46FFF /* icon_rating_purple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_rating_purple@2x.png"; sourceTree = "<group>"; };
 		1EBA5DCA17E9425800E46FFF /* icon_poll_purple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_poll_purple@2x.png"; sourceTree = "<group>"; };
 		1EBA5DCB17E9425800E46FFF /* icon_event_purple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_event_purple@2x.png"; sourceTree = "<group>"; };
+		1EBB593F184D11F900CE084D /* ManageGroupVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManageGroupVC.h; sourceTree = "<group>"; };
+		1EBB5940184D11F900CE084D /* ManageGroupVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ManageGroupVC.m; sourceTree = "<group>"; };
+		1EBB5941184D11F900CE084D /* ManageGroupVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ManageGroupVC.xib; sourceTree = "<group>"; };
+		1EBB5944184D136C00CE084D /* group_check_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "group_check_off@2x.png"; sourceTree = "<group>"; };
+		1EBB5945184D136C00CE084D /* group_check_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "group_check_on@2x.png"; sourceTree = "<group>"; };
+		1EBB5948184D2CCE00CE084D /* GroupContactCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupContactCell.h; sourceTree = "<group>"; };
+		1EBB5949184D2CCE00CE084D /* GroupContactCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupContactCell.m; sourceTree = "<group>"; };
+		1EBB594A184D2CCE00CE084D /* GroupContactCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GroupContactCell.xib; sourceTree = "<group>"; };
 		1EC20D9218180DD1001B112F /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		1EC20D9418180EDE001B112F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		1EC20D9518180EDE001B112F /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -1462,6 +1484,9 @@
 		1E6A1019183EF65100F63666 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
+				1EBB5948184D2CCE00CE084D /* GroupContactCell.h */,
+				1EBB5949184D2CCE00CE084D /* GroupContactCell.m */,
+				1EBB594A184D2CCE00CE084D /* GroupContactCell.xib */,
 				1E3E85F2184AECB800BB7171 /* GroupTableViewCell.h */,
 				1E3E85F3184AECB800BB7171 /* GroupTableViewCell.m */,
 				1E3E85F4184AECB800BB7171 /* GroupTableViewCell.xib */,
@@ -1613,6 +1638,12 @@
 		1E9280E9177FB68F008A583C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1EBB5944184D136C00CE084D /* group_check_off@2x.png */,
+				1EBB5945184D136C00CE084D /* group_check_on@2x.png */,
+				1E3E85FE184D0D2700BB7171 /* actionsheet_button_bg_gray@2x.png */,
+				1E3E85FF184D0D2700BB7171 /* actionsheet_no_gray@2x.png */,
+				1E3E8600184D0D2700BB7171 /* actionsheet_button_bg_aqua@2x.png */,
+				1E3E8601184D0D2800BB7171 /* actionsheet_yes_gray@2x.png */,
 				1E3E85F7184AECD700BB7171 /* groups_cell_arrow@2x.png */,
 				1E3E85F8184AECD700BB7171 /* groups_cell_icon@2x.png */,
 				1E6BA030184A69390005B8BF /* name_widget_x@2x.png */,
@@ -2309,6 +2340,9 @@
 				1EC44C1A18130CC100F4A2C2 /* EditGroupVC.h */,
 				1EC44C1B18130CC100F4A2C2 /* EditGroupVC.m */,
 				1EC44C1C18130CC100F4A2C2 /* EditGroupVC.xib */,
+				1EBB593F184D11F900CE084D /* ManageGroupVC.h */,
+				1EBB5940184D11F900CE084D /* ManageGroupVC.m */,
+				1EBB5941184D11F900CE084D /* ManageGroupVC.xib */,
 			);
 			name = Groups;
 			sourceTree = "<group>";
@@ -2463,6 +2497,7 @@
 				1E4B78491803535900A8812D /* modal_vertical_divider@2x.png in Resources */,
 				1E928222177FB690008A583C /* key5.png in Resources */,
 				1E928223177FB690008A583C /* key5@2x.png in Resources */,
+				1EBB5946184D136C00CE084D /* group_check_off@2x.png in Resources */,
 				1E928224177FB690008A583C /* key6.png in Resources */,
 				1E928225177FB690008A583C /* key6@2x.png in Resources */,
 				1E928226177FB690008A583C /* key7.png in Resources */,
@@ -2507,6 +2542,7 @@
 				1E92823F177FB690008A583C /* question-icon-off.png in Resources */,
 				1E928240177FB690008A583C /* question-icon-off@2x.png in Resources */,
 				1EC44C6518130CC100F4A2C2 /* FormsHomeVC.xib in Resources */,
+				1E3E8605184D0D2800BB7171 /* actionsheet_yes_gray@2x.png in Resources */,
 				1E928241177FB690008A583C /* question-icon-on.png in Resources */,
 				1E9C36BC17FA43880017E9AD /* Images.xcassets in Resources */,
 				1E928242177FB690008A583C /* question-icon-on@2x.png in Resources */,
@@ -2514,6 +2550,7 @@
 				1E928244177FB690008A583C /* reset_button@2x.png in Resources */,
 				1EC44C5318130CC100F4A2C2 /* ChatVC.xib in Resources */,
 				1EC44C5918130CC100F4A2C2 /* EditChatVC.xib in Resources */,
+				1EBB594C184D2CCE00CE084D /* GroupContactCell.xib in Resources */,
 				1E928245177FB690008A583C /* savings_table_input_bg.png in Resources */,
 				1E928246177FB690008A583C /* search_go_button.png in Resources */,
 				1E928247177FB690008A583C /* search_go_button@2x.png in Resources */,
@@ -2548,6 +2585,7 @@
 				1E9282F3177FDCEB008A583C /* icon_recents.png in Resources */,
 				1E0F8EF81810999E00B6C6AF /* settings_icon_on@2x.png in Resources */,
 				1E4B78591803556C00A8812D /* icon_attach_cancel@2x.png in Resources */,
+				1E3E8604184D0D2800BB7171 /* actionsheet_button_bg_aqua@2x.png in Resources */,
 				1E7A6E291806EDED004B62CE /* rating_meter_dot_aqua@2x.png in Resources */,
 				1E59F12017FC7AF300EE2902 /* NotoSans-Regular.ttf in Resources */,
 				1E4B78501803535900A8812D /* chat_attach_panel@2x.png in Resources */,
@@ -2570,6 +2608,7 @@
 				1E928302177FDCEB008A583C /* page_dot_red@2x.png in Resources */,
 				1E928303177FDCEB008A583C /* cell_arrow_teal@2x.png in Resources */,
 				1E928306177FDCEB008A583C /* popup_bg@2x.png in Resources */,
+				1EBB5947184D136C00CE084D /* group_check_on@2x.png in Resources */,
 				1E928307177FDCEB008A583C /* tabbar_current_bg@2x.png in Resources */,
 				1E928308177FDCEB008A583C /* wood_bg@2x.png in Resources */,
 				1E928309177FDCEB008A583C /* wood_bg-568h@2x.png in Resources */,
@@ -2662,11 +2701,13 @@
 				1E2C7E9F17E4FFCB0043E28D /* chat_left_tail_white@2x.png in Resources */,
 				1E2C7EA017E4FFCB0043E28D /* top_pull_handle@2x.png in Resources */,
 				1E59F11D17FC7AF200EE2902 /* NotoSans-Bold.ttf in Resources */,
+				1E3E8602184D0D2800BB7171 /* actionsheet_button_bg_gray@2x.png in Resources */,
 				1E7A6E1E1806EA21004B62CE /* EmbedRatingOption.xib in Resources */,
 				1E2C7EA117E4FFCB0043E28D /* dkblue_small2_btn_bg@2x.png in Resources */,
 				1EC44C7518130CC100F4A2C2 /* ProfileStart5VC.xib in Resources */,
 				1EC44C6D18130CC100F4A2C2 /* ProfileStart1VC.xib in Resources */,
 				1E0F8EF71810999E00B6C6AF /* settings_icon_off@2x.png in Resources */,
+				1E3E8603184D0D2800BB7171 /* actionsheet_no_gray@2x.png in Resources */,
 				1E2C7EA217E4FFCB0043E28D /* dkblue_btn_bg_slice@2x.png in Resources */,
 				1E2C7EA317E4FFCB0043E28D /* dkblue_med2_btn_bg@2x.png in Resources */,
 				1E79B7181815BB9F002E417A /* appicon_80.png in Resources */,
@@ -2704,6 +2745,7 @@
 				1EBA5DD517E9425800E46FFF /* icon_refresh_purple@2x.png in Resources */,
 				1E0F8EF61810999E00B6C6AF /* settings_big_button_bg@2x.png in Resources */,
 				1EBA5DD617E9425800E46FFF /* icon_rating_purple@2x.png in Resources */,
+				1EBB5943184D11F900CE084D /* ManageGroupVC.xib in Resources */,
 				1EBA5DD717E9425800E46FFF /* icon_poll_purple@2x.png in Resources */,
 				1EBA5DD817E9425800E46FFF /* icon_event_purple@2x.png in Resources */,
 				1E1E25C417F3319F0079416C /* FancyCheckbox.xib in Resources */,
@@ -2834,6 +2876,7 @@
 				1E7A6E311806EF5F004B62CE /* RatingMeterSlider.m in Sources */,
 				1E928258177FB690008A583C /* DataModel.m in Sources */,
 				1E6A1018183E536E00F63666 /* ChatFormVO.m in Sources */,
+				1EBB594B184D2CCE00CE084D /* GroupContactCell.m in Sources */,
 				1E92825B177FB690008A583C /* HelpCopy.m in Sources */,
 				1E1A9A9417FE4A4C008D81E6 /* ChatVO.m in Sources */,
 				1E6A1022183F154800F63666 /* RatingResponseCell.m in Sources */,
@@ -2878,6 +2921,7 @@
 				1E4B787A18039F3C00A8812D /* AquaTableViewCell.m in Sources */,
 				1EC44C5818130CC100F4A2C2 /* EditChatVC.m in Sources */,
 				1E3E85FD184AEE0D00BB7171 /* AltBoldLabel.m in Sources */,
+				1EBB5942184D11F900CE084D /* ManageGroupVC.m in Sources */,
 				1EC44C6E18130CC100F4A2C2 /* ProfileStart2VC.m in Sources */,
 				1E9282A2177FB690008A583C /* Spin360Component.m in Sources */,
 				1E9282A3177FB690008A583C /* TabbedContentComponent.m in Sources */,
