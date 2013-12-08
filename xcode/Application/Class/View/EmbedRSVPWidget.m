@@ -9,6 +9,7 @@
 #import "EmbedRSVPWidget.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIColor+ColorWithHex.h"
+#import "UIImage+Tint.h"
 
 #import "FormOptionVO.h"
 
@@ -27,18 +28,13 @@
 @implementation EmbedRSVPWidget
 
 
-- (id)initWithFrame:(CGRect)frame andOptions:(NSMutableArray *)formOptions isOwner:(BOOL)owner
+- (id)initWithFrame:(CGRect)frame andOptions:(NSMutableArray *)formOptions andResponses:(NSMutableDictionary *)responseMap isOwner:(BOOL)owner
 {
     NSLog(@"===== %s", __FUNCTION__);
     self = [super initWithFrame:frame];
     
     if (self) {
         
-        offFont = [UIFont fontWithName:@"Raleway-Regular" size:14];
-        onFont = [UIFont fontWithName:@"Raleway-Bold" size:14];
-        
-        offCheckbox = [UIImage imageNamed:kCheckboxOffImage];
-        onCheckbox = [UIImage imageNamed:kCheckboxOnImage];
         //        self.hotspot1.backgroundColor = [UIColor clearColor];
         //        self.hotspot2.backgroundColor = [UIColor clearColor];
         //        self.hotspot3.backgroundColor = [UIColor clearColor];
@@ -46,21 +42,35 @@
         _theView = [[[NSBundle mainBundle] loadNibNamed:@"EmbedRSVPWidget" owner:self options:nil] objectAtIndex:0];
         _theView.backgroundColor = [UIColor clearColor];
         
-        
+        _options = formOptions;
+        _optionIndex = -1;
         [self.roundPic.layer setCornerRadius:36.0f];
         [self.roundPic.layer setMasksToBounds:YES];
         [self.roundPic.layer setBorderWidth:1.0f];
         [self.roundPic.layer setBorderColor:[UIColor whiteColor].CGColor];
         self.roundPic.clipsToBounds = YES;
         self.roundPic.contentMode = UIViewContentModeScaleAspectFill;
-                
+        
         float ypos = kInitialY;
         
+        offFont = [UIFont fontWithName:@"Raleway-Regular" size:14];
+        onFont = [UIFont fontWithName:@"Raleway-Bold" size:14];
+        
+        offCheckbox = [UIImage imageNamed:kCheckboxOffImage];
+        onCheckbox = [UIImage imageNamed:kCheckboxOnImage];
+        
+        self.label1.font = offFont;
+        self.label2.font = offFont;
+        self.label3.font = offFont;
+
         if (owner) {
+            
             self.doneButton.hidden = YES;
             self.leftCallout.hidden = YES;
             self.rightCallout.hidden = NO;
             //            [self.subjectLabel setTextColor:[UIColor whiteColor]];
+            [self.subjectLabel setTextColor:[UIColor whiteColor]];
+            
             [self.timeLabel setTextColor:[UIColor whiteColor]];
             [self.nameLabel setTextColor:[UIColor colorWithHexValue:0x28CFEA]];
             formLocked = YES;
@@ -69,7 +79,23 @@
             formLocked = NO;
             self.rightCallout.hidden = YES;
             self.leftCallout.hidden = NO;
-            //            [self.subjectLabel setTextColor:[UIColor blackColor]];
+            
+            UIColor *tintColor = [UIColor blackColor];
+            offCheckbox = [offCheckbox tintedImageUsingColor:tintColor];
+            onCheckbox = [onCheckbox tintedImageUsingColor:tintColor];
+            
+            self.checkbox1.image = offCheckbox;
+            self.checkbox2.image = offCheckbox;
+            self.checkbox3.image = offCheckbox;
+            
+            [self.label1 setTextColor:tintColor];
+            [self.label2 setTextColor:tintColor];
+            [self.label3 setTextColor:tintColor];
+            [self.whatText setTextColor:tintColor];
+            [self.whereText setTextColor:tintColor];
+            
+            [self.subjectLabel setTextColor:tintColor];
+            
             [self.nameLabel setTextColor:[UIColor colorWithHexValue:0x0d7dac]];
             [self.timeLabel setTextColor:[UIColor blackColor]];
             ypos = self.frame.size.height;
@@ -77,7 +103,46 @@
         self.dynamicHeight = self.lowerForm.frame.origin.y + self.lowerForm.frame.size.height + 10;
         
         
+        if (responseMap != nil && responseMap.count > 0) {
+            formLocked = YES;
+            self.doneButton.enabled = NO;
+            int index = 0;
+            for (FormOptionVO *option in _options) {
+                NSLog(@"Evaluate responseMap option %i -- value %@", index, option.name);
+                FormResponseVO *myResponse = (FormResponseVO *) [responseMap objectForKey:option.system_id];
+                if (myResponse != nil) {
+                    if ([myResponse.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
+                        if ([option.name isEqualToString:kResponseYes]) {
+                            self.checkbox1.image = onCheckbox;
+                            self.label1.font = onFont;
+                            
+                        } else if ([option.name isEqualToString:kResponseNo]) {
+                            self.checkbox2.image = onCheckbox;
+                            self.label2.font = onFont;
+
+                        } else if ([option.name isEqualToString:kResponseMaybe]) {
+                            self.checkbox3.image = onCheckbox;
+                            self.label3.font = onFont;
+                            
+                        }
+                    }
+                    
+                }
+                index ++;
+            }
+            
+            
+            
+            
+        } else {
+            self.label1.font = offFont;
+            self.label2.font = offFont;
+            self.label3.font = offFont;
+
+        }
+        
         [self addSubview:_theView];
+        
         
         //        UIImage *detailsImage = [UIImage imageNamed:@"see_details"];
         //        CGRect detailsFrame = CGRectMake(self.headerView.frame.origin.x + 100, self.headerView.frame.origin.y + 70, 143, 41);
@@ -107,8 +172,9 @@
     UIView* hitView = [self hitTest:locationPoint withEvent:event];
     NSLog(@"hitView.tag = %i", hitView.tag);
     if (!formLocked) {
-        
         switch (hitView.tag) {
+                
+                
             case kTagOption1:
             {
                 self.checkbox1.image = onCheckbox;
@@ -117,7 +183,7 @@
                 self.label2.font = offFont;
                 self.checkbox3.image = offCheckbox;
                 self.label3.font = offFont;
-                
+                _optionIndex = 0;
                 break;
             }
             case kTagOption2:
@@ -128,6 +194,7 @@
                 self.label2.font = onFont;
                 self.checkbox3.image = offCheckbox;
                 self.label3.font = offFont;
+                _optionIndex = 1;
                 break;
             }
             case kTagOption3:
@@ -138,6 +205,7 @@
                 self.label2.font = offFont;
                 self.checkbox3.image = onCheckbox;
                 self.label3.font = onFont;
+                _optionIndex = 2;
                 break;
             }
                 
@@ -146,8 +214,62 @@
     
 }
 - (IBAction)tapDoneButton {
-    self.dynamicHeight -= self.doneButton.frame.size.height;
-    self.doneButton.enabled = NO;
-    formLocked = YES;
+    
+    if (!formLocked) {
+        
+        BOOL isOk = YES;
+        if (_optionIndex < 0) {
+            isOk = NO;
+            return;
+        }
+        self.dynamicHeight -= self.doneButton.frame.size.height;
+        self.doneButton.enabled = NO;
+        formLocked = YES;
+        
+        UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        CGFloat halfButtonHeight = self.doneButton.bounds.size.height / 2;
+        CGFloat buttonWidth = self.doneButton.bounds.size.width;
+        indicator.center = CGPointMake(buttonWidth - halfButtonHeight , halfButtonHeight);
+        [self.doneButton addSubview:indicator];
+        [indicator startAnimating];
+        
+        
+        if (formSvc == nil) {
+            formSvc = [[FormManager alloc] init];
+        }
+        
+        FormResponseVO *response;
+        int index = 0;
+        
+        FormOptionVO *selectedOption = [_options objectAtIndex:_optionIndex];
+        
+        NSLog(@"Select option key is %@", selectedOption.system_id);
+        
+        response = [[FormResponseVO alloc] init];
+        response.contact_key = [DataModel shared].user.contact_key;
+        response.form_key = self.form_key;
+        response.chat_key = self.chat_key;
+        response.option_key = selectedOption.system_id;
+        
+        index ++;
+        [formSvc apiSaveFormResponse:response callback:^(PFObject *object) {
+            [indicator stopAnimating];
+            [indicator removeFromSuperview];
+            if (object) {
+                [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formResponseEntered object:nil]];
+            }
+        }];
+        
+        
+    } else {
+        // Done button not enabled
+    }
 }
+- (IBAction)tapDetailsButton {
+    
+    NSLog(@"%s", __FUNCTION__);
+    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_showFormDetails object:self.form_key]];
+
+}
+
 @end

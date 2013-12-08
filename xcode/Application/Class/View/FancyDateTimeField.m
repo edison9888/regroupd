@@ -7,6 +7,7 @@
 //
 
 #import "FancyDateTimeField.h"
+#import "UIColor+ColorWithHex.h"
 
 @implementation FancyDateTimeField
 
@@ -24,6 +25,7 @@
     
     self.clipsToBounds = YES;
     
+    
     return self;
 }
 
@@ -32,7 +34,7 @@
     __leftView = [[UIImageView alloc] initWithFrame:CGRectMake(16, 5, image.size.width, image.size.height)];
 //    __leftView.bounds = self.leftView.bounds;
     __leftView.image = image;
-    
+//    [self.leftView insertSubview:<#(UIView *)#> aboveSubview:<#(UIView *)#>]
     [self setLeftView:__leftView];
     [self setLeftViewMode:UITextFieldViewModeAlways];
 }

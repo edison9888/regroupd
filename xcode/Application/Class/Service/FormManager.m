@@ -85,7 +85,7 @@
                    form.system_id,
                    form.name,
                    form.location,
-                   form.description,
+                   form.details,
                    form.imagefile,
                    [NSNumber numberWithInt:form.type],
                    [NSNumber numberWithInt:form.status],
@@ -151,7 +151,7 @@
                form.system_id,
                form.name,
                form.location,
-               form.description,
+               form.details,
                form.imagefile,
                [NSNumber numberWithInt:form.type],
                [NSNumber numberWithInt:form.status],
@@ -361,12 +361,13 @@
         data[@"name"] = form.name;
         data[@"type"] = [NSNumber numberWithInt:form.type];
         data[@"user"] = [PFUser currentUser];
+        data[@"contact_key"] = [DataModel shared].user.contact_key;
         
         if (form.location != nil) {
             data[@"location"] = form.location;
         }
-        if (form.description != nil) {
-            data[@"description"] = form.description;
+        if (form.details != nil) {
+            data[@"details"] = form.details;
         }
         if (form.eventStartsAt != nil) {
             data[@"eventStartsAt"] = form.eventStartsAt;
@@ -374,10 +375,11 @@
         if (form.eventEndsAt != nil) {
             data[@"eventEndsAt"] = form.eventEndsAt;
         }
+
+        if (form.allow_share != nil) {
+            data[@"allow_share"] = form.allow_share;
+        }
         
-        data[@"name"] = form.name;
-        
-        data[@"contact_key"] = [DataModel shared].user.contact_key;
         
         [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             NSLog(@"Saved form with objectId %@", data.objectId);
@@ -403,8 +405,8 @@
             if (form.location != nil) {
                 data[@"location"] = form.location;
             }
-            if (form.description != nil) {
-                data[@"description"] = form.description;
+            if (form.details != nil) {
+                data[@"details"] = form.details;
             }
             if (form.eventStartsAt != nil) {
                 data[@"eventStartsAt"] = form.eventStartsAt;
@@ -412,6 +414,10 @@
             if (form.eventEndsAt != nil) {
                 data[@"eventEndsAt"] = form.eventEndsAt;
             }
+            if (form.allow_share != nil) {
+                data[@"allow_share"] = form.allow_share;
+            }
+            
             
             [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 NSLog(@"Saved form with objectId %@", data.objectId);

@@ -59,6 +59,8 @@ typedef enum {
 @property (nonatomic, retain) UIImage *photo;
 @property (nonatomic, retain) PFFile *pfPhoto;
 @property BOOL isSelected;
+@property (nonatomic, retain) NSMutableArray *responses;
+
 
 + (FormOptionVO *) readFromDictionary:(NSDictionary *) dict;
 + (FormOptionVO *) readFromPFObject:(PFObject *)data;

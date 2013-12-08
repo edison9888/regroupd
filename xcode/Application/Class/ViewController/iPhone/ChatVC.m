@@ -495,6 +495,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 }
                 case FormType_RSVP:
                 {
+                    [DataModel shared].action = @"popup";
+                    RSVPDetailVC *detailsVC = [[RSVPDetailVC alloc] init];
+                    [self presentViewController:detailsVC animated:YES completion:nil];
                     break;
                 }
             }
@@ -862,17 +865,35 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         return bubble;
         
     } else if (theForm.type == FormType_RSVP) {
-        EmbedRSVPWidget *embedWidget = [[EmbedRSVPWidget alloc] initWithFrame:msgFrame andOptions:theForm.options isOwner:isOwner];
+        EmbedRSVPWidget *embedWidget = [[EmbedRSVPWidget alloc] initWithFrame:msgFrame andOptions:theForm.options andResponses:(NSMutableDictionary *)theForm.responsesMap isOwner:isOwner];
         //                    embedWidget.subjectLabel.text = attachedForm.name;
-        
-        NSDate *dt = [DateTimeUtils readDateFromFriendlyDateTime:theForm.start_time];
+
+        // Save keys in widget for when user submits response data
+        embedWidget.chat_key = [DataModel shared].chat.system_id;
+        embedWidget.form_key = theForm.system_id;
+
+        NSLog(@"widget height = %f", embedWidget.dynamicHeight);
+        msgFrame.size.height = embedWidget.dynamicHeight;
+        embedWidget.frame = msgFrame;
+
         
         embedWidget.nameLabel.text = nameValue;
         embedWidget.timeLabel.text = timeValue;
         
-        embedWidget.eventDateLabel.text = [DateTimeUtils printDatePartFromDate:dt];
-        embedWidget.eventTimeLabel.text = [DateTimeUtils printTimePartFromDate:dt];
-        embedWidget.whatText.text = theForm.description;
+        embedWidget.userInteractionEnabled = YES;
+        
+
+        embedWidget.eventDateLabel.text = [DateTimeUtils printDatePartFromDate:theForm.eventStartsAt];
+        
+        NSString *timeRange = @"%@ - %@";
+        
+        timeRange = [NSString stringWithFormat:timeRange,
+                     [DateTimeUtils printTimePartFromDate:theForm.eventStartsAt],
+                     [DateTimeUtils printTimePartFromDate:theForm.eventEndsAt]];
+        embedWidget.eventTimeLabel.text = timeRange;
+
+        embedWidget.subjectLabel.text = theForm.name;
+        embedWidget.whatText.text = theForm.details;
         embedWidget.whereText.text = theForm.location;
         
         if (theForm.pfPhoto != nil) {

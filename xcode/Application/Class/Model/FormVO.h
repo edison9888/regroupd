@@ -48,7 +48,7 @@ typedef enum {
 
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *location;
-@property (nonatomic, retain) NSString *description;
+@property (nonatomic, retain) NSString *details;
 @property (nonatomic, retain) NSString *imagefile;
 @property int type;
 @property int status;

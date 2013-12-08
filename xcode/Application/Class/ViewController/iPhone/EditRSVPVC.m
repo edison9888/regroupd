@@ -7,12 +7,12 @@
 //
 
 #import "EditRSVPVC.h"
-#import "FormManager.h"
 #import "FormVO.h"
 #import "FormOptionVO.h"
 #import "UIAlertView+Helper.h"
 #import "DateTimeUtils.h"
 #import "UIImage+Resize.h"
+#import "UIColor+ColorWithHex.h"
 
 //#import "NSDate+Extensions.h"
 
@@ -54,7 +54,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    canSave = YES;
 
+    formSvc = [[FormManager alloc] init];
+    
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
 
@@ -80,9 +83,14 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     // Setup text fields
     
     self.subjectField.delegate = self;
+    
     self.whereField.delegate = self;
     self.descriptionField.delegate = self;
     
+    self.subjectField.textAlignment = NSTextAlignmentLeft;
+    self.whereField.textAlignment = NSTextAlignmentLeft;
+    self.descriptionField.textAlignment = NSTextAlignmentLeft;
+
     // Add survey options
 
     self.datePicker = [[UIDatePicker alloc] init];
@@ -90,33 +98,27 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     self.timePicker = [[UIDatePicker alloc] init];
     self.timePicker.datePickerMode = UIDatePickerModeTime;
+    self.timePicker.minuteInterval = 15;
     
-    UIImage *icon_calendar = [UIImage imageNamed:@"icon_calendar_aqua"];
-    UIImage *icon_clock = [UIImage imageNamed:@"icon_clock_aqua"];
-            
     self.tfStartDate.tag = kTagStartDate;
     self.tfStartDate.text = @"";
     self.tfStartDate.inputView = self.datePicker;
     self.tfStartDate.delegate = self;
-    [self.tfStartDate setIcon:icon_calendar];
 
     self.tfStartTime.tag = kTagStartTime;
     self.tfStartTime.text = @"";
     self.tfStartTime.inputView = self.timePicker;
     self.tfStartTime.delegate = self;
-    [self.tfStartTime setIcon:icon_clock];
 
     self.tfEndDate.tag = kTagEndDate;
     self.tfEndDate.text = @"";
     self.tfEndDate.inputView = self.datePicker;
     self.tfEndDate.delegate = self;
-    [self.tfEndDate setIcon:icon_calendar];
     
     self.tfEndTime.tag = kTagEndTime;
     self.tfEndTime.text = @"";
     self.tfEndTime.inputView = self.timePicker;
     self.tfEndTime.delegate = self;
-    [self.tfEndTime setIcon:icon_clock];
 
     allow_public = -1;
     self.ckAllowOthersYes.ckLabel.text = @"Yes";
@@ -138,6 +140,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self setKeyboardControls:[[BSKeyboardControls alloc] initWithFields:fields]];
     [self.keyboardControls setDelegate:self];
 
+    [self.keyboardControls setTintColor:[UIColor colorWithHexValue:0x999999]];
     
     // register for keyboard notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -155,6 +158,19 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formSaveCompleteNotificationHandler:)     name:k_formSaveCompleteNotification            object:nil];
     
     
+    [self.datePicker addTarget:self action:@selector(datePickerValueChanged:) forControlEvents:UIControlEventValueChanged];
+    [self.timePicker addTarget:self action:@selector(timePickerValueChanged:) forControlEvents:UIControlEventValueChanged];
+    
+    self.datePicker.date = [self getRoundedDate:[NSDate date]];
+    
+    dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MMM d, yyyy"];
+    
+    timeFormatter = [[NSDateFormatter alloc] init];
+    [timeFormatter setDateFormat:kSimpleTimeFormat];
+    
+    
+    fieldTags = @[@kTagSubject, @kTagLocation, @kTagDescription, @kTagStartDate, @kTagStartTime, @kTagEndDate, @kTagEndTime];
     // Create and initialize a tap gesture
     
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
@@ -279,6 +295,41 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 //    
 //}
 
+#pragma mark - Date Picker and Date methods
+
+- (void) timePickerValueChanged:(id)sender{
+    NSLog(@"%s fieldIndex=%i", __FUNCTION__, fieldIndex);
+    _currentField.text = [DateTimeUtils printTimePartFromDate:self.timePicker.date];
+}
+- (void) datePickerValueChanged:(id)sender{
+    NSLog(@"%s fieldIndex=%i", __FUNCTION__, fieldIndex);
+    _currentField.text = [DateTimeUtils printDatePartFromDate:self.datePicker.date];
+
+//    switch (fieldIndex) {
+//        case kTagStartDate:
+//            
+//            self.tfStartDate.text = [DateTimeUtils printDatePartFromDate:self.datePicker.date];
+//            break;
+//            
+//        case kTagStartTime:
+//            
+//            self.tfStartTime.text = [DateTimeUtils printTimePartFromDate:self.datePicker.date];
+//            break;
+//            
+//        case kTagEndDate:
+//            
+//            self.tfEndDate.text = [DateTimeUtils printDatePartFromDate:self.datePicker.date];
+//            break;
+//            
+//        case kTagEndTime:
+//            
+//            self.tfEndTime.text = [DateTimeUtils printTimePartFromDate:self.datePicker.date];
+//            break;
+//            
+//    }
+
+}
+
 #pragma mark - UITextField methods
 
 -(BOOL) textFieldShouldBeginEditing:(UITextField*)textField {
@@ -305,6 +356,19 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 // SEE: http://www.cocoawithlove.com/2008/10/sliding-uitextfields-around-to-avoid.html
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
+    FancyTextField *fancyField;
+    
+    if (textField.tag >= kTagSubject && textField.tag <= kTagEndTime) {
+        // FINISH THIS: deactivate all fields and set current one as active
+        for (NSNumber *fieldTag in fieldTags) {
+//            NSLog(@"fieldTag %@", fieldTag);
+            fancyField = (FancyTextField *)[self.view viewWithTag:fieldTag.integerValue];
+            [fancyField setDefaultStyle];
+        }
+    }
+    fancyField = (FancyTextField *)[self.view viewWithTag:textField.tag];
+    [fancyField setActiveStyle:nil];
+    
     
     CGRect textFieldRect = [self.view.window convertRect:textField.bounds fromView:textField];
     CGRect viewRect = [self.view.window convertRect:self.view.bounds fromView:self.view];
@@ -536,10 +600,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         isOK = NO;
         [errorIds addObject:[NSNumber numberWithInt:kTagEndTime]];
     }
-//    if (allow_public < 0) {
-//        isOK = NO;
-//        [errorIds addObject:[NSNumber numberWithInt:kTagAllowOthersYes]];
-//    }
+    if (allow_public < 0) {
+        isOK = NO;
+        [errorIds addObject:[NSNumber numberWithInt:kTagAllowOthersYes]];
+    }
+    
     if (isOK) {
 //        FormManager *formSvc = [[FormManager alloc] init];
 
@@ -561,53 +626,59 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 //        start_time = [DateTimeUtils dbDateStampFromDate:date1];
 //        end_time = [DateTimeUtils dbDateStampFromDate:date2];
         
-        FormVO *form = [[FormVO alloc] init];
-        
-        form.system_id = @"";
-        
-        form.name = self.subjectField.text;
-        form.location = self.whereField.text;
-        form.description = self.descriptionField.text;
-//        form.start_time = start_time;
-//        form.end_time = end_time;
-        form.type = FormType_RSVP;
-        form.status = FormStatus_DRAFT;
+        if (date1 != nil && date2 != nil) {
+            self.doneButtonTop.enabled = NO;
+            self.doneButtonEnd.enabled = NO;
+            if (canSave) {
+                canSave = NO;
+                FormVO *form = [[FormVO alloc] init];
+                
+                form.system_id = @"";
+                form.name = self.subjectField.text;
+                form.location = self.whereField.text;
+                form.details = self.descriptionField.text;
+                //        form.start_time = start_time;
+                //        form.end_time = end_time;
+                form.type = FormType_RSVP;
+                form.status = FormStatus_DRAFT;
+                form.allow_share = [NSNumber numberWithInt:allow_public];
+                
+                form.eventStartsAt = date1;
+                form.eventEndsAt = date2;
+                form.photo = formImage;
+                
+                [formSvc apiSaveForm:form callback:^(PFObject *pfForm) {
+                    NSString *formId = pfForm.objectId;
+                    
+                    NSArray *answers = @[kResponseYes, kResponseMaybe, kResponseNo];
+                    
+                    for (int i=1; i<=answers.count; i++) {
+                        
+                        FormOptionVO *option;
+                        
+                        option = [[FormOptionVO alloc] init];
+                        
+                        option.name =[answers objectAtIndex:i-1];
+                        option.position = i;
+                        
+                        [formSvc apiSaveFormOption:option formId:formId callback:^(PFObject *object) {
+                            NSLog(@"Save option %i", i + 1);
+                            if (i == answers.count) {
+                                [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formSaveCompleteNotification object:nil]];
+                            }
+                            
+                        }];
+                    }
+                    
+                }];
+                
+                
+            }
 
-        form.eventStartsAt = date1;
-        form.eventEndsAt = date2;
-        
-        if (formImage != nil) {
-            form.photo = formImage;
-            NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
-            NSString *filename = [NSString stringWithFormat:@"form_rsvp_%f.png", seconds];
-            form.imagefile = filename;
+            
+        } else {
+            NSLog(@"Date conversion failed: %@ -- %@", start_time, end_time);
         }
-
-//        [formSvc apiSaveForm:form callback:^(PFObject *pfForm) {
-//            NSString *formId = pfForm.objectId;
-//            
-//            NSArray *answers = @[@"Yes", @"No", @"Maybe"];
-//            
-//            for (int i=1; i<=answers.count; i++) {
-//                
-//                FormOptionVO *option;
-//                
-//                option = [[FormOptionVO alloc] init];
-//                
-//                option.name =[answers objectAtIndex:i-1];
-//                option.position = i;
-//                
-//                [formSvc apiSaveFormOption:option formId:formId callback:^(PFObject *object) {
-//                    NSLog(@"Save option %i", i + 1);
-//                    if (i == answers.count) {
-//                        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formSaveCompleteNotification object:nil]];
-//                    }
-//                    
-//                }];
-//            }
-//            
-//        }];
-
         
 
     } else {
@@ -661,31 +732,40 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSLog(@"%s at field %i", __FUNCTION__, fieldIndex);
     
     NSDate *pickDate;
-    switch (fieldIndex) {
-            
-        case kTagStartDate:
-            pickDate = self.datePicker.date;
-            
-            _currentField.text = [DateTimeUtils printDatePartFromDate:pickDate];
-            break;
-            
-        case kTagStartTime:
-            pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils printTimePartFromDate:pickDate];
-            
-            break;
-            
-        case kTagEndDate:
-            pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils printDatePartFromDate:pickDate];
-            
-            break;
-            
-        case kTagEndTime:
-            
-            pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils printTimePartFromDate:pickDate];
-            break;
+    if (_currentField.text.length == 0) {
+        switch (fieldIndex) {
+                
+            case kTagStartDate:
+                pickDate = self.datePicker.date;
+                
+                _currentField.text = [DateTimeUtils printDatePartFromDate:pickDate];
+                if (self.tfEndDate.text.length == 0) {
+                    self.tfEndDate.text = _currentField.text;
+                    
+                }
+                break;
+                
+            case kTagStartTime:
+                pickDate = self.datePicker.date;
+                _currentField.text = [DateTimeUtils printTimePartFromDate:pickDate];
+                if (self.tfEndTime.text.length == 0) {
+                    self.tfEndTime.text = _currentField.text;
+                }
+                
+                break;
+                
+            case kTagEndDate:
+                pickDate = self.datePicker.date;
+                _currentField.text = [DateTimeUtils printDatePartFromDate:pickDate];
+                
+                break;
+                
+            case kTagEndTime:
+                
+                pickDate = self.datePicker.date;
+                _currentField.text = [DateTimeUtils printTimePartFromDate:pickDate];
+                break;
+        }
     }
     
 }
@@ -694,14 +774,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)keyboardControls:(BSKeyboardControls *)keyboardControls selectedField:(UIView *)field inDirection:(BSKeyboardControlsDirection)direction
 {
     
-//    UIView *active = keyboardControls.activeField;
-////    CGRect aRect = self.view.frame;    
-////    aRect.size.height -= keyboardHeight;
-//
-//    CGRect targetFrame = active.frame;
-//    targetFrame.origin.y -= keyboardHeight;
-//    
-//    [self.scrollView scrollRectToVisible:targetFrame animated:YES];
 }
 
 
@@ -715,25 +787,24 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         case kTagStartDate:
             pickDate = self.datePicker.date;
             
-            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
+            _currentField.text = [DateTimeUtils printDatePartFromDate:pickDate];
             break;
             
         case kTagStartTime:
             pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
+            _currentField.text = [DateTimeUtils printTimePartFromDate:pickDate];
             
             break;
             
         case kTagEndDate:
             pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
-            
+            _currentField.text = [DateTimeUtils printDatePartFromDate:pickDate];            
             break;
             
         case kTagEndTime:
             
             pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
+            _currentField.text = [DateTimeUtils printTimePartFromDate:pickDate];
             break;
     }
     
@@ -745,32 +816,28 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 #pragma mark - picker actions
 
--(IBAction)dismissDatePicker:(id)sender {
-    NSDate *pickDate = self.datePicker.date;
-    switch (fieldIndex) {
-            
-        case kTagStartDate:
-            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
-            break;
-            
-        case kTagStartTime:
-            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
-            break;
-            
-        case kTagEndDate:
-            _currentField.text = [DateTimeUtils dbDateStampFromDate:pickDate];
-            break;
-            
-        case kTagEndTime:
-            _currentField.text = [DateTimeUtils simpleTimeLabelFromDate:pickDate];
-            break;
-    }
-    [_currentField resignFirstResponder];
+-(NSDate *)getRoundedDate:(NSDate *)inDate
+{
+    NSInteger minuteInterval = 15;
+    NSDateComponents *dateComponents = [[NSCalendar currentCalendar] components:NSMinuteCalendarUnit fromDate:inDate];
+    NSInteger minutes = [dateComponents minute];
+    
+    float minutesF = [[NSNumber numberWithInteger:minutes] floatValue];
+    float minuteIntervalF = [[NSNumber numberWithInteger:minuteInterval] floatValue];
+    
+    // Determine whether to add 0 or the minuteInterval to time found by rounding down
+    NSInteger roundingAmount = (fmodf(minutesF, minuteIntervalF)) > minuteIntervalF/2.0 ? minuteInterval : 0;
+    NSInteger minutesRounded = ( (NSInteger)(minutes / minuteInterval) ) * minuteInterval;
+    NSDate *roundedDate = [[NSDate alloc] initWithTimeInterval:60.0 * (minutesRounded + roundingAmount - minutes) sinceDate:inDate];
+    
+    return roundedDate;
 }
+
 
 
 - (IBAction)tapPickPhoto {
     NSLog(@"%s", __FUNCTION__);
+    [_currentField resignFirstResponder];
     
     [[NSNotificationCenter defaultCenter] postNotification:[NSNotification
                                                             notificationWithName:@"showImagePickerNotification"
@@ -820,23 +887,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     resize = CGSizeMake(kMinimumImageDimension, kMinimumImageDimension);
     
-    UIImage *resizeImage = [tmpImage resizedImageWithContentMode:UIViewContentModeScaleAspectFill bounds:resize interpolationQuality:kCGInterpolationMedium];
+    formImage = [tmpImage resizedImageWithContentMode:UIViewContentModeScaleAspectFill bounds:resize interpolationQuality:kCGInterpolationMedium];
     
     tmpImage = nil;
     
-    [self setPhoto:resizeImage];
-    
-//    currentOption.roundPic.image = tmpImage;
-    
-    // NSLog(@"downsizing image");
-//    if (photoView == nil) {
-//        photoView = [[UIImageView alloc] initWithFrame:previewFrame];
-//        photoView.clipsToBounds = YES;
-//        photoView.contentMode = UIViewContentModeScaleAspectFill;
-//        
-//        [self.view addSubview:photoView];
-//    }
-//    photoView.image = tmpImage;
+    [self setPhoto:formImage];
     
 	[self dismissViewControllerAnimated:YES completion:nil];
     self.imagePickerVC = nil;

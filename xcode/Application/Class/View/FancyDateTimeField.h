@@ -7,8 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FancyTextField.h"
 
-@interface FancyDateTimeField : UITextField {
+
+// Highlight light blue:  0xc4f5fd
+
+@interface FancyDateTimeField : FancyTextField {
     UIImageView *__leftView;
     
 }
@@ -17,6 +21,7 @@
 @property BOOL isChanged;
 
 - (void) setIcon:(UIImage *)image;
+
 
 
 @end

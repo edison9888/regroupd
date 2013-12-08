@@ -25,8 +25,8 @@
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="1">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="810"/>
+        <view autoresizesSubviews="NO" contentMode="scaleToFill" id="1">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="topnav_aqua_bg.png" id="15">
@@ -57,7 +57,7 @@
                     </connections>
                 </button>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="pHM-8K-1pe">
-                    <rect key="frame" x="0.0" y="30" width="320" height="1200"/>
+                    <rect key="frame" x="0.0" y="30" width="320" height="538"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <subviews>
                         <view contentMode="scaleToFill" id="Se0-LI-zDk" userLabel="View - upper section">
@@ -190,7 +190,7 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </tableView>
-                        <imageView userInteractionEnabled="NO" tag="44" contentMode="scaleToFill" id="ZEe-OV-iYg" userLabel="Image View - thumbnail">
+                        <imageView userInteractionEnabled="NO" tag="44" contentMode="scaleToFill" id="ZEe-OV-iYg" userLabel="Image View - thumbnail" customClass="PFImageView">
                             <rect key="frame" x="10" y="54" width="100" height="100"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>

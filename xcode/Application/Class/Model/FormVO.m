@@ -38,8 +38,8 @@
     text = [dict valueForKey:@"location"];
     o.location = text;
     
-    text = [dict valueForKey:@"description"];
-    o.description = text;
+    text = [dict valueForKey:@"details"];
+    o.details = text;
 
     text = [dict valueForKey:@"imagefile"];
     o.imagefile = text;
@@ -79,6 +79,7 @@
     FormVO *o = [[FormVO alloc] init];
     NSString *text;
     NSNumber *number;
+    NSDate *dt;
     o.system_id = data.objectId;
     o.createdAt = data.createdAt;
     o.updatedAt = data.updatedAt;
@@ -89,9 +90,6 @@
     }
     text = [data valueForKey:@"contact_key"];
     o.contact_key= text;
-
-    text = [data valueForKey:@"contact_key"];
-    o.contact_key= text;
     
     text = [data valueForKey:@"name"];
     o.name = text;
@@ -99,9 +97,26 @@
     text = [data valueForKey:@"location"];
     o.location = text;
     
-    text = [data valueForKey:@"description"];
-    o.description = text;
+    if (data[@"details"]) {
+        text = [data valueForKey:@"details"];
+        o.details = text;
+        NSLog(@"found details %@", text);
+    }
     
+    if (data[@"eventStartsAt"]) {
+        dt = [data valueForKey:@"eventStartsAt"];
+        o.eventStartsAt = dt;
+    }
+    if (data[@"eventEndsAt"]) {
+        dt = [data valueForKey:@"eventEndsAt"];
+        o.eventEndsAt = dt;
+    }
+
+    if (data[@"photo"]) {
+        PFFile *pfPhoto = (PFFile *) [data objectForKey:@"photo"];
+        o.pfPhoto = pfPhoto;
+    }
+
     text = [data valueForKey:@"type"];
     o.type = text.integerValue;
 

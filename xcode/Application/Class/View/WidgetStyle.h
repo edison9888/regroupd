@@ -15,6 +15,7 @@
 @property uint fontcolor;
 @property uint bgcolor;
 @property uint bordercolor;
+@property int borderwidth;
 @property int corner;
 
 @end

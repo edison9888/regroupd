@@ -29,6 +29,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    [self setupModal:self.actionsheet];
     
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
@@ -55,7 +56,66 @@
 {
     return YES;
 }
+#pragma mark - Modal view
 
+-(void)setupModal:(UIView*)modalView
+{
+    
+    
+    CGRect modalFrame = modalView.frame;
+    
+    modalFrame.origin.y = [DataModel shared].stageHeight + 40;
+    
+    modalFrame.origin.x = ([DataModel shared].stageWidth - modalFrame.size.width ) / 2;
+    
+    modalView.layer.zPosition = 99;
+    modalView.layer.borderWidth = 1.0;
+    modalView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    modalView.layer.cornerRadius = 5.0;
+    
+    modalView.frame = modalFrame;
+    
+    if(![modalView isDescendantOfView:[self view]]) {
+        [self.view addSubview:modalView];
+    }
+}
+
+
+-(void)showModal:(UIView*)modalView animate:(BOOL)animate
+{
+    
+    
+    CGRect modalFrame = modalView.frame;
+    modalFrame.origin.y = [DataModel shared].stageHeight - modalFrame.size.height;
+    
+    [self.view bringSubviewToFront:modalView];
+    
+    if (animate) {
+        [UIView animateWithDuration:0.3 animations:^{
+            modalView.frame = modalFrame;
+        }];
+        
+    } else {
+        modalView.frame = modalFrame;
+        
+    }
+}
+-(void)hideModal:(UIView*)modalView animate:(BOOL)animate
+{
+    
+    
+    CGRect modalFrame = modalView.frame;
+    modalFrame.origin.y = modalFrame.size.height * -1;
+    modalFrame.origin.y -= 20;
+    
+    if (animate) {
+        [UIView animateWithDuration:0.3 animations:^{
+            modalView.frame = modalFrame;
+        }];
+    } else {
+        modalView.frame = modalFrame;
+    }
+}
 
 #pragma mark - UIAlertView
 
@@ -165,6 +225,7 @@
     
 }
 - (IBAction)tapDeleteButton {
+//    [self showModal:self.actionsheet animate:YES];
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Please confirm"
                                                     message:@"Do you want to delete this group?"
                                                    delegate:self

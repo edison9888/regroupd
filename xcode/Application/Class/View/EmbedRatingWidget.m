@@ -263,6 +263,7 @@
     
 }
 - (IBAction)tapDoneButton {
+    NSLog(@"%s", __FUNCTION__);
     self.dynamicHeight -= self.doneButton.frame.size.height;
     self.doneButton.enabled = NO;
     formLocked = YES;

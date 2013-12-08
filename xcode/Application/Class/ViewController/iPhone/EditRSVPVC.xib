@@ -10,6 +10,8 @@
                 <outlet property="ckAllowOthersNo" destination="41" id="100"/>
                 <outlet property="ckAllowOthersYes" destination="37" id="99"/>
                 <outlet property="descriptionField" destination="86" id="98"/>
+                <outlet property="doneButtonEnd" destination="89" id="wHV-Df-sWM"/>
+                <outlet property="doneButtonTop" destination="20" id="fPx-25-JR7"/>
                 <outlet property="lowerForm" destination="50" id="55"/>
                 <outlet property="photoHolder" destination="72" id="101"/>
                 <outlet property="photoModal" destination="56" id="62"/>
@@ -91,11 +93,10 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" tag="11" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="23" customClass="BrandUITextField">
+                        <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" tag="11" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="23" customClass="FancyTextField">
                             <rect key="frame" x="10" y="46" width="236" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
                             <textInputTraits key="textInputTraits"/>
                         </textField>
@@ -192,29 +193,50 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" tag="12" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="84" customClass="BrandUITextField">
-                            <rect key="frame" x="10" y="256" width="300" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
-                            <textInputTraits key="textInputTraits"/>
-                        </textField>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Description" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="85" customClass="BrandUILabel">
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Description" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="61w-mH-YkT" customClass="BrandUILabel">
                             <rect key="frame" x="10" y="296" width="180" height="24"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="16"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" tag="13" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="86" customClass="BrandUITextField">
-                            <rect key="frame" x="10" y="320" width="300" height="30"/>
+                        <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" tag="12" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="84" customClass="FancyTextField">
+                            <rect key="frame" x="10" y="256" width="300" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
                             <textInputTraits key="textInputTraits"/>
                         </textField>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Description" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="85" customClass="BrandUILabel">
+                            <rect key="frame" x="-112" y="134" width="180" height="24"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="16"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" tag="13" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="86" customClass="FancyTextField">
+                            <rect key="frame" x="10" y="320" width="300" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </textField>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="icon_calendar_aqua.png" id="spp-9Z-77S">
+                            <rect key="frame" x="32" y="131" width="16" height="16"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="icon_clock_aqua.png" id="waB-ad-B8n">
+                            <rect key="frame" x="172" y="131" width="16" height="16"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="icon_calendar_aqua.png" id="8h2-26-aGW">
+                            <rect key="frame" x="32" y="192" width="16" height="16"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="icon_clock_aqua.png" id="72K-4C-Usa">
+                            <rect key="frame" x="172" y="192" width="16" height="16"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="hbar_dark_grey.png" id="87" userLabel="-----------">
                             <rect key="frame" x="0.0" y="365" width="320" height="1"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -332,6 +354,8 @@
     <resources>
         <image name="btn_aqua_bg_small.png" width="55" height="28"/>
         <image name="hbar_dark_grey.png" width="1" height="1"/>
+        <image name="icon_calendar_aqua.png" width="16" height="16"/>
+        <image name="icon_clock_aqua.png" width="16" height="16"/>
         <image name="icon_pencil_edit.png" width="26" height="26"/>
         <image name="icon_photo_default.png" width="23" height="16"/>
         <image name="modal_add_photo.png" width="302" height="159"/>

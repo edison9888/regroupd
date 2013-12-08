@@ -11,6 +11,10 @@
 #import "FormOptionVO.h"
 #import "FormResponseVO.h"
 
+#define kResponseYes @"Yes"
+#define kResponseNo @"No"
+#define kResponseMaybe @"Maybe"
+#define kResponseWaiting @"Waiting"
 
 @interface FormManager : NSObject {
     

@@ -10,6 +10,8 @@
 #import <CommonCrypto/CommonCryptor.h>
 
 #define kSimpleTimeFormat  @"h:mm a"
+#define kSimpleDateFormat  @"MMM d, yyyy"
+
 #define kShortDateOnlyFormat @"M/d/yy"
 #define kDecimalDateFormat @"MM.dd.yy"
 
@@ -25,7 +27,6 @@
 + (NSDate *) readDateFromFriendlyDateTime:(NSString *)dbDate;
 
 // Convert date to String
-+ (NSString *) simpleTimeLabelFromDate:(NSDate *)date;
 + (NSString *) formatDecimalDate:(NSDate *)date;
 + (NSString *) dbDateTimeStampFromDate:(NSDate *)date;
 + (NSString *) dbDateStampFromDate:(NSDate *)date;

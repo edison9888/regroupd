@@ -21,15 +21,19 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
 
+    defaultStyle = [[WidgetStyle alloc] init];
+    defaultStyle.bgcolor = 0xFFFFFF;
+    defaultStyle.bordercolor = 0x758188;
+    defaultStyle.borderwidth = 1;
+
     self.isChanged = NO;
     [self setFont:[UIFont fontWithName:@"Raleway-Regular" size:self.font.pointSize]];
-    self.textColor = [UIColor colorWithHexValue:0x333333];
-    self.textAlignment = NSTextAlignmentLeft;
     
+//    self.textColor = [UIColor colorWithHexValue:0x333333];
 //    self.borderStyle = UITextBorderStyleRoundedRect; // clear out default border
     
     [self setBackgroundColor:[UIColor whiteColor]];
-    [self.layer setBorderColor:[UIColor grayColor].CGColor];
+    [self.layer setBorderColor:[UIColor colorWithHexValue:defaultStyle.bordercolor].CGColor];
     [self.layer setBorderWidth:1.0];
     [self.layer setCornerRadius:5];
     
@@ -38,17 +42,35 @@
 
 // See: http://vodpodgeekblog.wordpress.com/2011/03/04/ios-trick-add-padding-to-a-uitextlabel/
 - (CGRect)textRectForBounds:(CGRect)bounds {
-    return CGRectMake(bounds.origin.x + 26, bounds.origin.y + 4,
-                      bounds.size.width - 12, bounds.size.height - 8);
+    return CGRectMake(bounds.origin.x + 10, bounds.origin.y + 4,
+                      bounds.size.width - 10, bounds.size.height - 8);
 }
 
 - (CGRect)editingRectForBounds:(CGRect)bounds {
     return [self textRectForBounds:bounds];
 }
 
-- (void) setFieldLabel:(NSString *)label {
+
+- (void) setActiveStyle:(WidgetStyle *)widgetStyle {
+    if (widgetStyle == nil) {
+        widgetStyle = [[WidgetStyle alloc] init];
+        widgetStyle.bgcolor = kHighlightLightBlueBG;
+        widgetStyle.bordercolor = kHighlightAquaBorder;
+        widgetStyle.borderwidth = 2;
+    }
+    
+    self.backgroundColor = [UIColor colorWithHexValue:widgetStyle.bgcolor];
+    self.layer.borderColor = [UIColor colorWithHexValue:widgetStyle.bordercolor].CGColor;
+    self.layer.borderWidth = widgetStyle.borderwidth;
     
 }
+- (void) setDefaultStyle {
+    self.backgroundColor = [UIColor colorWithHexValue:defaultStyle.bgcolor];
+    self.layer.borderColor = [UIColor colorWithHexValue:defaultStyle.bordercolor].CGColor;
+    self.layer.borderWidth = defaultStyle.borderwidth;
+    
+}
+
 
 // SEE: https://coderwall.com/p/_kiqsq
 //- (void)setPlaceholder:(NSString *)placeholder

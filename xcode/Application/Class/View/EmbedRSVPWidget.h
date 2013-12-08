@@ -8,10 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import "BrandUILabel.h"
+#import "FormManager.h"
+#import "FormResponseVO.h"
 
 @interface EmbedRSVPWidget : UIView {
+    
+    FormManager *formSvc;
+    
     UIView *_theView;
-    NSMutableArray *options;
+    NSMutableArray *_options;
+    
+    int _optionIndex;
+    
     BOOL formLocked;
     UIFont *offFont;
     UIFont *onFont;
@@ -21,7 +29,7 @@
 }
 
 
-- (id)initWithFrame:(CGRect)frame andOptions:(NSMutableArray *)formOptions isOwner:(BOOL)owner;
+- (id)initWithFrame:(CGRect)frame andOptions:(NSMutableArray *)formOptions andResponses:(NSMutableDictionary *)responseMap isOwner:(BOOL)owner;
 
 @property float dynamicHeight;
 
@@ -32,8 +40,12 @@
 
 @property (nonatomic, strong) IBOutlet UIView *headerView;
 @property (nonatomic, strong) IBOutlet PFImageView *roundPic;
+
+@property (nonatomic, strong) IBOutlet BrandUILabel *subjectLabel;
 @property (nonatomic, strong) IBOutlet BrandUILabel *eventDateLabel;
 @property (nonatomic, strong) IBOutlet BrandUILabel *eventTimeLabel;
+@property (nonatomic, strong) IBOutlet BrandUILabel *whatText;
+@property (nonatomic, strong) IBOutlet BrandUILabel *whereText;
 
 @property (nonatomic, strong) IBOutlet UIImageView *rightCallout;
 @property (nonatomic, strong) IBOutlet UIImageView *leftCallout;
@@ -56,12 +68,11 @@
 @property (nonatomic, strong) IBOutlet BrandUILabel *label3;
 @property (nonatomic, strong) IBOutlet UIButton *doneButton;
 
-@property (nonatomic, strong) IBOutlet BrandUILabel *whatText;
-@property (nonatomic, strong) IBOutlet BrandUILabel *whereText;
 
 
 
 - (IBAction)tapDoneButton;
+- (IBAction)tapDetailsButton;
 
 
 @end

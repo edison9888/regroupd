@@ -20,7 +20,7 @@
 
 #import "SideScrollVC.h"
 
-@interface PollDetailVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
+@interface PollDetailVC : SlideViewController<UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate> {
     FormManager *formSvc;
     ChatManager *chatSvc;
     ContactManager *contactSvc;

@@ -59,14 +59,6 @@ static NSDateFormatter *shortDateFormatter;
     return [self.sharedDbDateTimeFormatter dateFromString:dbDate];
 }
 
-+ (NSString *) simpleTimeLabelFromDate:(NSDate *)date{
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:kSimpleTimeFormat];
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
-
-    return [dateFormatter stringFromDate:date];
-}
 
 + (NSString *) dbDateTimeStampFromDate:(NSDate *)date{        
     return [self.sharedDbDateTimeFormatter stringFromDate:date];
@@ -92,8 +84,8 @@ static NSDateFormatter *shortDateFormatter;
 //2013-10-11 3:30 PM
 + (NSDate *) readDateFromFriendlyDateTime:(NSString *)dbDate {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"MMM, d yyyy h:mm a"];
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    [dateFormatter setDateFormat:@"MMM d, yyyy h:mm a"];
+//    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
 
     return [dateFormatter dateFromString:dbDate];
 }
@@ -108,7 +100,7 @@ static NSDateFormatter *shortDateFormatter;
 }
 + (NSString *) printDatePartFromDate:(NSDate *)date {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"MMM, d yyyy"];
+    [dateFormatter setDateFormat:kSimpleDateFormat];
     
     return [dateFormatter stringFromDate:date];
     

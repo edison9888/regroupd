@@ -8,20 +8,40 @@
 
 #import "SlideViewController.h"
 #import "SQLiteDB.h"
-#import "CCTableViewCell.h"
-#import "ContactVO.h"
+
 #import "FormManager.h"
+#import "ChatManager.h"
+#import "ContactManager.h"
+
+#import "ContactVO.h"
 #import "FormVO.h"
 #import "FormOptionVO.h"
+
+#import "MBProgressHUD.h"
 #import "BrandUILabel.h"
 
 @interface RSVPDetailVC : SlideViewController<UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate> {
+    FormManager *formSvc;
+    ChatManager *chatSvc;
+    ContactManager *contactSvc;
+    
     BOOL isLoading;
     int selectedIndex;
+    NSString *currentKey;
+    int contactTotal;
+    
+    NSMutableArray *optionKeys;
+    NSMutableArray *contactKeys;
+    
+    NSMutableArray *dataArray;
     NSMutableArray *tableData;
-    FormManager *formSvc;
+    NSMutableArray *allResponses;
+    NSMutableDictionary *responseMap;
     
 }
+
+@property (nonatomic, retain) MBProgressHUD *hud;
+
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
 
 @property (nonatomic, retain) IBOutlet UIView *headerView;
@@ -37,7 +57,7 @@
 @property (nonatomic, strong) IBOutlet BrandUILabel *whatText;
 @property (nonatomic, strong) IBOutlet BrandUILabel *whereText;
 
-@property (nonatomic, strong) IBOutlet UIImageView *roundPic;
+@property (nonatomic, strong) IBOutlet PFImageView *roundPic;
 
 @property (nonatomic, strong) IBOutlet UIButton *yesButton;
 @property (nonatomic, strong) IBOutlet UIButton *maybeButton;

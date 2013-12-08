@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FancyTextField.h"
+#import "IndentedTextField.h"
 #import "BrandUILabel.h"
 
 @interface SurveyOptionWithPic : UIView<UITextFieldDelegate> {
@@ -16,7 +16,7 @@
 }
 
 @property int index;
-@property (nonatomic, strong) IBOutlet FancyTextField *input;
+@property (nonatomic, strong) IBOutlet IndentedTextField *input;
 @property (nonatomic, strong) IBOutlet UIView *photoHolder;
 @property (nonatomic, strong) IBOutlet UIImageView *roundPic;
 @property (nonatomic, strong) IBOutlet UIButton *pickPhoto;

@@ -100,7 +100,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="a7i-58-U4i" userLabel="BrandUI Label - name" customClass="BrandUILabel">
-                    <rect key="frame" x="43" y="65" width="217" height="108"/>
+                    <rect key="frame" x="52" y="65" width="217" height="108"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <string key="text" base64-UTF8="YES">
 QXJlIHlvdSBzdXJlIHlvdSADd2FudCB0byBjbGVhciBhbGwgY2hhdHMgaW4gdGhpcyBncm91cD8

@@ -518,6 +518,10 @@
 		1EC44C841813117700F4A2C2 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EC44C821813117700F4A2C2 /* AddressBookUI.framework */; };
 		1EC44C871813118B00F4A2C2 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EC44C851813118B00F4A2C2 /* EventKit.framework */; };
 		1EC44C881813118B00F4A2C2 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EC44C861813118B00F4A2C2 /* EventKitUI.framework */; };
+		1ED7865D1853A0050083022A /* IndentedTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED7865C1853A0050083022A /* IndentedTextField.m */; };
+		1ED786601854926A0083022A /* UIImage+Tint.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED7865F1854926A0083022A /* UIImage+Tint.m */; };
+		1ED786641854AE9B0083022A /* RSVPResponseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED786621854AE9B0083022A /* RSVPResponseCell.m */; };
+		1ED786651854AE9B0083022A /* RSVPResponseCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1ED786631854AE9B0083022A /* RSVPResponseCell.xib */; };
 		1EEA97631844343D00D726C4 /* WidgetStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEA97621844343D00D726C4 /* WidgetStyle.m */; };
 		1EEA9765184437F500D726C4 /* name_widget_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EEA9764184437F500D726C4 /* name_widget_arrow@2x.png */; };
 		1EEA976818444B8900D726C4 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEA976718444B8900D726C4 /* UIImage+Resize.m */; };
@@ -1208,6 +1212,13 @@
 		1EC44C821813117700F4A2C2 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		1EC44C851813118B00F4A2C2 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		1EC44C861813118B00F4A2C2 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
+		1ED7865B1853A0050083022A /* IndentedTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndentedTextField.h; sourceTree = "<group>"; };
+		1ED7865C1853A0050083022A /* IndentedTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndentedTextField.m; sourceTree = "<group>"; };
+		1ED7865E1854926A0083022A /* UIImage+Tint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Tint.h"; sourceTree = "<group>"; };
+		1ED7865F1854926A0083022A /* UIImage+Tint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Tint.m"; sourceTree = "<group>"; };
+		1ED786611854AE9B0083022A /* RSVPResponseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSVPResponseCell.h; sourceTree = "<group>"; };
+		1ED786621854AE9B0083022A /* RSVPResponseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSVPResponseCell.m; sourceTree = "<group>"; };
+		1ED786631854AE9B0083022A /* RSVPResponseCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RSVPResponseCell.xib; sourceTree = "<group>"; };
 		1EEA97611844343D00D726C4 /* WidgetStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetStyle.h; sourceTree = "<group>"; };
 		1EEA97621844343D00D726C4 /* WidgetStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WidgetStyle.m; sourceTree = "<group>"; };
 		1EEA9764184437F500D726C4 /* name_widget_arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "name_widget_arrow@2x.png"; sourceTree = "<group>"; };
@@ -1419,6 +1430,8 @@
 		1E1E25BF17F32F450079416C /* Widget */ = {
 			isa = PBXGroup;
 			children = (
+				1ED7865B1853A0050083022A /* IndentedTextField.h */,
+				1ED7865C1853A0050083022A /* IndentedTextField.m */,
 				1E802637182E96AF006FA827 /* ChatMessageWidget.h */,
 				1E802638182E96AF006FA827 /* ChatMessageWidget.m */,
 				1E802639182E96AF006FA827 /* ChatMessageWidget.xib */,
@@ -1442,6 +1455,8 @@
 				1E7A6E121806EA21004B62CE /* EmbedRSVPWidget.xib */,
 				1E1E25C517F342180079416C /* FancyTextField.h */,
 				1E1E25C617F342180079416C /* FancyTextField.m */,
+				1E131D5917F60FBE00749506 /* FancyDateTimeField.h */,
+				1E131D5A17F60FBE00749506 /* FancyDateTimeField.m */,
 				1E88806617F4FC620070116C /* FancyTextView.h */,
 				1E88806717F4FC630070116C /* FancyTextView.m */,
 				1E1E25C017F32FC90079416C /* FancyCheckbox.h */,
@@ -1453,8 +1468,6 @@
 				1E88806117F4FC310070116C /* SurveyOptionWidget.h */,
 				1E88806217F4FC320070116C /* SurveyOptionWidget.m */,
 				1E88806317F4FC330070116C /* SurveyOptionWidget.xib */,
-				1E131D5917F60FBE00749506 /* FancyDateTimeField.h */,
-				1E131D5A17F60FBE00749506 /* FancyDateTimeField.m */,
 				1E37C29E17FE2B8D0029D95F /* NameWidget.h */,
 				1E37C29F17FE2B8D0029D95F /* NameWidget.m */,
 				1E4B787818039F3C00A8812D /* AquaTableViewCell.h */,
@@ -1490,12 +1503,15 @@
 				1E3E85F2184AECB800BB7171 /* GroupTableViewCell.h */,
 				1E3E85F3184AECB800BB7171 /* GroupTableViewCell.m */,
 				1E3E85F4184AECB800BB7171 /* GroupTableViewCell.xib */,
-				1E6A101F183F154800F63666 /* RatingResponseCell.h */,
-				1E6A1020183F154800F63666 /* RatingResponseCell.m */,
-				1E6A1021183F154800F63666 /* RatingResponseCell.xib */,
 				1E6A101A183EF66400F63666 /* PollResponseCell.h */,
 				1E6A101B183EF66400F63666 /* PollResponseCell.m */,
 				1E6A101C183EF66400F63666 /* PollResponseCell.xib */,
+				1E6A101F183F154800F63666 /* RatingResponseCell.h */,
+				1E6A1020183F154800F63666 /* RatingResponseCell.m */,
+				1E6A1021183F154800F63666 /* RatingResponseCell.xib */,
+				1ED786611854AE9B0083022A /* RSVPResponseCell.h */,
+				1ED786621854AE9B0083022A /* RSVPResponseCell.m */,
+				1ED786631854AE9B0083022A /* RSVPResponseCell.xib */,
 				1E59F12117FC873900EE2902 /* ChatTableViewCell.h */,
 				1E59F12217FC873900EE2902 /* ChatTableViewCell.m */,
 				1E59F12317FC873900EE2902 /* ChatTableViewCell.xib */,
@@ -1912,6 +1928,8 @@
 		1E92812C177FB68F008A583C /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				1ED7865E1854926A0083022A /* UIImage+Tint.h */,
+				1ED7865F1854926A0083022A /* UIImage+Tint.m */,
 				1EEA976618444B8900D726C4 /* UIImage+Resize.h */,
 				1EEA976718444B8900D726C4 /* UIImage+Resize.m */,
 				1E8BFAC817F73B3C0053BEE3 /* NSArray+Random.h */,
@@ -2568,6 +2586,7 @@
 				1EA0B46718087CFD004C4DDA /* btn_rsvp_yes_off@2x.png in Resources */,
 				1E6A1023183F154800F63666 /* RatingResponseCell.xib in Resources */,
 				1E92824E177FB690008A583C /* trend_dot_dark.png in Resources */,
+				1ED786651854AE9B0083022A /* RSVPResponseCell.xib in Resources */,
 				1E7A6E2E1806EDED004B62CE /* icon_star_purple@2x.png in Resources */,
 				1E7A6E201806EA21004B62CE /* EmbedRatingWidget.xib in Resources */,
 				1E92826D177FB690008A583C /* TabBarView.xib in Resources */,
@@ -2860,6 +2879,7 @@
 			files = (
 				1E80263C182E9BB3006FA827 /* ChatMessageWidget.m in Sources */,
 				1EC3DE22180F204C008E2D3F /* ContactTableViewCell.m in Sources */,
+				1ED7865D1853A0050083022A /* IndentedTextField.m in Sources */,
 				1E1A9AA717FE5016008D81E6 /* NSBubbleData.m in Sources */,
 				1E0CAA43178253F100A294C0 /* BrandUITextField.m in Sources */,
 				1E928250177FB690008A583C /* AppDelegate.m in Sources */,
@@ -2891,6 +2911,7 @@
 				1E3ACA491804E49500A6E6B2 /* EmbedPollWidget.m in Sources */,
 				1E92828C177FB690008A583C /* ViewController.m in Sources */,
 				1EC44C6A18130CC100F4A2C2 /* PollDetailVC.m in Sources */,
+				1ED786641854AE9B0083022A /* RSVPResponseCell.m in Sources */,
 				1E92828F177FB690008A583C /* PresentationViewController.m in Sources */,
 				1E928290177FB690008A583C /* SlideViewController.m in Sources */,
 				1E928291177FB690008A583C /* EasingFilter.m in Sources */,
@@ -2967,6 +2988,7 @@
 				1E8333B917978C2A00B60612 /* GDataXMLNode.m in Sources */,
 				1E59F10817FA532D00EE2902 /* SideScrollVC.m in Sources */,
 				1EC44C7218130CC100F4A2C2 /* ProfileStart4VC.m in Sources */,
+				1ED786601854926A0083022A /* UIImage+Tint.m in Sources */,
 				1E1A9AA817FE5016008D81E6 /* UIBubbleHeaderTableViewCell.m in Sources */,
 				1EC44C5A18130CC100F4A2C2 /* EditGroupVC.m in Sources */,
 				1E802635182ACC31006FA827 /* MyProfileVC.m in Sources */,

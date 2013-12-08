@@ -12,8 +12,14 @@
 #import "BrandUITextField.h"
 #import "FancyDateTimeField.h"
 #import "BSKeyboardControls.h"
+#import "FormManager.h"
 
 @interface EditRSVPVC : SlideViewController<UIScrollViewDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate, BSKeyboardControlsDelegate> {
+
+    FormManager *formSvc;
+    NSDateFormatter *dateFormatter;
+    NSDateFormatter *timeFormatter;
+
     int fieldIndex;
     
     CGPoint  offset; // unused
@@ -32,6 +38,8 @@
     CGFloat animatedDistance;
     UIImage *formImage;
     
+    NSArray *fieldTags;
+    BOOL canSave;
 }
 
 @property (nonatomic, retain) UIImagePickerController* imagePickerVC;
@@ -51,9 +59,12 @@
 @property (nonatomic, strong) IBOutlet UIImageView *roundPic;
 @property (nonatomic, strong) IBOutlet UIButton *pickPhoto;
 
-@property (nonatomic, retain) IBOutlet BrandUITextField *subjectField;
-@property (nonatomic, retain) IBOutlet BrandUITextField *whereField;
-@property (nonatomic, retain) IBOutlet BrandUITextField *descriptionField;
+@property (nonatomic, strong) IBOutlet UIButton *doneButtonTop;
+@property (nonatomic, strong) IBOutlet UIButton *doneButtonEnd;
+
+@property (nonatomic, retain) IBOutlet FancyTextField *subjectField;
+@property (nonatomic, retain) IBOutlet FancyTextField *whereField;
+@property (nonatomic, retain) IBOutlet FancyTextField *descriptionField;
 
 @property (nonatomic, retain) IBOutlet FancyDateTimeField *tfStartDate;
 @property (nonatomic, retain) IBOutlet FancyDateTimeField *tfStartTime;
@@ -73,7 +84,7 @@
 - (IBAction)modalCancelButton;
 
 - (IBAction)tapPickPhoto;
-- (IBAction)dismissDatePicker:(id)sender;
+//- (IBAction)dismissDatePicker:(id)sender;
 
 - (void) setPhoto:(UIImage *)photo;
 
