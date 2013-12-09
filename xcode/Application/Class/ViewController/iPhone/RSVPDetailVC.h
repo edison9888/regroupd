@@ -30,6 +30,9 @@
     NSString *currentKey;
     int contactTotal;
     
+    NSMutableSet *includedKeys;
+    NSMutableSet *excludedKeys;
+    
     NSMutableArray *optionKeys;
     NSMutableArray *contactKeys;
     

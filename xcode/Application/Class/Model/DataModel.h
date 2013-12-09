@@ -59,6 +59,8 @@
 
 @property (nonatomic, retain) NSString *action;
 @property (nonatomic, retain) NSString *timestampText;
+@property (nonatomic, retain) UIImage *anonymousImage;
+
 
 @property int stageHeight;
 @property int stageWidth;

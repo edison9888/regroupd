@@ -83,7 +83,7 @@
     self.footerView.hidden = YES;
     CGRect tableFrame = self.theTableView.frame;
     tableFrame.origin.y = footerFrame.origin.y;
-    tableFrame.size.height = [DataModel shared].stageHeight - tableFrame.origin.y;
+    tableFrame.size.height = [DataModel shared].stageHeight - tableFrame.origin.y - 30;
     self.theTableView.frame = tableFrame;
     
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
@@ -125,15 +125,16 @@
     allResponses = [[NSMutableArray alloc] init];
     
     contactKeys = [[NSMutableArray alloc] init];
+    NSMutableSet *idSet = [[NSMutableSet alloc] init];
+    
+    includedKeys = [[NSMutableSet alloc] init];
     
     [formSvc apiListFormResponses:[DataModel shared].form.system_id contactKey:nil callback:^(NSArray *results) {
         FormResponseVO *response;
         for (PFObject *pfResponse in results) {
             response = [FormResponseVO readFromPFObject:pfResponse];
-            
-            if (![contactKeys containsObject:response.contact_key]) {
-                [contactKeys addObject:response.contact_key];
-            }
+            [idSet addObject:response.contact_key];
+            [includedKeys addObject:response.contact_key];
             NSLog(@"Response: optionKey %@ contactKey %@", response.option_key, response.contact_key);
             [allResponses addObject:response];
             
@@ -145,34 +146,50 @@
             [formSvc apiUpdateFormCounter:[DataModel shared].form.system_id withCount:[NSNumber numberWithInt:results.count]];
         }
         
-        [contactSvc apiLookupContacts:[contactKeys copy] callback:^(NSArray *results) {
-            
-            [contactSvc lookupContactsFromPhonebook:[contactKeys copy]];
-            
-            [chatSvc apiListChatForms:nil formKey:[DataModel shared].form.system_id callback:^(NSArray *results) {
-                __block int index = 0;
-                int total = results.count;
-                if (total == 0) {
-                    [self loadFormData];
-                } else {
-                    
-                    for (PFObject *result in results) {
-                        PFObject *pfChat = result[@"chat"];
-                        [pfChat fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-                            if (pfChat[@"contact_keys"]) {
-                                NSArray *keys = pfChat[@"contact_keys"];
-                                contactTotal += keys.count - 1;
-                            }
-                            index ++;
-                            if (index == total) {
-                                [self loadFormData];
-                            }
-                        }];
-                    }
-                }
+        [chatSvc apiListChatForms:nil formKey:[DataModel shared].form.system_id callback:^(NSArray *results) {
+            __block int index = 0;
+            int total = results.count;
+            if (total == 0) {
+                [contactKeys addObjectsFromArray:[idSet allObjects]];
+                [self lookupContactData];
+            } else {
                 
-            }];
+                for (PFObject *result in results) {
+                    PFObject *pfChat = result[@"chat"];
+                    [pfChat fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+                        if (pfChat[@"contact_keys"]) {
+                            NSArray *keys = pfChat[@"contact_keys"];
+                            
+                            [idSet addObjectsFromArray:keys];
+                            contactTotal += keys.count - 1;
+                        }
+                        index ++;
+                        if (index == total) {
+                            [contactKeys addObjectsFromArray:[idSet allObjects]];
+                            [self lookupContactData];
+                        }
+                    }];
+                }
+            }
+            
         }];
+        
+    }];
+    
+}
+
+- (void) lookupContactData {
+    
+    excludedKeys = [[NSMutableSet alloc] init];
+    for (NSString *key in contactKeys) {
+        if (![includedKeys containsObject:key]) {
+            [excludedKeys addObject:key];
+        }
+    }
+    [contactSvc apiLookupContacts:[contactKeys copy] callback:^(NSArray *results) {
+        
+        [contactSvc lookupContactsFromPhonebook:[contactKeys copy]];
+        [self loadFormData];
         
     }];
     
@@ -240,6 +257,13 @@
             [((FormOptionVO *)[dataArray objectAtIndex:pointer]).responses addObject:response];
             
         }
+    }
+    FormResponseVO *nonResponse;
+    for (NSString *key in excludedKeys) {
+        nonResponse = [[FormResponseVO alloc] init];
+        nonResponse.contact_key = key;
+        nonResponse.contact = (ContactVO *) [[DataModel shared].contactCache objectForKey:key];
+        [((FormOptionVO *)[dataArray objectAtIndex:3]).responses addObject:nonResponse];
     }
     isLoading = NO;
     [MBProgressHUD hideHUDForView:self.view animated:NO];
@@ -393,14 +417,16 @@
             
             FormResponseVO *response = [option.responses objectAtIndex:indexPath.row];
             ContactVO *contact = (ContactVO *)[[DataModel shared].phonebookCache objectForKey:response.contact_key];
-            if (contact) {
+            if ([response.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
+                cell.titleLabel.text = @"Me";
+            } else if (contact) {
                 cell.titleLabel.text = contact.fullname;
                 
             } else {
                 cell.titleLabel.text = response.contact_key;
             }
             contact = (ContactVO *)[[DataModel shared].contactCache objectForKey:response.contact_key];
-
+            cell.roundPic.image = [DataModel shared].anonymousImage;
             cell.roundPic.file = contact.pfPhoto;
             [cell.roundPic loadInBackground];
 

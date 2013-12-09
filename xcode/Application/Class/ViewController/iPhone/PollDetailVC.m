@@ -310,6 +310,7 @@
         }
 //        cell.titleLabel.text = response.contact.fullname;
         
+        cell.roundPic.image = [DataModel shared].anonymousImage;
         
         cell.roundPic.file = response.contact.pfPhoto;
         [cell.roundPic loadInBackground];

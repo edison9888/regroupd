@@ -7,6 +7,7 @@
 
 #import "FormsTableViewCell.h"
 #import "NSDate+Extensions.h"
+#import "DateTimeUtils.h"
 
 #define kIconPoll @"icon_poll_purple@2x.png"
 #define kIconRating @"icon_rating_purple@2x.png"
@@ -59,7 +60,9 @@
     rowdata = form;
     self.titleField.text = form.name;
     UIImage *icon;
-    self.dateField.text = [form.updatedAt formatShortDate].uppercaseString;
+    self.dateField.text = [form.createdAt formatShortDate].uppercaseString;
+    NSString *responseText = @"Last response %@";
+    self.responsesField.text = [NSString stringWithFormat:responseText, [form.updatedAt formatShortDate]];
     
     if (form.type == FormType_POLL) {
         icon = [UIImage imageNamed:kIconPoll];
@@ -84,7 +87,12 @@
         self.whenField.hidden = NO;
         self.whereLabel.hidden = NO;
         self.whereField.hidden = NO;
-        self.whenField.text = form.start_time;
+        
+        NSString *whenText = @"%@, %@";
+        whenText = [NSString stringWithFormat:whenText,
+                    [DateTimeUtils printTimePartFromDate:form.eventStartsAt],
+                    [DateTimeUtils printDatePartFromDate:form.eventStartsAt]];
+        self.whenField.text = whenText;
         self.whereField.text = form.location;
         
     }

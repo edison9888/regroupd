@@ -64,6 +64,7 @@
 
     [DataModel shared].stageWidth = [[UIScreen mainScreen] bounds].size.width;
     [DataModel shared].stageHeight = [[UIScreen mainScreen] bounds].size.height;
+    [DataModel shared].anonymousImage = [UIImage imageNamed:@"anonymous_user.png"];
     
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
         // code here

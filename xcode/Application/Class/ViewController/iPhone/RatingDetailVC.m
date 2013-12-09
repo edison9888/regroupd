@@ -341,6 +341,8 @@
         
         
         [cell.ratingSlider setRatingBar:response.rating.floatValue];
+
+        cell.roundPic.image = [DataModel shared].anonymousImage;
         
         cell.roundPic.file = response.contact.pfPhoto;
         [cell.roundPic loadInBackground];
