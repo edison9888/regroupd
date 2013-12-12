@@ -34,7 +34,6 @@
     } else {
         self.backButton.titleLabel.text = @"All Contacts";
     }
-
     
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
@@ -50,35 +49,10 @@
     img = [UIImage imageNamed:@"anonymous_user"];
     self.roundPic.image = img;
 
-    if ([DataModel shared].contact != nil && [DataModel shared].contact.contact_key != nil) {
-        [contactSvc apiLoadContact:[DataModel shared].contact.contact_key callback:^(PFObject *pfContact) {
-            if (pfContact[@"photo"]) {
-                PFFile *photo = pfContact[@"photo"];
-                self.roundPic.file = photo;
-                [self.roundPic loadInBackground];
-            }
-        }];
-    }
-    if ([[DataModel shared].contact.system_id isEqualToString:[DataModel shared].user.contact_key]) {
-        self.nameLabel.text = @"Me";
-        
-    } else if ([DataModel shared].contact.first_name != nil && [DataModel shared].contact.last_name != nil) {
-        self.nameLabel.text = [DataModel shared].contact.fullname;
-    } else {
-        self.nameLabel.text = [DataModel shared].contact.phone;
-    }
-
-    
-    NSString *phoneText = [NSString stringWithFormat:@"Phone %@", [DataModel shared].contact.phone];
-    self.phoneButton.titleLabel.text = phoneText;
-    [self.phoneButton setTitle:phoneText forState:UIControlStateNormal];
-    NSString *msgText;
-    
-    if ([DataModel shared].contact.first_name != nil) {
-        msgText =[NSString stringWithFormat:@"Message %@", [DataModel shared].contact.first_name];
-        [self.messageButton setTitle:msgText forState:UIControlStateNormal];
-    }
+    [self refreshView];
 }
+
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -90,9 +64,63 @@
     return YES;
 }
 
+#pragma mark - Data Load
 
+- (void) refreshView {
+    
+    self.blockButton.enabled = NO;
+    
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    CGFloat halfButtonHeight = self.blockButton.bounds.size.height / 2;
+    CGFloat buttonWidth = self.blockButton.bounds.size.width;
+    indicator.center = CGPointMake(buttonWidth - halfButtonHeight , halfButtonHeight);
+    [self.blockButton addSubview:indicator];
+    [indicator startAnimating];
+    
+    
+    if ([DataModel shared].contact != nil && [DataModel shared].contact.system_id != nil) {
+        [contactSvc apiLoadContact:[DataModel shared].contact.system_id callback:^(PFObject *pfContact) {
+            if (pfContact[@"photo"]) {
+                PFFile *photo = pfContact[@"photo"];
+                self.roundPic.file = photo;
+                [self.roundPic loadInBackground];
+                
+            }
+            [contactSvc apiPrivacyLookupBlock:[DataModel shared].user.contact_key
+                                   blockedKey:[DataModel shared].contact.system_id
+                                     callback:^(PFObject *pfObject) {
+                                         self.blockButton.enabled = YES;
+                                         [indicator stopAnimating];
 
+                                         if (pfObject) {
+                                             isBlocked = YES;
+                                             [self.blockButton setTitle:@"Unblock User" forState:UIControlStateNormal];
+                                         }
+                                     }];
+        }];
+    }
 
+    if ([[DataModel shared].contact.system_id isEqualToString:[DataModel shared].user.contact_key]) {
+        self.nameLabel.text = @"Me";
+        
+    } else if ([DataModel shared].contact.first_name != nil && [DataModel shared].contact.last_name != nil) {
+        self.nameLabel.text = [DataModel shared].contact.fullname;
+    } else {
+        self.nameLabel.text = [DataModel shared].contact.phone;
+    }
+    
+    
+    NSString *phoneText = [NSString stringWithFormat:@"Phone %@", [DataModel shared].contact.phone];
+    self.phoneButton.titleLabel.text = phoneText;
+    [self.phoneButton setTitle:phoneText forState:UIControlStateNormal];
+    NSString *msgText;
+    
+    if ([DataModel shared].contact.first_name != nil) {
+        msgText =[NSString stringWithFormat:@"Message %@", [DataModel shared].contact.first_name];
+        [self.messageButton setTitle:msgText forState:UIControlStateNormal];
+    }
+
+}
 #pragma mark - IBActions
 
 - (IBAction)tapBackButton {
@@ -167,7 +195,42 @@
     
 }
 - (IBAction)tapBlockButton {
-    
+    if (isBlocked) {
+        [contactSvc apiPrivacyLookupBlock:[DataModel shared].user.contact_key
+                               blockedKey:[DataModel shared].contact.system_id
+                                 callback:^(PFObject *pfObject) {
+                                     if (pfObject) {
+                                         [pfObject deleteInBackground];
+                                         [self.blockButton setTitle:@"Block User" forState:UIControlStateNormal];
+                                         isBlocked = NO;
+                                     }
+                                     [[[UIAlertView alloc] initWithTitle:@"User unblocked" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                                 }];
+        
+    } else {
+        [contactSvc apiPrivacyLookupBlock:[DataModel shared].user.contact_key
+                               blockedKey:[DataModel shared].contact.system_id
+                                 callback:^(PFObject *pfObject) {
+                                     if (pfObject) {
+                                         [self.blockButton setTitle:@"Unblock User" forState:UIControlStateNormal];
+                                         isBlocked = YES;
+                                     } else {
+                                         [contactSvc apiPrivacyBlockUser:[DataModel shared].user.contact_key
+                                                              blockedKey:[DataModel shared].contact.system_id callback:^(PFObject *pfObject) {
+                                                                  if (pfObject) {
+                                                                      [self.blockButton setTitle:@"Unblock User" forState:UIControlStateNormal];
+                                                                      isBlocked = YES;
+                                                                      
+                                                                      [[[UIAlertView alloc] initWithTitle:@"User blocked" message:@"This contact will no longer be able to send you individual chat messages." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                                                                  }
+                                                              }];
+                                         
+                                     }
+                                 }];
+
+        
+        
+    }
 }
 
 @end

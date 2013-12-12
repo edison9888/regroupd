@@ -45,7 +45,7 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-    [self listMyChats];
+    [self preloadData];
     
 }
 - (void)didReceiveMemoryWarning
@@ -62,6 +62,15 @@
 
 #pragma mark - Data Load
 
+- (void) preloadData
+{
+    contactSvc = [[ContactManager alloc] init];
+    
+    [contactSvc apiPrivacyListBlocks:[DataModel shared].user.contact_key callback:^(NSArray *keys) {
+        _blockedKeys = keys;
+        [self listMyChats];
+    }];
+}
 - (void)listMyChats
 {
     NSLog(@"%s", __FUNCTION__);
@@ -92,10 +101,28 @@
         ChatVO *chat;
         
         for (PFObject* result in results) {
-            unknownContactKeys = [[NSMutableArray alloc] init];
             
+            NSArray *keys = [result objectForKey:@"contact_keys"];
+            NSLog(@"contact keys = %@", keys);
+            [contactKeySet addObjectsFromArray:keys];
+
             chat = [ChatVO readFromPFObject:result];
-            
+            BOOL isBlocked = NO;
+            if (keys.count == 2) {
+                // This is an individual chat. One of the keys belongs to current user.
+                for (NSString *key in keys) {
+                    if (![key isEqualToString:[DataModel shared].user.contact_key]) {
+                        if ([_blockedKeys containsObject:key]) {
+                            NSLog(@"Found blocked individual chat with key %@", key);
+                            isBlocked = YES;
+                        }
+                    }
+                }
+                
+            }
+            if (isBlocked) {
+                continue;
+            }
             ChatVO *lookup = [chatSvc loadChatByKey:chat.system_id];
             if (lookup == nil) {
                 // need to add
@@ -118,9 +145,6 @@
             
             [chatsArray addObject:chat];
             
-            NSArray *keys = [result objectForKey:@"contact_keys"];
-            NSLog(@"contact keys = %@", keys);
-            [contactKeySet addObjectsFromArray:keys];
             
             
         }

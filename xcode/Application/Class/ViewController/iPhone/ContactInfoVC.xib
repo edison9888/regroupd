@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContactInfoVC">
             <connections>
                 <outlet property="backButton" destination="fv0-kA-NpA" id="MwE-II-Qjz"/>
+                <outlet property="blockButton" destination="eGo-6R-dcX" id="n8L-fs-JQ0"/>
                 <outlet property="messageButton" destination="Qcz-if-xpA" id="geT-m6-9yv"/>
                 <outlet property="nameLabel" destination="w4a-bA-3Vd" id="TL9-Kr-IrX"/>
                 <outlet property="phoneButton" destination="13d-c7-bB9" id="NYF-tG-rsk"/>

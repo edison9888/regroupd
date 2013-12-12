@@ -203,7 +203,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)formSaveCompleteNotificationHandler:(NSNotification*)notification
 {
     NSLog(@"===== %s", __FUNCTION__);
-    [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Poll created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    [[[UIAlertView alloc] initWithTitle:@"Success" message:@"RSVP created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 }
 
 

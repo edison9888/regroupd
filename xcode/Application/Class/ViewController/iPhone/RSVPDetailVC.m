@@ -47,7 +47,9 @@
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
     self.theTableView.backgroundColor = [UIColor clearColor];
-    
+    [self.theTableView setSeparatorColor:[UIColor grayColor]];
+    [self.theTableView setSeparatorInset:UIEdgeInsetsZero];
+
     self.tableData =[[NSMutableArray alloc]init];
     
     formSvc = [[FormManager alloc] init];

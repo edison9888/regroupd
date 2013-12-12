@@ -6,6 +6,12 @@
 //
 //
 
+typedef enum {
+	PrivacyType_BLOCK_USER = 1,
+	PrivacyType_HIDE_CHAT,
+	PrivacyType_HIDE_MESSAGES
+}PrivacyType;
+
 #import <Foundation/Foundation.h>
 
 @interface ContactVO : NSObject

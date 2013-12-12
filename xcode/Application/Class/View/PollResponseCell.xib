@@ -38,10 +38,6 @@
                         <rect key="frame" x="69" y="30" width="14" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="hbar_96x2.png" id="Af8-J2-XAV" userLabel="Image View - divider">
-                        <rect key="frame" x="0.0" y="56" width="320" height="1"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </imageView>
                 </subviews>
             </tableViewCellContentView>
             <connections>
@@ -52,6 +48,5 @@
     </objects>
     <resources>
         <image name="checkbox_aqua.png" width="13" height="13"/>
-        <image name="hbar_96x2.png" width="96" height="2"/>
     </resources>
 </document>

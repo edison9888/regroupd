@@ -30,10 +30,6 @@
                         <rect key="frame" x="275" y="14" width="27" height="27"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="hbar_96x2.png" id="Af8-J2-XAV" userLabel="Image View - divider">
-                        <rect key="frame" x="0.0" y="56" width="320" height="1"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </imageView>
                     <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="10" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontSizeToFit="NO" id="p8L-mi-WFf" userLabel="Label - ratingLabel" customClass="BrandUILabel">
                         <rect key="frame" x="276" y="16" width="24" height="24"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -52,7 +48,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="hbar_96x2.png" width="96" height="2"/>
         <image name="rating_circle_bg_aqua.png" width="27" height="27"/>
     </resources>
 </document>

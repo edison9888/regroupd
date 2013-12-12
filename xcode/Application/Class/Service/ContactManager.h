@@ -33,6 +33,12 @@
 
 - (void) apiLookupContactsByPhoneNumbers:(NSArray *)numbers callback:(void (^)(NSArray *))callback;
 
+// PRIVACY API METHODS
+
+- (void) apiPrivacyLookupBlock:(NSString *)contactKey blockedKey:(NSString *)blockedKey callback:(void (^)(PFObject *))callback;
+- (void) apiPrivacyBlockUser:(NSString *)contactKey blockedKey:(NSString *)blockedKey callback:(void (^)(PFObject *))callback;
+- (void) apiPrivacyListBlocks:(NSString *)contactKey callback:(void (^)(NSArray *))callback;
+
 - (UIImage *) loadCachedPhoto:(NSString *)contactKey;
 
 - (void) asyncLoadCachedPhoto:(NSString *)contactKey callback:(void (^)(UIImage *img))callback;

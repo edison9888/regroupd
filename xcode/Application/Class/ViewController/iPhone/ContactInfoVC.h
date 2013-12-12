@@ -16,6 +16,7 @@
 @interface ContactInfoVC : SlideViewController {
     ContactManager *contactSvc;
     ChatManager *chatSvc;
+    BOOL isBlocked;
 }
 
 @property (nonatomic, strong) IBOutlet PFImageView *roundPic;
@@ -23,6 +24,7 @@
 @property (nonatomic, strong) IBOutlet BrandUIButton *messageButton;
 @property (nonatomic, strong) IBOutlet BrandUIButton *phoneButton;
 @property (nonatomic, strong) IBOutlet BrandUIButton *backButton;
+@property (nonatomic, strong) IBOutlet BrandUIButton *blockButton;
 
 - (IBAction)tapBackButton;
 - (IBAction)tapMessageButton;

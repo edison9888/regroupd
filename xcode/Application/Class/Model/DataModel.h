@@ -25,7 +25,7 @@
 #define kFormDB             @"FormDB"
 #define kFormOptionDB       @"FormOptionDB"
 #define kFormResponseDB     @"FormResponseDB"
-
+#define kPrivacyDB          @"PrivacyDB"
 
 @interface DataModel : NSObject {
     NSMutableDictionary *contactData;

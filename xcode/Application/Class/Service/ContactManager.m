@@ -376,6 +376,88 @@
     }
 }
 
+
+#pragma mark - PrivacyDB
+
+// Add row in PrivacyDB to block another user
+- (void) apiPrivacyListBlocks:(NSString *)contactKey callback:(void (^)(NSArray *))callback {
+    PFQuery *query = [PFQuery queryWithClassName:kPrivacyDB];
+    [query whereKey:@"contact"
+            equalTo:[PFObject objectWithoutDataWithClassName:kContactDB objectId:contactKey]];
+//    [query whereKey:@"type" equalTo:[NSNumber numberWithInt:PrivacyType_BLOCK_USER]];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        NSMutableArray *keys = [[NSMutableArray alloc] init];
+        
+        for (PFObject *data in results) {
+            if (data[@"blocked"]) {
+                PFObject *pfContact = (PFObject *) data[@"blocked"];
+                [keys addObject:pfContact.objectId];
+            }
+        }
+        callback([keys copy]);
+    }];
+    
+}
+
+
+- (void) apiPrivacyLookupBlock:(NSString *)contactKey blockedKey:(NSString *)blockedKey callback:(void (^)(PFObject *))callback {
+    PFQuery *query = [PFQuery queryWithClassName:kPrivacyDB];
+    [query whereKey:@"contact"
+            equalTo:[PFObject objectWithoutDataWithClassName:kContactDB objectId:contactKey]];
+    [query whereKey:@"blocked"
+            equalTo:[PFObject objectWithoutDataWithClassName:kContactDB objectId:blockedKey]];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        PFObject *data = nil;
+        
+        if (results.count > 0) {
+            data = [results objectAtIndex:0];
+            
+            callback(data);
+            
+        } else {
+            callback(nil);
+        }
+    }];
+    
+}
+- (void) apiPrivacyBlockUser:(NSString *)contactKey blockedKey:(NSString *)blockedKey callback:(void (^)(PFObject *))callback {
+    NSLog(@"%s", __FUNCTION__);
+    PFObject *data = nil;
+    
+    data = [PFObject objectWithClassName:kPrivacyDB];
+    
+    data[@"contact"] = [PFObject objectWithoutDataWithClassName:kContactDB objectId:contactKey];
+    data[@"blocked"] = [PFObject objectWithoutDataWithClassName:kContactDB objectId:blockedKey];
+    data[@"type"] = [NSNumber numberWithInt:PrivacyType_BLOCK_USER];
+    [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            callback(data);
+        }
+    }];
+    
+    
+}
+
+- (void) apiPrivacyUnblockUser:(NSString *)contactKey blockedKey:(NSString *)blockedKey callback:(void (^)(PFObject *))callback {
+    NSLog(@"%s", __FUNCTION__);
+    PFObject *data = nil;
+    
+    data = [PFObject objectWithClassName:kPrivacyDB];
+    
+    data[@"contact"] = [PFObject objectWithoutDataWithClassName:kContactDB objectId:contactKey];
+    data[@"blocked"] = [PFObject objectWithoutDataWithClassName:kContactDB objectId:blockedKey];
+    data[@"type"] = [NSNumber numberWithInt:PrivacyType_BLOCK_USER];
+    [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            callback(data);
+        }
+    }];
+    
+    
+}
+
 #pragma mark - Phonebook DAO
 
 - (NSDictionary *) findPersonByPhone:(NSString *)phone {
@@ -421,7 +503,7 @@
         return contact;
     }
     return nil;
-
+    
 }
 - (NSMutableDictionary *) lookupContactsFromPhonebook:(NSArray *)contactKeys {
     
@@ -443,7 +525,7 @@
                 [results setObject:contact forKey:key];
             } else {
                 NSLog(@"Did not find key %@", key);
-//                [results setObject:[NSNull null] forKey:key];
+                //                [results setObject:[NSNull null] forKey:key];
             }
             
         } else {
@@ -458,31 +540,31 @@
 
 
 //- (NSMutableArray *) lookupContactsFromPhonebook:(NSArray *)contactKeys {
-//    
+//
 //    NSMutableArray *results = [[NSMutableArray alloc] init];
-//    
+//
 //    NSString *sql = @"select * from phonebook where contact_key=?";
 //    ContactVO *contact;
-//    
+//
 //    for (NSString *key in contactKeys) {
 //        NSLog(@"Lookup for contactKey %@", key);
 //        if ([[DataModel shared].contactCache objectForKey:key] == nil) {
 //            FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
 //                               key];
-//            
+//
 //            if ([rs next]) {
 //                contact = [ContactVO readFromPhonebook:[rs resultDictionary]];
 //                [[DataModel shared].contactCache setObject:contact forKey:key];
 //                [results addObject:contact];
 //            }
-//            
+//
 //        } else {
 //            contact = [[DataModel shared].contactCache objectForKey:key];
 //            [results addObject:contact];
 //        }
 //    }
 //    return results;
-//    
+//
 //}
 //
 
@@ -527,7 +609,7 @@
 }
 - (void)updatePhonebookWithContacts:(NSArray *)contacts;
 {
-//    NSLog(@"%s", __FUNCTION__);
+    //    NSLog(@"%s", __FUNCTION__);
     NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
     [[SQLiteDB sharedQueue] inTransaction:^(FMDatabase *db, BOOL *rollback) {
         NSString *sql;
@@ -583,10 +665,10 @@
             @try {
                 ABMultiValueRef phones = ABRecordCopyValue(person, kABPersonPhoneProperty);
                 
-//                NSString* mobile=nil;
+                //                NSString* mobile=nil;
                 NSString* phonenumber;
                 
-//                NSString* mobileLabel;
+                //                NSString* mobileLabel;
                 for (int i=0; i < ABMultiValueGetCount(phones); i++) {
                     phonenumber = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
                     

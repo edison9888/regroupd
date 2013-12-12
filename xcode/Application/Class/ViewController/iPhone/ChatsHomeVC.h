@@ -24,9 +24,8 @@
     
     ChatManager *chatSvc;
     ContactManager *contactSvc;
-    NSMutableArray *unknownContactKeys;
     NSMutableSet *contactKeySet;
-    
+    NSArray *_blockedKeys;
 }
 
 @property (nonatomic, strong) MBProgressHUD *hud;

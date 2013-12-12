@@ -1808,9 +1808,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                         // Build a target query: everyone in the chat room except for this device.
                         // See also: http://blog.parse.com/2012/07/23/targeting-pushes-from-a-device/
                         PFQuery *query = [PFInstallation query];
+                        
                         NSString *channelId = [@"chat_" stringByAppendingString:chatId];
                         [query whereKey:@"channels" equalTo:channelId];
                         //            [query whereKey:@"installationId" notEqualTo:[PFInstallation currentInstallation].installationId];
+                        
                         
                         NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
                                               msg.message, @"alert",
@@ -1825,11 +1827,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                         PFPush *push = [[PFPush alloc] init];
                         [push expireAfterTimeInterval:interval];
                         [push setQuery:query];
-                        //            [push setChannel:chatId];
-                        //            [push setMessage:chatId];
                         [push setData:data];
                         [push sendPushInBackground];
-
+                        
+                        self.sendButton.enabled = YES;
+                        
                         NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
                         [chatSvc updateChatStatus:chatId name:[DataModel shared].chat.names readtime:[NSNumber numberWithDouble:seconds]];
 
