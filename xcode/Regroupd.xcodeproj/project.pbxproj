@@ -157,6 +157,8 @@
 		1E4B787A18039F3C00A8812D /* AquaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E4B787918039F3C00A8812D /* AquaTableViewCell.m */; };
 		1E4B814C180842480017F75B /* chat_callout_row_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E4B814A180842480017F75B /* chat_callout_row_right@2x.png */; };
 		1E4B814D180842480017F75B /* chat_callout_row_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E4B814B180842480017F75B /* chat_callout_row_left@2x.png */; };
+		1E4E286E18595A6C003C5897 /* default_form_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E4E286D18595A6C003C5897 /* default_form_image@2x.png */; };
+		1E4E287018595C38003C5897 /* default_image_large@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E4E286F18595C38003C5897 /* default_image_large@2x.png */; };
 		1E513A6317C9A29A00DC2566 /* cell_delete_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6117C9A29A00DC2566 /* cell_delete_icon.png */; };
 		1E513A6417C9A29A00DC2566 /* cell_delete_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6217C9A29A00DC2566 /* cell_delete_icon@2x.png */; };
 		1E513A6617CBAF8E00DC2566 /* checkbox_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6517CBAF8E00DC2566 /* checkbox_on@2x.png */; };
@@ -725,6 +727,8 @@
 		1E4B787918039F3C00A8812D /* AquaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AquaTableViewCell.m; sourceTree = "<group>"; };
 		1E4B814A180842480017F75B /* chat_callout_row_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_callout_row_right@2x.png"; sourceTree = "<group>"; };
 		1E4B814B180842480017F75B /* chat_callout_row_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_callout_row_left@2x.png"; sourceTree = "<group>"; };
+		1E4E286D18595A6C003C5897 /* default_form_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_form_image@2x.png"; sourceTree = "<group>"; };
+		1E4E286F18595C38003C5897 /* default_image_large@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_image_large@2x.png"; sourceTree = "<group>"; };
 		1E513A6117C9A29A00DC2566 /* cell_delete_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cell_delete_icon.png; sourceTree = "<group>"; };
 		1E513A6217C9A29A00DC2566 /* cell_delete_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell_delete_icon@2x.png"; sourceTree = "<group>"; };
 		1E513A6517CBAF8E00DC2566 /* checkbox_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox_on@2x.png"; sourceTree = "<group>"; };
@@ -1654,6 +1658,8 @@
 		1E9280E9177FB68F008A583C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1E4E286F18595C38003C5897 /* default_image_large@2x.png */,
+				1E4E286D18595A6C003C5897 /* default_form_image@2x.png */,
 				1EBB5944184D136C00CE084D /* group_check_off@2x.png */,
 				1EBB5945184D136C00CE084D /* group_check_on@2x.png */,
 				1E3E85FE184D0D2700BB7171 /* actionsheet_button_bg_gray@2x.png */,
@@ -2640,6 +2646,7 @@
 				1E3ACA801806011000A6E6B2 /* missingAvatar@2x.png in Resources */,
 				1E92830E177FDCEB008A583C /* icon_contacts@2x.png in Resources */,
 				1E3ACA821806011000A6E6B2 /* typingMine@2x.png in Resources */,
+				1E4E287018595C38003C5897 /* default_image_large@2x.png in Resources */,
 				1E92830F177FDCEB008A583C /* icon_recents@2x.png in Resources */,
 				1E928312177FDCEB008A583C /* fpo_fax.png in Resources */,
 				1E0AEC681793AFB100710FDE /* tablecell_opaque_bg.png in Resources */,
@@ -2724,6 +2731,7 @@
 				1E7A6E1E1806EA21004B62CE /* EmbedRatingOption.xib in Resources */,
 				1E2C7EA117E4FFCB0043E28D /* dkblue_small2_btn_bg@2x.png in Resources */,
 				1EC44C7518130CC100F4A2C2 /* ProfileStart5VC.xib in Resources */,
+				1E4E286E18595A6C003C5897 /* default_form_image@2x.png in Resources */,
 				1EC44C6D18130CC100F4A2C2 /* ProfileStart1VC.xib in Resources */,
 				1E0F8EF71810999E00B6C6AF /* settings_icon_off@2x.png in Resources */,
 				1E3E8603184D0D2800BB7171 /* actionsheet_no_gray@2x.png in Resources */,

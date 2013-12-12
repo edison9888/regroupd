@@ -54,6 +54,10 @@
     
     CGRect chatFrame;
     CGRect inputFrame;
+    
+    float defaultChatFrameHeight;
+    float defaultInputFrameHeight;
+    
     CGRect chatFrameWithKeyboard;
     
     

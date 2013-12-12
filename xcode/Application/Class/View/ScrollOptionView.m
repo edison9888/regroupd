@@ -33,7 +33,7 @@
         [self.roundPic.layer setBorderColor:[UIColor whiteColor].CGColor];
         self.roundPic.clipsToBounds = YES;
         self.roundPic.contentMode = UIViewContentModeScaleAspectFill;
-        
+
         if ([pageData objectForKey:@"photo"]) {
             
             PFFile *pfPhoto = (PFFile *) [pageData objectForKey:@"photo"];

@@ -62,7 +62,8 @@
             embedOption.userInteractionEnabled = YES;
             
             embedOption.fieldLabel.text = opt.name;
-            
+            embedOption.roundPic.image = [DataModel shared].defaultImage;
+
             if (opt.pfPhoto != nil) {
                 embedOption.roundPic.file = opt.pfPhoto;
                 [embedOption.roundPic loadInBackground];

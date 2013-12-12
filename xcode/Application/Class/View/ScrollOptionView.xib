@@ -24,7 +24,7 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="25" userLabel="Image View - round pic" customClass="PFImageView">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="default_image_large.png" id="25" userLabel="Image View - round pic" customClass="PFImageView">
                     <rect key="frame" x="64" y="54" width="192" height="192"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
@@ -35,4 +35,7 @@
             </accessibility>
         </view>
     </objects>
+    <resources>
+        <image name="default_image_large.png" width="192" height="192"/>
+    </resources>
 </document>

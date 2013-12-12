@@ -54,7 +54,8 @@
             [embedOption setIndex:index];
             embedOption.tag = k_CHAT_OPTION_BASETAG + index;
             embedOption.userInteractionEnabled = YES;
-            
+            embedOption.roundPic.image = [DataModel shared].defaultImage;
+
             if (opt.pfPhoto != nil) {
                 embedOption.roundPic.file = opt.pfPhoto;
                 [embedOption.roundPic loadInBackground];

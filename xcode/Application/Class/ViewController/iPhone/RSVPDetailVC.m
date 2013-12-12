@@ -76,6 +76,8 @@
     self.roundPic.clipsToBounds = YES;
     self.roundPic.contentMode = UIViewContentModeScaleAspectFill;
     
+    self.roundPic.image = [DataModel shared].defaultImage;
+
     if (form.pfPhoto) {
         self.roundPic.file = form.pfPhoto;
         [self.roundPic loadInBackground];

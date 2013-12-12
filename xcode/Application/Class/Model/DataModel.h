@@ -60,6 +60,7 @@
 @property (nonatomic, retain) NSString *action;
 @property (nonatomic, retain) NSString *timestampText;
 @property (nonatomic, retain) UIImage *anonymousImage;
+@property (nonatomic, retain) UIImage *defaultImage;
 
 
 @property int stageHeight;
