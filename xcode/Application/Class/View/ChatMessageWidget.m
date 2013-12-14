@@ -1,6 +1,6 @@
 //
 //  ChatMessageWidget.m
-//  Regroupd
+//  Re:group'd
 //
 //  Created by Hugh Lang on 9/25/13.
 //
@@ -60,6 +60,22 @@
             self.msgView.hidden = YES;
         }
         
+        if (owner) {
+            self.leftCallout.hidden = YES;
+            self.rightCallout.hidden = NO;
+            [self.msgView setTextColor:[UIColor whiteColor]];
+            [self.timeLabel setTextColor:[UIColor whiteColor]];
+            [self.nameLabel setTextColor:[UIColor colorWithHexValue:0x28CFEA]];
+            
+        } else {
+            self.leftCallout.hidden = NO;
+            self.rightCallout.hidden = YES;
+            [self.msgView setTextColor:[UIColor blackColor]];
+            [self.nameLabel setTextColor:[UIColor colorWithHexValue:0x0d7dac]];
+            [self.timeLabel setTextColor:[UIColor colorWithHexValue:0x8496a0]];
+        }
+        
+
         if (msg.photo != nil || msg.pfPhoto != nil) {
             CGRect photoFrame = CGRectMake(kContentLeft, ypos, kContentWidth, kContentHeight);
             self.photoView = [[PFImageView alloc] initWithFrame:photoFrame];
@@ -80,21 +96,6 @@
             self.dynamicHeight += kContentHeight + 10;
             [self addSubview:self.photoView];
             [self bringSubviewToFront:self.photoView];
-        }
-        
-        if (owner) {
-            self.leftCallout.hidden = YES;
-            self.rightCallout.hidden = NO;
-            [self.msgView setTextColor:[UIColor whiteColor]];
-            [self.timeLabel setTextColor:[UIColor whiteColor]];
-            [self.nameLabel setTextColor:[UIColor colorWithHexValue:0x28CFEA]];
-            
-        } else {
-            self.leftCallout.hidden = NO;
-            self.rightCallout.hidden = YES;
-            [self.msgView setTextColor:[UIColor blackColor]];
-            [self.nameLabel setTextColor:[UIColor colorWithHexValue:0x0d7dac]];
-            [self.timeLabel setTextColor:[UIColor colorWithHexValue:0x8496a0]];
         }
         
         [self addSubview:_theView];

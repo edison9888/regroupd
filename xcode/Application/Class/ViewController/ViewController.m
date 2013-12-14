@@ -7,7 +7,7 @@
 
 #import "ViewController.h"
 #import "SlideModel.h"
-#import "UserManager.h"
+#import "ChatMessageVO.h"
 
 @implementation ViewController
 
@@ -84,6 +84,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(switchNavNotificationHandler:)     name:@"switchNavNotification"            object:nil];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundPushNotificationReceived:)     name:k_chatPushNotificationReceived            object:nil];
+
     // Do any additional setup after loading the view, typically from a nib.
     [self gotoSlideWithName:kSlideHome andOverrideTransition:kPresentationTransitionFade];
     
@@ -148,6 +150,31 @@
     
     NSLog(@"Switch to slide %@", slideName);
     [_activeSlide.delegate gotoSlideWithName:slideName andOverrideTransition:kPresentationTransitionFade];
+    
+}
+
+- (void)backgroundPushNotificationReceived:(NSNotification*)notification
+{
+#ifdef DEBUGX
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    
+    NSLog(@"Current screen is %@", _activeSlide.slideModel.name);
+    if (notification.object != nil) {
+        ChatMessageVO *msg = (ChatMessageVO *) notification.object;
+        
+        if (chatSvc == nil) {
+            chatSvc = [[ChatManager alloc] init];
+        }
+        [chatSvc apiLoadChat:msg.chat_key callback:^(ChatVO *chat) {
+            [DataModel shared].chat =  chat;
+            
+            if (![_activeSlide.slideModel.name isEqualToString:@"Chat"]) {
+                [_activeSlide.delegate gotoSlideWithName:@"Chat" andOverrideTransition:kPresentationTransitionFade];
+            }
+        }];
+        
+    }
     
 }
 

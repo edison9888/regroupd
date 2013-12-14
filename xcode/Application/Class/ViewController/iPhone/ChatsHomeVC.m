@@ -9,6 +9,8 @@
 #import "ChatsHomeVC.h"
 #import "ChatVO.h"
 
+#define kTimestampDelay 10
+
 @interface ChatsHomeVC ()
 
 @end
@@ -136,7 +138,7 @@
                 
                 NSLog(@"Compare localTime %f vs. serverTime %f", lookup.read_timestamp.doubleValue, serverTime);
                 
-                if (lookup.read_timestamp.doubleValue < serverTime) {
+                if (lookup.read_timestamp.doubleValue + kTimestampDelay < serverTime) {
                     chat.hasNew = YES;
                 } else {
                     chat.hasNew = NO;

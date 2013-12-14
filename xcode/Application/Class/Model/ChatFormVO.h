@@ -1,6 +1,6 @@
 //
 //  ChatFormVO.h
-//  Regroupd
+//  Re:group'd
 //
 //  Created by Hugh Lang on 11/21/13.
 //

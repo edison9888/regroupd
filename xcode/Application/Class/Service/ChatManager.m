@@ -1,6 +1,6 @@
 //
 //  ChatManager.m
-//  Regroupd
+//  Re:group'd
 //
 //  Created by Hugh Lang on 10/3/13.
 //
@@ -327,6 +327,24 @@
 
 
 #pragma mark - Chat API 
+
+- (void)apiLoadChat:(NSString *)objectId callback:(void (^)(ChatVO *chat))callback {
+    
+    if ([[DataModel shared].chatCache objectForKey:objectId]) {
+        ChatVO *chat = [[DataModel shared].chatCache objectForKey:objectId];
+        callback(chat);
+    } else {
+        PFQuery *query = [PFQuery queryWithClassName:kChatDB];
+        [query whereKey:@"objectId" equalTo:objectId];
+        
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *pfObject, NSError *error) {
+            ChatVO *chat = [ChatVO readFromPFObject:pfObject];
+            callback(chat);
+        }];
+        
+    }
+}
+
 - (void) apiListChats:(NSString *)userId callback:(void (^)(NSArray *results))callback {
     PFQuery *query = [PFQuery queryWithClassName:kChatDB];
     [query whereKey:@"contact_keys" containsAllObjectsInArray:@[userId]];
@@ -560,46 +578,6 @@
 }
 #pragma mark - Synchronous API -- to be deprecated
 
-- (ChatVO *) apiLoadChat:(NSString *)objectId {
-    
-    
-    return [self apiLoadChat:objectId fetchAll:NO];
-}
-- (ChatVO *) apiLoadChat:(NSString *)objectId fetchAll:(BOOL)fetchAll {
-
-    PFQuery *query = [PFQuery queryWithClassName:kChatDB];
-    PFObject *data = [query getObjectWithId:objectId];
-    // Do something with the returned PFObject .
-
-    ChatVO *chat = [ChatVO readFromPFObject:data];
-    
-    if (fetchAll) {
-        chat.messages = [[NSMutableArray alloc] init];
-        ChatMessageVO *msg;
-        
-        query = [PFQuery queryWithClassName:kChatMessageDB];
-        [query whereKey:@"chat" equalTo:data];
-        [query orderByAscending:@"createdAt"];
-        
-        NSArray *results = [query findObjects];
-        for (PFObject *msgdata in results) {
-            msg = [ChatMessageVO readFromPFObject:msgdata];
-            if (msg != nil) {
-                [chat.messages addObject:msg];
-            }
-        }
-        
-    }
-    
-    return chat;
-//    ChatVO *match = [self findChatBySystemId:data.objectId];
-//    if (match == nil) {
-//        // Save to database
-//        [self saveChat:chat];
-//    }
-    return nil;
-
-}
 - (NSString *) apiSaveChat:(ChatVO *) chat {
     
     PFObject *data = [PFObject objectWithClassName:kChatDB];

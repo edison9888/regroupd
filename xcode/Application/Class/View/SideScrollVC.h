@@ -1,6 +1,6 @@
 //
 //  SideScrollVC.h
-//  Regroupd
+//  Re:group'd
 //
 //  Created by Hugh Lang on 9/30/13.
 //

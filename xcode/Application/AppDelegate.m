@@ -153,6 +153,10 @@
     NSLog(@"%s", __FUNCTION__);
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     [DataModel shared].needsLookup = YES;
+    
+    if (self.lastMessage != nil) {
+        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatPushNotificationReceived object:self.lastMessage]];
+    }
     /*
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
@@ -220,9 +224,10 @@
         NSLog(@"####### contact_key=%@", msg.contact_key);
         NSLog(@"####### chat_key=%@", msg.chat_key);
         NSLog(@"####### msg_key=%@", msg.system_id);
-        
+        self.lastMessage = msg;
 //        [PFPush handlePush:userInfo];
         [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatPushNotificationReceived object:msg]];
+        self.lastMessage = nil;
         
     }
     

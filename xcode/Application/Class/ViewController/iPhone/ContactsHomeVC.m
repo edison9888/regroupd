@@ -52,7 +52,7 @@
     
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
-    
+    [self loadGroups];
     [self preparePhonebook];
 }
 
@@ -68,7 +68,22 @@
 }
 
 #pragma mark - Data Load
+- (void) loadGroups {
+    [self.groupsData removeAllObjects];
+    
+    NSString *sql = @"select * from groups order by name";
+    
+    isLoading = YES;
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+    
+    while ([rs next]) {
+        NSDictionary *dict =[rs resultDictionary];
+        NSLog(@"Result %@", [dict objectForKey:@"name"]);
+        [self.groupsData addObject:dict];
+    }
 
+}
 - (void) preparePhonebook {
     
     self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -160,7 +175,7 @@
 //            break;
 //
 //        case 2:
-//            title = @"Invite to Regroupd";
+//            title = @"Invite to Re:group'd";
 //            break;
 //            
 //        default:
@@ -184,7 +199,7 @@
             break;
             
         case 2:
-            title = @"Invite to Regroupd";
+            title = @"Invite to Re:group'd";
             break;
             
         default:
@@ -287,18 +302,16 @@
                 cell = (ContactTableViewCell *)[nib objectAtIndex:0];
                 cell.selectionStyle = UITableViewCellSelectionStyleGray;
             }
-            cell.titleLabel.text = @"No groups yet";
-            cell.statusLabel.text = @"";
-//            if (groupsData.count > 0) {
-//                ContactVO *contact = (ContactVO *) [groupsData objectAtIndex:indexPath.row];
-//                cell.titleLabel.text = [contact fullname];
-//                
-//                cell.statusLabel.text = kStatusAvailable;
-//                
-//            } else {
-//                cell.titleLabel.text = @"No contacts yet";
-//                cell.statusLabel.text = @"";
-//            }
+            if (groupsData.count > 0) {
+                NSDictionary *rowdata = [self.groupsData objectAtIndex:indexPath.row];
+                NSString *name = [rowdata objectForKey:@"name"];
+                cell.titleLabel.text = name;
+                cell.statusLabel.text = @"";
+                
+            } else {
+                cell.titleLabel.text = @"No groups yet";
+                cell.statusLabel.text = @"";
+            }
             
         } @catch (NSException * e) {
             NSLog(@"Exception: %@", e);
@@ -316,10 +329,9 @@
             }
             
             NSDictionary *rowData = (NSDictionary *) [otherContacts objectAtIndex:indexPath.row];
-//            cell.titleLabel.text = [NSString stringWithFormat:kFullNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
             cell.titleLabel.text = [self readFullnameFromDictionary:rowData];
 
-            cell.statusLabel.text = @"";
+            cell.statusLabel.text = kStatusAvailable;
             
         } @catch (NSException * e) {
             NSLog(@"Exception: %@", e);
@@ -359,6 +371,14 @@
         } @catch (NSException * e) {
             NSLog(@"Exception: %@", e);
         }
+    } else if (indexPath.section == 1) {
+        NSDictionary *rowdata = [self.groupsData objectAtIndex:indexPath.row];
+        [DataModel shared].group = [GroupVO readFromDictionary:rowdata];
+        
+        [DataModel shared].action = kActionEDIT;
+        [_delegate setBackPath:@"ContactsHome"];
+        [_delegate gotoSlideWithName:@"GroupInfo" andOverrideTransition:kPresentationTransitionPush|kPresentationTransitionLeft];
+
     }
     
     

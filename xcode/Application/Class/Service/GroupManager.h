@@ -1,6 +1,6 @@
 //
 //  GroupManager.h
-//  Regroupd
+//  Re:group'd
 //
 //  Created by Hugh Lang on 11/2/13.
 //

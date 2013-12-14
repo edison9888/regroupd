@@ -1,6 +1,6 @@
 //
 //  ChatManager.h
-//  Regroupd
+//  Re:group'd
 //
 //  Created by Hugh Lang on 10/3/13.
 //
@@ -33,6 +33,7 @@
 - (ChatMessageVO *) findChatMessageBySystemId:(NSString *)objectId;
 
 // API functions
+- (void)apiLoadChat:(NSString *)objectId callback:(void (^)(ChatVO *chat))callback;
 - (void) apiListChats:(NSString *)userId callback:(void (^)(NSArray *results))callback;
 - (void) apiSaveChat:(ChatVO *)chat callback:(void (^)(PFObject *object))callback;
 - (void) apiUpdateChatCounter:(NSString *)chatId;
@@ -43,8 +44,6 @@
 - (void)apiSaveChatMessage:(ChatMessageVO *)msg withPhoto:(UIImage *)saveImage callback:(void (^)(PFObject *object))callback;
 
 // Syncrhonous API functions
-- (ChatVO *) apiLoadChat:(NSString *)objectId;
-- (ChatVO *) apiLoadChat:(NSString *)objectId fetchAll:(BOOL)all;
 - (NSString *) apiSaveChat:(ChatVO *) chat;
 
 - (NSMutableArray *) asyncListChatMessages:(NSString *)objectId afterDate:(NSDate *)date;

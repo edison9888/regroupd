@@ -1,6 +1,6 @@
 //
 //  WidgetStyle.h
-//  Regroupd
+//  Re:group'd
 //
 //  Created by Hugh Lang on 11/25/13.
 //

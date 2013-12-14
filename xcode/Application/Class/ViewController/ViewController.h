@@ -10,20 +10,16 @@
 #import "TabBarView.h"
 #import "MBProgressHUD.h"
 
+#import "UserManager.h"
+#import "ChatManager.h"
+
 @interface ViewController : PresentationViewController {
     TabBarView *brandNav;
     NSMutableDictionary *navMap;
     UIView *navMask;
-//    UIView *_popOverNavigation;
-//    UIView *_overlayView;
-//    UIView *_tabBarOverlayView;
-//    UIView *_tabBar;
-//    NSArray *_navigationButtons;
-//    UIButton *_espButton;
-//    UIButton *_selectedButton;
-//    UIButton *_lastSelectedButton;
-//    BOOL _isOnHomeSlide;
-//    BOOL _isOnEspSlide;
+    
+    ChatManager *chatSvc;
+    
 }
 
 @property(nonatomic, strong) TabBarView *brandNav;

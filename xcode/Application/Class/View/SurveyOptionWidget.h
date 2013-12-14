@@ -1,6 +1,6 @@
 //
 //  SurveyOptionWidget.h
-//  Regroupd
+//  Re:group'd
 //
 //  Created by Hugh Lang on 9/25/13.
 //

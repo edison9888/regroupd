@@ -1,6 +1,6 @@
 //
 //  GroupVO.h
-//  Regroupd
+//  Re:group'd
 //
 //  Created by Hugh Lang on 10/21/13.
 //

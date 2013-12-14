@@ -1,6 +1,6 @@
 //
 //  BrandUILabel.h
-//  Regroupd
+//  Re:group'd
 //
 //  Created by Hugh Lang on 9/14/13.
 //

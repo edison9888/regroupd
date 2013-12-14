@@ -1,6 +1,6 @@
 //
 //  ChatVO.h
-//  Regroupd
+//  Re:group'd
 //
 //  Created by Hugh Lang on 10/3/13.
 //
