@@ -232,11 +232,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Application/Class/Service/ContactManager.m"
-            timestampString = "408506135.781105"
+            timestampString = "408668615.126476"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "515"
-            endingLineNumber = "515"
+            startingLineNumber = "546"
+            endingLineNumber = "546"
             landmarkName = "-lookupContactsFromPhonebook:"
             landmarkType = "5">
             <Locations>
@@ -278,11 +278,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Application/Class/Service/ContactManager.m"
-            timestampString = "408506135.781105"
+            timestampString = "408668615.126476"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "429"
-            endingLineNumber = "429"
+            startingLineNumber = "460"
+            endingLineNumber = "460"
             landmarkName = "-apiPrivacyBlockUser:blockedKey:callback:"
             landmarkType = "5">
          </BreakpointContent>
@@ -310,11 +310,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Application/Class/Service/ContactManager.m"
-            timestampString = "408506135.781105"
+            timestampString = "408668615.126476"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "412"
-            endingLineNumber = "412"
+            startingLineNumber = "443"
+            endingLineNumber = "443"
             landmarkName = "-apiPrivacyLookupBlock:blockedKey:callback:"
             landmarkType = "5">
          </BreakpointContent>
@@ -456,6 +456,22 @@
             startingLineNumber = "94"
             endingLineNumber = "94"
             landmarkName = "-refreshView"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Application/Class/Service/ContactManager.m"
+            timestampString = "408668658.122529"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "305"
+            endingLineNumber = "305"
+            landmarkName = "-apiSendSMSInviteCode:callback:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

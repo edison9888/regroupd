@@ -57,6 +57,11 @@
     
     return self;
 }
+- (void)viewWillDisappear:(BOOL)animated
+{
+    
+    
+}
 
 - (void) toggle {
     if (self.isOn) {
@@ -65,6 +70,7 @@
         [self selected];
     }
 }
+
 
 - (void) selected {
     self.isOn = YES;

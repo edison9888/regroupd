@@ -23,6 +23,8 @@
 @property (nonatomic, strong) IBOutlet UIImageView *switchIcon;
 
 - (void) toggle;
+
+
 - (void) selected;
 - (void) unselected;
 

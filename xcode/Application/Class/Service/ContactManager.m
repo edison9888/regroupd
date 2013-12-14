@@ -202,9 +202,22 @@
             }
             NSLog(@"Found contact with phone %@", contact.phone);
             
-            callback(data);
-            //            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_contactSavedNotification
-            //                                                                                                 object:data]];
+            if (contact.first_name != nil) {
+                data[@"first_name"] = contact.first_name;
+            }
+            
+            if (contact.last_name != nil) {
+                data[@"last_name"] = contact.last_name;
+            }
+            
+            if (contact.email != nil) {
+                data[@"email"] = contact.email;
+            }
+            
+            [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                NSLog(@"Saved contact with objectId %@", data.objectId);
+                callback(data);
+            }];
         }
         
     }];

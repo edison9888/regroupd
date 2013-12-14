@@ -53,11 +53,17 @@
 
 - (IBAction)tapNoButton
 {
+    
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kSetting_Add_To_Calendar];
+
     [_delegate gotoNextSlide];
 }
 
 - (IBAction)tapYesButton
 {
+    
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kSetting_Add_To_Calendar];
+
     [_delegate gotoNextSlide];
 }
 

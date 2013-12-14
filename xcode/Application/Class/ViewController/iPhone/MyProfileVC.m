@@ -9,6 +9,10 @@
 #import "MyProfileVC.h"
 #import "UIImage+Resize.h"
 
+#define kTagScrollView  99
+#define kTagNameLabel   101
+#define kTagBGLayer     666
+
 @interface MyProfileVC ()
 
 @end
@@ -31,7 +35,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        CGRect wrapperFrame = self.scrollView.frame;
+        wrapperFrame.origin.y += 20;
+        self.scrollView.frame = wrapperFrame;
+    }
+
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
     
@@ -44,7 +53,7 @@
     
     self.photoModal.layer.zPosition = 99;
     self.photoModal.frame = modalFrame;
-    [self.view addSubview:self.photoModal];
+    [self.scrollView addSubview:self.photoModal];
     
 
     [self.roundPic.layer setCornerRadius:66.0f];
@@ -57,12 +66,13 @@
     userSvc = [[UserManager alloc] init];
     contactSvc = [[ContactManager alloc] init];
     
-    
-//    NSString *filename;
-//    filename = [NSString stringWithFormat:@"%@.png", [DataModel shared].user.contact_key];
-//    img = [userSvc loadPhoto:filename];
-    
-    
+    if ([DataModel shared].myContact.first_name.length == 0 && [DataModel shared].myContact.last_name.length == 0 ) {
+        [self showEditView];
+    } else {
+        NSString *fullname = [DataModel shared].myContact.fullname;
+        self.nameLabel.text = fullname;
+
+    }
     [contactSvc asyncLoadCachedPhoto:[DataModel shared].user.contact_key callback:^(UIImage *img) {
         if (img == nil) {
             img = [UIImage imageNamed:@"anonymous_user"];
@@ -70,10 +80,27 @@
         self.roundPic.image = img;
 
     }];
-//    NSString *nameFormat = @"%@ %@";
-//    self.nameLabel.text = [NSString stringWithFormat:nameFormat,
-//                           [DataModel shared].user.first_name,
-//                           [DataModel shared].user.last_name];
+    
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
+                                             
+                                             initWithTarget:self action:@selector(singleTap:)];
+    
+    // Specify that the gesture must be a single tap
+    
+    tapRecognizer.numberOfTapsRequired = 1;
+    
+    [self.view addGestureRecognizer:tapRecognizer];
+    
+    // register for keyboard notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:self.view.window];
+    // register for keyboard notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:self.view.window];
 
 }
 
@@ -88,6 +115,63 @@
     return YES;
 }
 
+#pragma mark - Keyboard event handlers
+
+/*
+ SEE: http://stackoverflow.com/questions/1126726/how-to-make-a-uitextfield-move-up-when-keyboard-is-present/2703756#2703756
+ */
+- (void)keyboardWillHide:(NSNotification *)n
+{
+    CGRect viewFrame = self.scrollView.frame;
+    viewFrame.size.height = [DataModel shared].stageHeight - 50;
+    [self.scrollView setFrame:viewFrame];
+    keyboardIsShown = NO;
+}
+
+- (void)keyboardWillShow:(NSNotification *)n
+{
+    if (keyboardIsShown) {
+        return;
+    }
+    
+    NSDictionary* userInfo = [n userInfo];
+    CGSize keyboardSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    CGRect viewFrame = self.scrollView.frame;
+    viewFrame.size.height = [DataModel shared].stageHeight - keyboardSize.height - 50;
+    [self.scrollView setFrame:viewFrame];
+    
+    keyboardIsShown = YES;
+    
+}
+
+#pragma mark - UITextField methods
+
+-(BOOL) textFieldShouldBeginEditing:(UITextField*)textField {
+    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
+    keyboardIsShown = YES;
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
+    [textField resignFirstResponder];
+    return YES;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    _currentField = textField;
+    
+    
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    [textField resignFirstResponder];
+    [textField endEditing:YES];
+}
+
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+    return YES;
+}
 
 #pragma mark - Modal
 
@@ -275,12 +359,79 @@
 - (IBAction)tapPhoneButton {
     
 }
-- (IBAction)tapGroupsButton {
+- (IBAction)tapSaveButton {
     
-}
-- (IBAction)tapBlockButton {
-    
+    [_currentField resignFirstResponder];
+    BOOL isOk = YES;
+    if (self.tfFirstName.text.length == 0) {
+        isOk = NO;
+    }
+    if (self.tfLastName.text.length == 0) {
+        isOk = NO;
+    }
+    if (isOk) {
+        self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [self.hud setLabelText:@"Saving"];
+        
+        [DataModel shared].myContact.first_name = self.tfFirstName.text;
+        [DataModel shared].myContact.last_name = self.tfLastName.text;
+        self.nameLabel.text = [DataModel shared].myContact.fullname;
+        [contactSvc apiSaveContact:[DataModel shared].myContact callback:^(PFObject *pfContact) {
+            
+            [self hideEditView];
+            [MBProgressHUD hideHUDForView:self.view animated:NO];
+            
+        }];
+        
+        
+    }
 }
 
+#pragma mark - Touch Gestures
+
+-(void)singleTap:(UITapGestureRecognizer*)sender
+{
+    NSLog(@"%s", __FUNCTION__);
+    if (UIGestureRecognizerStateEnded == sender.state)
+    {
+        UIView* view = sender.view;
+        CGPoint loc = [sender locationInView:view];
+        UIView* subview = [view hitTest:loc withEvent:nil];
+        NSLog(@"tag = %i", subview.tag);
+        
+        switch (subview.tag) {
+            case kTagScrollView:
+                if (keyboardIsShown) {
+                    [_currentField resignFirstResponder];
+                }
+                break;
+            case kTagNameLabel:
+                [self showEditView];
+                break;
+        }
+    }
+}
+
+- (void) showEditView
+{
+    if(![self.editView isDescendantOfView:[self view]]) {
+        CGRect editFrame = self.editView.frame;
+        editFrame.origin.y = self.nameLabel.frame.origin.y - 5;
+        editFrame.origin.x = 0;
+        
+        self.editView.frame = editFrame;
+        
+        self.tfFirstName.text = [DataModel shared].myContact.first_name;
+        self.tfLastName.text = [DataModel shared].myContact.last_name;
+        
+        [self.scrollView addSubview:self.editView];
+    }
+
+}
+- (void) hideEditView
+{
+    [self.editView removeFromSuperview];
+    
+}
 
 @end

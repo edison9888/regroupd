@@ -7,11 +7,13 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyProfileVC">
             <connections>
-                <outlet property="messageButton" destination="Qcz-if-xpA" id="geT-m6-9yv"/>
+                <outlet property="editView" destination="HCy-Eb-7WB" id="u8a-R6-Wkt"/>
                 <outlet property="nameLabel" destination="w4a-bA-3Vd" id="TL9-Kr-IrX"/>
-                <outlet property="phoneButton" destination="13d-c7-bB9" id="NYF-tG-rsk"/>
                 <outlet property="photoModal" destination="oxP-z5-O7R" id="Z0z-QX-EBP"/>
                 <outlet property="roundPic" destination="weh-Ka-DS7" id="8KF-PG-4nk"/>
+                <outlet property="scrollView" destination="N7r-JN-CQN" id="6zG-mq-b8y"/>
+                <outlet property="tfFirstName" destination="3Pl-Lo-KwD" id="04f-Uj-yXM"/>
+                <outlet property="tfLastName" destination="4HG-KS-fbS" id="4jW-F4-Q1I"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -43,76 +45,35 @@
                         <action selector="tapBackButton" destination="-1" eventType="touchUpInside" id="mCD-IR-eRl"/>
                     </connections>
                 </button>
-                <imageView userInteractionEnabled="NO" tag="44" contentMode="scaleToFill" id="weh-Ka-DS7" userLabel="Image View - thumbnail">
-                    <rect key="frame" x="94" y="73" width="132" height="132"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="contact name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="w4a-bA-3Vd" userLabel="BrandUI Label - name" customClass="BrandUILabel">
-                    <rect key="frame" x="10" y="218" width="300" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="22"/>
-                    <color key="textColor" red="0.050980392156862744" green="0.49019607843137253" blue="0.67450980392156867" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Qcz-if-xpA" customClass="BrandUIButton">
-                    <rect key="frame" x="60" y="262" width="200" height="37"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="edit name" backgroundImage="contact_btn_bg_aqua_large.png">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="tapMessageButton" destination="-1" eventType="touchUpInside" id="3Yo-0q-3Pv"/>
-                    </connections>
-                </button>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="13d-c7-bB9" customClass="BrandUIButton">
-                    <rect key="frame" x="60" y="312" width="200" height="37"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="edit phone" backgroundImage="contact_btn_bg_aqua_large.png">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="tapPhoneButton" destination="-1" eventType="touchUpInside" id="dRJ-Rr-fRJ"/>
-                    </connections>
-                </button>
-                <imageView hidden="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" image="hbar_96x2.png" id="la4-HG-2h1">
-                    <rect key="frame" x="20" y="368" width="280" height="1"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="zTI-Gg-JMK" customClass="BrandUIButton">
-                    <rect key="frame" x="60" y="387" width="200" height="37"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="Manage Groups" backgroundImage="contact_btn_bg_gray_large.png">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="tapGroupsButton" destination="-1" eventType="touchUpInside" id="LxF-9b-CR9"/>
-                    </connections>
-                </button>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="eGo-6R-dcX" customClass="BrandUIButton">
-                    <rect key="frame" x="60" y="437" width="200" height="37"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="Block User" backgroundImage="contact_btn_bg_gray_large.png">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="tapBlockButton" destination="-1" eventType="touchUpInside" id="4ee-Me-xyi"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="QMG-qB-AkV" userLabel="Button - tap area">
-                    <rect key="frame" x="96" y="75" width="128" height="128"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                    <state key="normal">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="tapPhotoArea" destination="-1" eventType="touchUpInside" id="Mfm-oS-VGm"/>
-                    </connections>
-                </button>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" tag="99" contentMode="scaleToFill" id="N7r-JN-CQN">
+                    <rect key="frame" x="0.0" y="50" width="320" height="568"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" tag="44" contentMode="scaleToFill" id="weh-Ka-DS7" userLabel="Image View - thumbnail">
+                            <rect key="frame" x="94" y="20" width="132" height="132"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <label opaque="NO" clipsSubviews="YES" tag="101" contentMode="left" text="contact name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="w4a-bA-3Vd" userLabel="BrandUI Label - name" customClass="BrandUILabel">
+                            <rect key="frame" x="10" y="165" width="300" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="22"/>
+                            <color key="textColor" red="0.050980392156862744" green="0.49019607843137253" blue="0.67450980392156867" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="QMG-qB-AkV" userLabel="Button - tap area">
+                            <rect key="frame" x="96" y="22" width="128" height="128"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <state key="normal">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="tapPhotoArea" destination="-1" eventType="touchUpInside" id="Mfm-oS-VGm"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                </scrollView>
             </subviews>
             <color key="backgroundColor" red="0.8666666666666667" green="0.88235294117647056" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
@@ -175,12 +136,43 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
         </view>
+        <view autoresizesSubviews="NO" contentMode="scaleToFill" id="HCy-Eb-7WB" userLabel="View - editView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="183"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" tag="12" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="first name" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="3Pl-Lo-KwD" userLabel="Text Field - first" customClass="BrandUITextField">
+                    <rect key="frame" x="20" y="20" width="280" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="18"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+                <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" tag="13" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="last name" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="4HG-KS-fbS" userLabel="Text Field - last" customClass="BrandUITextField">
+                    <rect key="frame" x="20" y="75" width="280" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="18"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+                <button opaque="NO" tag="102" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="9iO-0j-bzb" userLabel="Button - Save" customClass="BrandUIButton">
+                    <rect key="frame" x="113" y="130" width="94" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="13"/>
+                    <state key="normal" title="SAVE" backgroundImage="btn_aqua_medium.png">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="tapSaveButton" destination="-1" eventType="touchUpInside" id="FlH-Di-Muz"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.8666666666666667" green="0.88235294117647056" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+        </view>
     </objects>
     <resources>
         <image name="btn_aqua_medium.png" width="94" height="37"/>
-        <image name="contact_btn_bg_aqua_large.png" width="200" height="37"/>
-        <image name="contact_btn_bg_gray_large.png" width="200" height="37"/>
-        <image name="hbar_96x2.png" width="96" height="2"/>
         <image name="modal_add_photo.png" width="302" height="159"/>
         <image name="topnav_aqua_bg.png" width="320" height="50"/>
     </resources>

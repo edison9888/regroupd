@@ -253,33 +253,35 @@
 
         // TODO: Add country code and normalize
         NSLog(@"phoneId is %@", phoneId);
-        
-        [contactSvc apiSendSMSInviteCode:phoneId callback:^(NSString *code) {
-            NSLog(@"apiSendSMSInviteCode code = %@", code);
-            if (code) {
-                user.password = code;
-                [DataModel shared].user = user;
-                
-                [[[UIAlertView alloc] initWithTitle:@"INFO" message:@"A text message was sent to your phone with a 6-digit verification code." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-//                [userSvc apiCreateUser:user callback:^(PFObject *pfUser) {
-//                    if (pfUser) {
-//                        NSLog(@"Created user with objectId %@", pfUser.objectId);
-//                        user.system_id = pfUser.objectId;
-//                        
-//                        [DataModel shared].user = user;
-//                        
-//                        [[[UIAlertView alloc] initWithTitle:@"INFO" message:@"A text message was sent to your phone with a 6-digit verification code." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-//                    } else {
-//                        [[[UIAlertView alloc] initWithTitle:@"INFO" message:@"Unable to create user." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-//                        
-//                    }
-//                }];
 
-            } else {
-                [[[UIAlertView alloc] initWithTitle:@"INFO" message:@"Unable to send SMS code." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-                
-            }
-        }];
+        [_delegate gotoNextSlide];
+        
+//        [contactSvc apiSendSMSInviteCode:phoneId callback:^(NSString *code) {
+//            NSLog(@"apiSendSMSInviteCode code = %@", code);
+//            if (code) {
+//                user.password = code;
+//                [DataModel shared].user = user;
+//                
+//                [[[UIAlertView alloc] initWithTitle:@"INFO" message:@"A text message was sent to your phone with a 6-digit verification code." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+////                [userSvc apiCreateUser:user callback:^(PFObject *pfUser) {
+////                    if (pfUser) {
+////                        NSLog(@"Created user with objectId %@", pfUser.objectId);
+////                        user.system_id = pfUser.objectId;
+////                        
+////                        [DataModel shared].user = user;
+////                        
+////                        [[[UIAlertView alloc] initWithTitle:@"INFO" message:@"A text message was sent to your phone with a 6-digit verification code." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+////                    } else {
+////                        [[[UIAlertView alloc] initWithTitle:@"INFO" message:@"Unable to create user." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+////                        
+////                    }
+////                }];
+//
+//            } else {
+//                [[[UIAlertView alloc] initWithTitle:@"INFO" message:@"Unable to send SMS code." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+//                
+//            }
+//        }];
         
         
     } else {

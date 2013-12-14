@@ -1753,9 +1753,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                     [query whereKey:@"channels" equalTo:channelId];
                     //            [query whereKey:@"installationId" notEqualTo:[PFInstallation currentInstallation].installationId];
                     
+//                    NSString *msgtext = @"New message from %@";
+                    NSString *msgtext = @"%@: %@";
+                    msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, msg.message];
                     
                     NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
-                                          msg.message, @"alert",
+                                          msgtext, @"alert",
                                           //                                      @"Increment", @"badge",
                                           msg.contact_key, @"contact",
                                           chatId, @"chat",
@@ -1824,11 +1827,30 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                         
                         NSString *channelId = [@"chat_" stringByAppendingString:chatId];
                         [query whereKey:@"channels" equalTo:channelId];
-                        //            [query whereKey:@"installationId" notEqualTo:[PFInstallation currentInstallation].installationId];
                         
-                        
+                        NSString *msgtext = @"%@ posted a new %@: %@";
+                        switch (attachedForm.type) {
+                            case FormType_POLL:
+                            {
+                                msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, @"poll", attachedForm.name];
+                                break;
+                            }
+                            case FormType_RATING:
+                            {
+                                msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, @"Rating poll", attachedForm.name];
+                                
+                                break;
+                            }
+                            case FormType_RSVP:
+                            {
+                                msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, @"RSVP", attachedForm.name];
+                                break;
+                            }
+                        }
+                        msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname];
+
                         NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
-                                              msg.message, @"alert",
+                                              msgtext, @"alert",
                                               msg.contact_key, @"contact",
                                               chatId, @"chat",
                                               pfMessage.objectId, @"msg",
@@ -1882,7 +1904,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 NSString *channelId = [@"chat_" stringByAppendingString:chatId];
                 [query whereKey:@"channels" equalTo:channelId];
                 //            [query whereKey:@"installationId" notEqualTo:[PFInstallation currentInstallation].installationId];
-                
+                NSString *msgtext = @"%@: %@";
+                msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, @"posted a photo"];
+
                 NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
                                       msg.message, @"alert",
                                       msg.contact_key, @"contact",

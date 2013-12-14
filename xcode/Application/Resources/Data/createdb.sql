@@ -124,6 +124,12 @@ status INT,
 timestamp REAL
 );
 
+CREATE TABLE IF NOT EXISTS settings (
+key TEXT PRIMARY KEY,
+name TEXT,
+value TEXT
+);
+
 CREATE TABLE IF NOT EXISTS phonedump ( 
 id INTEGER PRIMARY KEY,	
 record_id BIGINT,

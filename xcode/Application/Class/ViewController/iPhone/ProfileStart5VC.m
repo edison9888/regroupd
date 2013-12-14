@@ -57,12 +57,17 @@
 - (IBAction)tapNoButton
 {
     // TODO: save permissions
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kSetting_Notifications_Enabled];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kSetting_Notifications_Show_Preview];
     [self createUser];
 }
 
 - (IBAction)tapYesButton
 {
     // TODO: save permissions
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kSetting_Notifications_Enabled];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kSetting_Notifications_Show_Preview];
+    
     [self createUser];
 }
 
@@ -97,6 +102,9 @@
         [DataModel shared].user = user;
         [DataModel shared].user.contact_key = pfContact.objectId;
         
+        ContactVO *contact = [ContactVO readFromPFObject:pfContact];
+        [DataModel shared].myContact = contact;
+
         [self preparePhonebook];
     }];
 

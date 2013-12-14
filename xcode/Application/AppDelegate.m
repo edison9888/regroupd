@@ -67,17 +67,17 @@
     [DataModel shared].anonymousImage = [UIImage imageNamed:@"anonymous_user.png"];
     [DataModel shared].defaultImage = [UIImage imageNamed:@"default_form_image.png"];
     
-    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
-        // code here
-        self.window.clipsToBounds =YES;
-        self.window.frame =  CGRectMake(0,0,self.window.frame.size.width,self.window.frame.size.height);
-    } else {
-        self.window.clipsToBounds =NO;
-        
-        self.window.frame =  CGRectMake(0,20,self.window.frame.size.width,self.window.frame.size.height);
-        
-        
-    }
+//    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+//        // code here
+//        self.window.clipsToBounds =YES;
+//        self.window.frame =  CGRectMake(0,0,self.window.frame.size.width,self.window.frame.size.height);
+//    } else {
+//        self.window.clipsToBounds =NO;
+//        
+//        self.window.frame =  CGRectMake(0,20,self.window.frame.size.width,self.window.frame.size.height);
+//        
+//        
+//    }
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
@@ -185,7 +185,7 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSLog(@"%s", __FUNCTION__);
-    
+    // http://www.rqgg.net/topic/zpnnq-on-off-setting-for-push-notification-at-app-level.html
     /*
      NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
      @"Increment", @"badge",

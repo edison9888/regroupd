@@ -12,6 +12,7 @@
 @synthesize contactId;
 
 @synthesize user;
+@synthesize myContact;
 @synthesize contact;
 @synthesize form;
 @synthesize chat;

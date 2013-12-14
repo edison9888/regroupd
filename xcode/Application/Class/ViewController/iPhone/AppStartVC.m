@@ -89,6 +89,8 @@
             [userSvc apiLookupContactForUser:u callback:^(PFObject *pfContact) {
                 if (pfContact != nil) {
                     NSLog(@"Valid user is %@, user_key=%@, contact_key=%@", u.username, u.objectId, pfContact.objectId);
+                    ContactVO *contact = [ContactVO readFromPFObject:pfContact];
+                    [DataModel shared].myContact = contact;
                     [DataModel shared].user.contact_key = pfContact.objectId;
                     [DataModel shared].navIndex = 3;
                     [_delegate gotoSlideWithName:@"FormsHome"];

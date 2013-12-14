@@ -30,12 +30,32 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    // ######### TEMP DEBUG #############
-    self.value1.text = [DataModel shared].user.username;
-    self.value2.text = [DataModel shared].user.password;
-    self.value3.text = [DataModel shared].user.user_key;
     
-    // ######### TEMP DEBUG #############
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kSetting_Notifications_Enabled]) {
+        [self.toggle1 selected];
+    } else {
+        [self.toggle1 unselected];
+        
+    }
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kSetting_Notifications_Show_Preview]) {
+        [self.toggle2 selected];
+    } else {
+        [self.toggle2 unselected];
+    }
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kSetting_Add_To_Calendar]) {
+        [self.toggle3 selected];
+    } else {
+        [self.toggle3 unselected];
+    }
+
+
+    
+//    // ######### TEMP DEBUG #############
+//    self.value1.text = [DataModel shared].user.username;
+//    self.value2.text = [DataModel shared].user.password;
+//    self.value3.text = [DataModel shared].user.user_key;
+//    
+//    // ######### TEMP DEBUG #############
 
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
@@ -57,7 +77,18 @@
     
     [self.view addGestureRecognizer:tapRecognizer];
 
+    
 }
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+
+    [self saveToggle1];
+    [self saveToggle2];
+    [self saveToggle3];
+    
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -85,9 +116,12 @@
         CGPoint loc = [sender locationInView:view];
         UIView* subview = [view hitTest:loc withEvent:nil];
         NSLog(@"tag = %i", subview.tag);
-                
+        
+        // http://www.rqgg.net/topic/zpnnq-on-off-setting-for-push-notification-at-app-level.html
         switch (subview.tag) {
             case 1:
+//                [[NSUserDefaults standardUserDefaults] setObject:m.location forKey:@"loc"];
+
                 [self.toggle1 toggle];
                 break;
             case 2:
@@ -105,8 +139,30 @@
     }
 
 }
+- (void) saveToggle1 {
+    if (self.toggle1.isOn) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kSetting_Notifications_Enabled];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kSetting_Notifications_Enabled];
+    }
+}
 
-#pragma mark - IBActions 
+- (void) saveToggle2 {
+    if (self.toggle2.isOn) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kSetting_Notifications_Show_Preview];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kSetting_Notifications_Show_Preview];
+    }
+
+}
+- (void) saveToggle3 {
+    if (self.toggle3.isOn) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kSetting_Add_To_Calendar];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kSetting_Add_To_Calendar];
+    }
+}
+#pragma mark - IBActions
 - (IBAction)tapClearAllButton {
     
     

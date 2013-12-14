@@ -27,6 +27,10 @@
 #define kFormResponseDB     @"FormResponseDB"
 #define kPrivacyDB          @"PrivacyDB"
 
+#define kSetting_Notifications_Enabled      @"Setting_Notifications_Enabled"
+#define kSetting_Notifications_Show_Preview @"Setting_Notifications_Show_Preview"
+#define kSetting_Add_To_Calendar            @"Setting_Add_To_Calendar"
+
 @interface DataModel : NSObject {
     NSMutableDictionary *contactData;
     NSString *action;
@@ -46,6 +50,8 @@
 @property int contactId;
 
 @property (nonatomic, retain) UserVO *user;
+@property (nonatomic, retain) ContactVO *myContact;
+
 @property (nonatomic, retain) ContactVO *contact;
 @property (nonatomic, retain) FormVO *form;
 @property (nonatomic, retain) ChatVO *chat;
