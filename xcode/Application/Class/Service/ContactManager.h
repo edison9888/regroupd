@@ -29,9 +29,9 @@
 - (void) apiLoadContact:(NSString *)contactKey callback:(void (^)(PFObject *))callback;
 
 - (void) apiLookupContacts:(NSArray *)contactKeys callback:(void (^)(NSArray *))callback;
-
-
 - (void) apiLookupContactsByPhoneNumbers:(NSArray *)numbers callback:(void (^)(NSArray *))callback;
+
+- (void) apiSendSMSInviteCode:(NSString *) phone callback:(void (^)(NSString *))callback;
 
 // PRIVACY API METHODS
 

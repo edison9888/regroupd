@@ -224,16 +224,18 @@
         isOk = NO;
     }
     if (isOk) {
-        UserVO *user = [DataModel shared].user;
-        user.password = @"123456";
-
-//        user.password = self.tf1.text;
+        NSString *code = self.tf1.text;
+        code = [code stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         
-        // TODO: Validate that code is correct
+        if ([code isEqualToString:[DataModel shared].user.password]) {
+            NSLog(@"Code is correct %@", code);
+            [_delegate gotoNextSlide];
+        } else {
+            [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Incorrect verification code" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            
+        }
         
         
-        
-        [_delegate gotoNextSlide];
     } else {
         [[[UIAlertView alloc] initWithTitle:@"INFO" message:@"Please enter the verification code." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         

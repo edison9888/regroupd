@@ -174,7 +174,7 @@
 
 // Create a user and then contact. Return the PF
 /*
- Use case: user signup with phone number and SMS verification code as password. 
+ Use case: user signup with phone number and SMS verification code as password.
  Notes:
  -- Existing UserDB record may already exist if user already signed up
  -- Existing ContactDB record may already exist
@@ -183,6 +183,81 @@
  
  
  */
+
+- (void) apiCreateUser:(UserVO *)user callback:(void (^)(PFObject *pfUser))callback{
+    
+    PFQuery *query= [PFUser query];
+    
+    [query whereKey:@"username" equalTo:user.phone];
+    
+    __block PFUser *pfUser;
+    
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error){
+        BOOL isOk = YES;
+        
+        if (object == nil) {
+            // need to create user
+            NSLog(@"Creating new user for phone %@", user.phone);
+            pfUser = [PFUser user];
+            pfUser.username = user.username;
+            pfUser.password = user.password;
+            if (user.email != nil) {
+                pfUser.email = user.email;
+            }
+            [pfUser setObject:user.phone forKey:@"phone"];
+            isOk = [pfUser signUp];
+            
+            if (isOk) {
+                NSLog(@"Signup ok");
+                callback(pfUser);
+            } else {
+                NSLog(@"Signup failed");
+            }
+        } else {
+            NSLog(@"Found user for phone %@", user.phone);
+            pfUser = (PFUser *)object;
+            pfUser.password = user.password;
+            [pfUser saveInBackground];
+//            NSError* error;
+//            [PFUser logInWithUsername:user.username password:user.password error:&error] ;
+//            
+//            if (error) {
+//                NSLog(@"%@", error);
+//            } else {
+//                isOk = YES;
+//            }
+            callback(pfUser);
+        }
+        
+    }];
+    
+}
+
+- (void) apiCreateContact:(UserVO *)user withUserId:(NSString *)userId callback:(void (^)(PFObject *pfContact))callback{
+    
+    PFQuery *query = [PFQuery queryWithClassName:kContactDB];
+    [query whereKey:@"phone" equalTo:user.phone];
+    
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *pfContact, NSError *error){
+        
+        if (!pfContact) {
+            NSLog(@"Creating new contact for phone %@", user.phone);
+            
+            pfContact = [PFObject objectWithClassName:kContactDB];
+            pfContact[@"user"] = [PFUser objectWithoutDataWithClassName:@"User" objectId:userId];
+            pfContact[@"phone"] = user.phone;
+            //                pfContact[@"first_name"] = user.first_name;
+            //                pfContact[@"last_name"] = user.last_name;
+            
+        }
+        callback(pfContact);
+        
+    }];
+    
+    
+}
+
+
 - (void) apiCreateUserAndContact:(UserVO *)user callback:(void (^)(PFObject *pfUser, PFObject *pfContact))callback{
     
     PFQuery *query= [PFUser query];
@@ -265,7 +340,7 @@
         }
         
     }];
-   
+    
 }
 
 - (void) apiLookupContactForUser:(PFUser *)pfUser callback:(void (^)(PFObject *pfContact))callback{
@@ -280,7 +355,7 @@
             callback(pfContact);
         }
     }];
-
+    
 }
 #pragma mark - User API Synchronous -- to be deprecated
 // API functions
@@ -289,7 +364,7 @@
     return nil;
 }
 - (NSString *) apiSaveUser:(UserVO *) user {
-
+    
     PFUser *u = [PFUser user];
     u.username = user.username;
     u.password = user.password;

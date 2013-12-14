@@ -289,6 +289,37 @@
     }];
     
 }
+#pragma mark -- Twilio SMS - Parse Cloud integration
+
+- (void) apiSendSMSInviteCode:(NSString *)phone callback:(void (^)(NSString *))callback {
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    [params setObject:phone forKey:@"phone"];
+    
+    int random = [self getRandomNumberBetween:100000 maxNumber:999999];
+    NSString *code = [NSNumber numberWithInt:random].stringValue;
+    [params setObject:code forKey:@"code"];
+    
+    // Call our Cloud Function that sends an SMS with Twilio
+    [PFCloud callFunctionInBackground:@"inviteWithTwilio"
+                       withParameters:params
+                                block:^(id object, NSError *error) {
+                                    if (error) {
+                                        NSLog(@"%@", error);
+                                        callback(nil);
+                                    } else {
+                                        callback(code);
+                                    }
+                                    
+                                }];
+}
+
+- (int)getRandomNumberBetween:(int)min maxNumber:(int)max
+{
+    return min + arc4random() % (max - min + 1);
+}
+
+
+#pragma mark -- Photo loading and caching. Probably remove
 - (UIImage *) loadCachedPhoto:(NSString *)contactKey {
     @try {
         NSArray *pathsToDocuments = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

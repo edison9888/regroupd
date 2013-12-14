@@ -10,6 +10,7 @@
 #import "UserVO.h"
 #import "NBPhoneNumberUtil.h"
 #import "ContactManager.h"
+#import "UserManager.h"
 
 @interface ProfileStart1VC ()
 
@@ -238,7 +239,9 @@
         isOk = NO;
     }
     if (isOk) {
+        
         ContactManager *contactSvc = [[ContactManager alloc] init];
+        UserManager *userSvc = [[UserManager alloc] init];
         
         NSString *phoneId = [contactSvc formatPhoneNumberAsE164:self.tf1.text];
         
@@ -246,16 +249,53 @@
         UserVO *user = [[UserVO alloc] init];
         user.phone = phoneId;
         user.username = phoneId;
-        
-        // TODO: Add country code and normalize
         [DataModel shared].user = user;
+
+        // TODO: Add country code and normalize
+        NSLog(@"phoneId is %@", phoneId);
         
-        [_delegate gotoNextSlide];
+        [contactSvc apiSendSMSInviteCode:phoneId callback:^(NSString *code) {
+            NSLog(@"apiSendSMSInviteCode code = %@", code);
+            if (code) {
+                user.password = code;
+                [DataModel shared].user = user;
+                
+                [[[UIAlertView alloc] initWithTitle:@"INFO" message:@"A text message was sent to your phone with a 6-digit verification code." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+//                [userSvc apiCreateUser:user callback:^(PFObject *pfUser) {
+//                    if (pfUser) {
+//                        NSLog(@"Created user with objectId %@", pfUser.objectId);
+//                        user.system_id = pfUser.objectId;
+//                        
+//                        [DataModel shared].user = user;
+//                        
+//                        [[[UIAlertView alloc] initWithTitle:@"INFO" message:@"A text message was sent to your phone with a 6-digit verification code." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+//                    } else {
+//                        [[[UIAlertView alloc] initWithTitle:@"INFO" message:@"Unable to create user." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+//                        
+//                    }
+//                }];
+
+            } else {
+                [[[UIAlertView alloc] initWithTitle:@"INFO" message:@"Unable to send SMS code." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                
+            }
+        }];
+        
+        
     } else {
         [[[UIAlertView alloc] initWithTitle:@"INFO" message:@"Please enter a valid phone number." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         
     }
 }
+
+#pragma mark - UIAlertView
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    
+    [_delegate gotoNextSlide];
+}
+
+
 
 - (NSString *) formatPhoneNumberAsE164:(NSString *)phone {
     NSString *result = nil;
@@ -306,5 +346,6 @@
     
     NSLog (@"extractCountryCode [%lu] [%@]", dRes, res);
 }
+
 
 @end

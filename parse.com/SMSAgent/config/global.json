@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "_default": {
+            "link": "regroupd-dev"
+        }, 
+        "regroupd-dev": {
+            "applicationId": "Xsf11WQNwFxIyu6rM447OTYtrvj5qSNNc5EX93Qt", 
+            "masterKey": "2VrHcoqT5aO1I4bA15lfI2sBlN5GQjhTmbRGFrEo"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.2.13"
+    }
+}

@@ -42,6 +42,9 @@ typedef enum {
 @property (nonatomic, retain) NSString *contact_key;
 
 @property (nonatomic, retain) NSString *facebook_id;
+
+@property (nonatomic, retain) NSString *password;
+
 @property (nonatomic, retain) NSString *first_name;
 @property (nonatomic, retain) NSString *last_name;
 @property (nonatomic, retain) NSString *phone;
