@@ -39,16 +39,20 @@
     
     CGRect scrollFrame = self.scrollView.frame;
     
-    scrollFrame.size.height = [DataModel shared].stageHeight - 30;
-    
-    
+//    scrollFrame.size.height = [DataModel shared].stageHeight - 30;
+//    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+//        scrollFrame.origin.y += 20;
+//    }
+    scrollFrame.size.height = [DataModel shared].stageHeight;
     self.scrollView.frame = scrollFrame;
+
     self.scrollView.delegate = self;
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
-    self.theTableView.backgroundColor = [UIColor clearColor];
+    self.theTableView.backgroundColor = [UIColor whiteColor];
+    
     [self.theTableView setSeparatorColor:[UIColor grayColor]];
-    [self.theTableView setSeparatorInset:UIEdgeInsetsZero];
+//    [self.theTableView setSeparatorInset:UIEdgeInsetsZero];
 
     self.tableData =[[NSMutableArray alloc]init];
     

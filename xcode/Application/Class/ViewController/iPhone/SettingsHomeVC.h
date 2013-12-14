@@ -20,6 +20,8 @@
     BOOL Setting_Add_To_Calendar;
 }
 
+@property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
+
 @property (nonatomic, strong) IBOutlet FancyToggle *toggle1;
 @property (nonatomic, strong) IBOutlet FancyToggle *toggle2;
 @property (nonatomic, strong) IBOutlet FancyToggle *toggle3;

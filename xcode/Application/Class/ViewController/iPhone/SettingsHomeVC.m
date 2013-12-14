@@ -30,7 +30,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    
+    CGRect scrollFrame = self.scrollView.frame;
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        scrollFrame.origin.y += 20;
+    }
+    scrollFrame.size.height = [DataModel shared].stageHeight;
+    self.scrollView.frame = scrollFrame;
+
     if ([[NSUserDefaults standardUserDefaults] boolForKey:kSetting_Notifications_Enabled]) {
         [self.toggle1 selected];
     } else {

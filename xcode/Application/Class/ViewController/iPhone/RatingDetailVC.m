@@ -73,7 +73,7 @@
     self.theTableView.dataSource = self;
     self.theTableView.backgroundColor = [UIColor clearColor];
     [self.theTableView setSeparatorColor:[UIColor grayColor]];
-    [self.theTableView setSeparatorInset:UIEdgeInsetsZero];
+//    [self.theTableView setSeparatorInset:UIEdgeInsetsZero];
 
     self.tableData =[[NSMutableArray alloc]init];
 

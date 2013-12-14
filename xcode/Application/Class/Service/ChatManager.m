@@ -355,6 +355,9 @@
     
     PFQuery *query = [PFQuery queryWithClassName:kChatDB];
     [query getObjectInBackgroundWithId:chatKey block:^(PFObject *pfChat, NSError *error) {
+        if (error) {
+            NSLog(@"apiUpdateChatCounter error: %@", error);
+        }
         if (pfChat) {
             [pfChat incrementKey:@"counter"];
             [pfChat saveInBackground];

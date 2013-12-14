@@ -7,10 +7,11 @@
 //
 
 #import "EmbedRSVPWidget.h"
+#import <EventKit/EventKit.h>
 #import <QuartzCore/QuartzCore.h>
+
 #import "UIColor+ColorWithHex.h"
 #import "UIImage+Tint.h"
-
 #import "FormOptionVO.h"
 
 #define kInitialY   62
@@ -253,6 +254,69 @@
         
         index ++;
         [formSvc apiSaveFormResponse:response callback:^(PFObject *object) {
+            
+
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:kSetting_Add_To_Calendar]) {
+                if ([selectedOption.name isEqualToString:@"Yes"] || [selectedOption.name isEqualToString:@"Maybe"] ) {
+
+                    NSLog(@"Saving event to user calendar");
+                    EKEventStore *eventStore = [[EKEventStore alloc] init];
+                    
+                    
+
+                    if([eventStore respondsToSelector:@selector(requestAccessToEntityType:completion:)])
+                    {
+                        // iOS 6 and later
+                        // This line asks user's permission to access his calendar
+                        [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error)
+                         {
+                             if (granted) // user user is ok with it
+                             {
+                                 EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
+                                 event.calendar  = [eventStore defaultCalendarForNewEvents];
+                                 event.title     = self.form.name;
+                                 event.location  = self.form.location;
+                                 event.notes     = self.form.details;
+                                 event.startDate = self.form.eventStartsAt;
+                                 event.endDate   = self.form.eventEndsAt;
+                                 event.allDay    = NO;
+                                 NSError *err;
+                                 
+                                 [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+                                 
+                                 if(err)
+                                     NSLog(@"unable to save event to the calendar!: Error= %@", err);
+                                 
+                             }
+                         }];
+                    }
+                    
+                    // iOS < 6
+                    else
+                    {
+                        EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
+                        event.calendar  = [eventStore defaultCalendarForNewEvents];
+                        event.title     = self.form.name;
+                        event.location  = self.form.location;
+                        event.notes     = self.form.details;
+                        event.startDate = self.form.eventStartsAt;
+                        event.endDate   = self.form.eventEndsAt;
+                        event.allDay    = NO;
+
+                        NSError *err;
+                        
+                        [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+                        
+                        if(err)
+                            NSLog(@"unable to save event to the calendar!: Error= %@", err);
+                        
+                    }
+                    
+                }
+            } else {
+                // do nothing
+            }
+
             [indicator stopAnimating];
             [indicator removeFromSuperview];
             if (object) {

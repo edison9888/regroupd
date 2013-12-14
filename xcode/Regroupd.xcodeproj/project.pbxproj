@@ -527,6 +527,7 @@
 		1EEA97631844343D00D726C4 /* WidgetStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEA97621844343D00D726C4 /* WidgetStyle.m */; };
 		1EEA9765184437F500D726C4 /* name_widget_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EEA9764184437F500D726C4 /* name_widget_arrow@2x.png */; };
 		1EEA976818444B8900D726C4 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEA976718444B8900D726C4 /* UIImage+Resize.m */; };
+		1EF18609185CB354008AA6FE /* createdb.sql in Resources */ = {isa = PBXBuildFile; fileRef = 1EF18608185CB354008AA6FE /* createdb.sql */; };
 		1EF463341783AE1C00D38DBB /* UserVO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EF463331783AE1C00D38DBB /* UserVO.m */; };
 		1EFEA23F182FB97300FEE9E4 /* NBAsYouTypeFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EFEA22F182FB97300FEE9E4 /* NBAsYouTypeFormatter.m */; };
 		1EFEA240182FB97300FEE9E4 /* NBNumberFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EFEA231182FB97300FEE9E4 /* NBNumberFormat.m */; };
@@ -1228,6 +1229,7 @@
 		1EEA9764184437F500D726C4 /* name_widget_arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "name_widget_arrow@2x.png"; sourceTree = "<group>"; };
 		1EEA976618444B8900D726C4 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
 		1EEA976718444B8900D726C4 /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
+		1EF18608185CB354008AA6FE /* createdb.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = createdb.sql; sourceTree = "<group>"; };
 		1EF463321783AE1C00D38DBB /* UserVO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserVO.h; sourceTree = "<group>"; };
 		1EF463331783AE1C00D38DBB /* UserVO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserVO.m; sourceTree = "<group>"; };
 		1EFEA22E182FB97300FEE9E4 /* NBAsYouTypeFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NBAsYouTypeFormatter.h; sourceTree = "<group>"; };
@@ -1627,6 +1629,7 @@
 		1E9280DC177FB68F008A583C /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				1EF18608185CB354008AA6FE /* createdb.sql */,
 				1EFEA249182FBFA500FEE9E4 /* NBPhoneNumberMetadata.plist */,
 				1EFEA24A182FBFA500FEE9E4 /* NBPhoneNumberMetadataForTesting.plist */,
 				1E2C7E4E17E4F6660043E28D /* regroupd.sqlite */,
@@ -2502,6 +2505,7 @@
 				1E3ACA7E1806011000A6E6B2 /* bubbleSomeone@2x.png in Resources */,
 				1E928217177FB690008A583C /* invisibutton-60x36.png in Resources */,
 				1E928218177FB690008A583C /* key0.png in Resources */,
+				1EF18609185CB354008AA6FE /* createdb.sql in Resources */,
 				1E4B784A1803535900A8812D /* icon_attach_plus@2x.png in Resources */,
 				1E928219177FB690008A583C /* key0@2x.png in Resources */,
 				1E59F11E17FC7AF300EE2902 /* NotoSans-BoldItalic.ttf in Resources */,

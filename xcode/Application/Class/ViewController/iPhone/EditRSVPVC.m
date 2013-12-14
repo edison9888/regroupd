@@ -140,7 +140,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self setKeyboardControls:[[BSKeyboardControls alloc] initWithFields:fields]];
     [self.keyboardControls setDelegate:self];
 
-    [self.keyboardControls setTintColor:[UIColor colorWithHexValue:0x999999]];
+    [self.keyboardControls setSegmentedControlTintControl:[UIColor colorWithHexValue:0x999999]];
     
     // register for keyboard notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -874,13 +874,15 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)Picker {
     NSLog(@"%s", __FUNCTION__);
 	[self dismissViewControllerAnimated:YES completion:nil];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     
     self.imagePickerVC = nil;
 }
 
 - (void)imagePickerController:(UIImagePickerController *)Picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     NSLog(@"%s", __FUNCTION__);
-    
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+
 	UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
     
     CGSize resize;

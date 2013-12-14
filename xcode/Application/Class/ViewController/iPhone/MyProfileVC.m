@@ -33,16 +33,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+//    CGRect frame = self.view.frame;
     
+    CGRect scrollFrame = self.scrollView.frame;
     if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
-        CGRect wrapperFrame = self.scrollView.frame;
-        wrapperFrame.origin.y += 20;
-        self.scrollView.frame = wrapperFrame;
+        scrollFrame.origin.y += 20;
     }
+    scrollFrame.size.height = [DataModel shared].stageHeight;
+    self.scrollView.frame = scrollFrame;
+    
+    self.scrollView.delegate = self;
 
-    NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
+//    NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
+//    [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
     
     CGRect modalFrame = self.photoModal.frame;
     int ypos = -modalFrame.size.height;
@@ -290,12 +293,14 @@
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)Picker {
     NSLog(@"%s", __FUNCTION__);
 	[self dismissViewControllerAnimated:YES completion:nil];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     
     self.imagePickerVC = nil;
 }
 
 - (void)imagePickerController:(UIImagePickerController *)Picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     NSLog(@"%s", __FUNCTION__);
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     
     self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [self.hud setLabelText:@"Saving"];

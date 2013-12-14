@@ -39,9 +39,6 @@
 
 @interface ChatVC ()
 {
-    //    IBOutlet UIBubbleTableView *bubbleTable;
-    
-    NSMutableArray *tableDataSource;
 }
 
 @end
@@ -307,7 +304,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [self.hud setLabelText:@"Loading"];
     [self.hud setDimBackground:YES];
-    
+
+    self.tableDataSource = [[NSMutableArray alloc] init];
+
     // Setup chat bubble config
     
     self.bubbleTable.bubbleDataSource = self;
@@ -523,8 +522,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     @try {
         if (notification.object != nil) {
             ChatVO *theChat = (ChatVO *) notification.object;
-            
-            tableDataSource = [[NSMutableArray alloc] init];
+            [self.tableDataSource removeAllObjects];
             self.imageMap = [[NSMutableDictionary alloc] initWithCapacity:theChat.contact_keys.count];
             
             
@@ -576,7 +574,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             if (bubble == nil) {
                 NSLog(@"bubble is nil");
             } else {
-                [tableDataSource addObject:bubble];
+                [self.tableDataSource addObject:bubble];
             }
         }
         NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
@@ -596,7 +594,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         //            if (bubble == nil) {
         //                NSLog(@"bubble is nil");
         //            } else {
-        //                [tableDataSource addObject:bubble];
+        //                [self.tableDataSource addObject:bubble];
         //            }
         //        }
     }
@@ -872,11 +870,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         
     } else if (theForm.type == FormType_RSVP) {
         EmbedRSVPWidget *embedWidget = [[EmbedRSVPWidget alloc] initWithFrame:msgFrame andOptions:theForm.options andResponses:(NSMutableDictionary *)theForm.responsesMap isOwner:isOwner];
-        //                    embedWidget.subjectLabel.text = attachedForm.name;
+        //                    embedWidget.subjectLabel.text = self.attachedForm.name;
         
         // Save keys in widget for when user submits response data
+        
         embedWidget.chat_key = [DataModel shared].chat.system_id;
         embedWidget.form_key = theForm.system_id;
+        embedWidget.form = theForm;
         
         NSLog(@"widget height = %f", embedWidget.dynamicHeight);
         msgFrame.size.height = embedWidget.dynamicHeight;
@@ -925,10 +925,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)hideFormSelectorNotificationHandler:(NSNotification*)notification
 {
     if (notification.object != nil) {
-        attachedForm = (FormVO *) notification.object;
-        attachmentType = attachedForm.type;
+        self.attachedForm = (FormVO *) notification.object;
+        attachmentType = self.attachedForm.type;
         hasAttachment = YES;
-        NSLog(@"Form pick: %@", attachedForm.name);
+        NSLog(@"Form pick: %@", self.attachedForm.name);
         
         switch (attachmentType) {
             case FormType_POLL:
@@ -947,13 +947,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         if (formSvc == nil) {
             formSvc = [[FormManager alloc] init];
         }
-        [formSvc apiListFormOptions:attachedForm.system_id callback:^(NSArray *results) {
-            attachedForm.options = [[NSMutableArray alloc] initWithCapacity:results.count];
+        [formSvc apiListFormOptions:self.attachedForm.system_id callback:^(NSArray *results) {
+            self.attachedForm.options = [[NSMutableArray alloc] initWithCapacity:results.count];
             FormOptionVO *option;
             
             for (PFObject *result in results) {
                 option = [FormOptionVO readFromPFObject:result];
-                [attachedForm.options addObject:option];
+                [self.attachedForm.options addObject:option];
             }
             [self hideFormSelector];
         }];
@@ -969,14 +969,14 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (NSInteger)rowsForBubbleTable:(UIBubbleTableView *)tableView
 {
-    NSLog(@"rowsForBubbleTable %i", [tableDataSource count]);
-    return [tableDataSource count];
+    NSLog(@"rowsForBubbleTable %i", [self.tableDataSource count]);
+    return [self.tableDataSource count];
 }
 
 - (NSBubbleData *)bubbleTableView:(UIBubbleTableView *)tableView dataForRow:(NSInteger)row
 {
     //    NSLog(@"bubbleTableView dataForRow %i",row);
-    return [tableDataSource objectAtIndex:row];
+    return [self.tableDataSource objectAtIndex:row];
 }
 
 
@@ -1057,27 +1057,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     //    }
     return YES;
 }
-
-//- (CGSize)determineSize:(NSString *)text constrainedToSize:(CGSize)size
-//{
-//
-//    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
-//        CGRect frame = [text boundingRectWithSize:size
-//                                          options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-//                                       attributes:@{NSFontAttributeName:theFont}
-//                                          context:nil];
-//        return frame.size;
-//    } else {
-//        return [text sizeWithFont:theFont constrainedToSize:size];
-//    }
-//}
-//- (CGFloat)textViewHeightForAttributedText:(NSAttributedString*)text andWidth:(CGFloat)width
-//{
-//    UITextView *calculationView = [[UITextView alloc] init];
-//    [calculationView setAttributedText:text];
-//    CGSize size = [calculationView sizeThatFits:CGSizeMake(width, FLT_MAX)];
-//    return size.height;
-//}
 
 
 #pragma mark - Keyboard events
@@ -1370,7 +1349,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     // ADD WARNING ALERT
     hasAttachment = NO;
     attachmentType = -1;
-    attachedPhoto = nil;
+    self.attachedPhoto = nil;
     
     [self hideAttachModal];
     [self.attachButton setImage:[UIImage imageNamed:kAttachPlusIcon] forState:UIControlStateNormal];
@@ -1461,27 +1440,29 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)Picker {
     NSLog(@"%s", __FUNCTION__);
 	[self dismissViewControllerAnimated:YES completion:nil];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     
     self.imagePickerVC = nil;
-    attachedPhoto = nil;
+    self.attachedPhoto = nil;
     
 }
 
 - (void)imagePickerController:(UIImagePickerController *)Picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     NSLog(@"%s", __FUNCTION__);
     
-    
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+
     UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
     
     CGSize resize;
     
     resize = CGSizeMake(kMinimumImageDimension, kMinimumImageDimension);
     
-    attachedPhoto = [tmpImage resizedImageWithContentMode:UIViewContentModeScaleAspectFill bounds:resize interpolationQuality:kCGInterpolationMedium];
+    self.attachedPhoto = [tmpImage resizedImageWithContentMode:UIViewContentModeScaleAspectFill bounds:resize interpolationQuality:kCGInterpolationMedium];
     
     tmpImage = nil;
     
-    NSLog(@"photo size = %f / %f", attachedPhoto.size.width, attachedPhoto.size.height);
+    NSLog(@"photo size = %f / %f", self.attachedPhoto.size.width, self.attachedPhoto.size.height);
     
     attachmentType = 0;
     hasAttachment = YES;
@@ -1735,15 +1716,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                     
                     bubble = [self buildMessageBubble:msg];
                     
-                    [tableDataSource addObject:bubble];
+                    [self.tableDataSource addObject:bubble];
                     [self.bubbleTable reloadData];
-                    [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
-                    
-                    self.inputField.text = @"";
-                    
-                    //                // Reset frame of chat and input
-                    //                self.inputField.frame = inputFrame;
-                    //                self.chatBar.frame = chatFrameWithKeyboard;
+                    [self resetChatUI];
                     
                     // Build a target query: everyone in the chat room except for this device.
                     // See also: http://blog.parse.com/2012/07/23/targeting-pushes-from-a-device/
@@ -1776,8 +1751,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                     [push setData:data];
                     [push sendPushInBackground];
                     
-                    self.sendButton.enabled = YES;
-                    
                     NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
                     [chatSvc updateChatStatus:chatId name:[DataModel shared].chat.names readtime:[NSNumber numberWithDouble:seconds]];
                     
@@ -1785,7 +1758,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             }
             //        [chatSvc apiSaveChatMessage:msg];
         }
-        [self resetChatUI];
         
         return;
     }
@@ -1794,16 +1766,16 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         [self.hud setLabelText:@"Sending"];
         
-        if (attachedForm != nil) {
+        if (self.attachedForm != nil) {
             
-            [formCache setObject:attachedForm forKey:attachedForm.system_id];
+            [formCache setObject:self.attachedForm forKey:self.attachedForm.system_id];
             
             // ################# PARSE SAVE ##################
             ChatMessageVO *msg = [[ChatMessageVO alloc] init];
             
             msg.contact_key = [DataModel shared].user.contact_key;
             msg.chat_key = chatId;
-            msg.form_key = attachedForm.system_id;
+            msg.form_key = self.attachedForm.system_id;
             
             if (self.inputField.text.length > 0) {
                 NSString *chatText = [self.inputField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -1814,9 +1786,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             
             bubble = [self buildMessageWidget:msg];
             
-            [tableDataSource addObject:bubble];
+            [self.tableDataSource addObject:bubble];
             [self.bubbleTable reloadData];
-            [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+//            [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+            formTitle = self.attachedForm.name;
+            NSLog(@"Saving form %@ in chat", formTitle);
             
             [chatSvc apiSaveChatMessage:msg callback:^(PFObject *pfMessage) {
                 if (pfMessage) {
@@ -1828,26 +1802,26 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                         NSString *channelId = [@"chat_" stringByAppendingString:chatId];
                         [query whereKey:@"channels" equalTo:channelId];
                         
+                        NSLog(@"form type = %i", attachmentType);
                         NSString *msgtext = @"%@ posted a new %@: %@";
-                        switch (attachedForm.type) {
+                        switch (attachmentType) {
                             case FormType_POLL:
                             {
-                                msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, @"poll", attachedForm.name];
+                                msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, @"poll", formTitle];
                                 break;
                             }
                             case FormType_RATING:
                             {
-                                msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, @"Rating poll", attachedForm.name];
+                                msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, @"Rating poll", formTitle];
                                 
                                 break;
                             }
                             case FormType_RSVP:
                             {
-                                msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, @"RSVP", attachedForm.name];
+                                msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, @"RSVP", formTitle];
                                 break;
                             }
                         }
-                        msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname];
 
                         NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
                                               msgtext, @"alert",
@@ -1878,7 +1852,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             }];
             
             
-        } else if (attachedPhoto != nil && attachmentType == 0) {
+        } else if (self.attachedPhoto != nil && attachmentType == 0) {
             
             ChatMessageVO *msg = [[ChatMessageVO alloc] init];
             
@@ -1888,15 +1862,14 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             }
             msg.contact_key = [DataModel shared].user.contact_key;
             msg.chat_key = chatId;
-            msg.photo = attachedPhoto;
+            msg.photo = self.attachedPhoto;
             NSBubbleData *bubble;
             bubble = [self buildMessageBubble:msg];
             
-            [tableDataSource addObject:bubble];
+            [self.tableDataSource addObject:bubble];
             [self.bubbleTable reloadData];
-            [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
             
-            [chatSvc apiSaveChatMessage:msg withPhoto:attachedPhoto callback:^(PFObject *pfMessage) {
+            [chatSvc apiSaveChatMessage:msg withPhoto:self.attachedPhoto callback:^(PFObject *pfMessage) {
                 
                 // Build a target query: everyone in the chat room except for this device.
                 // See also: http://blog.parse.com/2012/07/23/targeting-pushes-from-a-device/
@@ -1932,30 +1905,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             }];
             
         }
-        CGRect scrollFrame = self.bubbleTable.frame;
-        scrollFrame.size.height = [DataModel shared].stageHeight - kChatBarHeight - kScrollViewTop;
-        NSLog(@"Set scroll frame height to %f", scrollFrame.size.height);
-        
-        self.bubbleTable.frame = scrollFrame;
-        
-        self.inputField.text = @"";
-        self.inputField.frame = inputFrame;
-        self.chatBar.frame = chatFrame;
-        hasAttachment = NO;
-        attachedPhoto = nil;
-        attachedForm = nil;
-        [self.attachButton setImage:[UIImage imageNamed:kAttachPlusIcon] forState:UIControlStateNormal];
-        self.sendButton.enabled = YES;
+        [self resetChatUI];
     }
     
     
 }
 - (void) resetChatUI {
     CGRect scrollFrame = self.bubbleTable.frame;
-    scrollFrame.size.height = [DataModel shared].stageHeight - kChatBarHeight - kScrollViewTop;
-    NSLog(@"Set scroll frame height to %f", scrollFrame.size.height);
-    
-    self.bubbleTable.frame = scrollFrame;
     
     self.inputField.text = @"";
     
@@ -1963,11 +1919,20 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     self.inputField.frame = inputFrame;
     
     if (keyboardIsShown) {
+        scrollFrame.size.height = [DataModel shared].stageHeight - keyboardHeight - kChatBarHeight - kScrollViewTop;
+        NSLog(@"Set scroll frame height to %f", scrollFrame.size.height);
+        self.bubbleTable.frame = scrollFrame;
+
         chatFrame.size.height = defaultChatFrameHeight;
         chatFrame.origin.y = [DataModel shared].stageHeight - chatFrame.size.height - keyboardHeight;
         self.chatBar.frame = chatFrame;
 
     } else {
+        scrollFrame.size.height = [DataModel shared].stageHeight - kChatBarHeight - kScrollViewTop;
+        NSLog(@"Set scroll frame height to %f", scrollFrame.size.height);
+        self.bubbleTable.frame = scrollFrame;
+        
+        
         chatFrame.size.height = defaultChatFrameHeight;
         chatFrame.origin.y = [DataModel shared].stageHeight - chatFrame.size.height;
         self.chatBar.frame = chatFrame;
@@ -1976,11 +1941,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     
     hasAttachment = NO;
-    attachedPhoto = nil;
-    attachedForm = nil;
+    self.attachedPhoto = nil;
+    self.attachedForm = nil;
     [self.attachButton setImage:[UIImage imageNamed:kAttachPlusIcon] forState:UIControlStateNormal];
     self.sendButton.enabled = YES;
     
+    [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+
 }
 
 @end
