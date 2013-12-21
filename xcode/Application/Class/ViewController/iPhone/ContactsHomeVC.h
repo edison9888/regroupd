@@ -7,6 +7,8 @@
 //
 
 #import "SlideViewController.h"
+#import <MessageUI/MessageUI.h>
+
 #import "SQLiteDB.h"
 #import "MBProgressHUD.h"
 
@@ -17,7 +19,7 @@
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 //ABPersonViewControllerDelegate, 
-@interface ContactsHomeVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, ABNewPersonViewControllerDelegate> {
+@interface ContactsHomeVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, ABNewPersonViewControllerDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate> {
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *availableContacts;

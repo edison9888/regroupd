@@ -59,7 +59,7 @@
     
     if ([[DataModel shared].action isEqualToString:kActionADD]) {
         self.navTitle.text = @"New Group";
-        self.groupName.text = @"new group";
+//        self.groupName.text = @"new group";
         
     } else {
         self.navTitle.text = @"Edit Group";
@@ -81,7 +81,7 @@
     
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
-    self.theTableView.hidden = YES;
+    self.theTableView.hidden = NO;
     [self.theTableView setSeparatorColor:[UIColor grayColor]];
     
     
@@ -92,8 +92,6 @@
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
     
-    [self performSearch:@""];
-    
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
                                              
                                              initWithTarget:self action:@selector(singleTap:)];
@@ -103,6 +101,8 @@
     tapRecognizer.numberOfTapsRequired = 1;
     tapRecognizer.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tapRecognizer];
+
+    [self performSearch:@""];
 
 }
 
@@ -256,6 +256,9 @@
             item.tag = kBaseTagForNameWidget + contactsArray.count - 1;
             xpos += itemWidth + kNameWidgetGap;
             [self.selectionsView addSubview:item];
+            
+            self.ccSearchBar.text = @"";
+            [self performSearch:@""];
             
         }
     } @catch (NSException * e) {

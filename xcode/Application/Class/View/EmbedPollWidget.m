@@ -230,4 +230,12 @@
     self.doneButton.enabled = NO;
     formLocked = YES;
 }
+
+- (IBAction)tapDetailsButton {
+    
+    NSLog(@"%s", __FUNCTION__);
+    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_showFormDetails object:self.form_key]];
+    
+}
+
 @end

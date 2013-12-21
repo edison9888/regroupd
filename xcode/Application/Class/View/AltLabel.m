@@ -24,7 +24,7 @@
     self = [super initWithCoder:aDecoder];
     
     
-    [self setFont:[UIFont fontWithName:@"Raleway-Bold" size:self.font.pointSize]];
+    [self setFont:[UIFont fontWithName:@"NotoSans-Bold" size:self.font.pointSize]];
 //    self.textColor = [UIColor whiteColor];
 //    self.textAlignment = UITextAlignmentCenter;
     

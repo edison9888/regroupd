@@ -63,6 +63,7 @@ typedef enum {
 // Transient fields
 @property (nonatomic, retain) UIImage *photo;
 @property (nonatomic, retain) PFFile *pfPhoto;
+@property (nonatomic, retain) NSArray *phoneNumbers;
 
 - (NSString *) fullname;
 

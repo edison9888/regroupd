@@ -16,6 +16,7 @@
 @synthesize type, status, created, updated;
 
 @synthesize photo;
+@synthesize phoneNumbers;
 //@synthesize contact_key;
 
 - (NSString *) fullname {
@@ -92,9 +93,14 @@
 + (ContactVO *) readFromPhonebook:(NSDictionary *) data {
     ContactVO *o = [[ContactVO alloc] init];
     NSString *text;
+    NSNumber *number;
     
     text = [data valueForKey:@"contact_key"];
     o.system_id = text;
+    
+    number = [data valueForKey:@"record_id"];
+    o.record_id = number;
+    
     text = [data valueForKey:@"first_name"];
     o.first_name = text;
     text = [data valueForKey:@"last_name"];

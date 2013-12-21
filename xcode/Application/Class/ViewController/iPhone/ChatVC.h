@@ -34,6 +34,7 @@
     
     ChatVO *dbChat;
     NSString *chatId;
+    NSString *chatTitle;
     
     int fieldIndex;
     

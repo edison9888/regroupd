@@ -7,10 +7,12 @@
 //
 
 #import "SlideViewController.h"
+#import <MessageUI/MessageUI.h>
+
 #import "FancyToggle.h"
 #import "BrandUILabel.h"
 
-@interface SettingsHomeVC : SlideViewController {
+@interface SettingsHomeVC : SlideViewController<MFMailComposeViewControllerDelegate> {
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *tableData;

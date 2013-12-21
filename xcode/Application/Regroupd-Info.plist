@@ -39,11 +39,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.7</string>
+	<string>0.6</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>0.7</string>
+	<string>0.6</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIAppFonts</key>
@@ -52,10 +52,10 @@
 		<string>Raleway-Bold.otf</string>
 		<string>Raleway-Light.otf</string>
 		<string>Raleway-Medium.otf</string>
-		<string>NotoSans-Regular</string>
-		<string>NotoSans-Bold</string>
-		<string>NotoSans-Italic</string>
-		<string>NotoSans-BoldItalic</string>
+		<string>NotoSans-Regular.ttf</string>
+		<string>NotoSans-Bold.ttf</string>
+		<string>NotoSans-Italic.ttf</string>
+		<string>NotoSans-BoldItalic.ttf</string>
 	</array>
 	<key>UIPrerenderedIcon</key>
 	<true/>

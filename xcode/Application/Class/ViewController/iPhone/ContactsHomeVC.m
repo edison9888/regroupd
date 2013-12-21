@@ -53,7 +53,9 @@
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
     [self loadGroups];
-    [self preparePhonebook];
+    [self performSearch:@""];
+
+//    [self preparePhonebook];
 }
 
 - (void)didReceiveMemoryWarning
@@ -110,15 +112,6 @@
     
     [self batchLookupContactsByPhoneNumbers:numbers];
     
-    
-//    [contactSvc apiLookupContactsByPhoneNumbers:numbers callback:^(NSArray *contacts) {
-////        NSLog(@"Callback response count %i", contacts.count);
-//        if (contacts) {
-//            [contactSvc updatePhonebookWithContacts:contacts];
-//        }
-//        [self performSearch:@""];
-//    }];
-    
 }
 // http://stackoverflow.com/questions/6852012/what-is-an-easy-way-to-break-an-nsarray-with-4000-objects-in-it-into-multiple-a
 - (void) batchLookupContactsByPhoneNumbers:(NSMutableArray *)srcArray {
@@ -161,29 +154,6 @@
 }
 #pragma mark - UITableViewDataSource
 
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{
-//    NSString *title = nil;
-//    switch (section) {
-//            
-//        case 0:
-//            title = @"Available Contacts";
-//            break;
-//
-//        case 1:
-//            title = @"Groups";
-//            break;
-//
-//        case 2:
-//            title = @"Invite to Re:group'd";
-//            break;
-//            
-//        default:
-//            break;
-//    }
-//    return title;
-////    return _rowsInSection[section].count ? _sections[section] : nil;
-//}
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
@@ -379,11 +349,89 @@
         [_delegate setBackPath:@"ContactsHome"];
         [_delegate gotoSlideWithName:@"GroupInfo" andOverrideTransition:kPresentationTransitionPush|kPresentationTransitionLeft];
 
+    } else if (indexPath.section == 2) {
+
+        NSDictionary *rowdata = [otherContacts objectAtIndex:indexPath.row];
+        
+        ContactVO *contact = [ContactVO readFromPhonebook:rowdata];
+        
+        if (contact.record_id != nil) {
+            contact = [contactSvc readContactFromAddressBook:contact.record_id];
+            
+            
+            if (contact) {
+                BOOL success = YES;
+                if (contact.phoneNumbers.count > 0) {
+                    success = [self createSMSInvite:contact.phoneNumbers];
+                }
+                if (!success && contact.email != nil) {
+                    [self createEmailInvite:contact.email];
+                } else {
+                    // Do nothing or display alert
+                }
+            }
+        }
+        [self.theTableView deselectRowAtIndexPath:indexPath animated:YES];
+
     }
     
     
 }
 
+#pragma mark - MessageUI 
+
+- (BOOL) createEmailInvite:(NSString *)email {
+    // Email Content
+    NSString *subject = @"Invite to re:group'd";
+    NSString *message = @"Invite";
+    // To address
+    NSArray *toRecipents = [NSArray arrayWithObject:email];
+    
+    MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+    mc.mailComposeDelegate = self;
+    [mc setSubject:subject];
+    [mc setMessageBody:message isHTML:NO];
+    [mc setToRecipients:toRecipents];
+    
+    // Present mail view controller on screen
+    [self presentViewController:mc animated:YES completion:NULL];
+    
+    return YES;
+    
+}
+
+- (BOOL) createSMSInvite:(NSArray *)phones {
+    
+    NSString *subject = @"Invite to re:group'd";
+    // To address
+    
+    if ([MFMessageComposeViewController canSendText]) {
+        MFMessageComposeViewController *messageComposer = [[MFMessageComposeViewController alloc] init];
+        [messageComposer setBody:@""];
+        messageComposer.subject = subject;
+        messageComposer.recipients = phones;
+        messageComposer.messageComposeDelegate = self;
+        [self presentViewController:messageComposer animated:YES completion:nil];
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+-(void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
+    if(result == MessageComposeResultCancelled) {
+        //Message cancelled
+    } else if(result == MessageComposeResultSent) {
+        //Message sent
+    }
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+}
+#pragma mark - Private helpers
 
 - (void)performSearch:(NSString *)searchText
 {
@@ -426,7 +474,7 @@
         }
         
         status = 0;
-        sqlTemplate = @"select distinct first_name, last_name from phonebook where status=%i order by first_name";
+        sqlTemplate = @"select distinct record_id, first_name, last_name from phonebook where status=%i order by first_name";
         sql = [NSString stringWithFormat:sqlTemplate, status];
         
         rs = [[SQLiteDB sharedConnection] executeQuery:sql];

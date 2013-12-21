@@ -104,7 +104,7 @@ SW5jbHVkZSBjaGF0IG1lc3NhZ2UgA2luIG5vdGlmaWNhdGlvbnM
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Qcz-if-xpA" customClass="BrandUIButton">
                             <rect key="frame" x="13" y="235" width="290" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" title="Contact regroup'd" backgroundImage="settings_big_button_bg.png">
+                            <state key="normal" title="Contact re:group'd" backgroundImage="settings_big_button_bg.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>

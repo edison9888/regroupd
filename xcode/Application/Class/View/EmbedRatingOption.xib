@@ -8,10 +8,10 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EmbedRatingOption">
             <connections>
                 <outlet property="divider" destination="hXz-uJ-nPO" id="mUk-6o-0Qq"/>
+                <outlet property="fancySlider" destination="JeA-Cs-vba" id="Cus-g4-igK"/>
                 <outlet property="fieldLabel" destination="n8e-qd-onW" id="39A-0A-bi0"/>
                 <outlet property="ratingValue" destination="p96-Ky-qEP" id="pkb-Qq-gYn"/>
                 <outlet property="roundPic" destination="25" id="37"/>
-                <outlet property="sliderGuide" destination="yGD-H3-tj2" id="8yb-vi-rpD"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -44,11 +44,13 @@
                     <rect key="frame" x="0.0" y="89" width="230" height="1"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <view contentMode="scaleToFill" id="yGD-H3-tj2" userLabel="View - sliderview">
-                    <rect key="frame" x="78" y="60" width="144" height="14"/>
+                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="JeA-Cs-vba" customClass="FancySlider">
+                    <rect key="frame" x="76" y="51" width="150" height="34"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="calibratedRGB"/>
-                </view>
+                    <connections>
+                        <action selector="sliderValueChanged:" destination="-1" eventType="valueChanged" id="3ZF-3Y-Ivs"/>
+                    </connections>
+                </slider>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <accessibility key="accessibilityConfiguration">

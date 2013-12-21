@@ -95,6 +95,8 @@
     tapRecognizer.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tapRecognizer];
 
+    [self performSearch:@""];
+
 //    [self performSearch:@""];
     
     
@@ -245,7 +247,9 @@
             xpos += itemWidth + kNameWidgetGap;
             [self.selectionsView addSubview:item];
             //            }
-            
+            self.ccSearchBar.text = @"";
+            [self performSearch:@""];
+
             
         }
     } @catch (NSException * e) {

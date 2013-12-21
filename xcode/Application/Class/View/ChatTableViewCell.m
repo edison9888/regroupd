@@ -34,6 +34,11 @@
 {
     rowdata = chat;
     self.titleLabel.text = chat.names;
+//    if (chat.names != nil) {
+//        self.titleLabel.text = chat.names;
+//    } else {
+//        self.titleLabel.text = chat.name;
+//    }
 }
 - (void) setStatus:(int)status {
     

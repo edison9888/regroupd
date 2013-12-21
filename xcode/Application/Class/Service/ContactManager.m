@@ -765,7 +765,69 @@
     
     return peopleData;
 }
+- (ContactVO *) readContactFromAddressBook:(NSNumber *)recordId {
+    ContactVO *contact = [[ContactVO alloc] init];
+    CFErrorRef err;
+    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, &err);
+    
+    __block BOOL accessGranted = NO;
+    
+    if (ABAddressBookRequestAccessWithCompletion != NULL) { // we're on iOS 6
+        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+        ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
+            accessGranted = granted;
+            dispatch_semaphore_signal(sema);
+        });
+        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+        //        dispatch_release(sema);
+    }
+    else { // we're on iOS 5 or older
+        accessGranted = YES;
+    }
+    
+    if (accessGranted)
+    {
+        
+        NSMutableArray *phoneNumbers = [[NSMutableArray alloc] init];
+        NSString *phonenumber;
+        ABRecordID abRecordId = (ABRecordID)[recordId intValue];
+//        ABRecordID
+        ABRecordRef person = ABAddressBookGetPersonWithRecordID (addressBook,abRecordId);
+        
+        ABMultiValueRef phones = ABRecordCopyValue(person, kABPersonPhoneProperty);
+        
+        for (int i=0; i < ABMultiValueGetCount(phones); i++) {
+            phonenumber = (__bridge NSString*)ABMultiValueCopyValueAtIndex(phones, i);
+            
+            phonenumber = [self formatPhoneNumberAsE164:phonenumber];
+            
+            [phoneNumbers addObject:phonenumber];
+            
+        }
+        contact.phoneNumbers = [phoneNumbers copy];
+        
+        ABMultiValueRef emails = ABRecordCopyValue(person, kABPersonEmailProperty);
 
+        CFStringRef email = ABMultiValueCopyValueAtIndex(emails, 0);
+        CFStringRef firstName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
+        CFStringRef lastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
+        contact.first_name = (__bridge NSString *)firstName;
+        contact.last_name = (__bridge NSString *)lastName;
+        contact.email = (__bridge NSString *) email;
+        
+        if (firstName)
+            CFRelease(firstName);
+        if (lastName)
+            CFRelease(lastName);
+        if(email)
+            CFRelease(email);
+        
+        CFRelease(emails);
+
+    }
+    CFRelease(addressBook);
+    return contact;
+}
 // http://en.wikipedia.org/wiki/E.164
 - (NSString *) formatPhoneNumberAsE164:(NSString *)phone {
     NSString *result = nil;

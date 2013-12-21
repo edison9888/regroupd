@@ -47,7 +47,8 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-    [self preloadData];
+    [self performSearch:nil];
+//    [self preloadData];
     
 }
 - (void)didReceiveMemoryWarning
@@ -63,6 +64,33 @@
 
 
 #pragma mark - Data Load
+
+- (void)performSearch:(NSString *)searchText
+{
+    NSLog(@"%s: %@", __FUNCTION__, searchText);
+    self.tableData =[[NSMutableArray alloc]init];
+
+    NSString *sql = @"select * from chat";
+    
+    isLoading = YES;
+    
+//    NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+    [tableData removeAllObjects];
+    ChatVO *chat;
+    while ([rs next]) {
+        chat = [ChatVO readFromDictionary:[rs resultDictionary]];
+        
+        [tableData addObject:chat];
+    }
+    isLoading = NO;
+    
+    [self.theTableView reloadData];
+    
+    
+}
+
 
 - (void) preloadData
 {
@@ -214,6 +242,7 @@
 }
 
 
+
 #pragma mark - UITableViewDataSource
 
 
@@ -243,6 +272,7 @@
         }
         
         ChatVO *rowData = (ChatVO *) [tableData objectAtIndex:indexPath.row];
+        
         cell.rowdata = rowData;
         if (rowData.hasNew) {
             [cell setStatus:1];
@@ -259,23 +289,25 @@
     
 }
 
-- (NSDictionary *) readPFObjectAsDictionary:(PFObject *) data {
-    NSArray * allKeys = [data allKeys];
-    
-    NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
-    
-    for (NSString * key in allKeys) {
-        
-        [dict setObject:[data objectForKey:key] forKey:key];
-        
-    }
-    return dict;
-}
-
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 54;
 }
+
+
+//- (NSDictionary *) readPFObjectAsDictionary:(PFObject *) data {
+//    NSArray * allKeys = [data allKeys];
+//    
+//    NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
+//    
+//    for (NSString * key in allKeys) {
+//        
+//        [dict setObject:[data objectForKey:key] forKey:key];
+//        
+//    }
+//    return dict;
+//}
+
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

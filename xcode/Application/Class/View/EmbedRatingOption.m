@@ -13,6 +13,8 @@
 
 @implementation EmbedRatingOption
 
+@synthesize theRating;
+
 - (id)initWithFrame:(CGRect)frame
 {
     NSLog(@"===== %s", __FUNCTION__);
@@ -30,30 +32,32 @@
         [self.roundPic.layer setBorderColor:[UIColor whiteColor].CGColor];
         self.roundPic.clipsToBounds = YES;
         self.roundPic.contentMode = UIViewContentModeScaleAspectFill;
-        self.sliderGuide.alpha = 0;
+
+        //        self.sliderGuide.alpha = 0;
         
+        self.fancySlider.enabled = YES;
+        self.fancySlider.userInteractionEnabled = YES;
+        self.fancySlider.clipsToBounds = YES;
+        [self bringSubviewToFront:self.fancySlider];
         [self addSubview:_theView];
     }
     return self;
 }
 
-- (void) setRating:(float)value {
-    _rating = value;
-    self.ratingValue.text = [NSString stringWithFormat:@"%i",
-    [NSNumber numberWithFloat:value].intValue];
+-(IBAction)sliderValueChanged:(UISlider *)sender
+{
+    int rating = ceil(sender.value * 10);
+    self.ratingValue.text = [NSNumber numberWithInt:rating].stringValue;
+    self.theRating = [NSNumber numberWithInt:rating];
+}
+
+- (void) setRating:(NSNumber *)value {
+    self.theRating = value;
     
-    if (self.slider == nil) {
-        CGRect sliderFrame = self.sliderGuide.frame;
-        self.slider = [[RatingMeterSlider alloc] initWithFrame:sliderFrame];
-        [self.slider setSliderColor:[UIColor colorWithHexValue:kSelectedColor]];
-        [self.slider setDotColor:[UIColor colorWithHexValue:kDotColor]];
-        [self addSubview:self.slider];
-        [self.slider setRatingBar:value];
-        
-    } else {
-        [self.slider setRatingBar:value];
-    }
-    
+//    int rating = ceil(value.intValue);
+    self.ratingValue.text = self.theRating.stringValue;
+
+    self.fancySlider.value = self.theRating.floatValue / 10;
 }
 
 - (float) getRating {
@@ -69,6 +73,8 @@
 - (void) resizeHeight:(float)height {
     
 }
+
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

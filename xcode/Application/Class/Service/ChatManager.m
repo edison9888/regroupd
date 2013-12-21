@@ -474,46 +474,31 @@
         [query orderByAscending:@"createdAt"];
         
         [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+            
             NSMutableArray *msgs = [[NSMutableArray alloc] initWithCapacity:results.count];
-            ChatMessageVO *msg;
-            //            NSMutableArray *userKeys = [[NSMutableArray alloc] init];
-            //
-            for (PFObject *result in results) {
-                msg = [[ChatMessageVO alloc] init];
-                msg = [ChatMessageVO readFromPFObject:result];
-                
-                if (result[@"photo"]) {
-                    msg.pfPhoto = result[@"photo"];
+            if (results) {
+                ChatMessageVO *msg;
+                //            NSMutableArray *userKeys = [[NSMutableArray alloc] init];
+                //
+                for (PFObject *result in results) {
+                    msg = [[ChatMessageVO alloc] init];
+                    msg = [ChatMessageVO readFromPFObject:result];
+                    
+                    if (result[@"photo"]) {
+                        msg.pfPhoto = result[@"photo"];
+                    }
+                    [msgs addObject:msg];
                 }
-                [msgs addObject:msg];                
+                
+                //            NSLog(@"userKeys %@", userKeys);
+                
+                
             }
-            
-            //            NSLog(@"userKeys %@", userKeys);
-            
             chat.messages = msgs;
-
+            
             [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatMessagesLoaded
                                                                                                  object:chat]];
 
-            // IGNORE: This code was a mistake. It was overwriting the contactCache with pfContact data that does not have first/last name
-            
-//            PFQuery *query = [PFQuery queryWithClassName:kContactDB];
-//            [query whereKey:@"objectId" containedIn:chat.contact_keys];
-//            
-//            [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
-//                NSMutableDictionary *contactMap = [[NSMutableDictionary alloc] initWithCapacity:results.count];
-//                ContactVO *contact;
-//                for (PFObject *result in results) {
-//                    contact = [ContactVO readFromPFObject:result];
-//                    [contactMap setObject:contact forKey:contact.system_id];
-//                }
-//                chat.contactMap = contactMap;
-//                
-//                [DataModel shared].contactCache = contactMap;
-//                [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatMessagesLoaded
-//                                                                                                     object:chat]];
-//            }];
-            
             
         }];
         

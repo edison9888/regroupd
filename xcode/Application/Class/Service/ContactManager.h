@@ -55,6 +55,6 @@
 
 // Address Book
 - (NSMutableArray *)readAddressBook;
-
+- (ContactVO *) readContactFromAddressBook:(NSNumber *)recordId;
 
 @end

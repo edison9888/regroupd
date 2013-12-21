@@ -108,6 +108,29 @@
 }
 
 
+#pragma mark - MessageUI
+
+- (void) createEmail {
+    NSString *emailTitle = @"";
+    // Email Content
+    NSString *message = @"";
+    // To address
+    NSArray *toRecipents = [NSArray arrayWithObject:@"info@regroupd.com"];
+    
+    MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+    mc.mailComposeDelegate = self;
+    [mc setSubject:emailTitle];
+    [mc setMessageBody:message isHTML:NO];
+    [mc setToRecipients:toRecipents];
+    
+    // Present mail view controller on screen
+    [self presentViewController:mc animated:YES completion:NULL];
+    
+    
+}
+-(void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 
 #pragma mark - Tap Gestures
@@ -175,7 +198,7 @@
     
 }
 - (IBAction)tapContactButton {
-    
+    [self createEmail];
     
     
 }

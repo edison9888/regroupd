@@ -12,6 +12,7 @@
 #import "FormManager.h"
 #import "FormVO.h"
 #import "RatingMeterSlider.h"
+#import "FancySlider.h"
 
 @interface EmbedRatingWidget : UIView {
     UIView *_theView;
@@ -41,10 +42,14 @@
 @property (nonatomic, strong) IBOutlet BrandUILabel *nameLabel;
 @property (nonatomic, strong) IBOutlet BrandUILabel *timeLabel;
 
-
 @property (nonatomic, strong) IBOutlet UIView *inputHolder;
 
-- (IBAction)tapDoneButton;
+//@property (nonatomic, strong) IBOutlet FancySlider *fancySlider1;
+////@property (nonatomic, strong) IBOutlet FancySlider *fancySlider2;
+//@property (nonatomic, strong) FancySlider *fancySlider3;
 
+
+- (IBAction)tapDoneButton;
+- (IBAction)tapDetailsButton;
 
 @end
