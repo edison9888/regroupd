@@ -56,9 +56,9 @@
     o.clear_timestamp = number;
     
     if (number && number.doubleValue > 100) {
-        NSLog(@"clear timestamp %@", o.clear_timestamp);
-        NSTimeInterval timestamp = (NSTimeInterval)number.doubleValue;
-        o.cutoffDate = [NSDate dateWithTimeIntervalSince1970:timestamp];
+//        NSTimeInterval timestamp = (NSTimeInterval)number.doubleValue;
+        o.cutoffDate = [NSDate dateWithTimeIntervalSince1970:number.doubleValue];
+        NSLog(@"clear timestamp %@ with cutoffDate %@", o.clear_timestamp, o.cutoffDate);
     }
     
     return o;

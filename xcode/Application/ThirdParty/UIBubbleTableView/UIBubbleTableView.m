@@ -226,6 +226,11 @@
     
     cell.data = data;
     cell.showAvatar = self.showAvatars;
+
+//    if (data.iconFile) {
+//        cell.avatarImage.file = data.iconFile;
+//        [cell.avatarImage loadInBackground];
+//    }
     
     return cell;
 }

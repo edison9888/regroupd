@@ -17,7 +17,6 @@
 
 @property (nonatomic, retain) UIView *customView;
 @property (nonatomic, retain) UIImageView *bubbleImage;
-@property (nonatomic, retain) UIImageView *avatarImage;
 
 - (void) setupInternalData;
 
@@ -61,9 +60,9 @@
     if (!self.bubbleImage)
     {
 #if !__has_feature(objc_arc)
-        self.bubbleImage = [[[UIImageView alloc] init] autorelease];
+        self.bubbleImage = [[[PFImageView alloc] init] autorelease];
 #else
-        self.bubbleImage = [[UIImageView alloc] init];        
+        self.bubbleImage = [[PFImageView alloc] init];
 #endif
         [self addSubview:self.bubbleImage];
     }
@@ -74,6 +73,7 @@
     CGFloat width = self.data.view.frame.size.width;
     CGFloat height = self.data.view.frame.size.height;
 
+    
     CGFloat x = (type == BubbleTypeSomeoneElse) ? 0 : self.frame.size.width - width - self.data.insets.left - self.data.insets.right;
     CGFloat y = 0;
     
@@ -82,10 +82,15 @@
     {
         [self.avatarImage removeFromSuperview];
 #if !__has_feature(objc_arc)
-        self.avatarImage = [[[UIImageView alloc] initWithImage:(self.data.avatar ? self.data.avatar : [UIImage imageNamed:@"anonymous_user"])] autorelease];
+        self.avatarImage = [[[PFImageView alloc] initWithImage:(self.data.avatar ? self.data.avatar : [UIImage imageNamed:@"anonymous_user"])] autorelease];
 #else
-        self.avatarImage = [[UIImageView alloc] initWithImage:(self.data.avatar ? self.data.avatar : [UIImage imageNamed:@"anonymous_user"])];
+        self.avatarImage = [[PFImageView alloc] initWithImage:(self.data.avatar ? self.data.avatar : [UIImage imageNamed:@"anonymous_user"])];
 #endif
+        
+        if (self.data.iconFile) {
+            self.avatarImage.file = self.data.iconFile;
+            [self.avatarImage loadInBackground];
+        }
         self.avatarImage.layer.cornerRadius = 25.0;
         self.avatarImage.layer.masksToBounds = YES;
         self.avatarImage.layer.borderColor = [UIColor whiteColor].CGColor;

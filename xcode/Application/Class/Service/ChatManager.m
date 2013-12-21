@@ -28,7 +28,7 @@
         result = [ChatVO readFromDictionary:dict];
     }
     return result;
-
+    
 }
 
 - (void) updateChatStatus:(NSString *)chatKey name:(NSString *)name readtime:(NSNumber *)readtime  {
@@ -38,7 +38,7 @@
     
     @try {
         sql = @"UPDATE chat set name=?, read_timestamp=? where system_id=?";
-//        sql = [NSString stringWithFormat:sql, chatKey];
+        //        sql = [NSString stringWithFormat:sql, chatKey];
         success = [[SQLiteDB sharedConnection] executeUpdate:sql,
                    name,
                    readtime,
@@ -144,7 +144,7 @@
     NSDate *now = [NSDate date];
     NSString *dt = [DateTimeUtils dbDateTimeStampFromDate:now];
     NSLog(@"dt %@", dt);
-
+    
     @try {
         sql = @"INSERT into chat (system_id, name, type, status, clear_timestamp, read_timestamp, created, updated) values (?, ?, ?, ?, ?, ?, ?, ?);";
         success = [[SQLiteDB sharedConnection] executeUpdate:sql,
@@ -326,7 +326,7 @@
 
 
 
-#pragma mark - Chat API 
+#pragma mark - Chat API
 
 - (void)apiLoadChat:(NSString *)objectId callback:(void (^)(ChatVO *chat))callback {
     
@@ -450,61 +450,50 @@
     }];
 }
 
+- (NSMutableArray *) asyncListChatMessages:(NSString *)objectId afterDate:(NSDate *)date {
+    return nil;
+}
 /*
  async nested PFQueries.
  -- get the list of chat messages and convert to array of ChatMessageVO
  -- Get list of unique contact_key values and query for list of matching contacts
  
  */
-- (NSMutableArray *) asyncListChatMessages:(NSString *)objectId afterDate:(NSDate *)date {
-    __block ChatVO *chat = [[ChatVO alloc] init];
+- (void) apiListChatMessages:(NSString *)chatKey afterDate:(NSDate *)date callback:(void (^)(NSArray *results))callback {
     
+    PFQuery *query = [PFQuery queryWithClassName:kChatMessageDB];
+    [query whereKey:@"chat"
+            equalTo:[PFObject objectWithoutDataWithClassName:kChatDB objectId:chatKey]];
+    if (date) {
+        NSLog(@"Date filter is %@", date);
+        [query whereKey:@"createdAt" greaterThan:date];
+    }
+    [query orderByAscending:@"createdAt"];
     
-    PFQuery *query = [PFQuery queryWithClassName:kChatDB];
-    [query getObjectInBackgroundWithId:objectId block:^(PFObject *object, NSError *error) {
-        chat = [ChatVO readFromPFObject:object];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
         
-        PFQuery *query = [PFQuery queryWithClassName:kChatMessageDB];
-        [query whereKey:@"chat"
-                equalTo:[PFObject objectWithoutDataWithClassName:kChatDB objectId:objectId]];
-        if (date) {
-            NSLog(@"Date filter is %@", date);
-            [query whereKey:@"createdAt" greaterThan:date];
-        }
-        [query orderByAscending:@"createdAt"];
-        
-        [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
-            
+        if (error) {
+            NSLog(@">>>>>>>>>> ERROR %@", error);
+        } else {
             NSMutableArray *msgs = [[NSMutableArray alloc] initWithCapacity:results.count];
-            if (results) {
-                ChatMessageVO *msg;
-                //            NSMutableArray *userKeys = [[NSMutableArray alloc] init];
-                //
-                for (PFObject *result in results) {
-                    msg = [[ChatMessageVO alloc] init];
-                    msg = [ChatMessageVO readFromPFObject:result];
-                    
-                    if (result[@"photo"]) {
-                        msg.pfPhoto = result[@"photo"];
-                    }
-                    [msgs addObject:msg];
+            ChatMessageVO *msg;
+            for (PFObject *result in results) {
+                msg = [[ChatMessageVO alloc] init];
+                msg = [ChatMessageVO readFromPFObject:result];
+                
+                if (result[@"photo"]) {
+                    msg.pfPhoto = result[@"photo"];
                 }
-                
-                //            NSLog(@"userKeys %@", userKeys);
-                
-                
+                [msgs addObject:msg];
             }
-            chat.messages = msgs;
             
-            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatMessagesLoaded
-                                                                                                 object:chat]];
-
             
-        }];
+            callback([msgs copy]);
+            
+        }
+        
         
     }];
-    
-    return nil;
 }
 - (NSMutableArray *) asyncListChatContacts:(NSArray *)objectIds {
     PFQuery *query = [PFQuery queryWithClassName:kContactDB];
@@ -519,7 +508,7 @@
 #pragma mark - ChatForm API
 
 - (void) apiSaveChatForm:(NSString *)chatId formId:(NSString *)formId callback:(void (^)(PFObject *object))callback{
-
+    
     
     PFQuery *query = [PFQuery queryWithClassName:kChatFormDB];
     [query whereKey:@"chat" equalTo:[PFObject objectWithoutDataWithClassName:kChatDB objectId:chatId]];
@@ -542,7 +531,7 @@
         }
         
     }];
-
+    
 }
 - (void) apiListChatForms:(NSString *)chatId formKey:(NSString *)formId callback:(void (^)(NSArray *results))callback{
     PFQuery *query = [PFQuery queryWithClassName:kChatFormDB];
@@ -558,8 +547,8 @@
         
         callback(results);
     }];
-
-
+    
+    
 }
 #pragma mark - Synchronous API -- to be deprecated
 
@@ -568,7 +557,7 @@
     PFObject *data = [PFObject objectWithClassName:kChatDB];
     
     if (chat.name != nil) {
-        data[@"name"] = chat.name;        
+        data[@"name"] = chat.name;
     }
     data[@"user"] = [PFUser currentUser];
     data[@"contact_keys"] = chat.contact_keys;

@@ -46,6 +46,7 @@
 // Syncrhonous API functions
 - (NSString *) apiSaveChat:(ChatVO *) chat;
 
+- (void) apiListChatMessages:(NSString *)objectId afterDate:(NSDate *)date callback:(void (^)(NSArray *results))callback;
 - (NSMutableArray *) asyncListChatMessages:(NSString *)objectId afterDate:(NSDate *)date;
 - (NSMutableArray *) asyncListChatContacts:(NSArray *)objectIds;
 

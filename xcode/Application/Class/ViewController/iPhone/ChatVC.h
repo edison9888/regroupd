@@ -32,7 +32,12 @@
 
 @interface ChatVC : SlideViewController<UIBubbleTableViewDataSource, UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate, UIGestureRecognizerDelegate> {
     
+    ChatManager *chatSvc;
+    ContactManager *contactSvc;
+    FormManager *formSvc;
+
     ChatVO *dbChat;
+    ChatVO *liveChat;
     NSString *chatId;
     NSString *chatTitle;
     
@@ -69,8 +74,6 @@
 //    NEW SCROLLER
     CGFloat animatedDistance;
     
-    ChatManager *chatSvc;
-    ContactManager *contactSvc;
     
     BOOL hasAttachment;
     int attachmentType;
@@ -80,8 +83,9 @@
     NSMutableDictionary *formCache;
     NSMutableArray *contactsArray;
 
-    FormManager *formSvc;
-    
+    NSMutableSet *contactKeySet;
+    NSMutableSet *formKeySet;
+
 }
 
 @property (nonatomic, retain) NSMutableArray *tableDataSource;

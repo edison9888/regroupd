@@ -87,7 +87,8 @@
     isLoading = NO;
     
     [self.theTableView reloadData];
-    
+
+    [self listMyChats];
     
 }
 
@@ -153,25 +154,6 @@
             if (isBlocked) {
                 continue;
             }
-            ChatVO *lookup = [chatSvc loadChatByKey:chat.system_id];
-            if (lookup == nil) {
-                // need to add
-                [chatSvc saveChat:chat];
-                chat.hasNew = YES;
-                
-            } else {
-                // ignore
-                
-                NSTimeInterval serverTime = [chat.updatedAt timeIntervalSince1970];
-                
-                NSLog(@"Compare localTime %f vs. serverTime %f", lookup.read_timestamp.doubleValue, serverTime);
-                
-                if (lookup.read_timestamp.doubleValue + kTimestampDelay < serverTime) {
-                    chat.hasNew = YES;
-                } else {
-                    chat.hasNew = NO;
-                }
-            }
             
             [chatsArray addObject:chat];
             
@@ -229,6 +211,27 @@
                 NSString *names = [namesArray componentsJoinedByString:@", "];
                 chat.names = names;
                 
+                ChatVO *lookup = [chatSvc loadChatByKey:chat.system_id];
+                if (lookup == nil) {
+                    // need to add
+                    [chatSvc saveChat:chat];
+                    chat.hasNew = YES;
+                    
+                } else {
+                    // ignore
+//                    [chatSvc updateChatStatus:chat.system_id name:chat.names readtime:[NSNumber numberWithDouble:0.0]];
+
+                    NSTimeInterval serverTime = [chat.updatedAt timeIntervalSince1970];
+                    
+                    NSLog(@"Compare localTime %f vs. serverTime %f", lookup.read_timestamp.doubleValue, serverTime);
+                    
+                    if (lookup.read_timestamp.doubleValue + kTimestampDelay < serverTime) {
+                        chat.hasNew = YES;
+                    } else {
+                        chat.hasNew = NO;
+                    }
+                }
+
                 [tableData addObject:chat];
                 
             }
@@ -322,7 +325,8 @@
             selectedIndex = indexPath.row;
             
             [DataModel shared].chat = (ChatVO *)[tableData objectAtIndex:indexPath.row];
-            
+            NSLog(@"Fetching chat %@ with cutoffDate %@", [DataModel shared].chat.system_id, [DataModel shared].chat.cutoffDate);
+
             [_delegate gotoSlideWithName:@"Chat"];
             
         }

@@ -183,16 +183,280 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     tapRecognizer.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tapRecognizer];
     
+    self.tableDataSource = [[NSMutableArray alloc] init];
+    
+    // Setup chat bubble config
+    
+    self.bubbleTable.bubbleDataSource = self;
+    
+    // The line below sets the snap interval in seconds. This defines how the bubbles will be grouped in time.
+    // Interval of 120 means that if the next messages comes in 2 minutes since the last message, it will be added into the same group.
+    // Groups are delimited with header which contains date and time for the first message in the group.
+    
+    self.bubbleTable.snapInterval = 86400;
+    
+    // The line below enables avatar support. Avatar can be specified for each bubble with .avatar property of NSBubbleData.
+    // Avatars are enabled for the whole table at once. If particular NSBubbleData misses the avatar, a default placeholder will be set (missingAvatar.png)
+    
+    self.bubbleTable.showAvatars = YES;
+    
+    // Uncomment the line below to add "Now typing" bubble
+    // Possible values are
+    //    - NSBubbleTypingTypeSomebody - shows "now typing" bubble on the left
+    //    - NSBubbleTypingTypeMe - shows "now typing" bubble on the right
+    //    - NSBubbleTypingTypeNone - no "now typing" bubble
+    
+    //    self.bubbleTable.typingBubble = NSBubbleTypingTypeSomebody;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatPushNotificationHandler:) name:k_chatPushNotificationReceived object:nil];
+    
+    
     /*
      http://stackoverflow.com/questions/6672677/how-to-use-uipangesturerecognizer-to-move-object-iphone-ipad
      */
-    [self setupTopDrawer];
+    
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    
+    NSString *channelId = [@"chat_" stringByAppendingString:chatId];
+    //        [currentInstallation addUniqueObject:[DataModel shared].chat.system_id forKey:@"channels"];
+    [currentInstallation addUniqueObject:channelId forKey:@"channels"];
+    [currentInstallation saveInBackground];
+    
     [chatSvc apiLoadChat:chatId callback:^(ChatVO *chat) {
-        [DataModel shared].chat = chat;
+        liveChat = chat;
         [self loadChatMessages];
     }];
 }
 
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
+#pragma mark - Data loaders
+
+- (void) loadChatMessages
+{
+    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [self.hud setLabelText:@"Loading"];
+    [self.hud setDimBackground:YES];
+    
+    //        dbChat = [chatSvc loadChatByKey:chatId];
+    //        if (dbChat == nil) {
+    //
+    //        } else {
+    //            if (dbChat.clear_timestamp && dbChat.clear_timestamp.doubleValue > 0) {
+    //
+    //            }
+    //        }
+    
+    // Auto subscribe user to push notifications for this chat objectId
+    
+    formCache = [[NSMutableDictionary alloc]init];
+    [self.tableDataSource removeAllObjects];
+    
+    dbChat = [chatSvc loadChatByKey:chatId];
+    
+    NSLog(@"Fetching chat %@ with cutoffDate %@", chatId, dbChat.cutoffDate);
+    [chatSvc apiListChatMessages:chatId afterDate:dbChat.cutoffDate callback:^(NSArray *results) {
+        
+        if (results.count > 0) {
+            contactKeySet = [[NSMutableSet alloc] init];
+            formKeySet = [[NSMutableSet alloc] init];
+            
+            //            self.imageMap = [[NSMutableDictionary alloc] initWithCapacity:liveChat.contact_keys.count];
+            liveChat.messages = [results mutableCopy];
+            for (ChatMessageVO *msg in liveChat.messages) {
+                [contactKeySet addObject:msg.contact_key];
+                if (msg.form_key) {
+                    [formKeySet addObject:msg.form_key];
+                }
+            }
+            __block int index=0;
+            int total = contactKeySet.count;
+            for (NSString *contactKey in contactKeySet) {
+                [contactSvc apiLoadContact:contactKey callback:^(PFObject *pfContact) {
+                    ContactVO *contact;
+                    if (pfContact) {
+                        contact = [ContactVO readFromPFObject:pfContact];
+                        [[DataModel shared].contactCache setObject:contact forKey:contactKey];
+                    }
+                    index++;
+                    if (index == total) {
+                        [self loadFormData];
+                    }
+                }];
+            }
+            
+        } else {
+            liveChat.messages = [results mutableCopy];
+            [self renderChatMessages:liveChat];
+            
+        }
+        
+    }];
+}
+
+
+- (void) loadFormData {
+    
+    __block int index=0;
+    int total = formKeySet.count;
+    
+    if (total==0) {
+        [self renderChatMessages:liveChat];
+    } else {
+        
+        for (NSString *formKey in formKeySet) {
+            [formSvc apiLoadForm:formKey fetchAll:YES callback:^(FormVO *form) {
+                NSString *contactKey = nil;
+                if ([form.user_key isEqualToString:[PFUser currentUser].objectId]) {
+                    contactKey = nil;
+                } else {
+                    contactKey = [DataModel shared].user.contact_key;
+                }
+                
+                
+                if (form) {
+                    NSLog(@"Getting form responses");
+                    [formSvc apiListFormResponses:formKey contactKey:contactKey callback:^(NSArray *results) {
+                        form.responsesMap = [[NSMutableDictionary alloc] init];
+                        if (results.count == 0) {
+                            // Not results
+                        } else {
+                            FormResponseVO *response;
+                            if (contactKey == nil) {
+                                // not form owner. other recipient (left side)
+                                
+                                for (PFObject *result in results) {
+                                    response = [FormResponseVO readFromPFObject:result];
+                                    response.answerTotal = [NSNumber numberWithInt:1];
+                                    response.ratingCount = [NSNumber numberWithInt:1];
+                                    response.ratingTotal = response.rating;
+                                    
+                                    [form.responsesMap setObject:response forKey:response.option_key];
+                                }
+                                
+                            } else {
+                                // Form owner. That means aggregate result stats.
+                                for (PFObject *result in results) {
+                                    response = [FormResponseVO readFromPFObject:result];
+                                    
+                                    if ([form.responsesMap objectForKey:response.option_key] == nil) {
+                                        response.answerTotal = [NSNumber numberWithInt:1];
+                                        response.ratingCount = [NSNumber numberWithInt:1];
+                                        response.ratingTotal = response.rating;
+                                        
+                                        [form.responsesMap setObject:response forKey:response.option_key];
+                                        
+                                    } else {
+                                        
+                                        ((FormResponseVO *)[form.responsesMap objectForKey:response.option_key]).answerTotal = [NSNumber numberWithInt:[response.answerTotal intValue] + 1];;
+                                        if (response.rating) {
+                                            
+                                            FormResponseVO *_resp = (FormResponseVO *)[form.responsesMap objectForKey:response.option_key];
+                                            ((FormResponseVO *)[form.responsesMap objectForKey:response.option_key]).ratingTotal = [NSNumber numberWithInt:(_resp.ratingTotal.intValue + response.rating.intValue)];
+                                            ((FormResponseVO *)[form.responsesMap objectForKey:response.option_key]).ratingCount = [NSNumber numberWithInt:[response.ratingCount intValue] + 1];;
+                                            
+                                        }
+                                        
+                                    }
+                                }
+                            }
+                        }
+                        // Finish up. List chat messages now that we have the forms, options and responses
+                        [formCache setObject:form forKey:formKey];
+                        index++;
+                        
+                        if (index==total) {
+                            [self renderChatMessages:liveChat];
+                        }
+                    }];
+                    
+                }
+                
+            }];
+            
+        }
+        
+    }
+    
+    
+}
+
+#pragma mark - Notifications
+
+
+- (void)formResponseEnteredHandler:(NSNotification*)notification
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    @try {
+        
+        [[[UIAlertView alloc] initWithTitle:@"Thanks!" message:@"Response sent" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        
+    }
+    @catch (NSException *exception) {
+        NSLog(@"########### Exception %@", exception);
+    }
+    
+    
+}
+
+- (void)showFormDetailsHandler:(NSNotification*)notification
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    if (notification.object) {
+        NSString *formKey = (NSString *) notification.object;
+        
+        if ([formCache objectForKey:formKey]) {
+            FormVO *theForm = (FormVO *) [formCache objectForKey:formKey];
+            [DataModel shared].form = theForm;
+            
+            switch (theForm.type) {
+                case FormType_POLL:
+                {
+                    [DataModel shared].action = @"popup";
+                    PollDetailVC *pollDetailVC = [[PollDetailVC alloc] initWithNibName:@"PollDetailVC" bundle:nil];
+                    pollDetailVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+                    [self presentViewController:pollDetailVC animated:YES completion:nil];
+                    
+                    break;
+                }
+                case FormType_RATING:
+                {
+                    [DataModel shared].action = @"popup";
+                    RatingDetailVC *detailsVC = [[RatingDetailVC alloc] init];
+                    detailsVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+                    [self presentViewController:detailsVC animated:YES completion:nil];
+                    
+                    break;
+                }
+                case FormType_RSVP:
+                {
+                    [DataModel shared].action = @"popup";
+                    RSVPDetailVC *detailsVC = [[RSVPDetailVC alloc] init];
+                    detailsVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+                    [self presentViewController:detailsVC animated:YES completion:nil];
+                    break;
+                }
+            }
+        } else {
+            NSLog(@"formKey not recognized in cache %@", formKey);
+        }
+        
+    }
+    
+    
+}
+
+#pragma mark - Load Data and Setup
 - (void) setupTopDrawer {
     
     [self.bubbleTable setContentInset:UIEdgeInsetsMake(20,0,0,0)];
@@ -290,327 +554,35 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (BOOL)prefersStatusBarHidden
-{
-    return YES;
-}
-
-#pragma mark - Data loaders
-
-- (void) loadChatMessages
-{
-    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [self.hud setLabelText:@"Loading"];
-    [self.hud setDimBackground:YES];
-
-    self.tableDataSource = [[NSMutableArray alloc] init];
-
-    // Setup chat bubble config
-    
-    self.bubbleTable.bubbleDataSource = self;
-    
-    // The line below sets the snap interval in seconds. This defines how the bubbles will be grouped in time.
-    // Interval of 120 means that if the next messages comes in 2 minutes since the last message, it will be added into the same group.
-    // Groups are delimited with header which contains date and time for the first message in the group.
-    
-    self.bubbleTable.snapInterval = 86400;
-    
-    // The line below enables avatar support. Avatar can be specified for each bubble with .avatar property of NSBubbleData.
-    // Avatars are enabled for the whole table at once. If particular NSBubbleData misses the avatar, a default placeholder will be set (missingAvatar.png)
-    
-    self.bubbleTable.showAvatars = YES;
-    
-    // Uncomment the line below to add "Now typing" bubble
-    // Possible values are
-    //    - NSBubbleTypingTypeSomebody - shows "now typing" bubble on the left
-    //    - NSBubbleTypingTypeMe - shows "now typing" bubble on the right
-    //    - NSBubbleTypingTypeNone - no "now typing" bubble
-    
-    //    self.bubbleTable.typingBubble = NSBubbleTypingTypeSomebody;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatMessagesLoadedHandler:) name:k_chatMessagesLoaded object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatContactsLoadedHandler:) name:k_chatContactsLoaded object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatPushNotificationHandler:) name:k_chatPushNotificationReceived object:nil];
-    
-    if ([DataModel shared].chat != nil) {
-//        dbChat = [chatSvc loadChatByKey:chatId];
-        //        if (dbChat == nil) {
-        //
-        //        } else {
-        //            if (dbChat.clear_timestamp && dbChat.clear_timestamp.doubleValue > 0) {
-        //
-        //            }
-        //        }
-        
-        // Auto subscribe user to push notifications for this chat objectId
-        PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-        
-        NSString *channelId = [@"chat_" stringByAppendingString:chatId];
-        //        [currentInstallation addUniqueObject:[DataModel shared].chat.system_id forKey:@"channels"];
-        [currentInstallation addUniqueObject:channelId forKey:@"channels"];
-        [currentInstallation saveInBackground];
-        
-        NSLog(@"Fetch chat by objectId %@", [DataModel shared].chat.system_id);
-        //        - (void) apiListChatForms:(NSString *)chatId formKey:(NSString *)formId callback:(void (^)(NSArray *results))callback
-        [chatSvc apiListChatForms:[DataModel shared].chat.system_id formKey:nil callback:^(NSArray *results) {
-            // Each result is a ChatFormDB object with relational values: form and chat
-            formCache = [[NSMutableDictionary alloc]init];
-            __block int index=0;
-            int total = results.count;
-            
-            if (results.count > 0) {
-                for (PFObject *result in results) {
-                    if (result[@"form"]) {
-                        PFObject *pfForm = result[@"form"];
-                        NSLog(@">>>>>>>>>>>>>> Found form %@", pfForm.objectId);
-                        
-                        [formSvc apiLoadForm:pfForm.objectId fetchAll:YES callback:^(FormVO *form) {
-                            NSString *contactKey = nil;
-                            if ([form.user_key isEqualToString:[PFUser currentUser].objectId]) {
-                                contactKey = nil;
-                            } else {
-                                contactKey = [DataModel shared].user.contact_key;
-                            }
-                            
-                            
-                            if (form) {
-                                NSLog(@"Getting form responses");
-                                [formSvc apiListFormResponses:pfForm.objectId contactKey:contactKey callback:^(NSArray *results) {
-                                    form.responsesMap = [[NSMutableDictionary alloc] init];
-                                    if (results.count == 0) {
-                                        // Not results
-                                    } else {
-                                        FormResponseVO *response;
-                                        if (contactKey == nil) {
-                                            // not form owner. other recipient (left side)
-                                            
-                                            for (PFObject *result in results) {
-                                                response = [FormResponseVO readFromPFObject:result];
-                                                response.answerTotal = [NSNumber numberWithInt:1];
-                                                response.ratingCount = [NSNumber numberWithInt:1];
-                                                response.ratingTotal = response.rating;
-                                                
-                                                [form.responsesMap setObject:response forKey:response.option_key];
-                                            }
-                                            
-                                        } else {
-                                            // Form owner. That means aggregate result stats.
-                                            for (PFObject *result in results) {
-                                                response = [FormResponseVO readFromPFObject:result];
-                                                
-                                                if ([form.responsesMap objectForKey:response.option_key] == nil) {
-                                                    response.answerTotal = [NSNumber numberWithInt:1];
-                                                    response.ratingCount = [NSNumber numberWithInt:1];
-                                                    response.ratingTotal = response.rating;
-                                                    
-                                                    [form.responsesMap setObject:response forKey:response.option_key];
-                                                    
-                                                } else {
-                                                    
-                                                    ((FormResponseVO *)[form.responsesMap objectForKey:response.option_key]).answerTotal = [NSNumber numberWithInt:[response.answerTotal intValue] + 1];;
-                                                    if (response.rating) {
-                                                        
-                                                        FormResponseVO *_resp = (FormResponseVO *)[form.responsesMap objectForKey:response.option_key];
-                                                        ((FormResponseVO *)[form.responsesMap objectForKey:response.option_key]).ratingTotal = [NSNumber numberWithInt:(_resp.ratingTotal.intValue + response.rating.intValue)];
-                                                        ((FormResponseVO *)[form.responsesMap objectForKey:response.option_key]).ratingCount = [NSNumber numberWithInt:[response.ratingCount intValue] + 1];;
-                                                        
-                                                    }
-                                                    
-                                                }
-                                            }
-                                        }
-                                    }
-                                    // Finish up. List chat messages now that we have the forms, options and responses
-                                    [formCache setObject:form forKey:pfForm.objectId];
-                                    index++;
-                                    if (index==total) {
-                                        [chatSvc asyncListChatMessages:chatId afterDate:dbChat.cutoffDate];
-                                    }
-                                }];
-                                
-                            }
-                            
-                        }];
-                    }
-                }
-                
-            } else {
-                
-                [chatSvc asyncListChatMessages:chatId afterDate:dbChat.cutoffDate];
-                
-            }
-        }];
-        
-        
-    }
-    
-    
-    
-}
-
-#pragma mark - Notifications
-
-- (void)formResponseEnteredHandler:(NSNotification*)notification
-{
-    NSLog(@"%s", __FUNCTION__);
-    
-    @try {
-        
-        [[[UIAlertView alloc] initWithTitle:@"Thanks!" message:@"Response sent" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-        
-    }
-    @catch (NSException *exception) {
-        NSLog(@"########### Exception %@", exception);
-    }
-    
-    
-}
-
-- (void)showFormDetailsHandler:(NSNotification*)notification
-{
-    NSLog(@"%s", __FUNCTION__);
-    
-    if (notification.object) {
-        NSString *formKey = (NSString *) notification.object;
-        
-        if ([formCache objectForKey:formKey]) {
-            FormVO *theForm = (FormVO *) [formCache objectForKey:formKey];
-            [DataModel shared].form = theForm;
-            
-            switch (theForm.type) {
-                case FormType_POLL:
-                {
-                    [DataModel shared].action = @"popup";
-                    PollDetailVC *pollDetailVC = [[PollDetailVC alloc] initWithNibName:@"PollDetailVC" bundle:nil];
-                    pollDetailVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-                    [self presentViewController:pollDetailVC animated:YES completion:nil];
-                    
-                    break;
-                }
-                case FormType_RATING:
-                {
-                    [DataModel shared].action = @"popup";
-                    RatingDetailVC *detailsVC = [[RatingDetailVC alloc] init];
-                    detailsVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-                    [self presentViewController:detailsVC animated:YES completion:nil];
-                    
-                    break;
-                }
-                case FormType_RSVP:
-                {
-                    [DataModel shared].action = @"popup";
-                    RSVPDetailVC *detailsVC = [[RSVPDetailVC alloc] init];
-                    detailsVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-                    [self presentViewController:detailsVC animated:YES completion:nil];
-                    break;
-                }
-            }
-        } else {
-            NSLog(@"formKey not recognized in cache %@", formKey);
-        }
-        
-    }
-    
-    
-}
-
-- (void)chatMessagesLoadedHandler:(NSNotification*)notification
-{
-    NSLog(@"%s", __FUNCTION__);
-    
-    @try {
-        if (notification.object != nil) {
-            ChatVO *theChat = (ChatVO *) notification.object;
-            [self.tableDataSource removeAllObjects];
-            self.imageMap = [[NSMutableDictionary alloc] initWithCapacity:theChat.contact_keys.count];
-            
-            
-            [self renderChatMessages:theChat];
-            
-//            for (NSString *key in theChat.contact_keys) {
-//                
-//                [contactSvc asyncLoadCachedPhoto:key callback:^(UIImage *img) {
-//                    if (img) {
-//                        NSLog(@"Setting image for key %@", key);
-//                        [self.imageMap setObject:img forKey:key];
-//                    } else {
-//                        NSLog(@"No image for key %@", key);
-//                    }
-//                    counter++;
-//                    if (counter == keycount) {
-//                        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatContactsLoaded object:theChat]];
-//                        //                            [self.bubbleTable reloadData];
-//                    }
-//                }];
-//            }
-            
-            
-        }
-    }
-    @catch (NSException *exception) {
-        NSLog(@"########### Exception %@", exception);
-    }
-    
-    
-}
 
 - (void) renderChatMessages:(ChatVO *)theChat {
     NSLog(@"%s", __FUNCTION__);
     NSBubbleData *bubble;
-        int index = 0;
-        for (ChatMessageVO* msg in theChat.messages) {
-            index++;
-            NSLog(@"%i grouped message %@", index, msg.message);
-            if (msg.form_key == nil) {
-                bubble = [self buildMessageBubble:msg];
-                
-            } else {
-                bubble = [self buildMessageWidget:msg];
-            }
-            if (bubble == nil) {
-                NSLog(@"bubble is nil");
-            } else {
-                [self.tableDataSource addObject:bubble];
-            }
+    int index = 0;
+    for (ChatMessageVO* msg in theChat.messages) {
+        index++;
+        NSLog(@"%i grouped message %@", index, msg.message);
+        if (msg.form_key == nil) {
+            bubble = [self buildMessageBubble:msg];
+            
+        } else {
+            bubble = [self buildMessageWidget:msg];
         }
-        NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
-        [chatSvc updateChatStatus:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
-        
-        //        NSMutableArray *groupedMessages = [self consolidateChatMessages:theChat.messages];
-        //        NSLog(@"Grouped messages count %i", groupedMessages.count);
-        //        for (ChatMessageVO* msg in groupedMessages) {
-        //            index++;
-        //            NSLog(@"%i grouped message %@", index, msg.message);
-        //            if (msg.form_key == nil) {
-        //                bubble = [self buildMessageBubble:msg];
-        //
-        //            } else {
-        //                bubble = [self buildMessageWidget:msg];
-        //            }
-        //            if (bubble == nil) {
-        //                NSLog(@"bubble is nil");
-        //            } else {
-        //                [self.tableDataSource addObject:bubble];
-        //            }
-        //        }
+        if (bubble == nil) {
+            NSLog(@"bubble is nil");
+        } else {
+            [self.tableDataSource addObject:bubble];
+        }
+    }
+    NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
+    [chatSvc updateChatStatus:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
+    
     [MBProgressHUD hideHUDForView:self.view animated:NO];
     NSLog(@"Ready to reload table");
+    [self setupTopDrawer];
+    
     [self.bubbleTable reloadData];
     [self.bubbleTable scrollBubbleViewToBottomAnimated:NO];
-}
-- (void)chatContactsLoadedHandler:(NSNotification*)notification
-{
-
-    if (notification.object) {
-        ChatVO *theChat = (ChatVO *) notification.object;
-        [self renderChatMessages:theChat];
-    }
-    
 }
 - (void)chatPushNotificationHandler:(NSNotification*)notification
 {
@@ -620,7 +592,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         
         if ([msg.chat_key isEqualToString:chatId]) {
             
-            [chatSvc asyncListChatMessages:chatId afterDate:dbChat.cutoffDate];
+            [self loadChatMessages];
             
             
         } else {
@@ -732,6 +704,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSString *timeValue;
     NSString *nameValue;
     UIEdgeInsets viewInset;
+    ContactVO *contact = (ContactVO *) [[DataModel shared].contactCache objectForKey:msg.contact_key];
+
     if ([msg.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
         if (msg.pfPhoto == nil) {
             viewInset = UIEdgeInsetsMake(2, 5, 2, 5);
@@ -742,6 +716,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         ChatMessageWidget *msgView = [[ChatMessageWidget alloc] initWithFrame:msgFrame message:msg isOwner:YES];
         msgView.tag = 188;
         
+        
         NSLog(@"widget height = %f", msgView.dynamicHeight);
         msgFrame.size.height = msgView.dynamicHeight;
         msgView.frame = msgFrame;
@@ -749,7 +724,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         
         //        bubble = [NSBubbleData dataWithView:msgView date:msg.createdAt type:BubbleTypeMine insets:UIEdgeInsetsMake(2, 5, 2, 5)];
         bubble = [NSBubbleData dataWithView:msgView date:msg.createdAt type:BubbleTypeMine insets:viewInset];
-        bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
+        bubble.iconFile = contact.pfPhoto;
+//        bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
     } else {
         // someone else
         if (msg.pfPhoto == nil) {
@@ -758,7 +734,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             viewInset = UIEdgeInsetsMake(5, 10, 5, 0);
         }
         
-        ContactVO *contact = (ContactVO *) [[DataModel shared].contactCache objectForKey:msg.contact_key];
         if (contact) {
             if (contact.first_name != nil && contact.last_name != nil) {
                 nameValue = contact.fullname;
@@ -782,7 +757,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         
         //        bubble = [NSBubbleData dataWithView:msgView date:msg.createdAt type:BubbleTypeSomeoneElse insets:UIEdgeInsetsMake(2, 10, 2, 0)];
         bubble = [NSBubbleData dataWithView:msgView date:msg.createdAt type:BubbleTypeSomeoneElse insets:viewInset];
-        bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
+        bubble.iconFile = contact.pfPhoto;
+
+//        bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
     }
     return bubble;
 }
@@ -804,6 +781,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     BOOL isOwner;
     UIEdgeInsets viewInset;
     
+    ContactVO *contact = (ContactVO *) [[DataModel shared].contactCache objectForKey:msg.contact_key];
+
     if ([msg.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
         msgFrame = CGRectMake(0, 0, 240, 80);
         whoType = BubbleTypeMine;
@@ -851,7 +830,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         embedWidget.timeLabel.text = timeValue;
         
         bubble = [NSBubbleData dataWithView:embedWidget date:msg.createdAt type:whoType insets:viewInset];
-        bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
+        bubble.iconFile = contact.pfPhoto;
+//        bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
         return bubble;
         
     } else if (theForm.type == FormType_RATING) {
@@ -872,7 +852,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         embedWidget.timeLabel.text = timeValue;
         
         bubble = [NSBubbleData dataWithView:embedWidget date:msg.createdAt type:whoType insets:viewInset];
-        bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
+//        bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
+        bubble.iconFile = contact.pfPhoto;
         return bubble;
         
     } else if (theForm.type == FormType_RSVP) {
@@ -923,7 +904,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         embedWidget.frame = msgFrame;
         
         bubble = [NSBubbleData dataWithView:embedWidget date:msg.createdAt type:whoType insets:viewInset];
-        bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
+//        bubble.avatar = (UIImage *)[self.imageMap objectForKey:msg.contact_key];
+        bubble.iconFile = contact.pfPhoto;
+
         return bubble;
         
     }
@@ -1110,7 +1093,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         //        frame.size.height += kbSize.height + kChatBarHeight;
         self.bubbleTable.frame = frame;
         
-
+        
         
     }];
 }
@@ -1418,7 +1401,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 
                 [chatSvc updateClearTimestamp:chatId cleartime:[NSNumber numberWithDouble:seconds]];
                 dbChat = [chatSvc loadChatByKey:chatId];
-                [chatSvc asyncListChatMessages:chatId afterDate:dbChat.cutoffDate];
+                [self loadChatMessages];
                 
             }
             break;
@@ -1458,7 +1441,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSLog(@"%s", __FUNCTION__);
     
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-
+    
     UIImage *tmpImage = (UIImage *)[info valueForKey:UIImagePickerControllerOriginalImage];
     
     CGSize resize;
@@ -1735,7 +1718,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                     [query whereKey:@"channels" equalTo:channelId];
                     //            [query whereKey:@"installationId" notEqualTo:[PFInstallation currentInstallation].installationId];
                     
-//                    NSString *msgtext = @"New message from %@";
+                    //                    NSString *msgtext = @"New message from %@";
                     NSString *msgtext = @"%@: %@";
                     msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, msg.message];
                     
@@ -1795,7 +1778,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             
             [self.tableDataSource addObject:bubble];
             [self.bubbleTable reloadData];
-//            [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+            //            [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
             formTitle = self.attachedForm.name;
             NSLog(@"Saving form %@ in chat", formTitle);
             
@@ -1829,7 +1812,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                 break;
                             }
                         }
-
+                        
                         NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
                                               msgtext, @"alert",
                                               msg.contact_key, @"contact",
@@ -1886,7 +1869,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 //            [query whereKey:@"installationId" notEqualTo:[PFInstallation currentInstallation].installationId];
                 NSString *msgtext = @"%@: %@";
                 msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, @"posted a photo"];
-
+                
                 NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
                                       msg.message, @"alert",
                                       msg.contact_key, @"contact",
@@ -1929,11 +1912,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         scrollFrame.size.height = [DataModel shared].stageHeight - keyboardHeight - kChatBarHeight - kScrollViewTop;
         NSLog(@"Set scroll frame height to %f", scrollFrame.size.height);
         self.bubbleTable.frame = scrollFrame;
-
+        
         chatFrame.size.height = defaultChatFrameHeight;
         chatFrame.origin.y = [DataModel shared].stageHeight - chatFrame.size.height - keyboardHeight;
         self.chatBar.frame = chatFrame;
-
+        
     } else {
         scrollFrame.size.height = [DataModel shared].stageHeight - kChatBarHeight - kScrollViewTop;
         NSLog(@"Set scroll frame height to %f", scrollFrame.size.height);
@@ -1954,7 +1937,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     self.sendButton.enabled = YES;
     
     [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
-
+    
 }
 
 @end
