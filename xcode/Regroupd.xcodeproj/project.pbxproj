@@ -168,6 +168,7 @@
 		1E4B814D180842480017F75B /* chat_callout_row_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E4B814B180842480017F75B /* chat_callout_row_left@2x.png */; };
 		1E4E286E18595A6C003C5897 /* default_form_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E4E286D18595A6C003C5897 /* default_form_image@2x.png */; };
 		1E4E287018595C38003C5897 /* default_image_large@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E4E286F18595C38003C5897 /* default_image_large@2x.png */; };
+		1E4E35671866273F00FA29DC /* NexmoSMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E4E35661866273F00FA29DC /* NexmoSMS.m */; };
 		1E513A6317C9A29A00DC2566 /* cell_delete_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6117C9A29A00DC2566 /* cell_delete_icon.png */; };
 		1E513A6417C9A29A00DC2566 /* cell_delete_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6217C9A29A00DC2566 /* cell_delete_icon@2x.png */; };
 		1E513A6617CBAF8E00DC2566 /* checkbox_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6517CBAF8E00DC2566 /* checkbox_on@2x.png */; };
@@ -749,6 +750,8 @@
 		1E4B814B180842480017F75B /* chat_callout_row_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat_callout_row_left@2x.png"; sourceTree = "<group>"; };
 		1E4E286D18595A6C003C5897 /* default_form_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_form_image@2x.png"; sourceTree = "<group>"; };
 		1E4E286F18595C38003C5897 /* default_image_large@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_image_large@2x.png"; sourceTree = "<group>"; };
+		1E4E35651866273F00FA29DC /* NexmoSMS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NexmoSMS.h; sourceTree = "<group>"; };
+		1E4E35661866273F00FA29DC /* NexmoSMS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NexmoSMS.m; sourceTree = "<group>"; };
 		1E513A6117C9A29A00DC2566 /* cell_delete_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cell_delete_icon.png; sourceTree = "<group>"; };
 		1E513A6217C9A29A00DC2566 /* cell_delete_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell_delete_icon@2x.png"; sourceTree = "<group>"; };
 		1E513A6517CBAF8E00DC2566 /* checkbox_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox_on@2x.png"; sourceTree = "<group>"; };
@@ -1999,6 +2002,8 @@
 				1E928138177FB68F008A583C /* SystemVersioning.h */,
 				1E09AE661837FC6600FDEC38 /* ParseUtils.h */,
 				1E09AE671837FC6600FDEC38 /* ParseUtils.m */,
+				1E4E35651866273F00FA29DC /* NexmoSMS.h */,
+				1E4E35661866273F00FA29DC /* NexmoSMS.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -3055,6 +3060,7 @@
 				1EB652A2179F6F7200BEC96C /* SignatureView.m in Sources */,
 				1E5CABD817BA8DF0000D8759 /* RecentTableViewCell.m in Sources */,
 				1EC44C6C18130CC100F4A2C2 /* ProfileStart1VC.m in Sources */,
+				1E4E35671866273F00FA29DC /* NexmoSMS.m in Sources */,
 				1E2C7EAC17E501940043E28D /* BrandUILabel.m in Sources */,
 				1EFEA243182FB97300FEE9E4 /* NBPhoneNumber.m in Sources */,
 				1EC44C6218130CC100F4A2C2 /* FormSelectorVC.m in Sources */,

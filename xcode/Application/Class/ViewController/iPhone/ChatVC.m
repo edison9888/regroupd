@@ -575,7 +575,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         }
     }
     NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
-    [chatSvc updateChatStatus:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
+    [chatSvc updateChatReadTime:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
     
     [MBProgressHUD hideHUDForView:self.view animated:NO];
     NSLog(@"Ready to reload table");
@@ -1742,7 +1742,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                     [push sendPushInBackground];
                     
                     NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
-                    [chatSvc updateChatStatus:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
+                    [chatSvc updateChatReadTime:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
                     
                 }];
             }
@@ -1832,7 +1832,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                         self.sendButton.enabled = YES;
                         
                         NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
-                        [chatSvc updateChatStatus:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
+                        [chatSvc updateChatReadTime:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
                         
                         [MBProgressHUD hideHUDForView:self.view animated:NO];
                     }];
@@ -1888,7 +1888,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 [push setData:data];
                 [push sendPushInBackground];
                 NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
-                [chatSvc updateChatStatus:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
+                [chatSvc updateChatReadTime:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
                 
                 [MBProgressHUD hideHUDForView:self.view animated:NO];
                 

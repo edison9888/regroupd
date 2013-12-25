@@ -120,6 +120,7 @@ contact_key TEXT,
 first_name TEXT,
 last_name TEXT,
 phone TEXT,
+email TEXT,
 status INT,
 timestamp REAL
 );

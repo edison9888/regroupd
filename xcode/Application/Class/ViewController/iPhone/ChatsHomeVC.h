@@ -44,4 +44,6 @@
 
 - (IBAction)tapEditButton;
 
+//- (void)listMyChats;
+
 @end

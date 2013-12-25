@@ -173,6 +173,7 @@
                 }
                 if (i+1 == arrayOfArrays.count) {
                     [MBProgressHUD hideHUDForView:self.view animated:NO];
+                    [[[UIAlertView alloc] initWithTitle:@"Thank you" message:@"Sign up complete." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
                     
                 }
             }];
@@ -183,7 +184,6 @@
         [MBProgressHUD hideHUDForView:self.view animated:NO];
         
     }
-    [[[UIAlertView alloc] initWithTitle:@"Thank you" message:@"Sign up complete." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 
 }
 

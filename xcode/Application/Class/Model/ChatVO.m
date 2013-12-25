@@ -37,6 +37,7 @@
     text = [data valueForKey:@"name"];
     o.name = text;
     o.names = text;
+    
     text = [data valueForKey:@"type"];
     o.type = text.integerValue;
     

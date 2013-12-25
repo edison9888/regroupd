@@ -7,6 +7,7 @@
 //
 
 #import "SettingsHomeVC.h"
+#import "NexmoSMS.h"
 
 @interface SettingsHomeVC ()
 
@@ -115,7 +116,7 @@
     // Email Content
     NSString *message = @"";
     // To address
-    NSArray *toRecipents = [NSArray arrayWithObject:@"info@regroupd.com"];
+    NSArray *toRecipents = [NSArray arrayWithObject:@"info@getregroupd.com"];
     
     MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
     mc.mailComposeDelegate = self;
@@ -194,7 +195,11 @@
 #pragma mark - IBActions
 - (IBAction)tapClearAllButton {
     
+    NexmoSMS *nexmo = [[NexmoSMS alloc] init];
     
+    [nexmo sendAuthMessageTo:@"19172926600" pin:@"123456" callback:^(NSString *response) {
+        NSLog(@"Nexmo response: %@", response);
+    }];
     
 }
 - (IBAction)tapContactButton {

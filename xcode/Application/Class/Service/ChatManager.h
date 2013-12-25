@@ -17,9 +17,11 @@
 - (ChatVO *) loadChat:(int)_chatId fetchAll:(BOOL)all;
 - (int) saveChat:(ChatVO *) chat;
 - (void) deleteChat:(ChatVO *)chat;
-- (void) updateChat:(ChatVO *)chat;
-- (void) updateChatStatus:(NSString *)chatKey name:(NSString *)name readtime:(NSNumber *)readtime;
+
+- (void) updateChat:(NSString *)chatKey withName:(NSString *)name;
+- (void) updateChatReadTime:(NSString *)chatKey name:(NSString *)name readtime:(NSNumber *)readtime;
 - (void) updateClearTimestamp:(NSString *)chatKey cleartime:(NSNumber *)cleartime;
+- (void) updateChatStatus:(NSString *)chatKey status:(int)status;
 - (NSMutableArray *) listChats:(int)type;
 
 - (ChatMessageVO *) loadChatMessage:(int)_msgId;

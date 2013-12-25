@@ -286,20 +286,29 @@
 
 
 - (void) apiLookupContactsByPhoneNumbers:(NSArray *)numbers callback:(void (^)(NSArray *))callback {
+    @try {
+        PFQuery *query = [PFQuery queryWithClassName:kContactDB];
+        [query whereKey:@"phone" containedIn:numbers];
+//        NSLog(@"numbers %@", numbers);
+        
+        [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+            if (error) {
+                NSLog(@"Error %@", error);
+            }
+            NSMutableArray *contacts = [[NSMutableArray alloc] init];
+            ContactVO *contact;
+            for (PFObject *result in results) {
+                contact = [ContactVO readFromPFObject:result];
+                
+                [contacts addObject:contact];
+            }
+            callback([contacts copy]);
+        }];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"ERROR %@", exception);
+    }
     
-    PFQuery *query = [PFQuery queryWithClassName:kContactDB];
-    [query whereKey:@"phone" containedIn:numbers];
-    
-    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
-        NSMutableArray *contacts = [[NSMutableArray alloc] init];
-        ContactVO *contact;
-        for (PFObject *result in results) {
-            contact = [ContactVO readFromPFObject:result];
-            
-            [contacts addObject:contact];
-        }
-        callback([contacts copy]);
-    }];
     
 }
 #pragma mark -- Twilio SMS - Parse Cloud integration
@@ -632,7 +641,7 @@
     
     [[SQLiteDB sharedQueue] inTransaction:^(FMDatabase *db, BOOL *rollback) {
         
-        NSString *insertSql = @"INSERT INTO phonebook (record_id, first_name, last_name, phone, status, timestamp) VALUES (?, ?, ?, ?, ?, ?);";
+        NSString *insertSql = @"INSERT INTO phonebook (record_id, first_name, last_name, phone, email, status, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?);";
         for (ContactVO *contact in contacts) {
             
             BOOL success = [db executeUpdate:insertSql,
@@ -640,12 +649,13 @@
                             contact.first_name,
                             contact.last_name,
                             contact.phone,
+                            contact.email,
                             [NSNumber numberWithInt:0],
                             [NSNumber numberWithInt:0]
                             ];
             
             if (!success) {
-                NSLog(@"################################### SQL Insert failed ###################################");
+                NSLog(@"FAILED INSERT %@: %@/%@/%@", contact.record_id, contact.first_name, contact.last_name, contact.phone);
             }
         }
     }];
@@ -673,7 +683,7 @@
 
 - (NSMutableArray *)readAddressBook {
     NSMutableSet *phoneSet = [[NSMutableSet alloc] init];
-    NSMutableArray *peopleData = [[NSMutableArray alloc] init];
+    NSMutableArray *resultsArray = [[NSMutableArray alloc] init];
     
     CFErrorRef err;
     ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, &err);
@@ -706,9 +716,12 @@
             ABRecordID abRecordID = ABRecordGetRecordID(person);
             NSNumber *recordId = [NSNumber numberWithInt:abRecordID];
             
+            
             @try {
                 ABMultiValueRef phones = ABRecordCopyValue(person, kABPersonPhoneProperty);
+                ABMultiValueRef emails = ABRecordCopyValue(person, kABPersonEmailProperty);
                 
+
                 //                NSString* mobile=nil;
                 NSString* phonenumber;
                 
@@ -719,14 +732,18 @@
                     phonenumber = [self formatPhoneNumberAsE164:phonenumber];
                     
                     if (![phoneSet containsObject:phonenumber]) {
+                        CFStringRef email = ABMultiValueCopyValueAtIndex(emails, 0);
+                        CFStringRef firstName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
+                        CFStringRef lastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
                         //                    mobile = [self makePhoneId:mobile];
                         contact = [[ContactVO alloc] init];
                         contact.phone = phonenumber;
-                        CFStringRef firstName;
-                        CFStringRef lastName;
                         
-                        firstName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
-                        lastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
+                        if (email) {
+                            contact.email = (__bridge NSString *) email;
+                        } else {
+                            contact.email = @"";
+                        }
                         if (firstName) {
                             contact.first_name = (__bridge NSString *)firstName;
                         } else {
@@ -739,18 +756,19 @@
                         }
                         
                         if (contact.first_name.length == 0 && contact.last_name.length == 0) {
-                            contact.first_name = contact.phone;
+                            continue;
                         }
                         contact.record_id = recordId;
-                        [peopleData addObject:contact];
+                        [resultsArray addObject:contact];
                         [phoneSet addObject:phonenumber];
                         if (firstName)
                             CFRelease(firstName);
                         if (lastName)
                             CFRelease(lastName);
-                        
+                        if (email)
+                            CFRelease(email);
+
                     }
-                    
                 }
                 
                 
@@ -763,7 +781,7 @@
     }
     CFRelease(addressBook);
     
-    return peopleData;
+    return resultsArray;
 }
 - (ContactVO *) readContactFromAddressBook:(NSNumber *)recordId {
     ContactVO *contact = [[ContactVO alloc] init];

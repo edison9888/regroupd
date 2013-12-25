@@ -31,7 +31,31 @@
     
 }
 
-- (void) updateChatStatus:(NSString *)chatKey name:(NSString *)name readtime:(NSNumber *)readtime  {
+- (void) updateChat:(NSString *)chatKey withName:(NSString *)name {
+    
+    NSString *sql;
+    BOOL success;
+    
+    @try {
+        sql = @"UPDATE chat set name=? where system_id=?";
+        success = [[SQLiteDB sharedConnection] executeUpdate:sql,
+                   name,
+                   chatKey
+                   ];
+        
+        if (!success) {
+            NSLog(@"####### SQL Update failed #######");
+        } else {
+            NSLog(@"====== SQL UPDATE SUCCESS ======");
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"EXCEPTION %@", exception);
+    }
+    
+}
+
+- (void) updateChatReadTime:(NSString *)chatKey name:(NSString *)name readtime:(NSNumber *)readtime  {
     NSString *sql;
     BOOL success;
     NSLog(@"%@ update readtime = %f",chatKey, readtime.doubleValue);
@@ -83,6 +107,31 @@
     
 }
 
+- (void) updateChatStatus:(NSString *)chatKey status:(int)status {
+    NSString *sql;
+    BOOL success;
+    NSDate *now = [NSDate date];
+    NSString *dt = [DateTimeUtils dbDateTimeStampFromDate:now];
+    NSLog(@"dt %@", dt);
+    
+    @try {
+        sql = @"UPDATE chat set status=? where system_id=?";
+        success = [[SQLiteDB sharedConnection] executeUpdate:sql,
+                   [NSNumber numberWithInt:status],
+                   chatKey
+                   ];
+        
+        if (!success) {
+            NSLog(@"####### SQL Update failed #######");
+        } else {
+            NSLog(@"====== SQL UPDATE SUCCESS ======");
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"EXCEPTION %@", exception);
+    }
+    
+}
 
 - (ChatVO *) loadChat:(int)_chatId {
     return [self loadChat:_chatId fetchAll:NO];
@@ -183,8 +232,6 @@
 }
 - (void) deleteChat:(ChatVO *) chat {
     
-}
-- (void) updateChat:(ChatVO *) chat {
 }
 - (NSMutableArray *) listChats:(int)type {
     return nil;

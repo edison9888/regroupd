@@ -38,7 +38,8 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
+    contactSvc = [[ContactManager alloc] init];
+
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
     self.theTableView.backgroundColor = [UIColor clearColor];
@@ -54,6 +55,11 @@
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
     [self loadGroups];
     [self performSearch:@""];
+
+    [self performSelector:@selector(preparePhonebook:)
+               withObject:nil
+               afterDelay:3.0];
+    
 
 //    [self preparePhonebook];
 }
@@ -84,16 +90,14 @@
         NSLog(@"Result %@", [dict objectForKey:@"name"]);
         [self.groupsData addObject:dict];
     }
+    
 
 }
-- (void) preparePhonebook {
+- (void) preparePhonebook:(id)sender {
     
-    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [self.hud setLabelText:@"Loading..."];
+//    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    [self.hud setLabelText:@"Loading..."];
     
-    if (contactSvc == nil) {
-        contactSvc = [[ContactManager alloc] init];
-    }
     [contactSvc purgePhonebook];
     NSMutableArray *people = [contactSvc readAddressBook];
     NSLog(@"Found addressbook contacts to load qty:%i", people.count);
@@ -132,17 +136,22 @@
         for (int i=0; i<arrayOfArrays.count; i++) {
             NSLog(@"batchLookupContactsByPhoneNumbers %i", i);
             NSArray *numbers = (NSArray *) [arrayOfArrays objectAtIndex:i];
-            [contactSvc apiLookupContactsByPhoneNumbers:numbers callback:^(NSArray *contacts) {
-                //        NSLog(@"Callback response count %i", contacts.count);
-                if (contacts) {
-                    [contactSvc updatePhonebookWithContacts:contacts];
-                }
-                if (i+1 == arrayOfArrays.count) {
-                    [MBProgressHUD hideHUDForView:self.view animated:NO];
-                    
-                    [self performSearch:@""];
-                }
-            }];
+            @try {
+                [contactSvc apiLookupContactsByPhoneNumbers:numbers callback:^(NSArray *contacts) {
+                    NSLog(@"Callback response count %i", contacts.count);
+                    if (contacts) {
+                        [contactSvc updatePhonebookWithContacts:contacts];
+                    }
+                    if (i+1 == arrayOfArrays.count) {
+                        [MBProgressHUD hideHUDForView:self.view animated:NO];
+                        
+                        [self performSearch:@""];
+                    }
+                }];
+            }
+            @catch (NSException *exception) {
+                NSLog(@"ERROR %@", exception);
+            }
             
         }
         
@@ -301,7 +310,7 @@
             NSDictionary *rowData = (NSDictionary *) [otherContacts objectAtIndex:indexPath.row];
             cell.titleLabel.text = [self readFullnameFromDictionary:rowData];
 
-            cell.statusLabel.text = kStatusAvailable;
+            cell.statusLabel.text = @"";
             
         } @catch (NSException * e) {
             NSLog(@"Exception: %@", e);
@@ -382,8 +391,8 @@
 
 - (BOOL) createEmailInvite:(NSString *)email {
     // Email Content
-    NSString *subject = @"Invite to re:group'd";
-    NSString *message = @"Invite";
+    NSString *subject = @"Join re:group'd";
+    NSString *message = @"www.getregroupd.com";
     // To address
     NSArray *toRecipents = [NSArray arrayWithObject:email];
     
@@ -402,12 +411,12 @@
 
 - (BOOL) createSMSInvite:(NSArray *)phones {
     
-    NSString *subject = @"Invite to re:group'd";
+    NSString *subject = @"Join re:group'd";
     // To address
     
     if ([MFMessageComposeViewController canSendText]) {
         MFMessageComposeViewController *messageComposer = [[MFMessageComposeViewController alloc] init];
-        [messageComposer setBody:@""];
+        [messageComposer setBody:@"www.getregroupd.com"];
         messageComposer.subject = subject;
         messageComposer.recipients = phones;
         messageComposer.messageComposeDelegate = self;
@@ -435,63 +444,42 @@
 
 - (void)performSearch:(NSString *)searchText
 {
-    NSLog(@"%s: %@", __FUNCTION__, searchText);
     
-    if (searchText.length > 0) {
-        NSString *sqlTemplate = @"select * from phonebook where first_name like '%%%@%%' or last_name like '%%%@%%' limit 20";
-        
-        isLoading = YES;
-        
-        NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
-        
-        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-        [availableContacts removeAllObjects];
-        
-        while ([rs next]) {
-            [availableContacts addObject:[rs resultDictionary]];
-        }
-        isLoading = NO;
-        
-        [self.theTableView reloadData];
-        
-    } else {
-        NSString *sqlTemplate;
-        sqlTemplate = @"select * from phonebook where status=%i order by last_name";
-        
-        isLoading = YES;
-        int status;
-        NSString *sql;
-
-        status = 1;
-        sql = [NSString stringWithFormat:sqlTemplate, status];
-        
-        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-        [availableContacts removeAllObjects];
-        
-        while ([rs next]) {
-            NSDictionary *dict =[rs resultDictionary];
-            [availableContacts addObject:dict];
-        }
-        
-        status = 0;
-        sqlTemplate = @"select distinct record_id, first_name, last_name from phonebook where status=%i order by first_name";
-        sql = [NSString stringWithFormat:sqlTemplate, status];
-        
-        rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-        [otherContacts removeAllObjects];
-        
-        while ([rs next]) {
-            
-            NSDictionary *dict =[rs resultDictionary];
-            [otherContacts addObject:dict];
-        }
-        NSLog(@"otherContacts %i", otherContacts.count);
-        
-        isLoading = NO;
-        
-        [self.theTableView reloadData];
+    NSString *sqlTemplate;
+    sqlTemplate = @"select * from phonebook where status=%i order by last_name";
+    
+    isLoading = YES;
+    int status;
+    NSString *sql;
+    
+    status = 1;
+    sql = [NSString stringWithFormat:sqlTemplate, status];
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+    [availableContacts removeAllObjects];
+    
+    while ([rs next]) {
+        NSDictionary *dict =[rs resultDictionary];
+        [availableContacts addObject:dict];
     }
     
+    status = 0;
+    sqlTemplate = @"select distinct record_id, first_name, last_name from phonebook where status=%i order by first_name";
+    sql = [NSString stringWithFormat:sqlTemplate, status];
+    
+    rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+    [otherContacts removeAllObjects];
+    
+    while ([rs next]) {
+        
+        NSDictionary *dict =[rs resultDictionary];
+        [otherContacts addObject:dict];
+    }
+    NSLog(@"otherContacts %i", otherContacts.count);
+    
+    isLoading = NO;
+    
+    [self.theTableView reloadData];
     
 }
 
@@ -617,7 +605,7 @@
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
 
-    [self preparePhonebook];
+    [self preparePhonebook:nil];
 }
 
 - (NSString *) makePhoneId:(NSString *)originalString {
@@ -723,9 +711,9 @@
 
 - (NSString *) readFullnameFromDictionary:(NSDictionary *)rowData {
 //    NSLog(@"lastname %@", [rowData objectForKey:@"last_name"]);
-    if ([rowData objectForKey:@"first_name"] != NULL && [rowData objectForKey:@"last_name"] == NULL) {
+    if ([rowData objectForKey:@"first_name"] != nil && [rowData objectForKey:@"last_name"] == nil) {
         return [rowData objectForKey:@"first_name"];
-    } else if ([rowData objectForKey:@"first_name"] == NULL && [rowData objectForKey:@"last_name"] != NULL) {
+    } else if ([rowData objectForKey:@"first_name"] == nil && [rowData objectForKey:@"last_name"] != nil) {
         return [rowData objectForKey:@"last_name"];
     } else {
         return [NSString stringWithFormat:kFullNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];

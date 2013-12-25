@@ -70,7 +70,7 @@
     NSLog(@"%s: %@", __FUNCTION__, searchText);
     self.tableData =[[NSMutableArray alloc]init];
 
-    NSString *sql = @"select * from chat";
+    NSString *sql = @"select * from chat where name is not null and status > -1";
     
     isLoading = YES;
     
@@ -81,34 +81,41 @@
     ChatVO *chat;
     while ([rs next]) {
         chat = [ChatVO readFromDictionary:[rs resultDictionary]];
-        
+        NSLog(@"chat.names = %@", chat.names);
         [tableData addObject:chat];
     }
     isLoading = NO;
     
     [self.theTableView reloadData];
 
-    [self listMyChats];
+//    [self performSelector:@selector(preloadData:)
+//               withObject:nil
+//               afterDelay:1.0];
+    [self preloadData:nil];
     
 }
 
 
-- (void) preloadData
+- (void) preloadData:(id)sender
 {
     contactSvc = [[ContactManager alloc] init];
     
     [contactSvc apiPrivacyListBlocks:[DataModel shared].user.contact_key callback:^(NSArray *keys) {
         _blockedKeys = keys;
-        [self listMyChats];
+        for (NSString *key in keys) {
+            [chatSvc updateChatStatus:key status:-1];
+        }
+        [self listMyChats:nil];
     }];
 }
-- (void)listMyChats
+- (void)listMyChats:(id)sender
 {
     NSLog(@"%s", __FUNCTION__);
     self.tableData =[[NSMutableArray alloc]init];
-    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [self.hud setLabelText:@"Loading"];
-    [self.hud setDimBackground:YES];
+//    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    [self.hud setLabelText:@"Loading"];
+//    [self.hud setDimBackground:YES];
+    
     contactKeySet = [[NSMutableSet alloc] init];  // collect full set of contact keys
     
     if (chatSvc == nil) {
@@ -130,6 +137,7 @@
         
         NSMutableArray *chatsArray = [[NSMutableArray alloc] initWithCapacity:results.count];
         ChatVO *chat;
+        ChatVO *dbChat;
         
         for (PFObject* result in results) {
             
@@ -158,7 +166,6 @@
             [chatsArray addObject:chat];
             
             
-            
         }
         
         // Loads phonebookCache
@@ -169,6 +176,7 @@
             NSString *name;
             
             for (ChatVO *chat in chatsArray) {
+                
                 NSMutableArray *namesArray = [[NSMutableArray alloc] init];
                 
                 for (NSString *key in chat.contact_keys) {
@@ -220,10 +228,10 @@
                 } else {
                     // ignore
 //                    [chatSvc updateChatStatus:chat.system_id name:chat.names readtime:[NSNumber numberWithDouble:0.0]];
-
+                    [chatSvc updateChat:chat.system_id withName:names];
                     NSTimeInterval serverTime = [chat.updatedAt timeIntervalSince1970];
                     
-                    NSLog(@"Compare localTime %f vs. serverTime %f", lookup.read_timestamp.doubleValue, serverTime);
+//                    NSLog(@"Compare localTime %f vs. serverTime %f", lookup.read_timestamp.doubleValue, serverTime);
                     
                     if (lookup.read_timestamp.doubleValue + kTimestampDelay < serverTime) {
                         chat.hasNew = YES;
