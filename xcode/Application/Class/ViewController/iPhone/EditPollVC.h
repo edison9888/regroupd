@@ -12,6 +12,7 @@
 
 #import "FancyCheckbox.h" 
 #import "FancyTextField.h"
+
 #import "BrandUITextField.h"
 #import "SurveyOptionWithPic.h"
 
@@ -33,7 +34,7 @@
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, retain) IBOutlet UIView *lowerForm;
 
-@property (nonatomic, retain) IBOutlet BrandUITextField *subjectField;
+@property (nonatomic, retain) IBOutlet FancyTextField *subjectField;
 
 @property (nonatomic, retain) IBOutlet FancyCheckbox *ckPublic;
 @property (nonatomic, retain) IBOutlet FancyCheckbox *ckPrivate;

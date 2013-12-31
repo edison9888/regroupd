@@ -76,7 +76,6 @@
     self.noButton.enabled = NO;
     
     UserVO *user = [DataModel shared].user;
-    user.first_name = @"default";
 
     
     if (userSvc == nil) {

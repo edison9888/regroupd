@@ -19,8 +19,18 @@
 
 @implementation EditRatingVC
 
-#define kTagPublic     101
-#define kTagPrivate    102
+#define kTagSubject 11
+
+#define kTagOption1 101
+#define kTagOption2 102
+#define kTagOption3 103
+
+#define tf1_default @"Option one"
+#define tf2_default @"Option two"
+#define tf3_default @"Option three"
+
+#define kTagPublic     201
+#define kTagPrivate    202
 #define kInputFieldInterval 65
 
 #define kFirstOptionId  1
@@ -69,6 +79,9 @@
     [formatter setNumberStyle: NSNumberFormatterSpellOutStyle];
     
 
+    self.subjectField.delegate = self;
+    self.subjectField.textAlignment = NSTextAlignmentLeft;
+    
     SurveyOptionWidget *surveyOption;
     // OPTION 1 INPUT
     count++;
@@ -79,9 +92,9 @@
     surveyOption.tag = count;
     surveyOption.index = count;
     surveyOption.input.placeholder = defaultText;
-    surveyOption.input.defaultText = defaultText;
+//    surveyOption.input.defaultText = defaultText;
     surveyOption.input.returnKeyType = UIReturnKeyNext;
-    surveyOption.input.tag = count;
+    surveyOption.input.tag = kTagOption1;
     surveyOption.input.delegate = self;
     [self.scrollView addSubview:surveyOption];
     [surveyOptions addObject:surveyOption];
@@ -96,9 +109,9 @@
     surveyOption.tag = count;
     surveyOption.index = count;
     surveyOption.input.placeholder = defaultText;
-    surveyOption.input.defaultText = defaultText;
+//    surveyOption.input.defaultText = defaultText;
     surveyOption.input.returnKeyType = UIReturnKeyNext;
-    surveyOption.input.tag = count;
+    surveyOption.input.tag = kTagOption2;
     surveyOption.input.delegate = self;
     
     [self.scrollView addSubview:surveyOption];
@@ -114,9 +127,9 @@
     surveyOption.tag = count;
     surveyOption.index = count;
     surveyOption.input.placeholder = defaultText;
-    surveyOption.input.defaultText = defaultText;
+//    surveyOption.input.defaultText = defaultText;
     surveyOption.input.returnKeyType = UIReturnKeyNext;
-    surveyOption.input.tag = count;
+    surveyOption.input.tag = kTagOption3;
     surveyOption.input.delegate = self;
     
     [self.scrollView addSubview:surveyOption];
@@ -134,6 +147,10 @@
     self.ckPrivate.tag = kTagPrivate;
     [self.ckPrivate unselected];
     
+    textViewTags = @[@kTagOption1, @kTagOption2, @kTagOption3];
+
+//    fieldTags = @[@kTagSubject, @kTagLocation, @kTagDescription, @kTagStartDate, @kTagStartTime, @kTagEndDate, @kTagEndTime];
+
     
     // register for keyboard notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -281,33 +298,125 @@
     
 }
 
+#pragma mark - UITextField methods
+
+-(BOOL) textFieldShouldBeginEditing:(UITextField*)textField {
+    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
+    keyboardIsShown = YES;
+    fieldIndex = textField.tag;
+    _currentFocus = textField;
+    
+    return YES;
+    
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
+    
+    [textField resignFirstResponder];
+    
+    return YES;
+}
+
+
+// SEE: http://www.cocoawithlove.com/2008/10/sliding-uitextfields-around-to-avoid.html
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
+    FancyTextField *fancyField;
+    fancyField = (FancyTextField *)[self.view viewWithTag:textField.tag];
+    [fancyField setActiveStyle:nil];
+    
+    
+    
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    FancyTextField *fancyField;
+    fancyField = (FancyTextField *)[self.view viewWithTag:textField.tag];
+    [fancyField setDefaultStyle];
+//    CGRect viewFrame = self.view.frame;
+//    viewFrame.origin.y += animatedDistance;
+//    
+//    [UIView beginAnimations:nil context:NULL];
+//    [UIView setAnimationBeginsFromCurrentState:YES];
+//    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
+//    
+//    [self.view setFrame:viewFrame];
+//    
+//    [UIView commitAnimations];
+//    
+//    [self.keyboardControls.activeField resignFirstResponder];
+    
+}
+
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+    return YES;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    //    NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    
+    return YES;
+}
+
 #pragma mark - UITextView delegate methods
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
     NSLog(@"===== %s", __FUNCTION__);
+    
+
     _currentFocus = textView;
     optionIndex = textView.tag;
     [self updateScrollView];
     
     inputHeight = textView.frame.size.height;
-    
-//    CGRect target = CGRectMake(textView.frame.origin.x,
-//                               textView.frame.origin.y + 30,
-//                               textView.frame.size.width,
-//                               textView.frame.size.height);
-//    
-//    [self.scrollView scrollRectToVisible:target animated:YES];
-    
+
+    FancyTextView *fancyField;
+    fancyField = (FancyTextView *)[self.view viewWithTag:textView.tag];
+    fancyField.textColor = [UIColor blackColor];
+    [fancyField setActiveStyle:nil];
+
+//    if ([fancyField.text isEqualToString:fancyField.defaultText]) {
+//        fancyField.text = nil;
+//    }
+    switch (textView.tag) {
+        case kTagOption1:
+            
+            if ([textView.text isEqualToString:tf1_default]) {
+                textView.text = nil;
+            }
+            break;
+            
+        case kTagOption2:
+            if ([textView.text isEqualToString:tf2_default]) {
+                textView.text = nil;
+            }
+            break;
+            
+        case kTagOption3:
+            if ([textView.text isEqualToString:tf3_default]) {
+                textView.text = nil;
+            }
+            break;
+            
+            
+    }
+
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
     NSLog(@"===== %s", __FUNCTION__);
     [_currentFocus resignFirstResponder];
     [textView endEditing:YES];
+
+    FancyTextView *fancyField;
+    fancyField = (FancyTextView *)[self.view viewWithTag:textView.tag];
+    [fancyField setDefaultStyle];
+
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
-//    NSLog(@"%s tag=%i", __FUNCTION__, textView.tag);
+    NSLog(@"%s tag=%i", __FUNCTION__, textView.tag);
     optionIndex = textView.tag;
     
     float vshift = 0;
@@ -327,7 +436,7 @@
         
         inputHeight = newsize;
         if (inputHeight < kMaxInputHeight) {
-            int pointer = optionIndex - 1;
+            int pointer = optionIndex - kTagOption1;
             SurveyOptionWidget *currentOption;
             CGRect optionFrame;
 
@@ -546,6 +655,7 @@
 
         __block NSString *imagefile;
         __block int index = 1;
+        __block int position = 1;
         [formSvc apiSaveForm:form callback:^(PFObject *pfForm) {
             NSString *formId = pfForm.objectId;
             int total = surveyOptions.count;
@@ -567,10 +677,11 @@
                 option.name = surveyOption.input.text;
                 option.type = OptionType_TEXT;
                 option.status = OptionStatus_DRAFT;
-                option.position = index;
+                option.position = position;
+                position++;
                 [formSvc apiSaveFormOption:option formId:formId callback:^(PFObject *object) {
-                    index++;
                     NSLog(@"Save option %i", index);
+                    index++;
                     if (index > total) {
                         [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formSaveCompleteNotification object:nil]];
                         

@@ -4,6 +4,7 @@
 //
 
 #import "WidgetStyle.h"
+#import "FancyTextField.h"
 
 #define kHighlightLightBlueBG    0xc4f5fd
 #define kHighlightAquaBorder    0x28cfea

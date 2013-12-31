@@ -19,6 +19,7 @@
 
 @implementation ChatMessageWidget
 
+@synthesize msgView;
 
 - (id)initWithFrame:(CGRect)frame message:(ChatMessageVO *)msg isOwner:(BOOL)owner
 {
@@ -29,12 +30,15 @@
         _theView = [[[NSBundle mainBundle] loadNibNamed:@"ChatMessageWidget" owner:self options:nil] objectAtIndex:0];
         _theView.backgroundColor = [UIColor clearColor];
         
-        theFont = [UIFont fontWithName:@"Raleway-Regular" size:13];
+//        theFont = [UIFont fontWithName:@"NotoSans-Bold" size:14];
+//        [self.msgView setFont:[UIFont fontWithName:@"Raleway-Bold" size:14]];
+
+        
         float ypos = kContentTop;
         
         if (msg.message != nil && msg.message.length > 0) {
             self.msgView.hidden = NO;
-            [self.msgView setFont:theFont];
+//            [self.msgView setFont:theFont];
             
             self.msgView.text = msg.message;
             

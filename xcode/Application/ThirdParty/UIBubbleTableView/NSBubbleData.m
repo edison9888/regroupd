@@ -55,7 +55,7 @@ const UIEdgeInsets textInsetsSomeone = {5, 15, 11, 10};
 {
 //    [self setFont:[UIFont fontWithName:@"Raleway-Regular" size:self.font.pointSize]];
 //    self.textColor = [UIColor colorWithHexValue:0x333333];
-    UIFont *font = [UIFont fontWithName:@"Raleway-Regular" size:13];
+    UIFont *font = [UIFont fontWithName:@"Raleway-Bold" size:14];
 //    [UIFont systemFontOfSize:[UIFont systemFontSize]];
     CGSize size = [(text ? text : @"") sizeWithFont:font constrainedToSize:CGSizeMake(220, 9999) lineBreakMode:NSLineBreakByWordWrapping];
     

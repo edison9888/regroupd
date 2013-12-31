@@ -21,7 +21,9 @@
     FancyTextView *fancyInput;
     CGPoint  offset; // unused
     UIResponder *_currentFocus;
-    
+
+    int fieldIndex;
+
     BOOL keyboardIsShown;
     float keyboardHeight;
     float navbarHeight;
@@ -29,6 +31,7 @@
     UIView *bgLayer;
     
     float inputHeight;
+    NSArray *textViewTags;
     
 }
 
@@ -37,7 +40,7 @@
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, retain) IBOutlet UIView *lowerForm;
 
-@property (nonatomic, retain) IBOutlet BrandUITextField *subjectField;
+@property (nonatomic, retain) IBOutlet FancyTextField *subjectField;
 
 @property (nonatomic, retain) IBOutlet FancyCheckbox *ckPublic;
 @property (nonatomic, retain) IBOutlet FancyCheckbox *ckPrivate;

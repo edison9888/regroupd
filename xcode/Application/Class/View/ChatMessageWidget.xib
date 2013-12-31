@@ -8,7 +8,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChatMessageWidget">
             <connections>
                 <outlet property="leftCallout" destination="B23-YF-VyC" id="geK-zT-vkX"/>
-                <outlet property="msgView" destination="jk9-Mc-LGW" id="s7R-kK-jqk"/>
                 <outlet property="nameLabel" destination="rUA-dE-FjS" id="mo3-n2-tqp"/>
                 <outlet property="rightCallout" destination="LT6-h6-pXV" id="eBb-ul-gcV"/>
                 <outlet property="timeLabel" destination="bg2-ke-LKO" id="GI4-V7-xkx"/>

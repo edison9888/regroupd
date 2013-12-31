@@ -19,6 +19,11 @@
 
 @implementation EditPollVC
 
+#define kTagSubject 10
+#define kTagOption1 11
+#define kTagOption2 12
+#define kTagOption3 13
+
 #define kTagPublic     101
 #define kTagPrivate    102
 #define kTagMultipleYes   103
@@ -67,6 +72,9 @@
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setNumberStyle: NSNumberFormatterSpellOutStyle];
     
+    self.subjectField.delegate = self;
+    self.subjectField.textAlignment = NSTextAlignmentLeft;
+    
     // OPTION 1 INPUT
     count++;
     defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
@@ -78,7 +86,7 @@
     surveyOption.input.placeholder = defaultText;
     surveyOption.input.defaultText = defaultText;
     surveyOption.input.returnKeyType = UIReturnKeyNext;
-    surveyOption.input.tag = count;
+    surveyOption.input.tag = kTagOption1;
     surveyOption.input.delegate = self;
     [self.scrollView addSubview:surveyOption];
     [surveyOptions addObject:surveyOption];
@@ -95,7 +103,7 @@
     surveyOption.input.placeholder = defaultText;
     surveyOption.input.defaultText = defaultText;
     surveyOption.input.returnKeyType = UIReturnKeyNext;
-    surveyOption.input.tag = count;
+    surveyOption.input.tag = kTagOption2;
     surveyOption.input.delegate = self;
 
     [self.scrollView addSubview:surveyOption];
@@ -113,7 +121,7 @@
     surveyOption.input.placeholder = defaultText;
     surveyOption.input.defaultText = defaultText;
     surveyOption.input.returnKeyType = UIReturnKeyNext;
-    surveyOption.input.tag = count;
+    surveyOption.input.tag = kTagOption3;
     surveyOption.input.delegate = self;
 
     [self.scrollView addSubview:surveyOption];
@@ -295,23 +303,27 @@
     NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
     
     // Get next field
-    if (textField.tag < surveyOptions.count) {
-        SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:textField.tag];
-        [currentOption.input becomeFirstResponder];
-
-        optionIndex = textField.tag + 1;
-        [self updateScrollView];
-        
-    } else {
-        NSLog(@"Last field");
-        [textField resignFirstResponder];
-    }
+//    if (textField.tag < surveyOptions.count) {
+//        SurveyOptionWithPic *currentOption = [surveyOptions objectAtIndex:textField.tag];
+//        [currentOption.input becomeFirstResponder];
+//
+//        optionIndex = textField.tag + 1;
+//        [self updateScrollView];
+//        
+//    } else {
+//        NSLog(@"Last field");
+//        [textField resignFirstResponder];
+//    }
 
     return YES;
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     
+    FancyTextField *fancyField;
+    fancyField = (FancyTextField *)[self.view viewWithTag:textField.tag];
+    [fancyField setActiveStyle:nil];
+
     _currentField = textField;
     optionIndex = textField.tag;
     [self updateScrollView];
@@ -319,6 +331,10 @@
     
 }
 - (void)textFieldDidEndEditing:(UITextField *)textField {
+    FancyTextField *fancyField;
+    fancyField = (FancyTextField *)[self.view viewWithTag:textField.tag];
+    [fancyField setDefaultStyle];
+
     [textField resignFirstResponder];
     [textField endEditing:YES];
     
@@ -495,6 +511,7 @@
             NSString *formId = pfForm.objectId;
             int total = surveyOptions.count;
             __block int index = 1;
+            __block int position = 1;
             for (SurveyOptionWithPic* surveyOption in surveyOptions) {
                 FormOptionVO *option;
                 
@@ -512,7 +529,8 @@
                 option.name = surveyOption.input.text;
                 option.type = OptionType_TEXT;
                 option.status = OptionStatus_DRAFT;
-                option.position = index;
+                option.position = position;
+                position++;
                 [formSvc apiSaveFormOption:option formId:formId callback:^(PFObject *object) {
                     index++;
                     NSLog(@"Save option %i", index);

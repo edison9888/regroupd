@@ -1688,6 +1688,15 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 #pragma mark - Chat message handling
 
 - (void) insertMessageInChat {
+    
+    spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    CGFloat halfButtonHeight = self.sendButton.bounds.size.height / 2;
+    CGFloat buttonWidth = self.sendButton.bounds.size.width;
+    spinner.center = CGPointMake(buttonWidth / 2, halfButtonHeight);
+    [self.sendButton addSubview:spinner];
+    [spinner startAnimating];
+    self.sendButton.enabled = NO;
+
     //    [self.bubbleTable becomeFirstResponder];
     //    self.sendButton.enabled = NO;
     if (!hasAttachment) {
@@ -1903,6 +1912,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void) resetChatUI {
     CGRect scrollFrame = self.bubbleTable.frame;
     
+    [spinner stopAnimating];
+    [spinner removeFromSuperview];
+    spinner = nil;
+    self.sendButton.enabled = NO;
+
     self.inputField.text = @"";
     
     inputFrame.size.height = defaultInputFrameHeight;

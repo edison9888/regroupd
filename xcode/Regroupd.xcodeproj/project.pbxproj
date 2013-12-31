@@ -169,6 +169,9 @@
 		1E4E286E18595A6C003C5897 /* default_form_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E4E286D18595A6C003C5897 /* default_form_image@2x.png */; };
 		1E4E287018595C38003C5897 /* default_image_large@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E4E286F18595C38003C5897 /* default_image_large@2x.png */; };
 		1E4E35671866273F00FA29DC /* NexmoSMS.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E4E35661866273F00FA29DC /* NexmoSMS.m */; };
+		1E4E357E186C7D7500FA29DC /* ProfileStart2aVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E4E357C186C7D7500FA29DC /* ProfileStart2aVC.m */; };
+		1E4E357F186C7D7500FA29DC /* ProfileStart2aVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E4E357D186C7D7500FA29DC /* ProfileStart2aVC.xib */; };
+		1E4E3582186CB6B100FA29DC /* AltTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E4E3581186CB6B100FA29DC /* AltTextView.m */; };
 		1E513A6317C9A29A00DC2566 /* cell_delete_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6117C9A29A00DC2566 /* cell_delete_icon.png */; };
 		1E513A6417C9A29A00DC2566 /* cell_delete_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6217C9A29A00DC2566 /* cell_delete_icon@2x.png */; };
 		1E513A6617CBAF8E00DC2566 /* checkbox_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E513A6517CBAF8E00DC2566 /* checkbox_on@2x.png */; };
@@ -752,6 +755,11 @@
 		1E4E286F18595C38003C5897 /* default_image_large@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_image_large@2x.png"; sourceTree = "<group>"; };
 		1E4E35651866273F00FA29DC /* NexmoSMS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NexmoSMS.h; sourceTree = "<group>"; };
 		1E4E35661866273F00FA29DC /* NexmoSMS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NexmoSMS.m; sourceTree = "<group>"; };
+		1E4E357B186C7D7500FA29DC /* ProfileStart2aVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileStart2aVC.h; sourceTree = "<group>"; };
+		1E4E357C186C7D7500FA29DC /* ProfileStart2aVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileStart2aVC.m; sourceTree = "<group>"; };
+		1E4E357D186C7D7500FA29DC /* ProfileStart2aVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileStart2aVC.xib; sourceTree = "<group>"; };
+		1E4E3580186CB6B100FA29DC /* AltTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AltTextView.h; sourceTree = "<group>"; };
+		1E4E3581186CB6B100FA29DC /* AltTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AltTextView.m; sourceTree = "<group>"; };
 		1E513A6117C9A29A00DC2566 /* cell_delete_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cell_delete_icon.png; sourceTree = "<group>"; };
 		1E513A6217C9A29A00DC2566 /* cell_delete_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell_delete_icon@2x.png"; sourceTree = "<group>"; };
 		1E513A6517CBAF8E00DC2566 /* checkbox_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox_on@2x.png"; sourceTree = "<group>"; };
@@ -1427,6 +1435,8 @@
 				1E6A1025183FFA3200F63666 /* AltLabel.m */,
 				1E3E85FB184AEE0D00BB7171 /* AltBoldLabel.h */,
 				1E3E85FC184AEE0D00BB7171 /* AltBoldLabel.m */,
+				1E4E3580186CB6B100FA29DC /* AltTextView.h */,
+				1E4E3581186CB6B100FA29DC /* AltTextView.m */,
 				1E0CAA40178253DF00A294C0 /* BrandUITextField.h */,
 				1E0CAA41178253DF00A294C0 /* BrandUITextField.m */,
 				1E2C7EAA17E501940043E28D /* BrandUILabel.h */,
@@ -2311,6 +2321,9 @@
 				1EC44C3818130CC100F4A2C2 /* ProfileStart2VC.h */,
 				1EC44C3918130CC100F4A2C2 /* ProfileStart2VC.m */,
 				1EC44C3A18130CC100F4A2C2 /* ProfileStart2VC.xib */,
+				1E4E357B186C7D7500FA29DC /* ProfileStart2aVC.h */,
+				1E4E357C186C7D7500FA29DC /* ProfileStart2aVC.m */,
+				1E4E357D186C7D7500FA29DC /* ProfileStart2aVC.xib */,
 				1EC44C3B18130CC100F4A2C2 /* ProfileStart3VC.h */,
 				1EC44C3C18130CC100F4A2C2 /* ProfileStart3VC.m */,
 				1EC44C3D18130CC100F4A2C2 /* ProfileStart3VC.xib */,
@@ -2594,6 +2607,7 @@
 				1E3ACA841806011000A6E6B2 /* typingSomeone@2x.png in Resources */,
 				1E7A6E2B1806EDED004B62CE /* rating_detail_meter_bg_white@2x.png in Resources */,
 				1E928238177FB690008A583C /* loading-icon.png in Resources */,
+				1E4E357F186C7D7500FA29DC /* ProfileStart2aVC.xib in Resources */,
 				1E928239177FB690008A583C /* loading-icon@2x.png in Resources */,
 				1E3ACA6D1805A94400A6E6B2 /* icon_attach_rsvp_aqua@2x.png in Resources */,
 				1E92823C177FB690008A583C /* popup_volume_rebate.png in Resources */,
@@ -2935,6 +2949,7 @@
 				1EC3DE22180F204C008E2D3F /* ContactTableViewCell.m in Sources */,
 				1ED7865D1853A0050083022A /* IndentedTextField.m in Sources */,
 				1E1A9AA717FE5016008D81E6 /* NSBubbleData.m in Sources */,
+				1E4E357E186C7D7500FA29DC /* ProfileStart2aVC.m in Sources */,
 				1E0CAA43178253F100A294C0 /* BrandUITextField.m in Sources */,
 				1E928250177FB690008A583C /* AppDelegate.m in Sources */,
 				1E928251177FB690008A583C /* NSString+NumberFormat.m in Sources */,
@@ -3036,6 +3051,7 @@
 				1EFEA240182FB97300FEE9E4 /* NBNumberFormat.m in Sources */,
 				1EF463341783AE1C00D38DBB /* UserVO.m in Sources */,
 				1E0AEC651793860D00710FDE /* TabBarView.m in Sources */,
+				1E4E3582186CB6B100FA29DC /* AltTextView.m in Sources */,
 				1E76F4A917961283007EF5B0 /* ContactVO.m in Sources */,
 				1E1A9AAB17FE5016008D81E6 /* UIBubbleTypingTableViewCell.m in Sources */,
 				1EFEA244182FB97300FEE9E4 /* NBPhoneNumberDesc.m in Sources */,

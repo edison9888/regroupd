@@ -68,6 +68,22 @@
 			<key>name</key>
 			<string>ProfileStart2</string>
 			<key>nextSlideName</key>
+			<string>ProfileStart2a</string>
+		</dict>
+		<dict>
+			<key>slideData</key>
+			<dict/>
+			<key>allowLeftSlide</key>
+			<false/>
+			<key>allowRightSlide</key>
+			<false/>
+			<key>category</key>
+			<string>Profile</string>
+			<key>controllerName</key>
+			<string>ProfileStart2aVC</string>
+			<key>name</key>
+			<string>ProfileStart2a</string>
+			<key>nextSlideName</key>
 			<string>ProfileStart3</string>
 		</dict>
 		<dict>

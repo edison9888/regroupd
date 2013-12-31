@@ -65,7 +65,7 @@
     float defaultInputFrameHeight;
     
     CGRect chatFrameWithKeyboard;
-    
+    UIActivityIndicatorView *spinner;
     
     UIView *bgLayer;
     

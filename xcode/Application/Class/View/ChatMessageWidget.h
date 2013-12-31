@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BrandUILabel.h"
 #import "ChatMessageVO.h"
+#import "AltTextView.h"
 
 @class PFImageView;
 
@@ -25,7 +26,7 @@
 
 @property (nonatomic, strong) IBOutlet BrandUILabel *nameLabel;
 @property (nonatomic, strong) IBOutlet BrandUILabel *timeLabel;
-@property (nonatomic, strong) IBOutlet UITextView *msgView;
+@property (nonatomic, strong) IBOutlet AltTextView *msgView;
 
 @property (nonatomic, strong) IBOutlet UIImageView *rightCallout;
 @property (nonatomic, strong) IBOutlet UIImageView *leftCallout;

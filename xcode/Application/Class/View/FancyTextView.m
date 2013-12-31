@@ -18,6 +18,11 @@
         // Initialization code
         self.backgroundColor = [UIColor whiteColor];
         
+        defaultStyle = [[WidgetStyle alloc] init];
+        defaultStyle.bgcolor = 0xFFFFFF;
+        defaultStyle.bordercolor = 0x758188;
+        defaultStyle.borderwidth = 1;
+
         self.clipsToBounds = YES;
         [self setTextColor:[UIColor colorWithHexValue:0x333333 andAlpha:1.0]];
         theFont = [UIFont fontWithName:@"Raleway-Regular" size:13];
@@ -39,6 +44,11 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     
+    defaultStyle = [[WidgetStyle alloc] init];
+    defaultStyle.bgcolor = 0xFFFFFF;
+    defaultStyle.bordercolor = 0x758188;
+    defaultStyle.borderwidth = 1;
+
     self.backgroundColor = [UIColor whiteColor];
     
     self.clipsToBounds = YES;
@@ -54,6 +64,27 @@
     
     return self;
 }
+
+- (void) setActiveStyle:(WidgetStyle *)widgetStyle {
+    if (widgetStyle == nil) {
+        widgetStyle = [[WidgetStyle alloc] init];
+        widgetStyle.bgcolor = kHighlightLightBlueBG;
+        widgetStyle.bordercolor = kHighlightAquaBorder;
+        widgetStyle.borderwidth = 2;
+    }
+    
+    self.backgroundColor = [UIColor colorWithHexValue:widgetStyle.bgcolor];
+    self.layer.borderColor = [UIColor colorWithHexValue:widgetStyle.bordercolor].CGColor;
+    self.layer.borderWidth = widgetStyle.borderwidth;
+    
+}
+- (void) setDefaultStyle {
+    self.backgroundColor = [UIColor colorWithHexValue:defaultStyle.bgcolor];
+    self.layer.borderColor = [UIColor colorWithHexValue:defaultStyle.bordercolor].CGColor;
+    self.layer.borderWidth = defaultStyle.borderwidth;
+    
+}
+
 -(void)setNumLabel:(NSString*)num {
     __numLabel.text = num;    
 }
@@ -62,9 +93,11 @@
 {
     showPlaceholder = YES;
     self.text = placeholder;
+    self.textColor = [UIColor grayColor];
 }
 
 -(void)unsetPlaceholder:(NSString*)placeholder {
+    self.textColor = [UIColor blackColor];
     
 }
 

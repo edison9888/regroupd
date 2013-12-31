@@ -68,7 +68,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Ddx-FC-uCy" userLabel="Button +">
-                            <rect key="frame" x="2" y="5" width="40" height="40"/>
+                            <rect key="frame" x="-1" y="0.0" width="44" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <state key="normal" image="chat_attach_plus.png">
@@ -78,12 +78,12 @@
                                 <action selector="tapAttachButton" destination="-1" eventType="touchUpInside" id="XVj-Kz-hhq"/>
                             </connections>
                         </button>
-                        <button autoresizesSubviews="NO" opaque="NO" tag="33" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="2x0-BK-fQF">
-                            <rect key="frame" x="253" y="7" width="60" height="36"/>
+                        <button autoresizesSubviews="NO" opaque="NO" tag="33" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="2x0-BK-fQF">
+                            <rect key="frame" x="249" y="0.0" width="70" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.31372549020000001" green="0.61960784310000006" blue="0.6705882353" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="15"/>
-                            <state key="normal" title="Send" backgroundImage="btn_aqua_bg_small.png">
+                            <state key="normal" image="btn_chat_send.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -92,6 +92,17 @@
                             </state>
                             <connections>
                                 <action selector="tapSendButton" destination="-1" eventType="touchUpInside" id="0C6-Kb-SAb"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="snb-f6-oga" userLabel="Button - text tap area">
+                            <rect key="frame" x="42" y="0.0" width="203" height="50"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <state key="normal">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="tapAttachButton" destination="-1" eventType="touchUpInside" id="rGe-d7-60v"/>
                             </connections>
                         </button>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" id="5JB-Ai-Vv9" customClass="FancyTextView">
@@ -387,6 +398,7 @@
     </objects>
     <resources>
         <image name="btn_aqua_bg_small.png" width="55" height="28"/>
+        <image name="btn_chat_send.png" width="55" height="28"/>
         <image name="chat_attach_panel.png" width="320" height="263"/>
         <image name="chat_attach_plus.png" width="27" height="27"/>
         <image name="icon_attach_cancel.png" width="25" height="25"/>

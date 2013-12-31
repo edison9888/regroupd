@@ -299,15 +299,17 @@
                 isOk = YES;
             }
         }
+        
+        if (!pfUser) {
+            NSLog(@"pfUser is null!!!!!!!!!!");
+        }
+
         if (isOk) {
             PFQuery *query = [PFQuery queryWithClassName:kContactDB];
             [query whereKey:@"phone" equalTo:user.phone];
             
             [query getFirstObjectInBackgroundWithBlock:^(PFObject *pfContact, NSError *error){
                 
-                if (!pfUser) {
-                    NSLog(@"pfUser is null!!!!!!!!!!");
-                }
                 if (!pfContact) {
                     NSLog(@"Creating new contact for phone %@", user.phone);
                     
@@ -315,14 +317,25 @@
                     
                     pfContact[@"user"] = pfUser;
                     pfContact[@"phone"] = user.phone;
-                    //                pfContact[@"first_name"] = user.first_name;
-                    //                pfContact[@"last_name"] = user.last_name;
+                    if (user.first_name) {
+                        pfContact[@"first_name"] = user.first_name;
+                    }
+                    if (user.last_name) {
+                        pfContact[@"last_name"] = user.last_name;
+                    }
                     
                 } else {
                     NSLog(@"Updating contact for phone %@", user.phone);
                     pfContact[@"user"] = pfUser;
                     pfContact[@"phone"] = user.phone;
                     [pfUser setObject:user.phone forKey:@"phone"];
+                    if (user.first_name) {
+                        pfContact[@"first_name"] = user.first_name;
+                    }
+                    if (user.last_name) {
+                        pfContact[@"last_name"] = user.last_name;
+                    }
+
                     
                 }
                 
