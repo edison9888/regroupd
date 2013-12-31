@@ -39,6 +39,8 @@
 @property (nonatomic, strong) IBOutlet UIView *editView;
 @property (nonatomic, retain) IBOutlet BrandUITextField *tfFirstName;
 @property (nonatomic, retain) IBOutlet BrandUITextField *tfLastName;
+@property (nonatomic, strong) IBOutlet UIButton *saveButton;
+
 - (IBAction)tapSaveButton;
 
 - (IBAction)tapBackButton;

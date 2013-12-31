@@ -192,6 +192,7 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSLog(@"%s", __FUNCTION__);
     // http://www.rqgg.net/topic/zpnnq-on-off-setting-for-push-notification-at-app-level.html
+    // http://stackoverflow.com/questions/5056689/didreceiveremotenotification-when-in-background
     /*
      NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
      @"Increment", @"badge",
@@ -201,6 +202,11 @@
      msg.createdAt, @"dt",
      nil];
      */
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:kSetting_Notifications_Enabled]) {
+        return;
+    }
+
     NSString *text;
     ChatMessageVO *msg = [[ChatMessageVO alloc] init];
     
@@ -227,7 +233,14 @@
         NSLog(@"####### msg_key=%@", msg.system_id);
         self.lastMessage = msg;
 //        [PFPush handlePush:userInfo];
-        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatPushNotificationReceived object:msg]];
+        
+        if ( application.applicationState == UIApplicationStateActive ) {
+            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatPushNotificationReceived object:msg]];
+            
+        } else {
+            
+        }
+        
         self.lastMessage = nil;
         
     }

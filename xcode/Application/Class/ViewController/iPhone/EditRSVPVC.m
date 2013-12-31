@@ -137,10 +137,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                          self.whereField,
                          self.descriptionField ];
     
-    [self setKeyboardControls:[[BSKeyboardControls alloc] initWithFields:fields]];
-    [self.keyboardControls setDelegate:self];
-
-    [self.keyboardControls setSegmentedControlTintControl:[UIColor colorWithHexValue:0x999999]];
+//    [self setKeyboardControls:[[BSKeyboardControls alloc] initWithFields:fields]];
+//    [self.keyboardControls setDelegate:self];
+//
+//    [self.keyboardControls setSegmentedControlTintControl:[UIColor colorWithHexValue:0x999999]];
     
     // register for keyboard notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -401,7 +401,37 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [UIView commitAnimations];
     
     fieldIndex = textField.tag;
-    [self.keyboardControls setActiveField:textField];
+    NSDate *pickDate;
+    pickDate = self.datePicker.date;
+
+    switch (fieldIndex) {
+            
+        case kTagStartDate:
+            if (_currentField.text.length == 0) {
+                _currentField.text = [DateTimeUtils printDatePartFromDate:pickDate];
+            }
+            break;
+            
+        case kTagStartTime:
+            if (_currentField.text.length == 0) {
+                _currentField.text = [DateTimeUtils printTimePartFromDate:pickDate];
+            }
+            break;
+            
+        case kTagEndDate:
+            if (_currentField.text.length == 0) {
+                _currentField.text = [DateTimeUtils printDatePartFromDate:pickDate];
+            }
+            break;
+            
+        case kTagEndTime:
+            if (_currentField.text.length == 0) {
+                _currentField.text = [DateTimeUtils printTimePartFromDate:pickDate];
+            }
+            break;
+    }
+
+//    [self.keyboardControls setActiveField:textField];
 
 //    [self updateScrollView];
     
@@ -419,7 +449,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     [UIView commitAnimations];
     
-    [self.keyboardControls.activeField resignFirstResponder];
+//    [self.keyboardControls.activeField resignFirstResponder];
 //    [textField resignFirstResponder];
 //    [textField endEditing:YES];
     
@@ -568,7 +598,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 - (IBAction)tapDoneButton {
     NSLog(@"%s", __FUNCTION__);
-
     BOOL isOK = YES;
     NSMutableArray *errorIds = [[NSMutableArray alloc] init];
     
@@ -605,28 +634,42 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         [errorIds addObject:[NSNumber numberWithInt:kTagAllowOthersYes]];
     }
     
+    if (!isOK) {
+        // Data not complete.
+        [[[UIAlertView alloc] initWithTitle:@"Sorry" message:@"Please complete all fields." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        return;
+        
+    }
+
+    NSString *dtFormat = @"%@ %@";
+    NSString *start_time = [NSString stringWithFormat:dtFormat, self.tfStartDate.text, self.tfStartTime.text];
+    NSString *end_time = [NSString stringWithFormat:dtFormat, self.tfEndDate.text, self.tfEndTime.text];
+    NSLog(@"start date = %@", start_time);
+    NSLog(@"end date = %@", end_time);
+    
+    NSDate *date1 = [DateTimeUtils readDateFromFriendlyDateTime:start_time];
+    NSDate *date2 = [DateTimeUtils readDateFromFriendlyDateTime:end_time];
+    
+    NSLog(@"starts at %@", date1);
+    NSLog(@"ends at %@", date2);
+    //
+    //        // TODO: Convert back to db format
+    //        start_time = [DateTimeUtils dbDateStampFromDate:date1];
+    //        end_time = [DateTimeUtils dbDateStampFromDate:date2];
+    if (date1 == nil && date2 == nil) {
+        // Data not complete.
+        [[[UIAlertView alloc] initWithTitle:@"Sorry" message:@"Please enter valid dates and times." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        return;
+        
+    }
+
     if (isOK) {
 //        FormManager *formSvc = [[FormManager alloc] init];
+        self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [self.hud setLabelText:@"Saving"];
 
 
         // Read date fields and combine
-        NSString *dtFormat = @"%@ %@";
-        NSString *start_time = [NSString stringWithFormat:dtFormat, self.tfStartDate.text, self.tfStartTime.text];
-        NSString *end_time = [NSString stringWithFormat:dtFormat, self.tfEndDate.text, self.tfEndTime.text];
-        NSLog(@"start date = %@", start_time);
-        NSLog(@"end date = %@", end_time);
-        
-        NSDate *date1 = [DateTimeUtils readDateFromFriendlyDateTime:start_time];
-        NSDate *date2 = [DateTimeUtils readDateFromFriendlyDateTime:end_time];
-        
-        NSLog(@"starts at %@", date1);
-        NSLog(@"ends at %@", date2);
-//
-//        // TODO: Convert back to db format
-//        start_time = [DateTimeUtils dbDateStampFromDate:date1];
-//        end_time = [DateTimeUtils dbDateStampFromDate:date2];
-        
-        if (date1 != nil && date2 != nil) {
             self.doneButtonTop.enabled = NO;
             self.doneButtonEnd.enabled = NO;
             if (canSave) {
@@ -676,14 +719,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             }
 
             
-        } else {
-            NSLog(@"Date conversion failed: %@ -- %@", start_time, end_time);
-        }
         
 
-    } else {
-        // Data not complete. 
-        [[[UIAlertView alloc] initWithTitle:@"Sorry" message:@"Please complete all fields." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }
 
 

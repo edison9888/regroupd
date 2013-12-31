@@ -218,6 +218,7 @@
     </objects>
     <resources>
         <image name="btn_aqua_bg_small.png" width="55" height="28"/>
+        <image name="btn_aqua_bg_small.png" width="55" height="28"/>
         <image name="modal_add_photo.png" width="302" height="159"/>
         <image name="topnav_aqua_bg.png" width="320" height="50"/>
     </resources>

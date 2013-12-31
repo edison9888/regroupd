@@ -11,6 +11,7 @@
                 <outlet property="nameLabel" destination="w4a-bA-3Vd" id="TL9-Kr-IrX"/>
                 <outlet property="photoModal" destination="oxP-z5-O7R" id="Z0z-QX-EBP"/>
                 <outlet property="roundPic" destination="weh-Ka-DS7" id="8KF-PG-4nk"/>
+                <outlet property="saveButton" destination="9iO-0j-bzb" id="bIs-RU-IYJ"/>
                 <outlet property="scrollView" destination="N7r-JN-CQN" id="6zG-mq-b8y"/>
                 <outlet property="tfFirstName" destination="3Pl-Lo-KwD" id="04f-Uj-yXM"/>
                 <outlet property="tfLastName" destination="4HG-KS-fbS" id="4jW-F4-Q1I"/>

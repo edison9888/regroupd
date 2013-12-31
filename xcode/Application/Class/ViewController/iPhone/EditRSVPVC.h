@@ -13,6 +13,8 @@
 #import "FancyDateTimeField.h"
 #import "BSKeyboardControls.h"
 #import "FormManager.h"
+#import "MBProgressHUD.h"
+
 
 @interface EditRSVPVC : SlideViewController<UIScrollViewDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate, BSKeyboardControlsDelegate> {
 
@@ -42,13 +44,16 @@
     BOOL canSave;
 }
 
+@property (nonatomic, retain) MBProgressHUD *hud;
+
+
 @property (nonatomic, retain) UIImagePickerController* imagePickerVC;
 //@property (nonatomic, retain) IBOutlet UIDatePicker *datePicker;
 //@property (nonatomic, retain) IBOutlet UIDatePicker *timePicker;
 @property (nonatomic, retain) IBOutlet UIToolbar* doneToolbar;
 @property (nonatomic, retain) UIDatePicker *datePicker;
 @property (nonatomic, retain) UIDatePicker *timePicker;
-@property (nonatomic, strong) BSKeyboardControls *keyboardControls;
+//@property (nonatomic, strong) BSKeyboardControls *keyboardControls;
 
 
 

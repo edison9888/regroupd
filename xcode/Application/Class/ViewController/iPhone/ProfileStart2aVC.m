@@ -47,14 +47,8 @@
     self.tf1.textAlignment = NSTextAlignmentCenter;
     
     self.scrollView.delegate = self;
-    [self.tf1 setKeyboardType:UIKeyboardTypePhonePad];
-    
-    if ([DataModel shared].user != nil) {
-        if ([DataModel shared].user.first_name != nil) {
-            self.tf1.text = [DataModel shared].user.phone;
-        }
-    }
-    
+//    [self.tf1 setKeyboardType:UIKeyboardTypePhonePad];
+        
     CGRect viewframe = self.view.frame;
     NSLog(@"viewframe ypos = %f", viewframe.origin.y);
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {

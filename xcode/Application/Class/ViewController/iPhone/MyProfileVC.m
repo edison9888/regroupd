@@ -41,11 +41,16 @@
     }
     scrollFrame.size.height = [DataModel shared].stageHeight;
     self.scrollView.frame = scrollFrame;
+    CGSize scrollContentSize = CGSizeMake(320, 400);
+    self.scrollView.contentSize = scrollContentSize;
     
     self.scrollView.delegate = self;
+    self.tfFirstName.delegate = self;
+    self.tfLastName.delegate = self;
 
-//    NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
-//    [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
+    keyboardIsShown = NO;
+    NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
     
     CGRect modalFrame = self.photoModal.frame;
     int ypos = -modalFrame.size.height;
@@ -65,6 +70,7 @@
     [self.roundPic.layer setBorderColor:[UIColor whiteColor].CGColor];
     self.roundPic.clipsToBounds = YES;
     self.roundPic.contentMode = UIViewContentModeScaleAspectFill;
+    
     
     userSvc = [[UserManager alloc] init];
     contactSvc = [[ContactManager alloc] init];
@@ -125,10 +131,21 @@
  */
 - (void)keyboardWillHide:(NSNotification *)n
 {
+    
     CGRect viewFrame = self.scrollView.frame;
-    viewFrame.size.height = [DataModel shared].stageHeight - 50;
+    // I'm also subtracting a constant kTabBarHeight because my UIScrollView was offset by the UITabBar so really only the portion of the keyboard that is leftover pass the UITabBar is obscuring my UIScrollView.
+    viewFrame.size.height = [DataModel shared].stageHeight - viewFrame.origin.y;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    // The kKeyboardAnimationDuration I am using is 0.3
+    [UIView setAnimationDuration:0.3];
+    
     [self.scrollView setFrame:viewFrame];
+    [UIView commitAnimations];
+    
     keyboardIsShown = NO;
+
 }
 
 - (void)keyboardWillShow:(NSNotification *)n
@@ -139,10 +156,18 @@
     
     NSDictionary* userInfo = [n userInfo];
     CGSize keyboardSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    CGRect viewFrame = self.scrollView.frame;
-    viewFrame.size.height = [DataModel shared].stageHeight - keyboardSize.height - 50;
-    [self.scrollView setFrame:viewFrame];
+
     
+    CGRect viewFrame = self.scrollView.frame;
+    viewFrame.size.height = [DataModel shared].stageHeight - keyboardSize.height - viewFrame.origin.y;
+    
+    CGRect targetFrame = self.editView.frame;
+    targetFrame.origin.y += targetFrame.size.height;
+
+    self.scrollView.frame = viewFrame;
+//    self.scrollView.contentSize = CGSizeMake([DataModel shared].stageWidth, self.saveButton.frame.origin.y + 50);
+    [self.scrollView scrollRectToVisible:targetFrame animated:YES];
+
     keyboardIsShown = YES;
     
 }
@@ -151,7 +176,6 @@
 
 -(BOOL) textFieldShouldBeginEditing:(UITextField*)textField {
     NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
-    keyboardIsShown = YES;
     return YES;
 }
 
@@ -408,6 +432,8 @@
             case kTagScrollView:
                 if (keyboardIsShown) {
                     [_currentField resignFirstResponder];
+                    keyboardIsShown = NO;
+
                 }
                 break;
             case kTagNameLabel:
