@@ -7,10 +7,11 @@
 //
 
 #import "SlideViewController.h"
-
 #import "MBProgressHUD.h"
 
-#import "FancyCheckbox.h" 
+#import "FormVO.h"
+
+#import "FancyCheckbox.h"
 #import "FancyTextField.h"
 
 #import "BrandUITextField.h"
@@ -27,6 +28,8 @@
     float navbarHeight;
     NSMutableArray *surveyOptions;
     UIView *bgLayer;
+    FormVO *theForm;
+    
 }
 
 @property (nonatomic, retain) MBProgressHUD *hud;

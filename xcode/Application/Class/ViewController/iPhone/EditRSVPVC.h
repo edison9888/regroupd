@@ -7,6 +7,9 @@
 //
 
 #import "SlideViewController.h"
+
+#import "FormVO.h"
+
 #import "FancyCheckbox.h" 
 #import "FancyTextField.h"
 #import "BrandUITextField.h"
@@ -42,6 +45,9 @@
     
     NSArray *fieldTags;
     BOOL canSave;
+    
+    FormVO *theForm;
+
 }
 
 @property (nonatomic, retain) MBProgressHUD *hud;

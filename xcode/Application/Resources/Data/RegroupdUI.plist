@@ -331,6 +331,22 @@
 			<key>nextSlideName</key>
 			<string></string>
 		</dict>
+		<dict>
+			<key>slideData</key>
+			<dict/>
+			<key>allowLeftSlide</key>
+			<false/>
+			<key>allowRightSlide</key>
+			<false/>
+			<key>category</key>
+			<string>Contacts</string>
+			<key>name</key>
+			<string>ContactGroups</string>
+			<key>controllerName</key>
+			<string>ContactGroupsVC</string>
+			<key>nextSlideName</key>
+			<string></string>
+		</dict>
 		<!-- ########## Groups ########### -->
 		<dict>
 			<key>slideData</key>

@@ -217,7 +217,44 @@
     }
     return results;
 }
+- (NSMutableArray *) listContactGroupIds:(NSString *)contactKey {
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    
+    NSString *sql = @"select group_id from group_contact where contact_key=?";
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql, contactKey];
+    int groupId;
+    while ([rs next]) {
+        groupId = [rs intForColumnIndex:0];
+        [results addObject:[NSNumber numberWithInt:groupId]];
+    }
+    return results;
+}
 
+/*
+NOTE: There is a FMDB bug so that left join value for contact_key is always null.
+ */
+- (NSMutableArray *) listContactGroups:(NSString *)contactKey {
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+
+    NSString *sql = @"select gc.contact_key, g.* from groups as g left join group_contact as gc on g.group_id=gc.group_id and gc.contact_key=? order by name";
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
+                       contactKey];
+    NSDictionary *dict;
+    NSString *key;
+    
+    while ([rs next]) {
+        dict = [rs resultDictionary];
+        NSLog(@"row: %@", dict);
+        key = [rs stringForColumnIndex:0];
+        NSLog(@"key: %@", key);
+        [results addObject:[rs resultDictionary]];
+    }
+    return results;
+    
+    
+}
 - (BOOL) checkGroupContact:(int)groupId contacKey:(NSString *)contactKey {
     NSString *sql = @"select * from group_contact where group_id=? and contact_key=?";
     

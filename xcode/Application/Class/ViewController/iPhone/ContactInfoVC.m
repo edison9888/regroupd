@@ -193,6 +193,8 @@
 }
 - (IBAction)tapGroupsButton {
     
+    [_delegate gotoSlideWithName:@"ContactGroups" returnPath:@"ContactInfo"];
+    
 }
 - (IBAction)tapBlockButton {
     if (isBlocked) {

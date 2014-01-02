@@ -24,7 +24,7 @@
 @synthesize phonebookCache;
 
 @synthesize timestampText;
-@synthesize needsLookup, needsRefresh;
+@synthesize needsLookup, needsRefresh, didSaveOK;
 @synthesize stageHeight, stageWidth;
 
 @synthesize navIndex;

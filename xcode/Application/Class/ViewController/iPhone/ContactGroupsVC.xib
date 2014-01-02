@@ -5,10 +5,8 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GroupsHomeVC">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContactGroupsVC">
             <connections>
-                <outlet property="addButton" destination="23" id="26"/>
-                <outlet property="editButton" destination="21" id="28"/>
                 <outlet property="theTableView" destination="30" id="31"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
@@ -23,11 +21,11 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="21">
-                    <rect key="frame" x="7" y="7" width="55" height="36"/>
+                    <rect key="frame" x="7" y="7" width="60" height="36"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.31372549020000001" green="0.61960784310000006" blue="0.6705882353" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="15"/>
-                    <state key="normal" title="Edit" backgroundImage="btn_aqua_bg_small.png">
+                    <state key="normal" title="Cancel" backgroundImage="btn_aqua_bg_small.png">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -35,15 +33,15 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="tapEditButton" destination="-1" eventType="touchUpInside" id="29"/>
+                        <action selector="tapCancelButton" destination="-1" eventType="touchUpInside" id="eao-fz-7tX"/>
                     </connections>
                 </button>
-                <button autoresizesSubviews="NO" opaque="NO" contentMode="TopLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" id="23" userLabel="Button - New">
-                    <rect key="frame" x="273" y="2" width="45" height="45"/>
+                <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="3iM-ae-oA5">
+                    <rect key="frame" x="253" y="6" width="60" height="36"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="13"/>
-                    <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
-                    <state key="normal" image="btn_aqua_add.png">
+                    <color key="backgroundColor" red="0.31372549020000001" green="0.61960784310000006" blue="0.6705882353" alpha="1" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="15"/>
+                    <state key="normal" title="Done" backgroundImage="btn_aqua_bg_small.png">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -51,7 +49,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="tapAddButton" destination="-1" eventType="touchUpInside" id="27"/>
+                        <action selector="tapDoneButton" destination="-1" eventType="touchUpInside" id="Nej-v1-3t9"/>
                     </connections>
                 </button>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Groups" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="19" customClass="BrandUILabel">
@@ -69,12 +67,10 @@
                 </tableView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
     <resources>
-        <image name="btn_aqua_add.png" width="35" height="35"/>
         <image name="btn_aqua_bg_small.png" width="55" height="28"/>
         <image name="topnav_aqua_bg.png" width="320" height="50"/>
     </resources>

@@ -34,8 +34,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    
+    // Reset action
     typeFilter = 0;
     
     CGRect scrollFrame = self.theTableView.frame;

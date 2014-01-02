@@ -470,7 +470,12 @@
 }
 
 - (IBAction)tapCancelButton {
-    [_delegate gotoSlideWithName:@"FormsHome"];
+    if ([[DataModel shared].action isEqualToString:@"popup"]) {
+        [DataModel shared].action = @"";
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        [_delegate gotoSlideWithName:@"FormsHome"];
+    }
 }
 
 - (IBAction)tapDoneButton {
@@ -532,9 +537,13 @@
                 option.position = position;
                 position++;
                 [formSvc apiSaveFormOption:option formId:formId callback:^(PFObject *object) {
+                    // Save this to insert in chat
                     index++;
                     NSLog(@"Save option %i", index);
                     if (index > total) {
+                        [DataModel shared].didSaveOK = YES;
+                        theForm = form;
+                        
                         [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_pollSaveCompleteNotification object:nil]];
                     }
                     
@@ -620,8 +629,16 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     
-    [_delegate gotoSlideWithName:@"FormsHome"];
-    
+    if ([[DataModel shared].action isEqualToString:@"popup"]) {
+        [DataModel shared].action = @"";
+        
+        NSNotification* hideFormSelectorNotification = [NSNotification notificationWithName:@"hideFormSelectorNotification" object:theForm];
+        [[NSNotificationCenter defaultCenter] postNotification:hideFormSelectorNotification];
+
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        [_delegate gotoSlideWithName:@"FormsHome"];
+    }
 }
 
 #pragma mark - UIImagePicker methods

@@ -12,6 +12,10 @@
 #define kIconChatOff @"icon_chat_off.png"
 #define kIconChatOn @"icon_chat_on.png"
 
+#define LEFT_EDITING_MARGIN 20
+#define RIGHT_EDITING_MARGIN 0
+
+
 @implementation GroupTableViewCell
 
 @synthesize titleLabel;
@@ -56,5 +60,41 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+//    if ((state & UITableViewCellStateShowingDeleteConfirmationMask) == UITableViewCellStateShowingDeleteConfirmationMask) {
+    
+//    if (self.editing && self.contentView.frame.origin.x != 0) {
+//        NSLog(@"%s", __FUNCTION__);
+//
+//        CGRect frame = self.contentView.frame;
+//        CGFloat diff = LEFT_EDITING_MARGIN - frame.origin.x;
+//        frame.origin.x = LEFT_EDITING_MARGIN;
+//        frame.size.width -= diff;
+//        self.contentView.frame = frame;
+//    }
+}
+
+- (void)willTransitionToState:(UITableViewCellStateMask)state{
+    
+    NSLog(@"%s state=%i", __FUNCTION__, state);
+    // See: http://stackoverflow.com/questions/1615469/custom-delete-button-on-editing-in-uitableview-cell
+    // http://stackoverflow.com/questions/18647097/how-can-i-make-a-custom-view-of-the-delete-button-when-performing-commiteditin
+    
+    [super willTransitionToState:state];
+    if ((state & UITableViewCellStateShowingDeleteConfirmationMask) == UITableViewCellStateShowingDeleteConfirmationMask) {
+            NSLog(@"============= Delete mode");
+//        if (self.editing && self.contentView.frame.origin.x != 0) {
+//            CGRect frame = self.contentView.frame;
+////            CGFloat diff = RIGHT_EDITING_MARGIN - frame.origin.x;
+//        
+//            frame.origin.x = 0;
+//            frame.size.width -= 100;
+//            self.contentView.frame = frame;
+//        }
+    }
 }
 @end

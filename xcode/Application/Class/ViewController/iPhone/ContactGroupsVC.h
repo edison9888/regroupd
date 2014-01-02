@@ -1,5 +1,5 @@
 //
-//  GroupsHomeVC.h
+//  ContactGroupsVC.h
 //  NView-iphone
 //
 //  Created by Hugh Lang on 6/29/13.
@@ -8,15 +8,22 @@
 
 #import "SlideViewController.h"
 #import "SQLiteDB.h"
-#import "GroupTableViewCell.h"
+#import "GroupContactCell.h"
 #import "ContactVO.h"
+#import "GroupManager.h"
 
-@interface GroupsHomeVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
-    BOOL isLoading;
-    BOOL inEditMode;
-    int selectedIndex;
+@interface ContactGroupsVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     
+    GroupManager *groupSvc;
+    
+    BOOL isLoading;
+    int selectedIndex;
     NSMutableArray *tableData;
+    
+    NSMutableArray *memberKeys;
+    NSMutableDictionary *selectionsMap;
+    
+    NSString *theContactKey;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
@@ -26,12 +33,10 @@
 @property (nonatomic, strong) IBOutlet UILabel *navTitle;
 @property (nonatomic, strong) IBOutlet UILabel *navCaption;
 
-@property (nonatomic, strong) IBOutlet UIButton *editButton;
-@property (nonatomic, strong) IBOutlet UIButton *addButton;
 
+- (IBAction)tapCancelButton;
 
-- (IBAction)tapAddButton;
+- (IBAction)tapDoneButton;
 
-- (IBAction)tapEditButton;
 
 @end

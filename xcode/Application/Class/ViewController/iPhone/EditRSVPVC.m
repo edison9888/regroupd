@@ -594,7 +594,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 
 - (IBAction)tapCancelButton {
-    [_delegate gotoSlideWithName:@"FormsHome"];
+    if ([[DataModel shared].action isEqualToString:@"popup"]) {
+        [DataModel shared].action = @"";
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        [_delegate gotoSlideWithName:@"FormsHome"];
+    }
 }
 - (IBAction)tapDoneButton {
     NSLog(@"%s", __FUNCTION__);
@@ -707,6 +712,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                         [formSvc apiSaveFormOption:option formId:formId callback:^(PFObject *object) {
                             NSLog(@"Save option %i", i + 1);
                             if (i == answers.count) {
+                                [DataModel shared].didSaveOK = YES;
+                                theForm = form;
+                                
                                 [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formSaveCompleteNotification object:nil]];
                             }
                             
@@ -891,7 +899,16 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     
-    [_delegate gotoSlideWithName:@"FormsHome"];
+    if ([[DataModel shared].action isEqualToString:@"popup"]) {
+        [DataModel shared].action = @"";
+
+        NSNotification* hideFormSelectorNotification = [NSNotification notificationWithName:@"hideFormSelectorNotification" object:theForm];
+        [[NSNotificationCenter defaultCenter] postNotification:hideFormSelectorNotification];
+
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        [_delegate gotoSlideWithName:@"FormsHome"];
+    }
     
 }
 

@@ -8,6 +8,9 @@
 
 #import "GroupsHomeVC.h"
 
+static NSString *kEditLabel = @"Edit";
+static NSString *kDoneLabel = @"Done";
+
 @interface GroupsHomeVC ()
 
 @end
@@ -57,80 +60,7 @@
     return YES;
 }
 
-
-
-#pragma mark - UITableViewDataSource
-
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
-    // Return the number of sections.
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
-    return [tableData count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView
-         cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"%s", __FUNCTION__);
-    // http://stackoverflow.com/questions/413993/loading-a-reusable-uitableviewcell-from-a-nib
-    
-    static NSString *CellIdentifier = @"GroupTableCell";
-    static NSString *CellNib = @"GroupTableViewCell";
-    
-    GroupTableViewCell *cell = (GroupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    @try {
-        
-        if (cell == nil) {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:CellNib owner:self options:nil];
-            cell = (GroupTableViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleGray;
-        }
-        
-        NSDictionary *rowData = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
-        cell.rowdata = rowData;
-        
-    } @catch (NSException * e) {
-        NSLog(@"Exception: %@", e);
-    }
-    
-    return cell;
-    
-    
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 54;
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-#ifdef DEBUGX
-    NSLog(@"%s", __FUNCTION__);
-#endif
-    
-    @try {
-        if (indexPath != nil) {
-            NSLog(@"Selected row %i", indexPath.row);
-            
-            selectedIndex = indexPath.row;
-            NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
-            
-            [DataModel shared].group = [GroupVO readFromDictionary:rowdata];
-            
-            [DataModel shared].action = kActionEDIT;
-            [_delegate gotoSlideWithName:@"GroupInfo" returnPath:@"GroupsHome"];
-            
-        }
-    } @catch (NSException * e) {
-        NSLog(@"Exception: %@", e);
-    }
-    
-    
-}
-
+#pragma mark - Load Data
 
 - (void)performSearch:(NSString *)searchText
 {
@@ -177,6 +107,131 @@
     
 }
 
+
+#pragma mark - UITableViewDataSource
+
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
+    // Return the number of sections.
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
+    return [tableData count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"%s", __FUNCTION__);
+    // http://stackoverflow.com/questions/413993/loading-a-reusable-uitableviewcell-from-a-nib
+    
+    static NSString *CellIdentifier = @"GroupTableCell";
+    static NSString *CellNib = @"GroupTableViewCell";
+    
+    GroupTableViewCell *cell = (GroupTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    @try {
+        
+        if (cell == nil) {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:CellNib owner:self options:nil];
+            cell = (GroupTableViewCell *)[nib objectAtIndex:0];
+//            cell.selectionStyle = UITableViewCellSelectionStyleGray;
+//            cell.shouldIndentWhileEditing = NO;
+            cell.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin  | UIViewAutoresizingFlexibleLeftMargin;
+        }
+        
+        NSDictionary *rowData = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
+        cell.rowdata = rowData;
+        
+    } @catch (NSException * e) {
+        NSLog(@"Exception: %@", e);
+    }
+    
+    return cell;
+    
+    
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 54;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+#ifdef DEBUGX
+    NSLog(@"%s", __FUNCTION__);
+#endif
+    
+    @try {
+        if (indexPath != nil) {
+            NSLog(@"Selected row %i", indexPath.row);
+            
+            selectedIndex = indexPath.row;
+            NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
+            
+            [DataModel shared].group = [GroupVO readFromDictionary:rowdata];
+            
+            [DataModel shared].action = kActionEDIT;
+            [_delegate gotoSlideWithName:@"GroupInfo" returnPath:@"GroupsHome"];
+            
+        }
+    } @catch (NSException * e) {
+        NSLog(@"Exception: %@", e);
+    }
+    
+    
+}
+
+// Override to support conditional editing of the table view.
+// This only needs to be implemented if you are going to be returning NO
+// for some items. By default, all items are editable.
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Return YES if you want the specified item to be editable.
+    NSLog(@"%s", __FUNCTION__);
+    return YES;
+}
+
+// Override to support editing the table view.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%s", __FUNCTION__);
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        //add code here for when you hit delete
+    }
+}
+
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
+
+    [super setEditing:(BOOL)editing animated:(BOOL)animated];
+//    if (inEditMode) {
+//        [super setEditing:(BOOL)editing animated:(BOOL)animated];
+//    } else {
+//        
+//    }
+//    if (editing)
+//        self.editingFromEditButton = YES;
+//    self.editingFromEditButton = NO;
+    // Other code you may want at this point...
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO; // i also tried to  return YES;
+}
+
+// Select the editing style of each cell
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Do not allow inserts / deletes
+    return UITableViewCellEditingStyleDelete;
+}
+
+// Override to support conditional rearranging of the table view.
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Return NO if you do not want the item to be re-orderable.
+    return NO;
+}
+
+
 #pragma mark - Action handlers
 
 - (IBAction)tapAddButton
@@ -189,6 +244,25 @@
 
 - (IBAction)tapEditButton
 {
+    if (inEditMode) {
+        inEditMode = NO;
+        [self.editButton setTitle:kEditLabel forState:UIControlStateNormal];
+        [self.theTableView setEditing:inEditMode];
+
+        [self setEditing:inEditMode animated:YES];
+        [self.theTableView reloadData];
+        
+    } else {
+        inEditMode = YES;
+        [self setEditing:inEditMode animated:YES];
+        [self.theTableView setEditing:inEditMode];
+
+        [self.editButton setTitle:kDoneLabel forState:UIControlStateNormal];
+        
+        [self.theTableView reloadData];
+        
+        
+    }
     
 }
 @end

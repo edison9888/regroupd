@@ -76,6 +76,7 @@
 
 @property BOOL needsLookup;
 @property BOOL needsRefresh;
+@property BOOL didSaveOK;
 
 
 + (DataModel *) shared;

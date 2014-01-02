@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChatMessageWidget">
             <connections>
                 <outlet property="leftCallout" destination="B23-YF-VyC" id="geK-zT-vkX"/>
+                <outlet property="msgView" destination="jk9-Mc-LGW" id="sds-Ng-46r"/>
                 <outlet property="nameLabel" destination="rUA-dE-FjS" id="mo3-n2-tqp"/>
                 <outlet property="rightCallout" destination="LT6-h6-pXV" id="eBb-ul-gcV"/>
                 <outlet property="timeLabel" destination="bg2-ke-LKO" id="GI4-V7-xkx"/>
@@ -42,7 +43,7 @@
                     <color key="textColor" red="0.15686274509803921" green="0.81176470588235294" blue="0.91764705882352937" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" selectable="NO" id="jk9-Mc-LGW">
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" selectable="NO" id="jk9-Mc-LGW" customClass="AltTextView">
                     <rect key="frame" x="7" y="16" width="216" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

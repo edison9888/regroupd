@@ -345,8 +345,6 @@
 		1E92826B177FB690008A583C /* CCSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E928166177FB68F008A583C /* CCSearchBar.m */; };
 		1E92826C177FB690008A583C /* CCTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E928168177FB68F008A583C /* CCTableViewCell.m */; };
 		1E92826D177FB690008A583C /* TabBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E928169177FB68F008A583C /* TabBarView.xib */; };
-		1E928278177FB690008A583C /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1E92817D177FB68F008A583C /* ViewController.xib */; };
-		1E92828C177FB690008A583C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9281A0177FB690008A583C /* ViewController.m */; };
 		1E92828E177FB690008A583C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E9281A4177FB690008A583C /* InfoPlist.strings */; };
 		1E92828F177FB690008A583C /* PresentationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9281A9177FB690008A583C /* PresentationViewController.m */; };
 		1E928290177FB690008A583C /* SlideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9281AB177FB690008A583C /* SlideViewController.m */; };
@@ -437,6 +435,12 @@
 		1EA0B46518087CFD004C4DDA /* btn_rsvp_maybe_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EA0B45D18087CFD004C4DDA /* btn_rsvp_maybe_off@2x.png */; };
 		1EA0B46618087CFD004C4DDA /* btn_rsvp_yes_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EA0B45E18087CFD004C4DDA /* btn_rsvp_yes_on@2x.png */; };
 		1EA0B46718087CFD004C4DDA /* btn_rsvp_yes_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EA0B45F18087CFD004C4DDA /* btn_rsvp_yes_off@2x.png */; };
+		1EA3BF381875BC8000E9F5D9 /* ContactGroupsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA3BF361875BC8000E9F5D9 /* ContactGroupsVC.m */; };
+		1EA3BF391875BC8000E9F5D9 /* ContactGroupsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EA3BF371875BC8000E9F5D9 /* ContactGroupsVC.xib */; };
+		1EA3BF3D1875C4A300E9F5D9 /* ContactGroupTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA3BF3B1875C4A300E9F5D9 /* ContactGroupTableViewCell.m */; };
+		1EA3BF3E1875C4A300E9F5D9 /* ContactGroupTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EA3BF3C1875C4A300E9F5D9 /* ContactGroupTableViewCell.xib */; };
+		1EA3BF411875D2F200E9F5D9 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA3BF3F1875D2F200E9F5D9 /* ViewController.m */; };
+		1EA3BF431875D33700E9F5D9 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EA3BF421875D33700E9F5D9 /* ViewController.xib */; };
 		1EAFEC3117999C8A00CCBDA1 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAFEC3017999C8A00CCBDA1 /* MBProgressHUD.m */; };
 		1EAFEC321799BFAF00CCBDA1 /* pattern_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA441782586400A294C0 /* pattern_background@2x.png */; };
 		1EAFEC331799BFAF00CCBDA1 /* pattern_background-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0CAA451782586400A294C0 /* pattern_background-568h@2x.png */; };
@@ -987,9 +991,6 @@
 		1E928167177FB68F008A583C /* CCTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCTableViewCell.h; sourceTree = "<group>"; };
 		1E928168177FB68F008A583C /* CCTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCTableViewCell.m; sourceTree = "<group>"; };
 		1E928169177FB68F008A583C /* TabBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TabBarView.xib; sourceTree = "<group>"; };
-		1E92817D177FB68F008A583C /* ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ViewController.xib; path = ../View/ViewController.xib; sourceTree = "<group>"; };
-		1E92819F177FB690008A583C /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		1E9281A0177FB690008A583C /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		1E9281A5177FB690008A583C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
 		1E9281A8177FB690008A583C /* PresentationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresentationViewController.h; sourceTree = "<group>"; };
 		1E9281A9177FB690008A583C /* PresentationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresentationViewController.m; sourceTree = "<group>"; };
@@ -1124,6 +1125,15 @@
 		1EA0B45D18087CFD004C4DDA /* btn_rsvp_maybe_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_rsvp_maybe_off@2x.png"; sourceTree = "<group>"; };
 		1EA0B45E18087CFD004C4DDA /* btn_rsvp_yes_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_rsvp_yes_on@2x.png"; sourceTree = "<group>"; };
 		1EA0B45F18087CFD004C4DDA /* btn_rsvp_yes_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_rsvp_yes_off@2x.png"; sourceTree = "<group>"; };
+		1EA3BF351875BC8000E9F5D9 /* ContactGroupsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactGroupsVC.h; sourceTree = "<group>"; };
+		1EA3BF361875BC8000E9F5D9 /* ContactGroupsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactGroupsVC.m; sourceTree = "<group>"; };
+		1EA3BF371875BC8000E9F5D9 /* ContactGroupsVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactGroupsVC.xib; sourceTree = "<group>"; };
+		1EA3BF3A1875C4A300E9F5D9 /* ContactGroupTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactGroupTableViewCell.h; sourceTree = "<group>"; };
+		1EA3BF3B1875C4A300E9F5D9 /* ContactGroupTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactGroupTableViewCell.m; sourceTree = "<group>"; };
+		1EA3BF3C1875C4A300E9F5D9 /* ContactGroupTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactGroupTableViewCell.xib; sourceTree = "<group>"; };
+		1EA3BF3F1875D2F200E9F5D9 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = Application/Class/ViewController/ViewController.m; sourceTree = SOURCE_ROOT; };
+		1EA3BF401875D2F200E9F5D9 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = Application/Class/ViewController/ViewController.h; sourceTree = SOURCE_ROOT; };
+		1EA3BF421875D33700E9F5D9 /* ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ViewController.xib; path = Application/Class/ViewController/ViewController.xib; sourceTree = SOURCE_ROOT; };
 		1EAFEC2F17999C8A00CCBDA1 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		1EAFEC3017999C8A00CCBDA1 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		1EAFEC341799BFC400CCBDA1 /* fax_template_hires.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fax_template_hires.png; sourceTree = "<group>"; };
@@ -1409,6 +1419,9 @@
 				1E2C7E4C17E4F28F0043E28D /* Regroupd-Prefix.pch */,
 				1E928129177FB68F008A583C /* AppDelegate.h */,
 				1E92812A177FB68F008A583C /* AppDelegate.m */,
+				1EA3BF401875D2F200E9F5D9 /* ViewController.h */,
+				1EA3BF3F1875D2F200E9F5D9 /* ViewController.m */,
+				1EA3BF421875D33700E9F5D9 /* ViewController.xib */,
 				1E9280DB177FB68F008A583C /* Resources */,
 				1E92812B177FB68F008A583C /* Class */,
 				1E9281A3177FB690008A583C /* en.lproj */,
@@ -1539,6 +1552,9 @@
 		1E6A1019183EF65100F63666 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
+				1EA3BF3A1875C4A300E9F5D9 /* ContactGroupTableViewCell.h */,
+				1EA3BF3B1875C4A300E9F5D9 /* ContactGroupTableViewCell.m */,
+				1EA3BF3C1875C4A300E9F5D9 /* ContactGroupTableViewCell.xib */,
 				1EBB5948184D2CCE00CE084D /* GroupContactCell.h */,
 				1EBB5949184D2CCE00CE084D /* GroupContactCell.m */,
 				1EBB594A184D2CCE00CE084D /* GroupContactCell.xib */,
@@ -2088,9 +2104,6 @@
 			children = (
 				1EC44C0618130CC000F4A2C2 /* iPhone */,
 				1E8BFB0617F7BEAA0053BEE3 /* Utility */,
-				1E92819F177FB690008A583C /* ViewController.h */,
-				1E9281A0177FB690008A583C /* ViewController.m */,
-				1E92817D177FB68F008A583C /* ViewController.xib */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -2368,6 +2381,9 @@
 				1EC44C1118130CC000F4A2C2 /* ContactInfoVC.h */,
 				1EC44C1218130CC000F4A2C2 /* ContactInfoVC.m */,
 				1EC44C1318130CC000F4A2C2 /* ContactInfoVC.xib */,
+				1EA3BF351875BC8000E9F5D9 /* ContactGroupsVC.h */,
+				1EA3BF361875BC8000E9F5D9 /* ContactGroupsVC.m */,
+				1EA3BF371875BC8000E9F5D9 /* ContactGroupsVC.xib */,
 			);
 			name = Contacts;
 			sourceTree = "<group>";
@@ -2635,6 +2651,7 @@
 				1E928248177FB690008A583C /* sync_button.png in Resources */,
 				1EC44C7718130CC100F4A2C2 /* RatingDetailVC.xib in Resources */,
 				1E9C36C817FA4DBC0017E9AD /* maserati.jpg in Resources */,
+				1EA3BF431875D33700E9F5D9 /* ViewController.xib in Resources */,
 				1E928249177FB690008A583C /* trend_bubble_bg.png in Resources */,
 				1E2E123A1863405000F6B875 /* alt_track_left_end@2x.png in Resources */,
 				1E3ACA4A1804E49500A6E6B2 /* EmbedPollWidget.xib in Resources */,
@@ -2651,7 +2668,6 @@
 				1E7A6E2E1806EDED004B62CE /* icon_star_purple@2x.png in Resources */,
 				1E7A6E201806EA21004B62CE /* EmbedRatingWidget.xib in Resources */,
 				1E92826D177FB690008A583C /* TabBarView.xib in Resources */,
-				1E928278177FB690008A583C /* ViewController.xib in Resources */,
 				1E92828E177FB690008A583C /* InfoPlist.strings in Resources */,
 				1EC44C6318130CC100F4A2C2 /* FormSelectorVC.xib in Resources */,
 				1E9C36BE17FA43CD0017E9AD /* Default.png in Resources */,
@@ -2791,6 +2807,7 @@
 				1E2C7EA117E4FFCB0043E28D /* dkblue_small2_btn_bg@2x.png in Resources */,
 				1EC44C7518130CC100F4A2C2 /* ProfileStart5VC.xib in Resources */,
 				1E4E286E18595A6C003C5897 /* default_form_image@2x.png in Resources */,
+				1EA3BF3E1875C4A300E9F5D9 /* ContactGroupTableViewCell.xib in Resources */,
 				1EC44C6D18130CC100F4A2C2 /* ProfileStart1VC.xib in Resources */,
 				1E2E123318633E9400F6B875 /* rating_track_right_end@2x.png in Resources */,
 				1E0F8EF71810999E00B6C6AF /* settings_icon_off@2x.png in Resources */,
@@ -2809,6 +2826,7 @@
 				1E2C7EA817E4FFCB0043E28D /* S1.1_button_enter@2x.png in Resources */,
 				1E2C7EA917E4FFCB0043E28D /* full_bg_aqua@2x.png in Resources */,
 				1E59F11817FB100F00EE2902 /* tabnav_selected_bar@2x.png in Resources */,
+				1EA3BF391875BC8000E9F5D9 /* ContactGroupsVC.xib in Resources */,
 				1E213BF417E542BE00E17DBF /* topnav_aqua_bg@2x.png in Resources */,
 				1E213BF517E542BE00E17DBF /* btn_aqua_add@2x.png in Resources */,
 				1E9C36C717FA4DBC0017E9AD /* tesla.jpg in Resources */,
@@ -2958,6 +2976,7 @@
 				1E928252177FB690008A583C /* UIColor+ColorWithHex.m in Sources */,
 				1E79B70318159EFE002E417A /* GroupVO.m in Sources */,
 				1EFEA246182FB97300FEE9E4 /* NSArray+NBAdditions.m in Sources */,
+				1EA3BF3D1875C4A300E9F5D9 /* ContactGroupTableViewCell.m in Sources */,
 				1E928253177FB690008A583C /* UIView+Helper.m in Sources */,
 				1E928254177FB690008A583C /* DateTimeUtils.m in Sources */,
 				1EC44C5418130CC100F4A2C2 /* ContactInfoVC.m in Sources */,
@@ -2978,7 +2997,6 @@
 				1E1A9A9A17FE4D3D008D81E6 /* ChatManager.m in Sources */,
 				1E1A9AA917FE5016008D81E6 /* UIBubbleTableView.m in Sources */,
 				1E3ACA491804E49500A6E6B2 /* EmbedPollWidget.m in Sources */,
-				1E92828C177FB690008A583C /* ViewController.m in Sources */,
 				1EC44C6A18130CC100F4A2C2 /* PollDetailVC.m in Sources */,
 				1ED786641854AE9B0083022A /* RSVPResponseCell.m in Sources */,
 				1E92828F177FB690008A583C /* PresentationViewController.m in Sources */,
@@ -3090,6 +3108,7 @@
 				1E6A101D183EF66400F63666 /* PollResponseCell.m in Sources */,
 				1EC44C5C18130CC100F4A2C2 /* EditPollVC.m in Sources */,
 				1E88804D17F4BD950070116C /* FormOptionVO.m in Sources */,
+				1EA3BF381875BC8000E9F5D9 /* ContactGroupsVC.m in Sources */,
 				1E6A1026183FFA3200F63666 /* AltLabel.m in Sources */,
 				1E1A9A9717FE4C08008D81E6 /* ChatMessageVO.m in Sources */,
 				1E88805017F4C0240070116C /* FormManager.m in Sources */,
@@ -3103,6 +3122,7 @@
 				1E59F10F17FA5ED400EE2902 /* BaseItemView.m in Sources */,
 				1E09AE681837FC6600FDEC38 /* ParseUtils.m in Sources */,
 				1E37C2A317FE31080029D95F /* UIView+Resize.m in Sources */,
+				1EA3BF411875D2F200E9F5D9 /* ViewController.m in Sources */,
 				1E8BFAD117F73B3C0053BEE3 /* NSString+Extensions.m in Sources */,
 				1EC44C6418130CC100F4A2C2 /* FormsHomeVC.m in Sources */,
 				1E8BFADF17F767290053BEE3 /* BSKeyboardControls.m in Sources */,

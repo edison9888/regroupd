@@ -40,7 +40,7 @@
     // Do any additional setup after loading the view from its nib.
     
 //    TODO: determine if user needs to create profile
-    [self performSelector:@selector(startNewProfile) withObject:nil afterDelay:3];
+    [self performSelector:@selector(startNewProfile) withObject:nil afterDelay:0];
     
 }
 

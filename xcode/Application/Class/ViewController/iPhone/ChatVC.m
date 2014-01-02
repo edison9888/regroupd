@@ -23,6 +23,10 @@
 #import "RatingDetailVC.h"
 #import "RSVPDetailVC.h"
 
+#import "EditPollVC.h"
+#import "EditRatingVC.h"
+#import "EditRSVPVC.h"
+
 #import "UIBubbleTableView.h"
 #import "UIBubbleTableViewDataSource.h"
 #import "NSBubbleData.h"
@@ -919,6 +923,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         attachmentType = self.attachedForm.type;
         hasAttachment = YES;
         NSLog(@"Form pick: %@", self.attachedForm.name);
+        self.sendButton.enabled = YES;
         
         switch (attachmentType) {
             case FormType_POLL:
@@ -946,11 +951,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 [self.attachedForm.options addObject:option];
             }
             [self hideFormSelector];
+            [self hideAttachModal];
         }];
         
     } else {
         [self hideFormSelector];
-        
+        [self hideAttachModal];
     }
     
 }
@@ -1951,6 +1957,53 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     self.sendButton.enabled = YES;
     
     [self.bubbleTable scrollBubbleViewToBottomAnimated:YES];
+    
+}
+
+#pragma mark - Create new form handlers
+
+- (IBAction)tapCreatePollButton {
+    [DataModel shared].action = @"popup";
+    [DataModel shared].didSaveOK = NO;
+    
+    EditPollVC *editPollVC = [[EditPollVC alloc] init];
+    [self presentViewController:editPollVC animated:YES completion:^{
+        
+//        if ([DataModel shared].didSaveOK) {
+//            NSLog(@"form saved.");
+//            [self hideAttachModal];
+//            self.attachedForm = [DataModel shared].form;
+//        }
+    }];
+    
+}
+- (IBAction)tapCreateRatingButton {
+    [DataModel shared].action = @"popup";
+    [DataModel shared].didSaveOK = NO;
+
+    EditRatingVC *editRatingVC = [[EditRatingVC alloc] init];
+    [self presentViewController:editRatingVC animated:YES completion:^{
+//        if ([DataModel shared].didSaveOK) {
+//            NSLog(@"form saved.");
+//            [self hideAttachModal];
+//            self.attachedForm = [DataModel shared].form;
+//        }
+    }];
+    
+}
+- (IBAction)tapCreateRSVPButton {
+    [DataModel shared].action = @"popup";
+    [DataModel shared].didSaveOK = NO;
+
+    EditRSVPVC *editRSVPVC = [[EditRSVPVC alloc] init];
+    [self presentViewController:editRSVPVC animated:YES completion:^{
+//        if ([DataModel shared].didSaveOK) {
+//            NSLog(@"form saved.");
+//            [self hideAttachModal];
+//            self.attachedForm = [DataModel shared].form;
+//        }
+    }];
+    
     
 }
 

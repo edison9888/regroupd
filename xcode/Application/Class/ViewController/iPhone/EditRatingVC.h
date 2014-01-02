@@ -10,6 +10,8 @@
 
 #import "MBProgressHUD.h"
 
+#import "FormVO.h"
+
 #import "FancyCheckbox.h"
 #import "FancyTextField.h"
 #import "BrandUITextField.h"
@@ -32,7 +34,8 @@
     
     float inputHeight;
     NSArray *textViewTags;
-    
+    FormVO *theForm;
+
 }
 
 @property (nonatomic, retain) MBProgressHUD *hud;

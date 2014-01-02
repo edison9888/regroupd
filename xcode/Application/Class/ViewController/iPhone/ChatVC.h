@@ -133,6 +133,10 @@
 @property (nonatomic, strong) IBOutlet UIButton *attachRSVPHotspot;
 @property (nonatomic, strong) IBOutlet UIButton *cancelHotspot;
 
+@property (nonatomic, strong) IBOutlet UIButton *createPollHotspot;
+@property (nonatomic, strong) IBOutlet UIButton *createRatingHotspot;
+@property (nonatomic, strong) IBOutlet UIButton *createRSVPHotspot;
+
 @property (nonatomic, strong) IBOutlet UIButton *detachButton;
 
 
@@ -141,6 +145,10 @@
 - (IBAction)tapAttachButton;
 - (IBAction)tapSendButton;
 - (IBAction)tapDetachButton;
+
+- (IBAction)tapCreatePollButton;
+- (IBAction)tapCreateRatingButton;
+- (IBAction)tapCreateRSVPButton;
 
 - (IBAction)modalCameraButton;
 - (IBAction)modalChooseButton;
