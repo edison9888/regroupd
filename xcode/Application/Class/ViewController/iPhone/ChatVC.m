@@ -277,7 +277,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             liveChat.messages = [results mutableCopy];
             for (ChatMessageVO *msg in liveChat.messages) {
                 [contactKeySet addObject:msg.contact_key];
-                if (msg.form_key) {
+                if (msg.form_key && msg.form_key.length > 0) {
                     [formKeySet addObject:msg.form_key];
                 }
             }
@@ -317,6 +317,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     } else {
         
         for (NSString *formKey in formKeySet) {
+            if (!formKey || formKey.length == 0) {
+                NSLog(@"Skipping empty formKey");
+                continue;
+            }
             [formSvc apiLoadForm:formKey fetchAll:YES callback:^(FormVO *form) {
                 NSString *contactKey = nil;
                 if ([form.user_key isEqualToString:[PFUser currentUser].objectId]) {
@@ -327,60 +331,70 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 
                 
                 if (form) {
-                    NSLog(@"Getting form responses");
+                    NSLog(@"Getting form responses %@", formKey);
                     [formSvc apiListFormResponses:formKey contactKey:contactKey callback:^(NSArray *results) {
-                        form.responsesMap = [[NSMutableDictionary alloc] init];
-                        if (results.count == 0) {
-                            // Not results
+                        if (!results) {
+                            // Skip
                         } else {
-                            FormResponseVO *response;
-                            if (contactKey == nil) {
-                                // not form owner. other recipient (left side)
-                                
-                                for (PFObject *result in results) {
-                                    response = [FormResponseVO readFromPFObject:result];
-                                    response.answerTotal = [NSNumber numberWithInt:1];
-                                    response.ratingCount = [NSNumber numberWithInt:1];
-                                    response.ratingTotal = response.rating;
-                                    
-                                    [form.responsesMap setObject:response forKey:response.option_key];
-                                }
-                                
+
+                            form.responsesMap = [[NSMutableDictionary alloc] init];
+                            if (results.count == 0) {
+                                // No results
                             } else {
-                                // Form owner. That means aggregate result stats.
-                                for (PFObject *result in results) {
-                                    response = [FormResponseVO readFromPFObject:result];
+                                FormResponseVO *response;
+                                if (contactKey == nil) {
+                                    // not form owner. other recipient (left side)
                                     
-                                    if ([form.responsesMap objectForKey:response.option_key] == nil) {
+                                    for (PFObject *result in results) {
+                                        response = [FormResponseVO readFromPFObject:result];
                                         response.answerTotal = [NSNumber numberWithInt:1];
                                         response.ratingCount = [NSNumber numberWithInt:1];
                                         response.ratingTotal = response.rating;
                                         
                                         [form.responsesMap setObject:response forKey:response.option_key];
+                                    }
+                                    
+                                } else {
+                                    // Form owner. That means aggregate result stats.
+                                    for (PFObject *result in results) {
+                                        response = [FormResponseVO readFromPFObject:result];
                                         
-                                    } else {
-                                        
-                                        ((FormResponseVO *)[form.responsesMap objectForKey:response.option_key]).answerTotal = [NSNumber numberWithInt:[response.answerTotal intValue] + 1];;
-                                        if (response.rating) {
+                                        if ([form.responsesMap objectForKey:response.option_key] == nil) {
+                                            response.answerTotal = [NSNumber numberWithInt:1];
+                                            response.ratingCount = [NSNumber numberWithInt:1];
+                                            response.ratingTotal = response.rating;
                                             
-                                            FormResponseVO *_resp = (FormResponseVO *)[form.responsesMap objectForKey:response.option_key];
-                                            ((FormResponseVO *)[form.responsesMap objectForKey:response.option_key]).ratingTotal = [NSNumber numberWithInt:(_resp.ratingTotal.intValue + response.rating.intValue)];
-                                            ((FormResponseVO *)[form.responsesMap objectForKey:response.option_key]).ratingCount = [NSNumber numberWithInt:[response.ratingCount intValue] + 1];;
+                                            [form.responsesMap setObject:response forKey:response.option_key];
+                                            
+                                        } else {
+                                            
+                                            ((FormResponseVO *)[form.responsesMap objectForKey:response.option_key]).answerTotal = [NSNumber numberWithInt:[response.answerTotal intValue] + 1];;
+                                            if (response.rating) {
+                                                
+                                                FormResponseVO *_resp = (FormResponseVO *)[form.responsesMap objectForKey:response.option_key];
+                                                ((FormResponseVO *)[form.responsesMap objectForKey:response.option_key]).ratingTotal = [NSNumber numberWithInt:(_resp.ratingTotal.intValue + response.rating.intValue)];
+                                                ((FormResponseVO *)[form.responsesMap objectForKey:response.option_key]).ratingCount = [NSNumber numberWithInt:[response.ratingCount intValue] + 1];;
+                                                
+                                            }
                                             
                                         }
-                                        
                                     }
                                 }
                             }
+                            // Finish up. List chat messages now that we have the forms, options and responses
+                            [formCache setObject:form forKey:formKey];
+                            
+                            
                         }
-                        // Finish up. List chat messages now that we have the forms, options and responses
-                        [formCache setObject:form forKey:formKey];
                         index++;
                         
                         if (index==total) {
                             [self renderChatMessages:liveChat];
                         }
                     }];
+                    
+                } // if form
+                else {
                     
                 }
                 
@@ -1004,8 +1018,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     } else {
         estSize = textView.contentSize;
     }
-    
-    float newsize = estSize.height;
+    // Add 3px since some letters are taller and go below baseline
+    float newsize = estSize.height + 3;
     
     //    NSLog(@"inputHeight %f // newsize %f", inputHeight, newsize);
     
@@ -1014,7 +1028,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         vshift = newsize - inputHeight;
         
         inputHeight = newsize;
-        if (inputHeight < kMaxInputHeight) {
+        float maxHeight = [DataModel shared].stageHeight - keyboardHeight - kScrollViewTop - 10;
+        if (inputHeight < maxHeight) {
             CGRect frame = self.inputField.frame;
             frame.size.height = newsize;
             self.inputField.frame = frame;
@@ -1031,9 +1046,17 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             frame.origin.y -= vshift;
             self.chatBar.frame = frame;
             chatFrame = frame;
+            
+            CGRect scrollFrame = self.bubbleTable.frame;
+            scrollFrame.size.height -= vshift;
+            self.bubbleTable.frame = scrollFrame;
+            
         } else {
             //            [textView scr]
         }
+        
+        [self.bubbleTable scrollBubbleViewToBottomAnimated:NO];
+
     }
     
     

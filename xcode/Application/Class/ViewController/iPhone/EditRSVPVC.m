@@ -334,7 +334,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 -(BOOL) textFieldShouldBeginEditing:(UITextField*)textField {
     NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
-    keyboardIsShown = YES;
     fieldIndex = textField.tag;
         
     _currentField = textField;

@@ -47,6 +47,10 @@
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
     
     groupSvc = [[GroupManager alloc] init];
+    
+    NSString *title = @"%@'s Groups";
+    title = [NSString stringWithFormat:title, [DataModel shared].contact.first_name];
+    self.navTitle.text = title;
 
     [self performSearch:@""];
     

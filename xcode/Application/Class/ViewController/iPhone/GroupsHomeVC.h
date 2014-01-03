@@ -10,8 +10,11 @@
 #import "SQLiteDB.h"
 #import "GroupTableViewCell.h"
 #import "ContactVO.h"
+#import "GroupManager.h"
 
 @interface GroupsHomeVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
+    GroupManager *groupSvc;
+    
     BOOL isLoading;
     BOOL inEditMode;
     int selectedIndex;

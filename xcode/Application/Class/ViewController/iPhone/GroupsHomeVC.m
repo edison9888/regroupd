@@ -35,6 +35,8 @@ static NSString *kDoneLabel = @"Done";
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    groupSvc = [[GroupManager alloc] init];
+    
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
     self.theTableView.backgroundColor = [UIColor clearColor];
@@ -140,8 +142,8 @@ static NSString *kDoneLabel = @"Done";
             cell.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin  | UIViewAutoresizingFlexibleLeftMargin;
         }
         
-        NSDictionary *rowData = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
-        cell.rowdata = rowData;
+        NSDictionary *rowdata = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
+        cell.rowdata = rowdata;
         
     } @catch (NSException * e) {
         NSLog(@"Exception: %@", e);
@@ -196,6 +198,13 @@ static NSString *kDoneLabel = @"Done";
     NSLog(@"%s", __FUNCTION__);
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         //add code here for when you hit delete
+        
+        NSDictionary *rowdata = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
+        GroupVO *group = [GroupVO readFromDictionary:rowdata];
+        [groupSvc deleteGroup:group];
+        [self setEditing:NO animated:YES];
+        [self performSearch:@""];
+        
     }
 }
 
@@ -203,6 +212,8 @@ static NSString *kDoneLabel = @"Done";
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated {
 
     [super setEditing:(BOOL)editing animated:(BOOL)animated];
+    [self.theTableView setEditing:editing];
+    
 //    if (inEditMode) {
 //        [super setEditing:(BOOL)editing animated:(BOOL)animated];
 //    } else {
@@ -247,15 +258,14 @@ static NSString *kDoneLabel = @"Done";
     if (inEditMode) {
         inEditMode = NO;
         [self.editButton setTitle:kEditLabel forState:UIControlStateNormal];
-        [self.theTableView setEditing:inEditMode];
 
         [self setEditing:inEditMode animated:YES];
+        
         [self.theTableView reloadData];
         
     } else {
         inEditMode = YES;
         [self setEditing:inEditMode animated:YES];
-        [self.theTableView setEditing:inEditMode];
 
         [self.editButton setTitle:kDoneLabel forState:UIControlStateNormal];
         

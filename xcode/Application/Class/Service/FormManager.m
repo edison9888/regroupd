@@ -430,34 +430,44 @@
 }
 - (void) apiLoadForm:(NSString *)formKey fetchAll:(BOOL)fetchAll callback:(void (^)(FormVO *form))callback {
     NSLog(@"%s", __FUNCTION__);
-
+    NSLog(@"Load form %@", formKey);
     PFQuery *query = [PFQuery queryWithClassName:kFormDB];
     [query getObjectInBackgroundWithId:formKey block:^(PFObject *pfForm, NSError *error) {
         FormVO *form;
-        if (pfForm) {
+        if (!error) {
             form = [FormVO readFromPFObject:pfForm];
             
             if (fetchAll) {
+                NSLog(@"Load form options %@", formKey);
                 
                 PFQuery *query = [PFQuery queryWithClassName:kFormOptionDB];
                 [query whereKey:@"form" equalTo:pfForm];
                 [query addAscendingOrder:@"position"];
                 
                 [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
-                    NSLog(@"Found form options %i", results.count);
-                    
-                    FormOptionVO *option;
-                    form.options = [[NSMutableArray alloc] init];
-                    for (PFObject *result in results) {
-                        option = [FormOptionVO readFromPFObject:result];
-                        [form.options addObject: option];
+                    if (error) {
+                        NSLog(@"Error with options for formKey %@", formKey);
+                        callback(nil);
+                    } else {
+                        NSLog(@"Found form options %i", results.count);
+                        
+                        FormOptionVO *option;
+                        form.options = [[NSMutableArray alloc] init];
+                        for (PFObject *result in results) {
+                            option = [FormOptionVO readFromPFObject:result];
+                            [form.options addObject: option];
+                        }
+                        callback(form);
+                        
                     }
-                    callback(form);
                 }];
 
             } else {
                 callback(form);
             }
+        } else {
+            NSLog(@"Error with loading formKey %@", formKey);
+            callback(nil);
         }
     }];
     
@@ -588,15 +598,11 @@
         [query whereKey:@"contact" equalTo:[PFObject objectWithoutDataWithClassName:kContactDB objectId:contactKey]];
     }
     [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
-//        FormResponseVO *response;
-//        NSMutableArray *responses = [[NSMutableArray alloc] init];
-//        
-//        for (PFObject *result in results) {
-//            response = [FormResponseVO readFromPFObject:result];
-//            
-//            
-//        }
-        callback(results);
+        if (error) {
+            callback(nil);
+        } else {
+            callback(results);
+        }
     }];
 }
 

@@ -12,8 +12,8 @@
     UIView *_theView;
     NSMutableDictionary *_buttonMap;
     UIImageView *_bgLayer;
-    
 }
+@property (nonatomic, readwrite, retain) IBOutlet UIView *highlightView;
 
 - (void) moveLayerToIndex:(int)index;
 

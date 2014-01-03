@@ -38,6 +38,7 @@
 
     CGSize scrollContentSize = CGSizeMake([DataModel shared].stageWidth, 520);
     self.scrollView.contentSize = scrollContentSize;
+    self.scrollView.delegate = self;
 
     self.tf1.delegate = self;
     self.tf1.textAlignment = NSTextAlignmentCenter;
@@ -127,15 +128,12 @@
     // resize the noteView
     CGRect viewFrame = self.scrollView.frame;
     // I'm also subtracting a constant kTabBarHeight because my UIScrollView was offset by the UITabBar so really only the portion of the keyboard that is leftover pass the UITabBar is obscuring my UIScrollView.
-    viewFrame.size.height -= (keyboardSize.height - navbarHeight);
+    viewFrame.size.height = [DataModel shared].stageHeight - keyboardSize.height - viewFrame.origin.y;
     
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    // The kKeyboardAnimationDuration I am using is 0.3
-    [UIView setAnimationDuration:0.3];
+    CGRect targetFrame = self.nextButton.frame;
+    targetFrame.origin.y += 20;
     [self.scrollView setFrame:viewFrame];
-    [UIView commitAnimations];
-    
+    [self.scrollView scrollRectToVisible:targetFrame animated:YES];
     keyboardIsShown = YES;
     
 }
@@ -144,12 +142,13 @@
     // resize the scrollview
     CGRect viewFrame = self.scrollView.frame;
     // I'm also subtracting a constant kTabBarHeight because my UIScrollView was offset by the UITabBar so really only the portion of the keyboard that is leftover pass the UITabBar is obscuring my UIScrollView.
-    viewFrame.size.height += (keyboardSize.height - navbarHeight);
+    viewFrame.size.height = [DataModel shared].stageHeight - viewFrame.origin.y;
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];
     // The kKeyboardAnimationDuration I am using is 0.3
     [UIView setAnimationDuration:0.3];
+    
     [self.scrollView setFrame:viewFrame];
     [UIView commitAnimations];
     
@@ -161,7 +160,6 @@
 
 -(BOOL) textFieldShouldBeginEditing:(UITextField*)textField {
     NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
-    keyboardIsShown = YES;
     return YES;
 }
 

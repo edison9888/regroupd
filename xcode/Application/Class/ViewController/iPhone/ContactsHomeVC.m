@@ -178,7 +178,7 @@
             break;
             
         case 2:
-            title = @"Invite to Re:group'd";
+            title = @"Invite to re:group'd";
             break;
             
         default:

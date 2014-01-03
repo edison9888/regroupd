@@ -162,7 +162,7 @@
     viewFrame.size.height = [DataModel shared].stageHeight - keyboardSize.height - viewFrame.origin.y;
     
     CGRect targetFrame = self.editView.frame;
-    targetFrame.origin.y += targetFrame.size.height;
+//    targetFrame.origin.y += targetFrame.size.height;
 
     self.scrollView.frame = viewFrame;
 //    self.scrollView.contentSize = CGSizeMake([DataModel shared].stageWidth, self.saveButton.frame.origin.y + 50);

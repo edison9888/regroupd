@@ -84,9 +84,9 @@
     if (contactSvc == nil) {
         contactSvc = [[ContactManager alloc] init];
     }
-    
-    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [self.hud setLabelText:@"Loading"];
+    [self.view setUserInteractionEnabled:NO];
+//    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    [self.hud setLabelText:@"Loading"];
 
     [userSvc apiCreateUserAndContact:user callback:^(PFObject *pfUser, PFObject *pfContact) {
         NSLog(@"Callback response objectId %@", pfUser.objectId);
@@ -180,7 +180,7 @@
         }
         
     } else {
-        [MBProgressHUD hideHUDForView:self.view animated:NO];
+//        [MBProgressHUD hideHUDForView:self.view animated:NO];
         
     }
 

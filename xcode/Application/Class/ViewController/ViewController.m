@@ -88,6 +88,7 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(backgroundPushNotificationReceived:)     name:k_chatPushNotificationReceived            object:nil];
 
+//    [self performSelector:@selector(startNewProfile) withObject:nil afterDelay:1];
     // Do any additional setup after loading the view, typically from a nib.
 //    [self startNewProfile];
     [self gotoSlideWithName:kSlideHome andOverrideTransition:kPresentationTransitionAuto];
@@ -282,8 +283,10 @@
                 [DataModel shared].myContact = contact;
                 [DataModel shared].user.contact_key = pfContact.objectId;
                 [DataModel shared].navIndex = 3;
-                [_delegate gotoSlideWithName:@"FormsHome"];
                 hasAccount = YES;
+                // post notification to switch to new tab (in ViewController)
+                NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:nil];
+                [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
             } else {
                 NSLog(@"No contact for user");
                 [_delegate gotoSlideWithName:@"ProfileStart1"];
