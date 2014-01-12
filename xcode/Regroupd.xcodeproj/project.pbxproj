@@ -437,8 +437,6 @@
 		1EA0B46718087CFD004C4DDA /* btn_rsvp_yes_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EA0B45F18087CFD004C4DDA /* btn_rsvp_yes_off@2x.png */; };
 		1EA3BF381875BC8000E9F5D9 /* ContactGroupsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA3BF361875BC8000E9F5D9 /* ContactGroupsVC.m */; };
 		1EA3BF391875BC8000E9F5D9 /* ContactGroupsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EA3BF371875BC8000E9F5D9 /* ContactGroupsVC.xib */; };
-		1EA3BF3D1875C4A300E9F5D9 /* ContactGroupTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA3BF3B1875C4A300E9F5D9 /* ContactGroupTableViewCell.m */; };
-		1EA3BF3E1875C4A300E9F5D9 /* ContactGroupTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EA3BF3C1875C4A300E9F5D9 /* ContactGroupTableViewCell.xib */; };
 		1EA3BF411875D2F200E9F5D9 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA3BF3F1875D2F200E9F5D9 /* ViewController.m */; };
 		1EA3BF431875D33700E9F5D9 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EA3BF421875D33700E9F5D9 /* ViewController.xib */; };
 		1EAFEC3117999C8A00CCBDA1 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EAFEC3017999C8A00CCBDA1 /* MBProgressHUD.m */; };
@@ -1128,9 +1126,6 @@
 		1EA3BF351875BC8000E9F5D9 /* ContactGroupsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactGroupsVC.h; sourceTree = "<group>"; };
 		1EA3BF361875BC8000E9F5D9 /* ContactGroupsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactGroupsVC.m; sourceTree = "<group>"; };
 		1EA3BF371875BC8000E9F5D9 /* ContactGroupsVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactGroupsVC.xib; sourceTree = "<group>"; };
-		1EA3BF3A1875C4A300E9F5D9 /* ContactGroupTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactGroupTableViewCell.h; sourceTree = "<group>"; };
-		1EA3BF3B1875C4A300E9F5D9 /* ContactGroupTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactGroupTableViewCell.m; sourceTree = "<group>"; };
-		1EA3BF3C1875C4A300E9F5D9 /* ContactGroupTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactGroupTableViewCell.xib; sourceTree = "<group>"; };
 		1EA3BF3F1875D2F200E9F5D9 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = Application/Class/ViewController/ViewController.m; sourceTree = SOURCE_ROOT; };
 		1EA3BF401875D2F200E9F5D9 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = Application/Class/ViewController/ViewController.h; sourceTree = SOURCE_ROOT; };
 		1EA3BF421875D33700E9F5D9 /* ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ViewController.xib; path = Application/Class/ViewController/ViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -1552,9 +1547,6 @@
 		1E6A1019183EF65100F63666 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
-				1EA3BF3A1875C4A300E9F5D9 /* ContactGroupTableViewCell.h */,
-				1EA3BF3B1875C4A300E9F5D9 /* ContactGroupTableViewCell.m */,
-				1EA3BF3C1875C4A300E9F5D9 /* ContactGroupTableViewCell.xib */,
 				1EBB5948184D2CCE00CE084D /* GroupContactCell.h */,
 				1EBB5949184D2CCE00CE084D /* GroupContactCell.m */,
 				1EBB594A184D2CCE00CE084D /* GroupContactCell.xib */,
@@ -2807,7 +2799,6 @@
 				1E2C7EA117E4FFCB0043E28D /* dkblue_small2_btn_bg@2x.png in Resources */,
 				1EC44C7518130CC100F4A2C2 /* ProfileStart5VC.xib in Resources */,
 				1E4E286E18595A6C003C5897 /* default_form_image@2x.png in Resources */,
-				1EA3BF3E1875C4A300E9F5D9 /* ContactGroupTableViewCell.xib in Resources */,
 				1EC44C6D18130CC100F4A2C2 /* ProfileStart1VC.xib in Resources */,
 				1E2E123318633E9400F6B875 /* rating_track_right_end@2x.png in Resources */,
 				1E0F8EF71810999E00B6C6AF /* settings_icon_off@2x.png in Resources */,
@@ -2976,7 +2967,6 @@
 				1E928252177FB690008A583C /* UIColor+ColorWithHex.m in Sources */,
 				1E79B70318159EFE002E417A /* GroupVO.m in Sources */,
 				1EFEA246182FB97300FEE9E4 /* NSArray+NBAdditions.m in Sources */,
-				1EA3BF3D1875C4A300E9F5D9 /* ContactGroupTableViewCell.m in Sources */,
 				1E928253177FB690008A583C /* UIView+Helper.m in Sources */,
 				1E928254177FB690008A583C /* DateTimeUtils.m in Sources */,
 				1EC44C5418130CC100F4A2C2 /* ContactInfoVC.m in Sources */,
@@ -3330,8 +3320,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_NAME = regroupd;
-				PROVISIONING_PROFILE = "C203B484-E443-4534-B3BE-2F7F60970C7C";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C203B484-E443-4534-B3BE-2F7F60970C7C";
+				PROVISIONING_PROFILE = "4ECCAF19-3D01-44B9-8B23-045215A1F627";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4ECCAF19-3D01-44B9-8B23-045215A1F627";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

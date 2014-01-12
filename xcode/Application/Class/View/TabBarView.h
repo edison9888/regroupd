@@ -11,7 +11,7 @@
 @interface TabBarView : UIView {
     UIView *_theView;
     NSMutableDictionary *_buttonMap;
-    UIImageView *_bgLayer;
+//    UIImageView *_bgLayer;
 }
 @property (nonatomic, readwrite, retain) IBOutlet UIView *highlightView;
 

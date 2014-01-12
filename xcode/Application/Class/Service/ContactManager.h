@@ -32,6 +32,7 @@
 - (void) apiLookupContactsByPhoneNumbers:(NSArray *)numbers callback:(void (^)(NSArray *))callback;
 
 - (void) apiSendSMSInviteCode:(NSString *) phone callback:(void (^)(NSString *))callback;
+- (int)getRandomNumberBetween:(int)min maxNumber:(int)max;
 
 // PRIVACY API METHODS
 

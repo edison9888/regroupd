@@ -203,7 +203,20 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)formSaveCompleteNotificationHandler:(NSNotification*)notification
 {
     NSLog(@"===== %s", __FUNCTION__);
-    [[[UIAlertView alloc] initWithTitle:@"Success" message:@"RSVP created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    
+    NSLog(@"Creating automatic FormResponse for RSVP: option %@", yesOption.system_id);
+    FormResponseVO *response;
+    response = [[FormResponseVO alloc] init];
+    response.contact_key = [DataModel shared].user.contact_key;
+    response.form_key = theForm.system_id;
+    response.chat_key = nil;
+    response.option_key = yesOption.system_id;
+    
+    [formSvc apiSaveFormResponse:response callback:^(PFObject *object) {
+        
+        [[[UIAlertView alloc] initWithTitle:@"Success" message:@"RSVP created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    }];
+    
 }
 
 
@@ -696,7 +709,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 
                 [formSvc apiSaveForm:form callback:^(PFObject *pfForm) {
                     NSString *formId = pfForm.objectId;
-                    
+                    form.system_id = pfForm.objectId;
                     NSArray *answers = @[kResponseYes, kResponseMaybe, kResponseNo];
                     
                     for (int i=1; i<=answers.count; i++) {
@@ -709,7 +722,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                         option.position = i;
                         
                         [formSvc apiSaveFormOption:option formId:formId callback:^(PFObject *object) {
-                            NSLog(@"Save option %i", i + 1);
+                            NSLog(@"Save option %i", i);
+                            NSString *optionName = object[@"name"];
+                            if ([optionName isEqualToString:@"Yes"]) {
+                                yesOption = [FormOptionVO readFromPFObject:object];
+                            }
                             if (i == answers.count) {
                                 [DataModel shared].didSaveOK = YES;
                                 theForm = form;

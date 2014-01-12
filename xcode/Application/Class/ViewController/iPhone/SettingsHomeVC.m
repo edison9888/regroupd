@@ -195,11 +195,11 @@
 #pragma mark - IBActions
 - (IBAction)tapClearAllButton {
     
-    NexmoSMS *nexmo = [[NexmoSMS alloc] init];
-    
-    [nexmo sendAuthMessageTo:@"19172926600" pin:@"123456" callback:^(NSString *response) {
-        NSLog(@"Nexmo response: %@", response);
-    }];
+//    NexmoSMS *nexmo = [[NexmoSMS alloc] init];
+//    
+//    [nexmo sendAuthMessageTo:@"19172926600" pin:@"123456" callback:^(NSString *response) {
+//        NSLog(@"Nexmo response: %@", response);
+//    }];
     
 }
 - (IBAction)tapContactButton {

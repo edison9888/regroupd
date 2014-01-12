@@ -379,6 +379,12 @@
         if (form.allow_share != nil) {
             data[@"allow_share"] = form.allow_share;
         }
+        if (form.allow_public != nil) {
+            data[@"allow_public"] = form.allow_public;
+        }
+        if (form.allow_multiple != nil) {
+            data[@"allow_multiple"] = form.allow_multiple;
+        }
         
         
         [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -566,6 +572,25 @@
     
 }
 
+- (void)apiLookupFormOption:(NSString *)formKey withName:(NSString *)name callback:(void (^)(FormOptionVO *option))callback
+{
+    PFQuery *query = [PFQuery queryWithClassName:kFormOptionDB];
+    [query whereKey:@"form" equalTo:[PFObject objectWithoutDataWithClassName:kFormDB objectId:formKey]];
+    [query whereKey:@"name" equalTo:name];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        
+        if (results) {
+            PFObject *pfObject = [results objectAtIndex:0];
+            FormOptionVO *result = [FormOptionVO readFromPFObject:pfObject];
+            callback(result);
+        }
+        callback(nil);
+    }];
+    
+    
+}
+
 #pragma mark - Form Response API
 
 - (void)apiSaveFormResponse:(FormResponseVO *)response callback:(void (^)(PFObject *object))callback
@@ -576,7 +601,9 @@
     
     data[@"form"] = [PFObject objectWithoutDataWithClassName:kFormDB objectId:response.form_key];
     data[@"contact"] = [PFObject objectWithoutDataWithClassName:kContactDB objectId:response.contact_key];
-    data[@"chat"] = [PFObject objectWithoutDataWithClassName:kChatDB objectId:response.chat_key];
+    if (response.chat_key != nil) {
+        data[@"chat"] = [PFObject objectWithoutDataWithClassName:kChatDB objectId:response.chat_key];
+    }
     if (response.option_key != nil) {
         data[@"option"] =[PFObject objectWithoutDataWithClassName:kFormOptionDB objectId:response.option_key];
     }

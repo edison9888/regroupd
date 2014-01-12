@@ -36,11 +36,11 @@
             }
         }
         
-        CGRect highlightFrame = self.highlightView.frame;
-        highlightFrame.origin.x = 0;
-        highlightFrame.origin.y = 13;
-        self.highlightView.backgroundColor = [UIColor colorWithHexValue:0xFFFFFF andAlpha:0.2];
-        self.highlightView.frame = highlightFrame;
+//        CGRect highlightFrame = self.highlightView.frame;
+//        highlightFrame.origin.x = 0;
+//        highlightFrame.origin.y = 13;
+//        self.highlightView.backgroundColor = [UIColor colorWithHexValue:0xFFFFFF andAlpha:0.2];
+//        self.highlightView.frame = highlightFrame;
     }
     return self;
 }
@@ -51,20 +51,6 @@
     UIButton *button = (UIButton *) selector;
     NSLog(@"hit tag=%i", button.tag);
     
-    if (button.tag == 3) {
-        self.highlightView.backgroundColor = [UIColor clearColor];
-    } else {
-        self.highlightView.backgroundColor = [UIColor colorWithHexValue:0xFFFFFF andAlpha:0.5];
-    }
-    //    if ([DataModel shared].navIndex != button.tag) {
-    CGRect bgFrame = self.highlightView.frame;
-    // move bglayer behind active button
-    int xpos = button.frame.origin.x + (button.frame.size.width/2) - bgFrame.size.width /2;
-    
-    NSLog(@"move to xpos %i", xpos);
-    bgFrame.origin.x = xpos;
-    
-    self.highlightView.frame = bgFrame;
     [DataModel shared].navIndex = button.tag;
     
     // post notification to switch to new tab (in ViewController)
@@ -85,13 +71,28 @@
     
     UIButton *button = (UIButton *) [_buttonMap objectForKey:num];
     
+    if (button.tag == 3) {
+        self.highlightView.backgroundColor = [UIColor clearColor];
+    } else {
+        self.highlightView.backgroundColor = [UIColor colorWithHexValue:0xFFFFFF andAlpha:0.5];
+    }
+    //    if ([DataModel shared].navIndex != button.tag) {
+    CGRect bgFrame = self.highlightView.frame;
     // move bglayer behind active button
-    int xpos = button.frame.origin.x + (button.frame.size.width/2) - _bgLayer.frame.size.width /2;
+    int xpos = button.frame.origin.x + (button.frame.size.width/2) - bgFrame.size.width /2;
     
     NSLog(@"move to xpos %i", xpos);
-    CGRect bgframe = CGRectMake(xpos, _bgLayer.frame.origin.y, _bgLayer.frame.size.width,
-                                _bgLayer.frame.size.height);
-    _bgLayer.frame = bgframe;
+    bgFrame.origin.x = xpos;
+    
+    self.highlightView.frame = bgFrame;
+
+    // move bglayer behind active button
+//    int xpos = button.frame.origin.x + (button.frame.size.width/2) - _bgLayer.frame.size.width /2;
+//    
+//    NSLog(@"move to xpos %i", xpos);
+//    CGRect bgframe = CGRectMake(xpos, _bgLayer.frame.origin.y, _bgLayer.frame.size.width,
+//                                _bgLayer.frame.size.height);
+//    _bgLayer.frame = bgframe;
     
     
 }

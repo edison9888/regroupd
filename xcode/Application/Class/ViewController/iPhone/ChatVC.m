@@ -80,6 +80,8 @@
 
 #define kAttachPlusIcon     @"chat_attach_plus"
 
+#define kDetailsNotPublic   @"Whoops! These results are private."
+
 static const CGFloat KEYBOARD_ANIMATION_DURATION = 0.3;
 static const CGFloat MINIMUM_SCROLL_FRACTION = 0.2;
 static const CGFloat MAXIMUM_SCROLL_FRACTION = 0.8;
@@ -437,22 +439,54 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             FormVO *theForm = (FormVO *) [formCache objectForKey:formKey];
             [DataModel shared].form = theForm;
             
+            
+            
             switch (theForm.type) {
                 case FormType_POLL:
                 {
-                    [DataModel shared].action = @"popup";
-                    PollDetailVC *pollDetailVC = [[PollDetailVC alloc] initWithNibName:@"PollDetailVC" bundle:nil];
-                    pollDetailVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-                    [self presentViewController:pollDetailVC animated:YES completion:nil];
+                    BOOL allowView = NO;
+                    if (theForm.allow_public != nil) {
+                        if (theForm.allow_public.intValue == 1) {
+                            allowView = YES;
+                        }
+                    }
+                    if ([theForm.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
+                        allowView = YES;
+                    }
+                    if (allowView) {
+                        [DataModel shared].action = @"popup";
+                        PollDetailVC *pollDetailVC = [[PollDetailVC alloc] initWithNibName:@"PollDetailVC" bundle:nil];
+                        pollDetailVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+                        [self presentViewController:pollDetailVC animated:YES completion:nil];
+                        
+                        
+                    } else {
+                        [[[UIAlertView alloc] initWithTitle:nil message:kDetailsNotPublic delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                    
+                    }
                     
                     break;
                 }
                 case FormType_RATING:
                 {
-                    [DataModel shared].action = @"popup";
-                    RatingDetailVC *detailsVC = [[RatingDetailVC alloc] init];
-                    detailsVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-                    [self presentViewController:detailsVC animated:YES completion:nil];
+                    BOOL allowView = NO;
+                    if (theForm.allow_public != nil) {
+                        if (theForm.allow_public.intValue == 1) {
+                            allowView = YES;
+                        }
+                    }
+                    if ([theForm.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
+                        allowView = YES;
+                    }
+                    if (allowView) {
+                        [DataModel shared].action = @"popup";
+                        RatingDetailVC *detailsVC = [[RatingDetailVC alloc] init];
+                        detailsVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+                        [self presentViewController:detailsVC animated:YES completion:nil];
+                    } else {
+                        [[[UIAlertView alloc] initWithTitle:nil message:kDetailsNotPublic delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                        
+                    }
                     
                     break;
                 }

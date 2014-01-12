@@ -11,6 +11,7 @@
 #import "NBPhoneNumberUtil.h"
 #import "ContactManager.h"
 #import "UserManager.h"
+#import "NexmoSMS.h"
 
 @interface ProfileStart1VC ()
 
@@ -252,7 +253,25 @@
         // TODO: Add country code and normalize
         NSLog(@"phoneId is %@", phoneId);
 
-        [_delegate gotoNextSlide];
+        int random = [contactSvc getRandomNumberBetween:100000 maxNumber:999999];
+        NSString *code = [NSNumber numberWithInt:random].stringValue;
+
+        NSLog(@"Code is %@", code);
+        NexmoSMS *nexmo = [[NexmoSMS alloc] init];
+        
+        NSString *number = [phoneId stringByReplacingOccurrencesOfString:@"[^0-9]" withString:@"" options:NSRegularExpressionSearch range:NSMakeRange(0, [phoneId length])];
+        
+        [nexmo sendAuthMessageTo:number pin:code callback:^(NSString *response) {
+            NSLog(@"Nexmo response: %@", response);
+            user.smscode = code;
+            user.password = @"123456";
+            [DataModel shared].user = user;
+            
+            [[[UIAlertView alloc] initWithTitle:@"INFO" message:@"A text message was sent to your phone with a 6-digit verification code." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        }];
+
+
+//        [_delegate gotoNextSlide];
         
 //        [contactSvc apiSendSMSInviteCode:phoneId callback:^(NSString *code) {
 //            NSLog(@"apiSendSMSInviteCode code = %@", code);
@@ -316,36 +335,6 @@
     
 }
 
-- (void) readPhoneNumber:(NSString *)phone {
-    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
-    
-    NSError *aError = nil;
-    NBPhoneNumber *myNumber = [phoneUtil parse:phone defaultRegion:@"US" error:&aError];
-    
-    if (aError == nil) {
-        // Should check error
-        NSLog(@"isValidPhoneNumber ? [%@]", [phoneUtil isValidNumber:myNumber] ? @"YES":@"NO");
-        NSLog(@"E164          : %@", [phoneUtil format:myNumber numberFormat:NBEPhoneNumberFormatE164
-                                                 error:&aError]);
-        NSLog(@"INTERNATIONAL : %@", [phoneUtil format:myNumber numberFormat:NBEPhoneNumberFormatINTERNATIONAL
-                                                 error:&aError]);
-        NSLog(@"NATIONAL      : %@", [phoneUtil format:myNumber numberFormat:NBEPhoneNumberFormatNATIONAL
-                                                 error:&aError]);
-        NSLog(@"RFC3966       : %@", [phoneUtil format:myNumber numberFormat:NBEPhoneNumberFormatRFC3966
-                                                 error:&aError]);
-    }
-    else {
-        NSLog(@"Error : %@", [aError localizedDescription]);
-    }
-    
-    NSLog (@"extractCountryCode [%ld]", [phoneUtil extractCountryCode:@"823213123123"
-                                                       nationalNumber:nil]);
-    
-    NSString *res = nil;
-    UInt32 dRes = [phoneUtil extractCountryCode:@"823213123123" nationalNumber:&res];
-    
-    NSLog (@"extractCountryCode [%lu] [%@]", dRes, res);
-}
 
 
 @end

@@ -24,6 +24,8 @@
     FormManager *formSvc;
     NSDateFormatter *dateFormatter;
     NSDateFormatter *timeFormatter;
+    
+    FormOptionVO *yesOption;
 
     int fieldIndex;
     

@@ -56,6 +56,8 @@
 @property (nonatomic, retain) NSString *contact_key;
 @property (nonatomic, retain) NSString *photoUrl;
 
+@property (nonatomic, retain) NSString *smscode;
+
 + (UserVO *) readFromDictionary:(NSDictionary *) dict;
 
 - (NSString *) getFullname;

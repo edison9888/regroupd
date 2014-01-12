@@ -184,6 +184,55 @@
  
  */
 
+- (void) apiSetUserPassword:(UserVO *)user callback:(void (^)(PFObject *pfUser))callback{
+    
+    PFQuery *query= [PFUser query];
+    
+    [query whereKey:@"username" equalTo:user.phone];
+    
+    __block PFUser *pfUser;
+    
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error){
+        BOOL isOk = YES;
+        
+        if (object == nil) {
+            // need to create user
+            NSLog(@"Creating new user for phone %@", user.phone);
+            pfUser = [PFUser user];
+            pfUser.username = user.username;
+            pfUser.password = user.password;
+            if (user.email != nil) {
+                pfUser.email = user.email;
+            }
+            [pfUser setObject:user.phone forKey:@"phone"];
+            isOk = [pfUser signUp];
+            
+            if (isOk) {
+                NSLog(@"Signup ok");
+                callback(pfUser);
+            } else {
+                NSLog(@"Signup failed");
+            }
+        } else {
+            NSLog(@"Found user for phone %@", user.phone);
+            pfUser = (PFUser *)object;
+            pfUser.password = user.password;
+            [pfUser saveInBackground];
+            //            NSError* error;
+            //            [PFUser logInWithUsername:user.username password:user.password error:&error] ;
+            //
+            //            if (error) {
+            //                NSLog(@"%@", error);
+            //            } else {
+            //                isOk = YES;
+            //            }
+            callback(pfUser);
+        }
+        
+    }];
+    
+}
+
 - (void) apiCreateUser:(UserVO *)user callback:(void (^)(PFObject *pfUser))callback{
     
     PFQuery *query= [PFUser query];

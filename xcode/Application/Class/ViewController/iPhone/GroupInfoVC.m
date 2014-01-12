@@ -187,7 +187,12 @@
                 NSLog(@"Found existing chat");
                 chat.names = names;
                 [DataModel shared].chat = chat;
-                [_delegate gotoSlideWithName:@"Chat" andOverrideTransition:kPresentationTransitionFade];
+
+                [DataModel shared].navIndex = 2;
+                NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
+                [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
+
+//                [_delegate gotoSlideWithName:@"Chat" andOverrideTransition:kPresentationTransitionFade];
                 
             } else {
                 NSLog(@"Creating new chat");
@@ -211,7 +216,9 @@
                     
                     [DataModel shared].chat = chat;
                     
-                    [_delegate gotoSlideWithName:@"Chat"];
+                    [DataModel shared].navIndex = 2;
+                    NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
+                    [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
                 }];
             }
         }];

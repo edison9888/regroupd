@@ -24,7 +24,8 @@
     UIImage *nav3ImageOn;
     UIImage *nav3ImageOff;
     
-    
+    BOOL inEditMode;
+
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *tableData;

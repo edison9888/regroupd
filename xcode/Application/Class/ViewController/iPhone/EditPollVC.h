@@ -19,6 +19,8 @@
 
 @interface EditPollVC : SlideViewController<UIScrollViewDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate> {
     int optionIndex;
+    int allowPublic;
+    int allowMultiple;
     
     CGPoint  offset; // unused
     

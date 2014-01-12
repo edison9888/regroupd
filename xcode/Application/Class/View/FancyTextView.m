@@ -92,6 +92,7 @@
 -(void)setPlaceholder:(NSString*)placeholder
 {
     showPlaceholder = YES;
+    self.defaultText = placeholder;
     self.text = placeholder;
     self.textColor = [UIColor grayColor];
 }

@@ -222,18 +222,19 @@
         isOk = NO;
     }
     if (isOk) {
-        [DataModel shared].user.password = @"123456";
-        [_delegate gotoNextSlide];
-//        NSString *code = self.tf1.text;
-//        code = [code stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-//        
-//        if ([code isEqualToString:[DataModel shared].user.password]) {
-//            NSLog(@"Code is correct %@", code);
-//            [_delegate gotoNextSlide];
-//        } else {
-//            [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Incorrect verification code" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-//            
-//        }
+//        [DataModel shared].user.password = @"123456";
+//        [_delegate gotoNextSlide];
+        
+        NSString *code = self.tf1.text;
+        code = [code stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        
+        if ([code isEqualToString:[DataModel shared].user.smscode]) {
+            NSLog(@"Code is correct %@", code);
+            [_delegate gotoNextSlide];
+        } else {
+            [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Incorrect verification code" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            
+        }
         
         
     } else {

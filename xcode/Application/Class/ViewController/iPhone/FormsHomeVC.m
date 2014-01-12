@@ -12,6 +12,9 @@
 #import "UIColor+ColorWithHex.h"
 #import "NSDate+Extensions.h"
 
+static NSString *kEditLabel = @"Edit";
+static NSString *kDoneLabel = @"Done";
+
 @interface FormsHomeVC ()
 
 @end
@@ -74,7 +77,88 @@
     return YES;
 }
 
+#pragma mark - Load data
 
+- (void)listMyForms
+{
+    NSLog(@"%s", __FUNCTION__);
+    self.allForms = [[NSMutableArray alloc] init];
+    
+    if (formSvc == nil) {
+        formSvc = [[FormManager alloc] init];
+    }
+    
+    [formSvc apiListForms:nil callback:^(NSArray *results) {
+        if (results) {
+            FormVO *form;
+            for (PFObject *result in results) {
+                form = [FormVO readFromPFObject:result];
+                [self.allForms addObject:form];
+            }
+            
+            [DataModel shared].formsList = self.allForms;
+            
+            self.tableData = [self.allForms mutableCopy];
+            [self.theTableView reloadData];
+        }
+    }];
+}
+- (void)listFormsByType:(int)formType
+{
+    [self.tableData removeAllObjects];
+    
+    for (FormVO *form in self.allForms) {
+        if (formType == 0) {
+            [self.tableData addObject:form];
+        } else if (form.type == formType) {
+            [self.tableData addObject:form];
+        }
+    }
+    [self.theTableView reloadData];
+}
+- (void)performSearch:(NSString *)searchText
+{
+    
+    if (typeFilter == 0) {
+        NSString *sql = @"select * from form order by updated desc";
+        
+        isLoading = YES;
+        
+        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+        [tableData removeAllObjects];
+        FormVO *row;
+        
+        while ([rs next]) {
+            row = [FormVO readFromDictionary:[rs resultDictionary]];
+            [tableData addObject:row];
+        }
+        isLoading = NO;
+        
+        [self.theTableView reloadData];
+        
+    } else {
+        NSLog(@"%s: %i", __FUNCTION__, typeFilter);
+        NSString *sql = @"select * from form where type=? order by updated desc";
+        
+        isLoading = YES;
+        
+        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
+                           [NSNumber numberWithInt:typeFilter]];
+        [tableData removeAllObjects];
+        
+        FormVO *row;
+        
+        while ([rs next]) {
+            row = [FormVO readFromDictionary:[rs resultDictionary]];
+            [tableData addObject:row];
+        }
+        isLoading = NO;
+        
+        [self.theTableView reloadData];
+    }
+    
+    
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -173,86 +257,57 @@
     
 }
 
-- (void)listMyForms
-{
+
+// Override to support conditional editing of the table view.
+// This only needs to be implemented if you are going to be returning NO
+// for some items. By default, all items are editable.
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Return YES if you want the specified item to be editable.
     NSLog(@"%s", __FUNCTION__);
-    self.allForms = [[NSMutableArray alloc] init];
-    
-    if (formSvc == nil) {
-        formSvc = [[FormManager alloc] init];
-    }
-    
-    [formSvc apiListForms:nil callback:^(NSArray *results) {
-        if (results) {
-            FormVO *form;
-            for (PFObject *result in results) {
-                form = [FormVO readFromPFObject:result];
-                [self.allForms addObject:form];
-            }
-            
-            [DataModel shared].formsList = self.allForms;
-            
-            self.tableData = [self.allForms mutableCopy];
-            [self.theTableView reloadData];
-        }
-    }];
+    return YES;
 }
-- (void)listFormsByType:(int)formType
+
+// Override to support editing the table view.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%s", __FUNCTION__);
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        //add code here for when you hit delete
+        
+        NSDictionary *rowdata = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
+//        GroupVO *group = [GroupVO readFromDictionary:rowdata];
+//        [groupSvc deleteGroup:group];
+//        [self setEditing:NO animated:YES];
+//        [self performSearch:@""];
+        
+    }
+}
+
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
+    
+    [super setEditing:(BOOL)editing animated:(BOOL)animated];
+    [self.theTableView setEditing:editing];
+    
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.tableData removeAllObjects];
-    
-    for (FormVO *form in self.allForms) {
-        if (formType == 0) {
-            [self.tableData addObject:form];
-        } else if (form.type == formType) {
-            [self.tableData addObject:form];
-        }
-    }
-    [self.theTableView reloadData];
+    return NO; // i also tried to  return YES;
 }
-- (void)performSearch:(NSString *)searchText
-{
-    
-    if (typeFilter == 0) {
-        NSString *sql = @"select * from form order by updated desc";
-        
-        isLoading = YES;
-        
-        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-        [tableData removeAllObjects];
-        FormVO *row;
-        
-        while ([rs next]) {
-            row = [FormVO readFromDictionary:[rs resultDictionary]];
-            [tableData addObject:row];
-        }
-        isLoading = NO;
-        
-        [self.theTableView reloadData];
-        
-    } else {
-        NSLog(@"%s: %i", __FUNCTION__, typeFilter);
-        NSString *sql = @"select * from form where type=? order by updated desc";
-        
-        isLoading = YES;
-        
-        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
-                           [NSNumber numberWithInt:typeFilter]];
-        [tableData removeAllObjects];
-        
-        FormVO *row;
-        
-        while ([rs next]) {
-            row = [FormVO readFromDictionary:[rs resultDictionary]];
-            [tableData addObject:row];
-        }
-        isLoading = NO;
-        
-        [self.theTableView reloadData];
-    }
-    
-    
+
+// Select the editing style of each cell
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Do not allow inserts / deletes
+    return UITableViewCellEditingStyleDelete;
 }
+
+// Override to support conditional rearranging of the table view.
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Return NO if you do not want the item to be re-orderable.
+    return NO;
+}
+
+
 
 #pragma mark - Action handlers
 
@@ -267,10 +322,31 @@
     
 }
 
+
 - (IBAction)tapEditButton
 {
+    if (inEditMode) {
+        inEditMode = NO;
+        [self.editButton setTitle:kEditLabel forState:UIControlStateNormal];
+        
+        [self setEditing:inEditMode animated:YES];
+        
+        [self.theTableView reloadData];
+        
+    } else {
+        inEditMode = YES;
+        [self setEditing:inEditMode animated:YES];
+        
+        [self.editButton setTitle:kDoneLabel forState:UIControlStateNormal];
+        
+        [self.theTableView reloadData];
+        
+        
+    }
     
 }
+
+
 - (IBAction)tapFormNav:(UIButton*)sender {
     NSLog(@"button clicked - %d",sender.tag);
     typeFilter = sender.tag;

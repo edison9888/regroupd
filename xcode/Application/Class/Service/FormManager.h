@@ -11,6 +11,8 @@
 #import "FormOptionVO.h"
 #import "FormResponseVO.h"
 
+#define kDefaultOptionCount 5
+
 #define kResponseYes @"Yes"
 #define kResponseNo @"No"
 #define kResponseMaybe @"Maybe"
@@ -48,6 +50,8 @@
 // Form Options API
 - (void) apiSaveFormOption:(FormOptionVO *)option formId:(NSString *)formId callback:(void (^)(PFObject *object))callback;
 - (void) apiListFormOptions:(NSString *)formId callback:(void (^)(NSArray *results))callback;
+- (void)apiLookupFormOption:(NSString *)formKey withName:(NSString *)name callback:(void (^)(FormOptionVO *option))callback;
+
 
 // Form Response API
 - (void)apiSaveFormResponse:(FormResponseVO *)response callback:(void (^)(PFObject *object))callback;

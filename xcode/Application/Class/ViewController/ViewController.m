@@ -147,13 +147,19 @@
 #ifdef DEBUGX
     NSLog(@"%s", __FUNCTION__);
 #endif
+    
     NSNumber *numIndex = [NSNumber numberWithInt:[DataModel shared].navIndex];
-    NSString *slideName = [navMap objectForKey:numIndex];
-    
     [brandNav moveLayerToIndex:numIndex.intValue];
+    NSString *target;
+    if (notification.object) {
+        target = (NSString *) notification.object;
+    } else {
+        target = [navMap objectForKey:numIndex];
+    }
     
-    NSLog(@"Switch to slide %@", slideName);
-    [_activeSlide.delegate gotoSlideWithName:slideName andOverrideTransition:kPresentationTransitionFade];
+    
+    NSLog(@"Switch to slide %@", target);
+    [_activeSlide.delegate gotoSlideWithName:target andOverrideTransition:kPresentationTransitionFade];
     
 }
 

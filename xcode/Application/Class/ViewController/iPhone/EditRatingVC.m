@@ -7,7 +7,6 @@
 //
 
 #import "EditRatingVC.h"
-#import "FormManager.h"
 #import "FormVO.h"
 #import "FormOptionVO.h"
 #import "UIAlertView+Helper.h"
@@ -21,13 +20,10 @@
 
 #define kTagSubject 11
 
+#define kTagOptionBase 100
 #define kTagOption1 101
 #define kTagOption2 102
 #define kTagOption3 103
-
-#define tf1_default @"Option one"
-#define tf2_default @"Option two"
-#define tf3_default @"Option three"
 
 #define kTagPublic     201
 #define kTagPrivate    202
@@ -83,60 +79,79 @@
     self.subjectField.textAlignment = NSTextAlignmentLeft;
     
     SurveyOptionWidget *surveyOption;
-    // OPTION 1 INPUT
-    count++;
-    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
-    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-    surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
-    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-    surveyOption.tag = count;
-    surveyOption.index = count;
-    surveyOption.input.placeholder = defaultText;
-//    surveyOption.input.defaultText = defaultText;
-    surveyOption.input.returnKeyType = UIReturnKeyNext;
-    surveyOption.input.tag = kTagOption1;
-    surveyOption.input.delegate = self;
-    [self.scrollView addSubview:surveyOption];
-    [surveyOptions addObject:surveyOption];
     
-    // OPTION 2 INPUT
-    count++;
-    ypos += kInputFieldInterval;
-    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
-    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-    surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
-    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-    surveyOption.tag = count;
-    surveyOption.index = count;
-    surveyOption.input.placeholder = defaultText;
-//    surveyOption.input.defaultText = defaultText;
-    surveyOption.input.returnKeyType = UIReturnKeyNext;
-    surveyOption.input.tag = kTagOption2;
-    surveyOption.input.delegate = self;
-    
-    [self.scrollView addSubview:surveyOption];
-    [surveyOptions addObject:surveyOption];
-    
-    // OPTION 3 INPUT
-    count++;
-    ypos += kInputFieldInterval;
-    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
-    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-    surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
-    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-    surveyOption.tag = count;
-    surveyOption.index = count;
-    surveyOption.input.placeholder = defaultText;
-//    surveyOption.input.defaultText = defaultText;
-    surveyOption.input.returnKeyType = UIReturnKeyNext;
-    surveyOption.input.tag = kTagOption3;
-    surveyOption.input.delegate = self;
-    
-    [self.scrollView addSubview:surveyOption];
-    [surveyOptions addObject:surveyOption];
+    for (int i=0; i<kDefaultOptionCount; i++) {
+        count++;
+        defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
+        optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
+        surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
+        surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
+        surveyOption.tag = count;
+        surveyOption.index = count;
+        surveyOption.input.placeholder = defaultText;
+        surveyOption.input.returnKeyType = UIReturnKeyNext;
+        surveyOption.input.tag = count + kTagOptionBase;
+        surveyOption.input.delegate = self;
+        [self.scrollView addSubview:surveyOption];
+        [surveyOptions addObject:surveyOption];
+        ypos += kInputFieldInterval;
+        
+        
+    }
+//    // OPTION 1 INPUT
+//    count++;
+//    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
+//    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
+//    surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
+//    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
+//    surveyOption.tag = count;
+//    surveyOption.index = count;
+//    surveyOption.input.placeholder = defaultText;
+////    surveyOption.input.defaultText = defaultText;
+//    surveyOption.input.returnKeyType = UIReturnKeyNext;
+//    surveyOption.input.tag = kTagOption1;
+//    surveyOption.input.delegate = self;
+//    [self.scrollView addSubview:surveyOption];
+//    [surveyOptions addObject:surveyOption];
+//    
+//    // OPTION 2 INPUT
+//    count++;
+//    ypos += kInputFieldInterval;
+//    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
+//    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
+//    surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
+//    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
+//    surveyOption.tag = count;
+//    surveyOption.index = count;
+//    surveyOption.input.placeholder = defaultText;
+////    surveyOption.input.defaultText = defaultText;
+//    surveyOption.input.returnKeyType = UIReturnKeyNext;
+//    surveyOption.input.tag = kTagOption2;
+//    surveyOption.input.delegate = self;
+//    
+//    [self.scrollView addSubview:surveyOption];
+//    [surveyOptions addObject:surveyOption];
+//    
+//    // OPTION 3 INPUT
+//    count++;
+//    ypos += kInputFieldInterval;
+//    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
+//    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
+//    surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
+//    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
+//    surveyOption.tag = count;
+//    surveyOption.index = count;
+//    surveyOption.input.placeholder = defaultText;
+////    surveyOption.input.defaultText = defaultText;
+//    surveyOption.input.returnKeyType = UIReturnKeyNext;
+//    surveyOption.input.tag = kTagOption3;
+//    surveyOption.input.delegate = self;
+//    
+//    [self.scrollView addSubview:surveyOption];
+//    [surveyOptions addObject:surveyOption];
 
-    self.lowerForm.hidden = YES;
-    CGRect lowerFrame = CGRectMake(0, ypos + 80, self.lowerForm.frame.size.width, self.lowerForm.frame.size.height);
+    self.lowerForm.hidden = NO;
+    CGRect lowerFrame = CGRectMake(0, ypos, self.lowerForm.frame.size.width, self.lowerForm.frame.size.height);
     [self.lowerForm setFrame:lowerFrame];
     
     self.ckPublic.ckLabel.text = @"Public";
@@ -147,7 +162,7 @@
     self.ckPrivate.tag = kTagPrivate;
     [self.ckPrivate unselected];
     
-    textViewTags = @[@kTagOption1, @kTagOption2, @kTagOption3];
+    allowPublic = -1;
 
 //    fieldTags = @[@kTagSubject, @kTagLocation, @kTagDescription, @kTagStartDate, @kTagStartTime, @kTagEndDate, @kTagEndTime];
 
@@ -201,6 +216,9 @@
     [MBProgressHUD hideHUDForView:self.view animated:NO];
     NSLog(@"===== %s", __FUNCTION__);
     [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Form created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    
+    
+    
 }
 
 
@@ -365,7 +383,7 @@
     
 
     _currentFocus = textView;
-    optionIndex = textView.tag;
+    optionIndex = textView.tag - kTagOptionBase - 1;
     [self updateScrollView];
     
     inputHeight = textView.frame.size.height;
@@ -378,28 +396,36 @@
 //    if ([fancyField.text isEqualToString:fancyField.defaultText]) {
 //        fancyField.text = nil;
 //    }
-    switch (textView.tag) {
-        case kTagOption1:
-            
-            if ([textView.text isEqualToString:tf1_default]) {
-                textView.text = nil;
-            }
-            break;
-            
-        case kTagOption2:
-            if ([textView.text isEqualToString:tf2_default]) {
-                textView.text = nil;
-            }
-            break;
-            
-        case kTagOption3:
-            if ([textView.text isEqualToString:tf3_default]) {
-                textView.text = nil;
-            }
-            break;
-            
-            
+//    int index = textView.tag - kTagOptionBase;
+    SurveyOptionWidget *widget = (SurveyOptionWidget *) [surveyOptions objectAtIndex:optionIndex];
+    NSString *defaultText = widget.input.defaultText;
+    
+    if ([textView.text isEqualToString:defaultText]) {
+        textView.text = nil;
     }
+    
+//    switch (textView.tag) {
+//        case kTagOption1:
+//            
+//            if ([textView.text isEqualToString:tf1_default]) {
+//                textView.text = nil;
+//            }
+//            break;
+//            
+//        case kTagOption2:
+//            if ([textView.text isEqualToString:tf2_default]) {
+//                textView.text = nil;
+//            }
+//            break;
+//            
+//        case kTagOption3:
+//            if ([textView.text isEqualToString:tf3_default]) {
+//                textView.text = nil;
+//            }
+//            break;
+//            
+//            
+//    }
 
 }
 
@@ -435,7 +461,7 @@
         
         inputHeight = newsize;
         if (inputHeight < kMaxInputHeight) {
-            int pointer = optionIndex - kTagOption1;
+            int pointer = optionIndex - kTagOptionBase - 1;  // First tag is 101. Need 0-based index
             SurveyOptionWidget *currentOption;
             CGRect optionFrame;
 
@@ -525,12 +551,13 @@
                 case kTagPublic:
                     [self.ckPublic selected];
                     [self.ckPrivate unselected];
-                    
+                    allowPublic = 1;
                     break;
                     
                 case kTagPrivate:
                     [self.ckPublic unselected];
                     [self.ckPrivate selected];
+                    allowPublic = 0;
                     break;
                     
                 case 666:
@@ -624,27 +651,38 @@
 
 - (IBAction)tapDoneButton {
     NSLog(@"%s", __FUNCTION__);
-
     BOOL isOK = YES;
+    
+
+    int optionCount = 0;
+    for (SurveyOptionWidget* surveyOption in surveyOptions) {
+        if (surveyOption.input.text.length > 0 && ![surveyOption.input.text isEqualToString:surveyOption.input.defaultText]) {
+            optionCount++;
+        }
+    }
+    
+    if (optionCount < 1) {
+        isOK = NO;
+        [[[UIAlertView alloc] initWithTitle:@"Sorry" message:@"Please enter at least 1 option." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        return;
+        
+    }
     
     if (self.subjectField.text.length == 0) {
         isOK = NO;
     }
-
-//    FormOptionVO *option;
-    for (SurveyOptionWidget* surveyOption in surveyOptions) {
-        if (surveyOption.input.text.length == 0) {
-            NSLog(@"Empty field: %i", surveyOption.index);
-            isOK = NO;
-        }
+    if (allowPublic < 0) {
+        isOK = NO;
     }
 
-    if (isOK) {
+//    FormOptionVO *option;
 
+    if (isOK) {
+        [_currentFocus resignFirstResponder];
         self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         [self.hud setLabelText:@"Saving"];
         
-        FormManager *formSvc = [[FormManager alloc] init];
+        formSvc = [[FormManager alloc] init];
         
         NSString *filename_fmt = @"form_%@-%i_photo.png";
 
@@ -656,46 +694,54 @@
         form.name = self.subjectField.text;
         form.type = FormType_RATING;
         form.status = FormStatus_DRAFT;
-
+        form.allow_public = [NSNumber numberWithInt:allowPublic];
+        
         __block NSString *imagefile;
         __block int index = 1;
         __block int position = 1;
+        
         [formSvc apiSaveForm:form callback:^(PFObject *pfForm) {
             NSString *formId = pfForm.objectId;
             int total = surveyOptions.count;
             
             for (SurveyOptionWidget* surveyOption in surveyOptions) {
-                FormOptionVO *option;
-                
-                option = [[FormOptionVO alloc] init];
-                
-                if (surveyOption.roundPic.image != nil) {
-                    imagefile = [NSString stringWithFormat:filename_fmt, formId, index];
-                    option.photo = surveyOption.roundPic.image;
-                    option.imagefile = imagefile;
-                } else {
-                    option.photo = nil;
-                    option.imagefile = nil;
-                }
-                
-                option.name = surveyOption.input.text;
-                option.type = OptionType_TEXT;
-                option.status = OptionStatus_DRAFT;
-                option.position = position;
-                position++;
-                [formSvc apiSaveFormOption:option formId:formId callback:^(PFObject *object) {
-                    NSLog(@"Save option %i", index);
+                if ((surveyOption.input.text.length == 0 || [surveyOption.input.text isEqualToString:surveyOption.input.defaultText]) && surveyOption.roundPic.image == nil) {
+                    NSLog(@"Skipping option at index %i", index);
                     index++;
-                    if (index > total) {
-                        // Save this to insert in chat
-                        [DataModel shared].didSaveOK = YES;
-                        theForm = form;
-
-                        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formSaveCompleteNotification object:nil]];
-                        
+                    
+                } else {
+                    FormOptionVO *option;
+                    
+                    option = [[FormOptionVO alloc] init];
+                    
+                    if (surveyOption.roundPic.image != nil) {
+                        imagefile = [NSString stringWithFormat:filename_fmt, formId, index];
+                        option.photo = surveyOption.roundPic.image;
+                        option.imagefile = imagefile;
+                    } else {
+                        option.photo = nil;
+                        option.imagefile = nil;
                     }
                     
-                }];
+                    option.name = surveyOption.input.text;
+                    option.type = OptionType_TEXT;
+                    option.status = OptionStatus_DRAFT;
+                    option.position = position;
+                    position++;
+                    [formSvc apiSaveFormOption:option formId:formId callback:^(PFObject *object) {
+                        NSLog(@"Save option %i", index);
+                        index++;
+                        if (index > total) {
+                            // Save this to insert in chat
+                            [DataModel shared].didSaveOK = YES;
+                            theForm = form;
+
+                            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formSaveCompleteNotification object:nil]];
+                            
+                        }
+                        
+                    }];
+                }
             }
             
             
@@ -730,7 +776,7 @@
         
         
     } else {
-        NSLog(@"Data fields not complete");
+        [[[UIAlertView alloc] initWithTitle:@"Sorry" message:@"Please complete required fields." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         
     }
 

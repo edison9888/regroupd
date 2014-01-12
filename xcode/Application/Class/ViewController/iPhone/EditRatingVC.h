@@ -8,6 +8,8 @@
 
 #import "SlideViewController.h"
 
+#import "FormManager.h"
+
 #import "MBProgressHUD.h"
 
 #import "FormVO.h"
@@ -19,7 +21,11 @@
 #import "FancyTextView.h"
 
 @interface EditRatingVC : SlideViewController<UIScrollViewDelegate, UITextViewDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate> {
+    FormManager *formSvc;
+
     int optionIndex;
+    int allowPublic;
+    
     FancyTextView *fancyInput;
     CGPoint  offset; // unused
     UIResponder *_currentFocus;
@@ -35,7 +41,6 @@
     float inputHeight;
     NSArray *textViewTags;
     FormVO *theForm;
-
 }
 
 @property (nonatomic, retain) MBProgressHUD *hud;
@@ -58,9 +63,6 @@
 - (IBAction)modalCameraButton;
 - (IBAction)modalChooseButton;
 - (IBAction)modalCancelButton;
-
-- (void) showModal;
-- (void) hideModal;
 
 
 @end
