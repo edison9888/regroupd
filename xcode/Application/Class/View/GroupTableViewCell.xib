@@ -14,10 +14,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="315" height="49"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView autoresizesSubviews="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" image="tablecell_opaque_bg.png" id="15">
-                        <rect key="frame" x="0.0" y="0.0" width="315" height="50"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </imageView>
                     <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Names" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" id="5" customClass="AltLabel">
                         <rect key="frame" x="37" y="7" width="269" height="23"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -37,7 +33,7 @@
                         <rect key="frame" x="10" y="13" width="19" height="11"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="groups_cell_arrow.png" id="bHu-f2-hCL">
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" image="groups_cell_arrow.png" id="bHu-f2-hCL">
                         <rect key="frame" x="297" y="16" width="9" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
@@ -53,6 +49,5 @@
     <resources>
         <image name="groups_cell_arrow.png" width="8" height="17"/>
         <image name="groups_cell_icon.png" width="18" height="11"/>
-        <image name="tablecell_opaque_bg.png" width="315" height="50"/>
     </resources>
 </document>

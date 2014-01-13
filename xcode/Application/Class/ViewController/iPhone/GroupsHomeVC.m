@@ -145,6 +145,16 @@ static NSString *kDoneLabel = @"Done";
         NSDictionary *rowdata = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
         cell.rowdata = rowdata;
         
+        UIImage *image = [UIImage imageNamed:@"groups_cell_arrow.png"];
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        CGRect frame = CGRectMake(0.0, 0.0, image.size.width, image.size.height);
+        button.frame = frame;
+        [button setBackgroundImage:image forState:UIControlStateNormal];
+        
+//        [button addTarget:self action:@selector(checkButtonTapped:event:)  forControlEvents:UIControlEventTouchUpInside];
+        button.backgroundColor = [UIColor clearColor];
+        cell.accessoryView = button;
+        
     } @catch (NSException * e) {
         NSLog(@"Exception: %@", e);
     }
@@ -227,7 +237,7 @@ static NSString *kDoneLabel = @"Done";
 
 - (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return NO; // i also tried to  return YES;
+    return NO;
 }
 
 // Select the editing style of each cell

@@ -191,6 +191,8 @@ static NSString *kDoneLabel = @"Done";
         FormVO *form = (FormVO *)[tableData objectAtIndex:indexPath.row];
         cell.rowdata = form;
         
+        [cell.sendArrow addTarget:self action:@selector(checkButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        
     } @catch (NSException * e) {
         NSLog(@"Exception: %@", e);
     }
@@ -220,7 +222,7 @@ static NSString *kDoneLabel = @"Done";
 #ifdef DEBUGX
     NSLog(@"%s", __FUNCTION__);
 #endif
-    
+    // http://stackoverflow.com/questions/1802707/detecting-which-uibutton-was-pressed-in-a-uitableview
     @try {
         if (indexPath != nil) {
             selectedIndex = indexPath.row;
@@ -255,6 +257,24 @@ static NSString *kDoneLabel = @"Done";
     }
     
     
+}
+
+- (void)checkButtonTapped:(id)sender
+{
+    NSLog(@"%s", __FUNCTION__);
+    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.theTableView];
+    NSIndexPath *indexPath = [self.theTableView indexPathForRowAtPoint:buttonPosition];
+    
+    if (indexPath != nil)
+    {
+        
+        NSLog(@"button index %@", indexPath);
+        
+        FormVO *form = (FormVO *)[tableData objectAtIndex:indexPath.row];
+        [DataModel shared].form = form;
+        [_delegate gotoSlideWithName:@"FormSend" returnPath:@"FormsHome"];
+        
+    }
 }
 
 

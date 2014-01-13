@@ -702,6 +702,7 @@
         
         [formSvc apiSaveForm:form callback:^(PFObject *pfForm) {
             NSString *formId = pfForm.objectId;
+            form.system_id = formId;
             int total = surveyOptions.count;
             
             for (SurveyOptionWidget* surveyOption in surveyOptions) {
@@ -831,7 +832,9 @@
 
         [self dismissViewControllerAnimated:YES completion:nil];
     } else {
-        [_delegate gotoSlideWithName:@"FormsHome"];
+        [DataModel shared].form = theForm;
+        [_delegate gotoSlideWithName:@"FormSend"];
+//        [_delegate gotoSlideWithName:@"FormsHome"];
     }
 }
 

@@ -298,6 +298,22 @@
 			<key>nextSlideName</key>
 			<string></string>
 		</dict>
+		<dict>
+			<key>slideData</key>
+			<dict/>
+			<key>allowLeftSlide</key>
+			<false/>
+			<key>allowRightSlide</key>
+			<false/>
+			<key>category</key>
+			<string>Forms</string>
+			<key>name</key>
+			<string>FormSend</string>
+			<key>controllerName</key>
+			<string>FormSendVC</string>
+			<key>nextSlideName</key>
+			<string></string>
+		</dict>
 		<!-- ########## Contacts ########### -->
 		<dict>
 			<key>slideData</key>

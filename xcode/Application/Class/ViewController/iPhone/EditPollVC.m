@@ -558,6 +558,7 @@
         __block NSString *imagefile;
         [formSvc apiSaveForm:form callback:^(PFObject *pfForm) {
             NSString *formId = pfForm.objectId;
+            form.system_id = formId;
             int total = surveyOptions.count;
             __block int index = 1;
             __block int position = 1;
@@ -663,7 +664,9 @@
         
         [self dismissViewControllerAnimated:YES completion:nil];
     } else {
-        [_delegate gotoSlideWithName:@"FormsHome"];
+        [DataModel shared].form = theForm;
+        [_delegate gotoSlideWithName:@"FormSend"];
+//        [_delegate gotoSlideWithName:@"FormsHome"];
     }
 }
 

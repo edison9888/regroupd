@@ -709,7 +709,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 
                 [formSvc apiSaveForm:form callback:^(PFObject *pfForm) {
                     NSString *formId = pfForm.objectId;
-                    form.system_id = pfForm.objectId;
+                    form.system_id = formId;
                     NSArray *answers = @[kResponseYes, kResponseMaybe, kResponseNo];
                     
                     for (int i=1; i<=answers.count; i++) {
@@ -923,7 +923,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
         [self dismissViewControllerAnimated:YES completion:nil];
     } else {
-        [_delegate gotoSlideWithName:@"FormsHome"];
+        [DataModel shared].form = theForm;
+        [_delegate gotoSlideWithName:@"FormSend"];
+//        [_delegate gotoSlideWithName:@"FormsHome"];
     }
     
 }

@@ -17,8 +17,10 @@
 @end
 
 @implementation ContactsHomeVC
+@synthesize ccSearchBar;
 
-@synthesize availableContacts;
+
+@synthesize contactsData;
 @synthesize groupsData;
 //@synthesize addressBookData;
 @synthesize otherContacts;
@@ -44,7 +46,19 @@
     self.theTableView.dataSource = self;
     self.theTableView.backgroundColor = [UIColor clearColor];
     
-    self.availableContacts =[[NSMutableArray alloc]init];
+    CGRect searchFrame = CGRectMake(10,57,300,32);
+    
+    ccSearchBar = [[CCSearchBar alloc] initWithFrame:searchFrame];
+    ccSearchBar.layer.borderColor = [UIColor colorWithHexValue:0xAAAAAA].CGColor;
+    ccSearchBar.layer.borderWidth = 1.0;
+    ccSearchBar.layer.cornerRadius = 3;
+    
+    ccSearchBar.delegate = self;
+    [self.view addSubview:ccSearchBar];
+    [self.view.layer setCornerRadius:3.0];
+    self.view.backgroundColor = [UIColor clearColor];
+
+    self.contactsData =[[NSMutableArray alloc]init];
     self.groupsData =[[NSMutableArray alloc]init];
     self.otherContacts =[[NSMutableArray alloc]init];
     
@@ -53,7 +67,6 @@
     
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
-    [self loadGroups];
     [self performSearch:@""];
 
     [self performSelector:@selector(preparePhonebook:)
@@ -76,14 +89,49 @@
 }
 
 #pragma mark - Data Load
-- (void) loadGroups {
-    [self.groupsData removeAllObjects];
+
+- (void)performSearch:(NSString *)searchText
+{
     
-    NSString *sql = @"select * from groups order by name";
+    NSString *sqlTemplate;
+    sqlTemplate = @"select * from phonebook where (first_name like '%%%@%%' or last_name like '%%%@%%') and status=%i order by last_name";
     
     isLoading = YES;
+    int status;
+    NSString *sql;
+    
+    status = 1;
+    sql = [NSString stringWithFormat:sqlTemplate, searchText, searchText, status];
     
     FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+    [contactsData removeAllObjects];
+    
+    while ([rs next]) {
+        NSDictionary *dict =[rs resultDictionary];
+        [contactsData addObject:dict];
+    }
+    
+    status = 0;
+    sql = [NSString stringWithFormat:sqlTemplate, searchText, searchText, status];
+    
+    rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+    [otherContacts removeAllObjects];
+    
+    while ([rs next]) {
+        
+        NSDictionary *dict =[rs resultDictionary];
+        [otherContacts addObject:dict];
+    }
+    NSLog(@"otherContacts %i", otherContacts.count);
+
+    [self.groupsData removeAllObjects];
+    
+    sql = @"select * from groups where name like '%%%@%%' order by name";
+    sql = [NSString stringWithFormat:sql, searchText];
+
+    isLoading = YES;
+    
+    rs = [[SQLiteDB sharedConnection] executeQuery:sql];
     
     while ([rs next]) {
         NSDictionary *dict =[rs resultDictionary];
@@ -91,8 +139,12 @@
         [self.groupsData addObject:dict];
     }
     
-
+    isLoading = NO;
+    
+    [self.theTableView reloadData];
+    
 }
+
 - (void) preparePhonebook:(id)sender {
     
 //    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -161,6 +213,44 @@
     }
     
 }
+
+#pragma mark - UISearchBar
+/*
+ SOURCE: http://jduff.github.com/2010/03/01/building-a-searchview-with-uisearchbar-and-uitableview/
+ */
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    [ccSearchBar setShowsCancelButton:NO animated:YES];
+    
+    self.theTableView.allowsSelection = YES;
+    self.theTableView.scrollEnabled = YES;
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    
+    [self performSearch:searchText];
+    
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    NSLog(@"%s", __FUNCTION__);
+    ccSearchBar.text=@"";
+    
+    //    self.theTableView.hidden = YES;
+    selectedIndex = -1;
+    
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)_searchBar {
+    // You'll probably want to do this on another thread
+    // SomeService is just a dummy class representing some
+    // api that you are using to do the search
+    NSLog(@"search text=%@", _searchBar.text);
+    
+    [self performSearch:_searchBar.text];
+    
+}
+
 #pragma mark - UITableViewDataSource
 
 
@@ -217,10 +307,10 @@
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
     
     if (section == 0) {
-        if (self.availableContacts.count == 0) {
+        if (self.contactsData.count == 0) {
             return 1;
         } else {
-            return [self.availableContacts count];
+            return [self.contactsData count];
         }
     } else if (section == 1) {
         if (self.groupsData.count == 0) {
@@ -253,14 +343,14 @@
                 cell.selectionStyle = UITableViewCellSelectionStyleGray;
             }
             
-            if (availableContacts.count > 0) {
-                NSDictionary *rowData = (NSDictionary *) [availableContacts objectAtIndex:indexPath.row];
+            if (contactsData.count > 0) {
+                NSDictionary *rowData = (NSDictionary *) [contactsData objectAtIndex:indexPath.row];
 //                cell.titleLabel.text = [NSString stringWithFormat:kFullNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
                 cell.titleLabel.text = [self readFullnameFromDictionary:rowData];
                 cell.statusLabel.text = kStatusAvailable;
                 
             } else {
-                cell.titleLabel.text = @"No contacts yet";
+                cell.titleLabel.text = @"No contacts";
                 cell.statusLabel.text = @"";
             }
             
@@ -288,7 +378,7 @@
                 cell.statusLabel.text = @"";
                 
             } else {
-                cell.titleLabel.text = @"No groups yet";
+                cell.titleLabel.text = @"No groups";
                 cell.statusLabel.text = @"";
             }
             
@@ -337,7 +427,7 @@
                 NSLog(@"Selected row %i", indexPath.row);
                 
                 selectedIndex = indexPath.row;
-                NSDictionary *rowdata = [availableContacts objectAtIndex:indexPath.row];
+                NSDictionary *rowdata = [contactsData objectAtIndex:indexPath.row];
                 
                 [DataModel shared].contact = [ContactVO readFromPhonebook:rowdata];
                 [_delegate gotoSlideWithName:@"ContactInfo"];
@@ -438,48 +528,6 @@
         //Message sent
     }
     [self dismissViewControllerAnimated:YES completion:nil];
-    
-}
-#pragma mark - Private helpers
-
-- (void)performSearch:(NSString *)searchText
-{
-    
-    NSString *sqlTemplate;
-    sqlTemplate = @"select * from phonebook where status=%i order by last_name";
-    
-    isLoading = YES;
-    int status;
-    NSString *sql;
-    
-    status = 1;
-    sql = [NSString stringWithFormat:sqlTemplate, status];
-    
-    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-    [availableContacts removeAllObjects];
-    
-    while ([rs next]) {
-        NSDictionary *dict =[rs resultDictionary];
-        [availableContacts addObject:dict];
-    }
-    
-    status = 0;
-    sqlTemplate = @"select distinct record_id, first_name, last_name from phonebook where status=%i order by first_name";
-    sql = [NSString stringWithFormat:sqlTemplate, status];
-    
-    rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-    [otherContacts removeAllObjects];
-    
-    while ([rs next]) {
-        
-        NSDictionary *dict =[rs resultDictionary];
-        [otherContacts addObject:dict];
-    }
-    NSLog(@"otherContacts %i", otherContacts.count);
-    
-    isLoading = NO;
-    
-    [self.theTableView reloadData];
     
 }
 

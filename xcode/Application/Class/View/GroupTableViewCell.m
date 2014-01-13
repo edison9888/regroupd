@@ -87,14 +87,14 @@
     [super willTransitionToState:state];
     if ((state & UITableViewCellStateShowingDeleteConfirmationMask) == UITableViewCellStateShowingDeleteConfirmationMask) {
             NSLog(@"============= Delete mode");
-//        if (self.editing && self.contentView.frame.origin.x != 0) {
-//            CGRect frame = self.contentView.frame;
-////            CGFloat diff = RIGHT_EDITING_MARGIN - frame.origin.x;
-//        
-//            frame.origin.x = 0;
-//            frame.size.width -= 100;
-//            self.contentView.frame = frame;
-//        }
+        if (self.editing && self.contentView.frame.origin.x != 0) {
+            CGRect frame = self.contentView.frame;
+//            CGFloat diff = RIGHT_EDITING_MARGIN - frame.origin.x;
+        
+            frame.origin.x = 0;
+            frame.size.width -= 100;
+            self.contentView.frame = frame;
+        }
     }
 }
 @end
