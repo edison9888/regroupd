@@ -41,6 +41,7 @@
     
     UITextField *_currentField;
     BOOL keyboardIsShown;
+    CGSize keyboardSize;
 
 }
 

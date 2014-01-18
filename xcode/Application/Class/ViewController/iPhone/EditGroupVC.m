@@ -17,6 +17,12 @@
 
 #define kBaseTagForNameWidget 900
 
+#define kTagScrollView  10
+
+#define kTagNameField   11
+#define kTagSearchField 12
+
+
 @interface EditGroupVC ()
 
 @end
@@ -46,6 +52,8 @@
     
     self.scrollView.delegate = self;
     self.scrollView.contentSize = CGSizeMake([DataModel shared].stageWidth, [DataModel shared].stageWidth);
+    self.scrollView.tag = kTagScrollView;
+    
     // Setup styles for name widgets
     theFont = [UIFont fontWithName:@"Raleway-Regular" size:13];
     xicon = [UIImage imageNamed:@"name_widget_x"];
@@ -77,8 +85,17 @@
     
     ccSearchBar = [[CCSearchBar alloc] initWithFrame:searchFrame];
     ccSearchBar.delegate = self;
+    
+    UITextField *txfSearchField = [ccSearchBar valueForKey:@"_searchField"];
+    txfSearchField.tag = kTagSearchField;
+//    txfSearchField.delegate = self;
+    
+    self.groupName.delegate = self;
+    self.groupName.tag = kTagNameField;
+    
     [self.searchView addSubview:ccSearchBar];
     [self.searchView.layer setCornerRadius:3.0];
+    
     self.searchView.backgroundColor = [UIColor clearColor];
     
     self.theTableView.delegate = self;
@@ -156,7 +173,7 @@
     
     [self.scrollView setFrame:viewFrame];
     [UIView commitAnimations];
-    
+
     keyboardIsShown = NO;
     
 }
@@ -167,25 +184,11 @@
     if (keyboardIsShown) {
         return;
     }
-    if (_currentField == self.groupName) {
-        return;
-    }
     NSDictionary* userInfo = [n userInfo];
-    CGSize keyboardSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    
-    
-    CGRect viewFrame = self.scrollView.frame;
-    viewFrame.size.height = [DataModel shared].stageHeight - keyboardSize.height - viewFrame.origin.y;
-    
-    CGRect targetFrame = self.searchView.frame;
-    //    targetFrame.origin.y += targetFrame.size.height;
-    
-    self.scrollView.frame = viewFrame;
-    //    self.scrollView.contentSize = CGSizeMake([DataModel shared].stageWidth, self.saveButton.frame.origin.y + 50);
-    [self.scrollView scrollRectToVisible:targetFrame animated:YES];
-    
+    keyboardSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+
     keyboardIsShown = YES;
-    
+
 }
 
 #pragma mark - UITextField methods
@@ -203,8 +206,9 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
+    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
     _currentField = textField;
-    
+
     
 }
 - (void)textFieldDidEndEditing:(UITextField *)textField {
@@ -227,6 +231,18 @@
     
     self.theTableView.allowsSelection = YES;
     self.theTableView.scrollEnabled = YES;
+    
+    CGRect viewFrame = self.scrollView.frame;
+    viewFrame.size.height = [DataModel shared].stageHeight - keyboardSize.height - viewFrame.origin.y;
+    
+    CGRect targetFrame = self.searchView.frame;
+    //    targetFrame.origin.y += targetFrame.size.height;
+    
+    self.scrollView.frame = viewFrame;
+    //    self.scrollView.contentSize = CGSizeMake([DataModel shared].stageWidth, self.saveButton.frame.origin.y + 50);
+    [self.scrollView scrollRectToVisible:targetFrame animated:YES];
+    
+
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
@@ -421,6 +437,11 @@
     NSLog(@"%s", __FUNCTION__);
     if (UIGestureRecognizerStateEnded == sender.state)
     {
+        if (keyboardIsShown) {
+            [_currentField resignFirstResponder];
+            [_currentField endEditing:YES];
+        }
+        
         UIView* view = sender.view;
         CGPoint loc = [sender locationInView:view];
         UIView* subview = [view hitTest:loc withEvent:nil];

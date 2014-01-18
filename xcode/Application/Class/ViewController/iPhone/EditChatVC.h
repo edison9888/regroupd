@@ -16,7 +16,7 @@
 #import "NameWidget.h"
 #import "WidgetStyle.h"
 
-@interface EditChatVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
+@interface EditChatVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UITextFieldDelegate> {
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *tableData;
@@ -33,7 +33,13 @@
     UIImage *xicon;
     UIFont *theFont;
 
+    UITextField *_currentField;
+    BOOL keyboardIsShown;
+    CGSize keyboardSize;
+    
 }
+
+@property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
 @property (nonatomic, retain) IBOutlet UIView *selectionsView;
