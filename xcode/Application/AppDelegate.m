@@ -26,7 +26,13 @@
     
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
 
-    NSLog(@"Fonts: %@", [UIFont fontNamesForFamilyName:@"NotoSans"] );
+    if (launchOptions != nil) {
+        // Launched from push notification
+        NSDictionary *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+        
+        NSLog(@"Launch options notification found %@", notification);
+        
+    }
     
     //  #################### PARSE SETUP #####################
     //    https://www.parse.com/apps/quickstart#ios/native/existing
@@ -50,16 +56,16 @@
     //  #################### /PARSE SETUP #####################
     [self performSelector:@selector(finishLaunchingApp) withObject:self afterDelay:0];
 
-    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
-     UIRemoteNotificationTypeAlert|
-     UIRemoteNotificationTypeSound];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kSetting_Notifications_Enabled]) {
+        [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
+         UIRemoteNotificationTypeAlert|
+         UIRemoteNotificationTypeSound];
+    }
+
 
     [DataModel shared].needsLookup = YES;
     [DataModel shared].contactCache = [[NSMutableDictionary alloc] init];
     [DataModel shared].phonebookCache = [[NSMutableDictionary alloc] init];
-    
-    UIImage *image = [UIImage imageNamed:@"tabbar_bg"];
-    [[UINavigationBar appearance] setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
     
     [SQLiteDB installDatabase];
 

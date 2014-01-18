@@ -44,6 +44,8 @@
     
     chatSvc = [[ChatManager alloc] init];
     
+    self.scrollView.delegate = self;
+    self.scrollView.contentSize = CGSizeMake([DataModel shared].stageWidth, [DataModel shared].stageWidth);
     // Setup styles for name widgets
     theFont = [UIFont fontWithName:@"Raleway-Regular" size:13];
     xicon = [UIImage imageNamed:@"name_widget_x"];
@@ -102,7 +104,20 @@
     tapRecognizer.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tapRecognizer];
 
+    // register for keyboard notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:self.view.window];
+    // register for keyboard notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:self.view.window];
+    
+
     [self performSearch:@""];
+    
 
 }
 
@@ -114,6 +129,90 @@
 
 - (BOOL)prefersStatusBarHidden
 {
+    return YES;
+}
+
+
+#pragma mark - Keyboard event handlers
+
+/*
+ SEE: http://stackoverflow.com/questions/1126726/how-to-make-a-uitextfield-move-up-when-keyboard-is-present/2703756#2703756
+ */
+- (void)keyboardWillHide:(NSNotification *)n
+{
+    NSLog(@"%s", __FUNCTION__);
+    if (_currentField == self.groupName) {
+        return;
+    }
+    
+    CGRect viewFrame = self.scrollView.frame;
+    // I'm also subtracting a constant kTabBarHeight because my UIScrollView was offset by the UITabBar so really only the portion of the keyboard that is leftover pass the UITabBar is obscuring my UIScrollView.
+    viewFrame.size.height = [DataModel shared].stageHeight - viewFrame.origin.y;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    // The kKeyboardAnimationDuration I am using is 0.3
+    [UIView setAnimationDuration:0.3];
+    
+    [self.scrollView setFrame:viewFrame];
+    [UIView commitAnimations];
+    
+    keyboardIsShown = NO;
+    
+}
+
+- (void)keyboardWillShow:(NSNotification *)n
+{
+    NSLog(@"%s", __FUNCTION__);
+    if (keyboardIsShown) {
+        return;
+    }
+    if (_currentField == self.groupName) {
+        return;
+    }
+    NSDictionary* userInfo = [n userInfo];
+    CGSize keyboardSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    
+    CGRect viewFrame = self.scrollView.frame;
+    viewFrame.size.height = [DataModel shared].stageHeight - keyboardSize.height - viewFrame.origin.y;
+    
+    CGRect targetFrame = self.searchView.frame;
+    //    targetFrame.origin.y += targetFrame.size.height;
+    
+    self.scrollView.frame = viewFrame;
+    //    self.scrollView.contentSize = CGSizeMake([DataModel shared].stageWidth, self.saveButton.frame.origin.y + 50);
+    [self.scrollView scrollRectToVisible:targetFrame animated:YES];
+    
+    keyboardIsShown = YES;
+    
+}
+
+#pragma mark - UITextField methods
+
+-(BOOL) textFieldShouldBeginEditing:(UITextField*)textField {
+    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
+    [textField resignFirstResponder];
+    return YES;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    _currentField = textField;
+    
+    
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    [textField resignFirstResponder];
+    [textField endEditing:YES];
+}
+
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
     return YES;
 }
 

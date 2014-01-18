@@ -191,6 +191,7 @@ static NSString *kDoneLabel = @"Done";
         FormVO *form = (FormVO *)[tableData objectAtIndex:indexPath.row];
         cell.rowdata = form;
         
+
         [cell.sendArrow addTarget:self action:@selector(checkButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         
     } @catch (NSException * e) {
@@ -284,14 +285,18 @@ static NSString *kDoneLabel = @"Done";
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return YES if you want the specified item to be editable.
     NSLog(@"%s", __FUNCTION__);
+
     return YES;
 }
+
+
 
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"%s", __FUNCTION__);
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         //add code here for when you hit delete
+        
         
         NSDictionary *rowdata = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
 //        GroupVO *group = [GroupVO readFromDictionary:rowdata];
@@ -306,6 +311,8 @@ static NSString *kDoneLabel = @"Done";
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated {
     
     [super setEditing:(BOOL)editing animated:(BOOL)animated];
+    
+
     [self.theTableView setEditing:editing];
     
 }
@@ -317,7 +324,17 @@ static NSString *kDoneLabel = @"Done";
 
 // Select the editing style of each cell
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Do not allow inserts / deletes
+    
+    FormsTableViewCell *cell = (FormsTableViewCell *)[self.theTableView cellForRowAtIndexPath:indexPath];
+    if (inEditMode) {
+        cell.dateField.hidden = YES;
+        cell.sendArrow.hidden = YES;
+        
+    } else {
+        cell.dateField.hidden = NO;
+        cell.sendArrow.hidden = NO;
+    }
+
     return UITableViewCellEditingStyleDelete;
 }
 
@@ -350,6 +367,12 @@ static NSString *kDoneLabel = @"Done";
         [self.editButton setTitle:kEditLabel forState:UIControlStateNormal];
         
         [self setEditing:inEditMode animated:YES];
+
+        for (int row = 0, rowCount = [self.theTableView numberOfRowsInSection:0]; row < rowCount; ++row) {
+            FormsTableViewCell *cell = (FormsTableViewCell *) [self.theTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
+            cell.dateField.hidden = NO;
+            cell.sendArrow.hidden = NO;
+        }
         
         [self.theTableView reloadData];
         

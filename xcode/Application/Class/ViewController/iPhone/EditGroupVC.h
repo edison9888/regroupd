@@ -20,7 +20,7 @@
 #import "BrandUITextField.h"
 #import "WidgetStyle.h"
 
-@interface EditGroupVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
+@interface EditGroupVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIScrollViewDelegate> {
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *tableData;
@@ -38,7 +38,13 @@
     WidgetStyle *widgetStyle;
     UIImage *xicon;
     UIFont *theFont;
+    
+    UITextField *_currentField;
+    BOOL keyboardIsShown;
+
 }
+
+@property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
 @property (nonatomic, retain) IBOutlet UIView *selectionsView;

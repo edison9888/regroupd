@@ -44,11 +44,11 @@
         [self.toggle1 unselected];
         
     }
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:kSetting_Notifications_Show_Preview]) {
-        [self.toggle2 selected];
-    } else {
-        [self.toggle2 unselected];
-    }
+//    if ([[NSUserDefaults standardUserDefaults] boolForKey:kSetting_Notifications_Show_Preview]) {
+//        [self.toggle2 selected];
+//    } else {
+//        [self.toggle2 unselected];
+//    }
     if ([[NSUserDefaults standardUserDefaults] boolForKey:kSetting_Add_To_Calendar]) {
         [self.toggle3 selected];
     } else {
@@ -172,8 +172,13 @@
 - (void) saveToggle1 {
     if (self.toggle1.isOn) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kSetting_Notifications_Enabled];
+        
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+        
     } else {
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kSetting_Notifications_Enabled];
+        
+        [[UIApplication sharedApplication] unregisterForRemoteNotifications];
     }
 }
 

@@ -248,9 +248,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void) loadChatMessages
 {
-    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [self.hud setLabelText:@"Loading"];
-    [self.hud setDimBackground:YES];
+//    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    [self.hud setLabelText:@"Loading"];
+//    [self.hud setDimBackground:YES];
     
     //        dbChat = [chatSvc loadChatByKey:chatId];
     //        if (dbChat == nil) {
@@ -629,7 +629,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
     [chatSvc updateChatReadTime:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
     
-    [MBProgressHUD hideHUDForView:self.view animated:NO];
+//    [MBProgressHUD hideHUDForView:self.view animated:NO];
     NSLog(@"Ready to reload table");
     [self setupTopDrawer];
     
@@ -1772,6 +1772,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 msg.message = chatText;
                 msg.contact_key = [DataModel shared].user.contact_key;
                 msg.chat_key = chatId;
+                msg.createdAt = [NSDate date];
                 
                 [chatSvc apiSaveChatMessage:msg callback:^(PFObject *pfMessage) {
                     NSBubbleData *bubble;
@@ -1825,8 +1826,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
     // Insert attachment if present. Reset inputs when done
     if (hasAttachment) {
-        self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        [self.hud setLabelText:@"Sending"];
+//        self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//        [self.hud setLabelText:@"Sending"];
         
         if (self.attachedForm != nil) {
             
@@ -1838,7 +1839,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             msg.contact_key = [DataModel shared].user.contact_key;
             msg.chat_key = chatId;
             msg.form_key = self.attachedForm.system_id;
-            
+            msg.createdAt = [NSDate date];
+
             if (self.inputField.text.length > 0) {
                 NSString *chatText = [self.inputField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                 msg.message = chatText;
@@ -1906,7 +1908,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                         NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
                         [chatSvc updateChatReadTime:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
                         
-                        [MBProgressHUD hideHUDForView:self.view animated:NO];
+//                        [MBProgressHUD hideHUDForView:self.view animated:NO];
                     }];
                 } else {
                     NSLog(@"Chat message was not saved");
@@ -1924,6 +1926,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             }
             msg.contact_key = [DataModel shared].user.contact_key;
             msg.chat_key = chatId;
+            msg.createdAt = [NSDate date];
+
             msg.photo = self.attachedPhoto;
             NSBubbleData *bubble;
             bubble = [self buildMessageBubble:msg];
@@ -1962,7 +1966,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
                 [chatSvc updateChatReadTime:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
                 
-                [MBProgressHUD hideHUDForView:self.view animated:NO];
+//                [MBProgressHUD hideHUDForView:self.view animated:NO];
                 
             }];
             

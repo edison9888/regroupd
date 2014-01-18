@@ -14,7 +14,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setFont:[UIFont fontWithName:@"NotoSans-Bold" size:self.font.pointSize]];
+        [self setFont:[UIFont fontWithName:@"NotoSans" size:self.font.pointSize]];
         // Initialization code
     }
     return self;
@@ -23,7 +23,7 @@
     self = [super initWithCoder:aDecoder];
     
     
-    [self setFont:[UIFont fontWithName:@"NotoSans-Bold" size:self.font.pointSize]];
+    [self setFont:[UIFont fontWithName:@"NotoSans" size:self.font.pointSize]];
     //    self.textColor = [UIColor whiteColor];
     //    self.textAlignment = UITextAlignmentCenter;
     

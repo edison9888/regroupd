@@ -30,9 +30,10 @@
         _theView = [[[NSBundle mainBundle] loadNibNamed:@"ChatMessageWidget" owner:self options:nil] objectAtIndex:0];
         _theView.backgroundColor = [UIColor clearColor];
         
-//        theFont = [UIFont fontWithName:@"NotoSans-Bold" size:14];
-//        [self.msgView setFont:[UIFont fontWithName:@"Raleway-Bold" size:14]];
-
+        // FML: The reason why your custom fonts won't show is the textview must be Editable
+        theFont = [UIFont fontWithName:@"NotoSans" size:13];
+        self.msgView.font = theFont;
+        self.msgView.userInteractionEnabled = NO;
         
         float ypos = kContentTop;
         

@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="groupName" destination="mAB-B1-Z5U" id="UEc-35-Oev"/>
                 <outlet property="navTitle" destination="19" id="2sL-TB-73k"/>
+                <outlet property="scrollView" destination="220-to-Q0K" id="kXz-nR-tgv"/>
                 <outlet property="searchView" destination="DBC-RU-Xsw" id="jLB-5T-R5t"/>
                 <outlet property="selectionsView" destination="RAX-bf-4s9" id="Axm-YO-wEY"/>
                 <outlet property="theTableView" destination="30" id="31"/>
@@ -63,47 +64,54 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="group name" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="mAB-B1-Z5U" userLabel="BrandUI Text Field - group name" customClass="BrandUITextField">
-                    <rect key="frame" x="10" y="83" width="300" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
-                    <textInputTraits key="textInputTraits"/>
-                </textField>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Participants:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="16m-rO-ask" customClass="BrandUILabel">
-                    <rect key="frame" x="10" y="121" width="180" height="28"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="16"/>
-                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Group Name:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dQF-Yp-RQm" customClass="BrandUILabel">
-                    <rect key="frame" x="10" y="58" width="180" height="28"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="16"/>
-                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <view contentMode="scaleToFill" id="RAX-bf-4s9" userLabel="View - selections">
-                    <rect key="frame" x="10" y="146" width="300" height="50"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                </view>
-                <view contentMode="scaleToFill" id="DBC-RU-Xsw" userLabel="View - search contacts">
-                    <rect key="frame" x="5" y="204" width="310" height="364"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="220-to-Q0K">
+                    <rect key="frame" x="0.0" y="50" width="320" height="568"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <subviews>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="36" sectionHeaderHeight="22" sectionFooterHeight="22" id="30">
-                            <rect key="frame" x="10" y="47" width="290" height="369"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="group name" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="mAB-B1-Z5U" userLabel="BrandUI Text Field - group name" customClass="BrandUITextField">
+                            <rect key="frame" x="10" y="31" width="300" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <color key="sectionIndexTrackingBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        </tableView>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </textField>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Participants:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="16m-rO-ask" customClass="BrandUILabel">
+                            <rect key="frame" x="10" y="69" width="180" height="28"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="16"/>
+                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Group Name:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dQF-Yp-RQm" customClass="BrandUILabel">
+                            <rect key="frame" x="10" y="6" width="180" height="28"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="16"/>
+                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" id="RAX-bf-4s9" userLabel="View - selections">
+                            <rect key="frame" x="10" y="94" width="300" height="50"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
+                        <view contentMode="scaleToFill" id="DBC-RU-Xsw" userLabel="View - search contacts">
+                            <rect key="frame" x="5" y="152" width="310" height="364"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="36" sectionHeaderHeight="22" sectionFooterHeight="22" id="30">
+                                    <rect key="frame" x="10" y="47" width="290" height="369"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <color key="sectionIndexTrackingBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </tableView>
+                            </subviews>
+                            <color key="backgroundColor" red="0.792156862745098" green="0.81176470588235294" blue="0.81568627450980391" alpha="1" colorSpace="calibratedRGB"/>
+                        </view>
                     </subviews>
-                    <color key="backgroundColor" red="0.792156862745098" green="0.81176470588235294" blue="0.81568627450980391" alpha="1" colorSpace="calibratedRGB"/>
-                </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                </scrollView>
             </subviews>
             <color key="backgroundColor" red="0.90196078431372551" green="0.92156862745098034" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

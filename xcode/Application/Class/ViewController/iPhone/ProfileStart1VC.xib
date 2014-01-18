@@ -32,7 +32,7 @@
                         <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="43" userLabel="Label - Caption" customClass="BrandUILabel">
                             <rect key="frame" x="28" y="118" width="265" height="70"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <string key="text">Please enter your phone number below and re:group will send 
+                            <string key="text">Please enter your phone number below and re:group'd will send 
 you a verification code via SMS</string>
                             <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="15"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

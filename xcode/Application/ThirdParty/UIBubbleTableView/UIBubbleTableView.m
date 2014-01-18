@@ -127,6 +127,11 @@
         
         NSDate *last = [NSDate dateWithTimeIntervalSince1970:0];
         NSMutableArray *currentSection = nil;
+#if !__has_feature(objc_arc)
+        currentSection = [[[NSMutableArray alloc] init] autorelease];
+#else
+        currentSection = [[NSMutableArray alloc] init];
+#endif
         
         for (int i = 0; i < count; i++)
         {
@@ -134,11 +139,6 @@
             
             if ([data.date timeIntervalSinceDate:last] > self.snapInterval)
             {
-#if !__has_feature(objc_arc)
-                currentSection = [[[NSMutableArray alloc] init] autorelease];
-#else
-                currentSection = [[NSMutableArray alloc] init];
-#endif
                 [self.bubbleSection addObject:currentSection];
             }
             
