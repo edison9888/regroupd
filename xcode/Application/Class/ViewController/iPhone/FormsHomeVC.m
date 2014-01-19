@@ -87,6 +87,9 @@ static NSString *kDoneLabel = @"Done";
     if (formSvc == nil) {
         formSvc = [[FormManager alloc] init];
     }
+    if (contactSvc == nil) {
+        contactSvc = [[ContactManager alloc] init];
+    }
     
     [formSvc apiListForms:nil callback:^(NSArray *results) {
         if (results) {
@@ -95,11 +98,28 @@ static NSString *kDoneLabel = @"Done";
                 form = [FormVO readFromPFObject:result];
                 [self.allForms addObject:form];
             }
-            
-            [DataModel shared].formsList = self.allForms;
-            
-            self.tableData = [self.allForms mutableCopy];
-            [self.theTableView reloadData];
+            [formSvc apiFindReceivedForms:[DataModel shared].user.contact_key callback:^(NSArray *results) {
+                FormVO *form;
+                for (PFObject *pfForm in results) {
+                    form = [FormVO readFromPFObject:pfForm];
+                    if (form.type == FormType_RSVP) {
+                        [self.allForms addObject:form];
+                    }
+                }
+                
+                [self.allForms sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
+                 {
+                     FormVO *form1 = (FormVO *)obj1;
+                     FormVO *form2 = (FormVO *)obj2;
+                     
+                     return [form2.updatedAt compare:form1.updatedAt];
+                 }];
+
+                [DataModel shared].formsList = self.allForms;
+                
+                self.tableData = [self.allForms mutableCopy];
+                [self.theTableView reloadData];
+            }];
         }
     }];
 }
@@ -194,6 +214,15 @@ static NSString *kDoneLabel = @"Done";
 
         [cell.sendArrow addTarget:self action:@selector(checkButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         
+        if (![form.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
+            [contactSvc apiLoadContact:form.contact_key callback:^(PFObject *pfContact) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    ContactVO *c = [ContactVO readFromPFObject:pfContact];
+                    cell.hostField.text = c.fullname;
+                });
+            }];
+        }
+
     } @catch (NSException * e) {
         NSLog(@"Exception: %@", e);
     }
@@ -214,7 +243,12 @@ static NSString *kDoneLabel = @"Done";
     if (form.type == FormType_POLL || form.type == FormType_RATING) {
         return 66;
     } else {
-        return 100;
+        if ([form.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
+            return 100;
+        } else {
+            return 115;
+        }
+
     }
 }
 
@@ -284,7 +318,6 @@ static NSString *kDoneLabel = @"Done";
 // for some items. By default, all items are editable.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return YES if you want the specified item to be editable.
-    NSLog(@"%s", __FUNCTION__);
 
     return YES;
 }

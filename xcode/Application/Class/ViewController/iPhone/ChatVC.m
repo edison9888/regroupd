@@ -1858,57 +1858,74 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             
             [chatSvc apiSaveChatMessage:msg callback:^(PFObject *pfMessage) {
                 if (pfMessage) {
-                    [chatSvc apiSaveChatForm:msg.chat_key formId:msg.form_key callback:^(PFObject *object) {
-                        // Build a target query: everyone in the chat room except for this device.
-                        // See also: http://blog.parse.com/2012/07/23/targeting-pushes-from-a-device/
-                        PFQuery *query = [PFInstallation query];
+                    
+                    [formSvc apiLookupFormContacts:msg.form_key contactKeys:[DataModel shared].chat.contact_keys callback:^(NSArray *savedKeys) {
                         
-                        NSString *channelId = [@"chat_" stringByAppendingString:chatId];
-                        [query whereKey:@"channels" equalTo:channelId];
+                        NSMutableSet *unsavedKeySet = [[NSMutableSet alloc] init];
                         
-                        NSLog(@"form type = %i", attachmentType);
-                        NSString *msgtext = @"%@ posted a new %@: %@";
-                        switch (attachmentType) {
-                            case FormType_POLL:
-                            {
-                                msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, @"poll", formTitle];
-                                break;
-                            }
-                            case FormType_RATING:
-                            {
-                                msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, @"Rating poll", formTitle];
-                                
-                                break;
-                            }
-                            case FormType_RSVP:
-                            {
-                                msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, @"RSVP", formTitle];
-                                break;
+                        for (NSString *key in [DataModel shared].chat.contact_keys) {
+                            
+                            if (![savedKeys containsObject:key]) {
+                                [unsavedKeySet addObject:key];
                             }
                         }
                         
-                        NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
-                                              msgtext, @"alert",
-                                              msg.contact_key, @"contact",
-                                              chatId, @"chat",
-                                              pfMessage.objectId, @"msg",
-                                              nil];
-                        // Create time interval
-                        NSTimeInterval interval = 60*60*24*7; // 1 week
+                        [formSvc apiBatchSaveFormContacts:msg.form_key contactKeys:[unsavedKeySet allObjects] callback:^(NSArray *savedKeys) {
+                            NSLog(@"Saved form contacts count %i", savedKeys.count);
+                            
+                        }];
+                        [chatSvc apiSaveChatForm:msg.chat_key formId:msg.form_key callback:^(PFObject *object) {
+                            // Build a target query: everyone in the chat room except for this device.
+                            // See also: http://blog.parse.com/2012/07/23/targeting-pushes-from-a-device/
+                            PFQuery *query = [PFInstallation query];
+                            
+                            NSString *channelId = [@"chat_" stringByAppendingString:chatId];
+                            [query whereKey:@"channels" equalTo:channelId];
+                            
+                            NSLog(@"form type = %i", attachmentType);
+                            NSString *msgtext = @"%@ posted a new %@: %@";
+                            switch (attachmentType) {
+                                case FormType_POLL:
+                                {
+                                    msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, @"poll", formTitle];
+                                    break;
+                                }
+                                case FormType_RATING:
+                                {
+                                    msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, @"Rating poll", formTitle];
+                                    
+                                    break;
+                                }
+                                case FormType_RSVP:
+                                {
+                                    msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, @"RSVP", formTitle];
+                                    break;
+                                }
+                            }
+                            
+                            NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                  msgtext, @"alert",
+                                                  msg.contact_key, @"contact",
+                                                  chatId, @"chat",
+                                                  pfMessage.objectId, @"msg",
+                                                  nil];
+                            // Create time interval
+                            NSTimeInterval interval = 60*60*24*7; // 1 week
+                            
+                            // Send push notification with expiration interval
+                            PFPush *push = [[PFPush alloc] init];
+                            [push expireAfterTimeInterval:interval];
+                            [push setQuery:query];
+                            [push setData:data];
+                            [push sendPushInBackground];
+                            
+                            self.sendButton.enabled = YES;
+                            
+                            NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
+                            [chatSvc updateChatReadTime:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
+                            
+                        }];
                         
-                        // Send push notification with expiration interval
-                        PFPush *push = [[PFPush alloc] init];
-                        [push expireAfterTimeInterval:interval];
-                        [push setQuery:query];
-                        [push setData:data];
-                        [push sendPushInBackground];
-                        
-                        self.sendButton.enabled = YES;
-                        
-                        NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
-                        [chatSvc updateChatReadTime:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
-                        
-//                        [MBProgressHUD hideHUDForView:self.view animated:NO];
                     }];
                 } else {
                     NSLog(@"Chat message was not saved");

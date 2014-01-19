@@ -17,8 +17,9 @@
 #import "ContactManager.h"
 #import "GroupManager.h"
 #import "ChatManager.h"
+#import "FormManager.h"
 
-@interface FormSendVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
+@interface FormSendVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate> {
     
     CCSearchBar *ccSearchBar;
 
@@ -31,6 +32,7 @@
     ContactManager *contactSvc;
     GroupManager *groupSvc;
     ChatManager *chatSvc;
+    FormManager *formSvc;
     
     NSMutableSet *contactSet;
     NSMutableSet *groupSet;

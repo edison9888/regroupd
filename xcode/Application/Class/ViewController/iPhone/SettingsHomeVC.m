@@ -7,7 +7,10 @@
 //
 
 #import "SettingsHomeVC.h"
+#import "ChatManager.h"
 #import "NexmoSMS.h"
+
+#define kAlertClearMessages 666
 
 @interface SettingsHomeVC ()
 
@@ -200,11 +203,15 @@
 #pragma mark - IBActions
 - (IBAction)tapClearAllButton {
     
-//    NexmoSMS *nexmo = [[NexmoSMS alloc] init];
-//    
-//    [nexmo sendAuthMessageTo:@"19172926600" pin:@"123456" callback:^(NSString *response) {
-//        NSLog(@"Nexmo response: %@", response);
-//    }];
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Please confirm"
+                                                    message:@"Do you want to clear all chat messages?"
+                                                   delegate:self
+                                          cancelButtonTitle:@"No"
+                                          otherButtonTitles:@"Yes", nil];
+    
+    alert.tag = kAlertClearMessages;
+    [alert show];
+
     
 }
 - (IBAction)tapContactButton {
@@ -215,4 +222,32 @@
 - (IBAction)tapProfileButton {
     [_delegate gotoSlideWithName:@"MyProfile" returnPath:@"SettingsHome"];
 }
+
+#pragma mark - UIAlertView
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    
+    switch (alertView.tag) {
+        case kAlertClearMessages:
+        {
+            if (buttonIndex == 1) {
+                
+                NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
+                NSLog(@"timestamp = %f", seconds);
+                
+                ChatManager *chatSvc = [[ChatManager alloc] init];
+                
+                [chatSvc updateClearTimestamp:@"*" cleartime:[NSNumber numberWithDouble:seconds]];
+                
+                [[[UIAlertView alloc] initWithTitle:nil message:@"All chats cleared." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                
+                
+            }
+            break;
+        }
+            
+    }
+    
+}
+
 @end

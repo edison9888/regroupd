@@ -541,6 +541,7 @@
 		1ED786601854926A0083022A /* UIImage+Tint.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED7865F1854926A0083022A /* UIImage+Tint.m */; };
 		1ED786641854AE9B0083022A /* RSVPResponseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED786621854AE9B0083022A /* RSVPResponseCell.m */; };
 		1ED786651854AE9B0083022A /* RSVPResponseCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1ED786631854AE9B0083022A /* RSVPResponseCell.xib */; };
+		1ED9FB16188B668400EAB6CA /* NSString+Rot13.m in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9FB15188B668400EAB6CA /* NSString+Rot13.m */; };
 		1EEA97631844343D00D726C4 /* WidgetStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEA97621844343D00D726C4 /* WidgetStyle.m */; };
 		1EEA9765184437F500D726C4 /* name_widget_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EEA9764184437F500D726C4 /* name_widget_arrow@2x.png */; };
 		1EEA976818444B8900D726C4 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEA976718444B8900D726C4 /* UIImage+Resize.m */; };
@@ -1264,6 +1265,8 @@
 		1ED786611854AE9B0083022A /* RSVPResponseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSVPResponseCell.h; sourceTree = "<group>"; };
 		1ED786621854AE9B0083022A /* RSVPResponseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSVPResponseCell.m; sourceTree = "<group>"; };
 		1ED786631854AE9B0083022A /* RSVPResponseCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RSVPResponseCell.xib; sourceTree = "<group>"; };
+		1ED9FB14188B668400EAB6CA /* NSString+Rot13.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Rot13.h"; sourceTree = "<group>"; };
+		1ED9FB15188B668400EAB6CA /* NSString+Rot13.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Rot13.m"; sourceTree = "<group>"; };
 		1EEA97611844343D00D726C4 /* WidgetStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetStyle.h; sourceTree = "<group>"; };
 		1EEA97621844343D00D726C4 /* WidgetStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WidgetStyle.m; sourceTree = "<group>"; };
 		1EEA9764184437F500D726C4 /* name_widget_arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "name_widget_arrow@2x.png"; sourceTree = "<group>"; };
@@ -2011,6 +2014,8 @@
 				1E928132177FB68F008A583C /* UIView+Helper.m */,
 				1E37C2A117FE31080029D95F /* UIView+Resize.h */,
 				1E37C2A217FE31080029D95F /* UIView+Resize.m */,
+				1ED9FB14188B668400EAB6CA /* NSString+Rot13.h */,
+				1ED9FB15188B668400EAB6CA /* NSString+Rot13.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -3032,6 +3037,7 @@
 				1EC44C6E18130CC100F4A2C2 /* ProfileStart2VC.m in Sources */,
 				1E9282A2177FB690008A583C /* Spin360Component.m in Sources */,
 				1E9282A3177FB690008A583C /* TabbedContentComponent.m in Sources */,
+				1ED9FB16188B668400EAB6CA /* NSString+Rot13.m in Sources */,
 				1E9282A4177FB690008A583C /* UnveilComponent.m in Sources */,
 				1EC44C6818130CC100F4A2C2 /* GroupsHomeVC.m in Sources */,
 				1E9282A5177FB690008A583C /* VideoComponent.m in Sources */,

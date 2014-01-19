@@ -633,5 +633,119 @@
     }];
 }
 
+#pragma mark - FormContact API
+
+- (void) apiSaveFormContact:(NSString *)formKey contactKey:(NSString *)contactKey callback:(void (^)(PFObject *object))callback {
+    
+    PFQuery *query = [PFQuery queryWithClassName:kFormContactDB];
+    [query whereKey:@"form" equalTo:[PFObject objectWithoutDataWithClassName:kFormDB objectId:formKey]];
+    [query whereKey:@"contact" equalTo:[PFObject objectWithoutDataWithClassName:kContactDB objectId:contactKey]];
+    
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *pfObject, NSError *error) {
+        
+        if (pfObject) {
+            callback(pfObject);
+        } else {
+            PFObject *data = [PFObject objectWithClassName:kFormContactDB];
+            
+            data[@"form"] = [PFObject objectWithoutDataWithClassName:kFormDB objectId:formKey];
+            data[@"contact"] = [PFObject objectWithoutDataWithClassName:kContactDB objectId:contactKey];
+            
+            [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                NSLog(@"Saved form-contact with objectId %@", data.objectId);
+                callback(data);
+            }];
+        }
+        
+    }];
+    
+}
+- (void) apiListFormContacts:(NSString *)formKey contactKey:(NSString *)contactKey callback:(void (^)(NSArray *results))callback{
+    PFQuery *query = [PFQuery queryWithClassName:kFormContactDB];
+    
+    if (formKey) {
+        [query whereKey:@"form" equalTo:[PFObject objectWithoutDataWithClassName:kFormDB objectId:formKey]];
+    }
+    if (contactKey) {
+        [query whereKey:@"contact" equalTo:[PFObject objectWithoutDataWithClassName:kContactDB objectId:contactKey]];
+    }
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        callback(results);
+    }];
+    
+    
+}
+
+/*
+ 
+ Find contact keys already saved. Useful in finding contact keys that need to be saved
+ */
+- (void) apiLookupFormContacts:(NSString *)formKey contactKeys:(NSArray *)contactKeys callback:(void (^)(NSArray *savedKeys))callback{
+    PFQuery *query = [PFQuery queryWithClassName:kFormContactDB];
+    
+    [query whereKey:@"form" equalTo:[PFObject objectWithoutDataWithClassName:kFormDB objectId:formKey]];
+    
+    [query whereKey:@"contact_key" containedIn:contactKeys];
+    __block NSMutableArray *savedKeys = [[NSMutableArray alloc] init];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        for (PFObject *object in objects) {
+            NSString *key = object[@"contact_key"];
+            [savedKeys addObject: key];
+        }
+        callback([savedKeys copy]);
+    }];
+    
+}
+
+- (void) apiBatchSaveFormContacts:(NSString *)formKey contactKeys:(NSArray *)contactKeys callback:(void (^)(NSArray *savedKeys))callback {
+    int total = contactKeys.count;
+    __block int index = 0;
+    
+    __block NSMutableArray *savedKeys = [[NSMutableArray alloc] init];
+    for (NSString *key in contactKeys) {
+        [self apiSaveFormContact:formKey contactKey:key callback:^(PFObject *object) {
+            [savedKeys addObject:key];
+            index++;
+            if (index == total) {
+                callback([savedKeys copy]);
+            }
+        }];
+    }
+}
+
+// Returns array of forms
+- (void) apiFindReceivedForms:(NSString *)contactKey callback:(void (^)(NSArray *results))callback{
+
+    
+//    PFQuery *innerQuery = [PFQuery queryWithClassName:kFormContactDB];
+//    [innerQuery whereKey:@"contact" equalTo:[PFObject objectWithoutDataWithClassName:kContactDB objectId:contactKey]];
+//    PFQuery *query = [PFQuery queryWithClassName:kFormDB];
+//    [query whereKey:@"post" matchesQuery:innerQuery];
+    
+    PFQuery *query = [PFQuery queryWithClassName:kFormContactDB];
+    [query whereKey:@"contact" equalTo:[PFObject objectWithoutDataWithClassName:kContactDB objectId:contactKey]];
+    [query includeKey:@"form"];
+    __block NSMutableSet *receivedFormSet = [[NSMutableSet alloc] init];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        for (PFObject *data in results) {
+            
+            PFObject *form = data[@"form"];
+            if (form != nil) {
+                NSString *contactKey = form[@"contact_key"];
+                if (![contactKey isEqualToString:[DataModel shared].user.contact_key]) {
+                    [receivedFormSet addObject:form];
+                } else {
+                    // ignore if owner of form
+                }
+            } else {
+                // form is nil
+            }
+        }
+        callback([receivedFormSet allObjects]);
+    }];
+    
+}
 
 @end

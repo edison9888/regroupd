@@ -50,39 +50,39 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <subviews>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Notifications" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="w4a-bA-3Vd" userLabel="BrandUI Label - Setting 1" customClass="BrandUILabel">
-                            <rect key="frame" x="12" y="11" width="180" height="28"/>
+                            <rect key="frame" x="12" y="16" width="180" height="28"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="15"/>
                             <color key="textColor" red="0.14117647058823529" green="0.14117647058823529" blue="0.14117647058823529" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" image="hbar_96x2.png" id="Iaf-tB-y66">
-                            <rect key="frame" x="8" y="55" width="300" height="1"/>
+                            <rect key="frame" x="8" y="60" width="300" height="1"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <view tag="1" contentMode="scaleToFill" id="IQh-ls-6BW" userLabel="Fancy Toggle 1" customClass="FancyToggle">
-                            <rect key="frame" x="215" y="12" width="93" height="26"/>
+                            <rect key="frame" x="215" y="17" width="93" height="26"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.15686274509803921" green="0.81176470588235294" blue="0.91764705882352937" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Automatically add events you’re attending to your calendar" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="B00-vW-JDb" userLabel="BrandUI Label - Setting 1" customClass="BrandUILabel">
-                            <rect key="frame" x="12" y="64" width="186" height="76"/>
+                            <rect key="frame" x="12" y="69" width="186" height="76"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="15"/>
                             <color key="textColor" red="0.14117647059999999" green="0.14117647059999999" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <view tag="3" contentMode="scaleToFill" id="KWM-WK-5qc" userLabel="Fancy Toggle 3" customClass="FancyToggle">
-                            <rect key="frame" x="215" y="75" width="93" height="26"/>
+                            <rect key="frame" x="215" y="80" width="93" height="26"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.15686274510000001" green="0.81176470590000005" blue="0.91764705879999997" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
                         <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" image="hbar_96x2.png" id="la4-HG-2h1">
-                            <rect key="frame" x="12" y="148" width="300" height="1"/>
+                            <rect key="frame" x="12" y="153" width="300" height="1"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Qcz-if-xpA" customClass="BrandUIButton">
-                            <rect key="frame" x="13" y="168" width="290" height="40"/>
+                            <rect key="frame" x="13" y="173" width="290" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="Contact re:group'd" backgroundImage="settings_big_button_bg.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -93,7 +93,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="zTI-Gg-JMK" customClass="BrandUIButton">
-                            <rect key="frame" x="12" y="223" width="290" height="40"/>
+                            <rect key="frame" x="12" y="228" width="290" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" title="Clear all conversations" backgroundImage="settings_big_button_bg.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

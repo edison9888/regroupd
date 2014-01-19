@@ -71,6 +71,8 @@
         self.whenField.hidden = YES;
         self.whereLabel.hidden = YES;
         self.whereField.hidden = YES;
+        self.hostLabel.hidden = YES;
+        self.hostField.hidden = YES;
         
     } else if (form.type == FormType_RATING) {
         icon = [UIImage imageNamed:kIconRating];
@@ -79,6 +81,8 @@
         self.whenField.hidden = YES;
         self.whereLabel.hidden = YES;
         self.whereField.hidden = YES;
+        self.hostLabel.hidden = YES;
+        self.hostField.hidden = YES;
         
     } else if (form.type == FormType_RSVP) {
         icon = [UIImage imageNamed:kIconEvent];
@@ -87,6 +91,8 @@
         self.whenField.hidden = NO;
         self.whereLabel.hidden = NO;
         self.whereField.hidden = NO;
+        self.hostLabel.hidden = NO;
+        self.hostField.hidden = NO;
         
         NSString *whenText = @"%@, %@";
         whenText = [NSString stringWithFormat:whenText,

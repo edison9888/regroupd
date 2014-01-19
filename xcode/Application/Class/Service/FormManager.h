@@ -50,11 +50,19 @@
 // Form Options API
 - (void) apiSaveFormOption:(FormOptionVO *)option formId:(NSString *)formId callback:(void (^)(PFObject *object))callback;
 - (void) apiListFormOptions:(NSString *)formId callback:(void (^)(NSArray *results))callback;
-- (void)apiLookupFormOption:(NSString *)formKey withName:(NSString *)name callback:(void (^)(FormOptionVO *option))callback;
+- (void) apiLookupFormOption:(NSString *)formKey withName:(NSString *)name callback:(void (^)(FormOptionVO *option))callback;
 
 
 // Form Response API
 - (void)apiSaveFormResponse:(FormResponseVO *)response callback:(void (^)(PFObject *object))callback;
 - (void)apiListFormResponses:(NSString *)formKey contactKey:(NSString *)contactKey callback:(void (^)(NSArray *results))callback;
+
+#pragma mark - FormContact API
+
+- (void) apiSaveFormContact:(NSString *)formKey contactKey:(NSString *)contactKey callback:(void (^)(PFObject *object))callback;
+- (void) apiListFormContacts:(NSString *)formKey contactKey:(NSString *)contactKey callback:(void (^)(NSArray *results))callback;
+- (void) apiLookupFormContacts:(NSString *)formKey contactKeys:(NSArray *)contactKeys callback:(void (^)(NSArray *savedKeys))callback;
+- (void) apiBatchSaveFormContacts:(NSString *)formKey contactKeys:(NSArray *)contactKeys callback:(void (^)(NSArray *savedKeys))callback;
+- (void) apiFindReceivedForms:(NSString *)contactKey callback:(void (^)(NSArray *results))callback;
 
 @end

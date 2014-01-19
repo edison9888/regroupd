@@ -199,7 +199,6 @@ static NSString *kDoneLabel = @"Done";
 // for some items. By default, all items are editable.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return YES if you want the specified item to be editable.
-    NSLog(@"%s", __FUNCTION__);
     return YES;
 }
 

@@ -46,12 +46,18 @@
     self.theTableView.dataSource = self;
     self.theTableView.backgroundColor = [UIColor clearColor];
     
+    CGRect tableFrame = self.theTableView.frame;
+    tableFrame.size.height = [DataModel shared].stageHeight - tableFrame.origin.y - 50;
+    self.theTableView.frame = tableFrame;
+    
     CGRect searchFrame = CGRectMake(10,57,300,32);
     
     ccSearchBar = [[CCSearchBar alloc] initWithFrame:searchFrame];
-    ccSearchBar.layer.borderColor = [UIColor colorWithHexValue:0xAAAAAA].CGColor;
-    ccSearchBar.layer.borderWidth = 1.0;
-    ccSearchBar.layer.cornerRadius = 3;
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        ccSearchBar.layer.borderColor = [UIColor colorWithHexValue:0xAAAAAA].CGColor;
+        ccSearchBar.layer.borderWidth = 1.0;
+        ccSearchBar.layer.cornerRadius = 3;
+    }
     
     ccSearchBar.delegate = self;
     [self.view addSubview:ccSearchBar];

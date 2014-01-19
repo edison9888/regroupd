@@ -12,7 +12,7 @@
 #import "FancyToggle.h"
 #import "BrandUILabel.h"
 
-@interface SettingsHomeVC : SlideViewController<MFMailComposeViewControllerDelegate> {
+@interface SettingsHomeVC : SlideViewController<MFMailComposeViewControllerDelegate, UIAlertViewDelegate> {
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *tableData;

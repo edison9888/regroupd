@@ -89,11 +89,21 @@
     NSLog(@"dt %@", dt);
     
     @try {
-        sql = @"UPDATE chat set clear_timestamp=? where system_id=?";
-        success = [[SQLiteDB sharedConnection] executeUpdate:sql,
-                   cleartime,
-                   chatKey
-                   ];
+        if ([chatKey isEqualToString:@"*"]) {
+            sql = @"UPDATE chat set clear_timestamp=?";
+            success = [[SQLiteDB sharedConnection] executeUpdate:sql,
+                       cleartime,
+                       chatKey
+                       ];
+            
+        } else {
+            sql = @"UPDATE chat set clear_timestamp=? where system_id=?";
+            success = [[SQLiteDB sharedConnection] executeUpdate:sql,
+                       cleartime,
+                       chatKey
+                       ];
+            
+        }
         
         if (!success) {
             NSLog(@"####### SQL Update failed #######");
@@ -559,7 +569,7 @@
     
     PFQuery *query = [PFQuery queryWithClassName:kChatFormDB];
     [query whereKey:@"chat" equalTo:[PFObject objectWithoutDataWithClassName:kChatDB objectId:chatId]];
-    [query whereKey:@"form" equalTo:[PFObject objectWithoutDataWithClassName:kChatDB objectId:formId]];
+    [query whereKey:@"form" equalTo:[PFObject objectWithoutDataWithClassName:kFormDB objectId:formId]];
     
     [query getFirstObjectInBackgroundWithBlock:^(PFObject *pfObject, NSError *error) {
         

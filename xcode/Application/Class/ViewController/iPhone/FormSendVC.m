@@ -42,19 +42,28 @@
     contactSvc = [[ContactManager alloc] init];
     groupSvc = [[GroupManager alloc] init];
     chatSvc = [[ChatManager alloc] init];
+    formSvc = [[FormManager alloc] init];
     
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
     self.theTableView.backgroundColor = [UIColor clearColor];
     
+    CGRect tableFrame = self.theTableView.frame;
+    tableFrame.size.height = [DataModel shared].stageHeight - tableFrame.origin.y - 50;
+    self.theTableView.frame = tableFrame;
+
     self.navTitle.text = [DataModel shared].form.name;
     
     CGRect searchFrame = CGRectMake(10,57,300,32);
     
     ccSearchBar = [[CCSearchBar alloc] initWithFrame:searchFrame];
-    ccSearchBar.layer.borderColor = [UIColor colorWithHexValue:0xAAAAAA].CGColor;
-    ccSearchBar.layer.borderWidth = 1.0;
-    ccSearchBar.layer.cornerRadius = 3;
+
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        ccSearchBar.layer.borderColor = [UIColor colorWithHexValue:0xAAAAAA].CGColor;
+        ccSearchBar.layer.borderWidth = 1.0;
+        ccSearchBar.layer.cornerRadius = 3;
+    }
+
     
     ccSearchBar.delegate = self;
     [self.view addSubview:ccSearchBar];
@@ -540,6 +549,25 @@
     
     [chatSvc apiSaveChatMessage:msg callback:^(PFObject *pfMessage) {
         if (pfMessage) {
+            
+            [formSvc apiLookupFormContacts:msg.form_key contactKeys:[DataModel shared].chat.contact_keys callback:^(NSArray *savedKeys) {
+                
+                NSMutableSet *unsavedKeySet = [[NSMutableSet alloc] init];
+                
+                for (NSString *key in [DataModel shared].chat.contact_keys) {
+                    
+                    if (![savedKeys containsObject:key]) {
+                        [unsavedKeySet addObject:key];
+                    }
+                }
+                
+                [formSvc apiBatchSaveFormContacts:msg.form_key contactKeys:[unsavedKeySet allObjects] callback:^(NSArray *savedKeys) {
+                    NSLog(@"Saved form contacts count %i", savedKeys.count);
+                    
+                }];
+            }];
+            
+            
             [chatSvc apiSaveChatForm:msg.chat_key formId:msg.form_key callback:^(PFObject *object) {
                 // Build a target query: everyone in the chat room except for this device.
                 // See also: http://blog.parse.com/2012/07/23/targeting-pushes-from-a-device/
@@ -605,7 +633,7 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     
-    [_delegate goBack];
+    [_delegate gotoSlideWithName:@"FormsHome"];
 }
 
 

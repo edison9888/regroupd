@@ -11,7 +11,7 @@
 #import "FormsTableViewCell.h"
 #import "FormVO.h"
 #import "FormManager.h"
-
+#import "ContactManager.h"
 
 @interface FormsHomeVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     
@@ -35,6 +35,7 @@
     int typeFilter;
     
     FormManager *formSvc;
+    ContactManager *contactSvc;
 
     
 }
