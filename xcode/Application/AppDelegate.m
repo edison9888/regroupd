@@ -37,8 +37,8 @@
     //  #################### PARSE SETUP #####################
     //    https://www.parse.com/apps/quickstart#ios/native/existing
     
-    [Parse setApplicationId:@"Xsf11WQNwFxIyu6rM447OTYtrvj5qSNNc5EX93Qt"
-                  clientKey:@"ZlDNsNZE4KaiDdyOp9HQC6oPxP85NO2gAJn7tTtQ"];
+    [Parse setApplicationId:@"zP5FnTdNCqQ1r6JmBgCDEJPvKhENEOoR04gwWYXF"
+                  clientKey:@"dHExtS7YpfNp8uKOHcBKY1me7Xzl4w2s5zFeHtrv"];
     
     //    [PFUser enableAutomaticUser];
     

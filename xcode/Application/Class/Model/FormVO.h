@@ -12,10 +12,10 @@ typedef enum {
 }FormType;
 
 typedef enum {
+	FormStatus_NONE = -1,
 	FormStatus_DRAFT = 0,
-	FormStatus_SAVED,
-	FormStatus_PUBLISHED,
-	FormStatus_REMOVED
+	FormStatus_PUBLISHED = 1,
+	FormStatus_REMOVED = 9
 }FormStatus;
 
 #import <Foundation/Foundation.h>
@@ -51,7 +51,7 @@ typedef enum {
 @property (nonatomic, retain) NSString *details;
 @property (nonatomic, retain) NSString *imagefile;
 @property int type;
-@property int status;
+@property NSNumber *status;
 
 @property (nonatomic, retain) NSNumber *counter;
 

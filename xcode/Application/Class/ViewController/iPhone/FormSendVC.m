@@ -101,14 +101,14 @@
 {
     
     NSString *sqlTemplate;
-    sqlTemplate = @"select * from phonebook where (first_name like '%%%@%%' or last_name like '%%%@%%') and status=%i order by last_name";
+    sqlTemplate = @"select * from phonebook where (first_name like '%%%@%%' or last_name like '%%%@%%') and status=%i and contact_key<>'%@' order by last_name";
     
     isLoading = YES;
     int status;
     NSString *sql;
     
     status = 1;
-    sql = [NSString stringWithFormat:sqlTemplate, searchText, searchText, status];
+    sql = [NSString stringWithFormat:sqlTemplate, searchText, searchText, status, [DataModel shared].user.contact_key];
     
     FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
     [contactsData removeAllObjects];

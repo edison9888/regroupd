@@ -36,6 +36,12 @@
 {
     [super viewDidLoad];
 
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        CGRect frame = self.view.frame;
+        frame.size.height += 20;
+        self.view.frame = frame;
+    }
+
     CGSize scrollContentSize = CGSizeMake([DataModel shared].stageWidth, 520);
     self.scrollView.contentSize = scrollContentSize;
     self.scrollView.delegate = self;

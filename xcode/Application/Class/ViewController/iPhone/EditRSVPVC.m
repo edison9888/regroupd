@@ -54,6 +54,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     canSave = YES;
 
     formSvc = [[FormManager alloc] init];
@@ -120,14 +121,14 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     self.tfEndTime.inputView = self.timePicker;
     self.tfEndTime.delegate = self;
 
-    allow_public = -1;
+    allow_public = 0;
     self.ckAllowOthersYes.ckLabel.text = @"Yes";
     self.ckAllowOthersYes.tag = kTagAllowOthersYes;
     [self.ckAllowOthersYes unselected];
     
     self.ckAllowOthersNo.ckLabel.text = @"No";
     self.ckAllowOthersNo.tag = kTagAllowOthersNo;
-    [self.ckAllowOthersNo unselected];
+    [self.ckAllowOthersNo selected];
     
     NSArray *fields = @[ self.subjectField,
                          self.tfStartDate,
@@ -184,6 +185,16 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self.view addGestureRecognizer:tapRecognizer];
     
     
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        CGRect frame = self.view.frame;
+        frame.size.height += 20;
+        self.view.frame = frame;
+    }
 }
 
 - (void)didReceiveMemoryWarning

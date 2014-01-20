@@ -409,6 +409,37 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
 }
 
+
+- (void) renderChatMessages:(ChatVO *)theChat {
+    NSLog(@"%s", __FUNCTION__);
+    NSBubbleData *bubble;
+    int index = 0;
+    for (ChatMessageVO* msg in theChat.messages) {
+        index++;
+        NSLog(@"%i grouped message %@", index, msg.message);
+        if (msg.form_key == nil) {
+            bubble = [self buildMessageBubble:msg];
+            
+        } else {
+            bubble = [self buildMessageWidget:msg];
+        }
+        if (bubble == nil) {
+            NSLog(@"bubble is nil");
+        } else {
+            [self.tableDataSource addObject:bubble];
+        }
+    }
+    NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
+    [chatSvc updateChatReadTime:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
+    
+    //    [MBProgressHUD hideHUDForView:self.view animated:NO];
+    NSLog(@"Ready to reload table");
+    [self setupTopDrawer];
+    
+    [self.bubbleTable reloadData];
+    [self.bubbleTable scrollBubbleViewToBottomAnimated:NO];
+}
+
 #pragma mark - Notifications
 
 
@@ -572,6 +603,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     ypos += kNameWidgetRowHeight + 10;
     float delta = 0;
     
+    // Determine if group already exists
+    
+    
+    // Resize outer drawer frame and view
+    
     CGRect frame = self.drawerContents.frame;
     //    float originalY = self.topDrawer.frame.origin.y;
     float originalHeight = frame.size.height;
@@ -606,36 +642,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
 }
 
-
-- (void) renderChatMessages:(ChatVO *)theChat {
-    NSLog(@"%s", __FUNCTION__);
-    NSBubbleData *bubble;
-    int index = 0;
-    for (ChatMessageVO* msg in theChat.messages) {
-        index++;
-        NSLog(@"%i grouped message %@", index, msg.message);
-        if (msg.form_key == nil) {
-            bubble = [self buildMessageBubble:msg];
-            
-        } else {
-            bubble = [self buildMessageWidget:msg];
-        }
-        if (bubble == nil) {
-            NSLog(@"bubble is nil");
-        } else {
-            [self.tableDataSource addObject:bubble];
-        }
-    }
-    NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
-    [chatSvc updateChatReadTime:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
-    
-//    [MBProgressHUD hideHUDForView:self.view animated:NO];
-    NSLog(@"Ready to reload table");
-    [self setupTopDrawer];
-    
-    [self.bubbleTable reloadData];
-    [self.bubbleTable scrollBubbleViewToBottomAnimated:NO];
-}
 - (void)chatPushNotificationHandler:(NSNotification*)notification
 {
     NSLog(@"%s", __FUNCTION__);
@@ -827,6 +833,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     FormVO *theForm = [formCache objectForKey:msg.form_key];
     if (theForm == nil) {
         NSLog(@"Cache lookup failed!!! >>>>>>>>>>>> %@", msg.form_key);
+        return nil;
+    }
+    if (theForm.status.intValue == FormStatus_REMOVED) {
+        NSLog(@"Ignoring removed form >>>>>>>>>>>> %@", msg.form_key);
         return nil;
     }
     NSBubbleType whoType;

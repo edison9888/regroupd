@@ -356,36 +356,7 @@
     
     if (form.photo == nil) {
 
-        PFObject *data = [PFObject objectWithClassName:kFormDB];
-        
-        data[@"name"] = form.name;
-        data[@"type"] = [NSNumber numberWithInt:form.type];
-        data[@"user"] = [PFUser currentUser];
-        data[@"contact_key"] = [DataModel shared].user.contact_key;
-        
-        if (form.location != nil) {
-            data[@"location"] = form.location;
-        }
-        if (form.details != nil) {
-            data[@"details"] = form.details;
-        }
-        if (form.eventStartsAt != nil) {
-            data[@"eventStartsAt"] = form.eventStartsAt;
-        }
-        if (form.eventEndsAt != nil) {
-            data[@"eventEndsAt"] = form.eventEndsAt;
-        }
-
-        if (form.allow_share != nil) {
-            data[@"allow_share"] = form.allow_share;
-        }
-        if (form.allow_public != nil) {
-            data[@"allow_public"] = form.allow_public;
-        }
-        if (form.allow_multiple != nil) {
-            data[@"allow_multiple"] = form.allow_multiple;
-        }
-        
+        PFObject *data = [self buildPFForm:form];
         
         [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             NSLog(@"Saved form with objectId %@", data.objectId);
@@ -398,41 +369,75 @@
         PFFile *fileObject = [PFFile fileWithName:form.imagefile data:imageData];
         
         [fileObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            
-            PFObject *data = [PFObject objectWithClassName:kFormDB];
-
-            data[@"name"] = form.name;
-            data[@"type"] = [NSNumber numberWithInt:form.type];
-            data[@"user"] = [PFUser currentUser];
-            data[@"contact_key"] = [DataModel shared].user.contact_key;
-            
+            PFObject *data = [self buildPFForm:form];
             data[@"photo"] = fileObject;
-            
-            if (form.location != nil) {
-                data[@"location"] = form.location;
-            }
-            if (form.details != nil) {
-                data[@"details"] = form.details;
-            }
-            if (form.eventStartsAt != nil) {
-                data[@"eventStartsAt"] = form.eventStartsAt;
-            }
-            if (form.eventEndsAt != nil) {
-                data[@"eventEndsAt"] = form.eventEndsAt;
-            }
-            if (form.allow_share != nil) {
-                data[@"allow_share"] = form.allow_share;
-            }
-            
-            
+
             [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 NSLog(@"Saved form with objectId %@", data.objectId);
                 callback(data);
+                
+                
             }];
             
         }];
 
     }
+}
+
+- (PFObject *) buildPFForm:(FormVO *)form {
+    PFObject *data = [PFObject objectWithClassName:kFormDB];
+    
+    data[@"name"] = form.name;
+    data[@"type"] = [NSNumber numberWithInt:form.type];
+    if (form.status) {
+        data[@"status"] = form.status;
+    }
+    
+    data[@"user"] = [PFUser currentUser];
+    data[@"contact_key"] = [DataModel shared].user.contact_key;
+    
+    if (form.location != nil) {
+        data[@"location"] = form.location;
+    }
+    if (form.details != nil) {
+        data[@"details"] = form.details;
+    }
+    if (form.eventStartsAt != nil) {
+        data[@"eventStartsAt"] = form.eventStartsAt;
+    }
+    if (form.eventEndsAt != nil) {
+        data[@"eventEndsAt"] = form.eventEndsAt;
+    }
+    if (form.allow_share != nil) {
+        data[@"allow_share"] = form.allow_share;
+    }
+    if (form.allow_public != nil) {
+        data[@"allow_public"] = form.allow_public;
+    }
+    if (form.allow_multiple != nil) {
+        data[@"allow_multiple"] = form.allow_multiple;
+    }
+    return data;
+}
+
+
+- (void) apiRemoveForm:(NSString *)formKey callback:(void (^)(BOOL))callback {
+    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"Load form %@", formKey);
+    PFQuery *query = [PFQuery queryWithClassName:kFormDB];
+    [query getObjectInBackgroundWithId:formKey block:^(PFObject *pfForm, NSError *error) {
+        
+        if (error) {
+            NSLog(@"########### Error loading form %@", formKey);
+            
+        } else {
+            pfForm[@"status"] = [NSNumber numberWithInt:FormStatus_REMOVED];
+            [pfForm saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                callback(YES);
+            }];
+        }
+    }];
+    
 }
 - (void) apiLoadForm:(NSString *)formKey fetchAll:(BOOL)fetchAll callback:(void (^)(FormVO *form))callback {
     NSLog(@"%s", __FUNCTION__);
@@ -488,6 +493,8 @@
     } else {
         [query whereKey:@"contact_key" equalTo:contactKey];
     }
+    [query whereKey:@"status" notEqualTo:[NSNumber numberWithInt:FormStatus_REMOVED]];
+    
     [query addDescendingOrder:@"updatedAt"];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {

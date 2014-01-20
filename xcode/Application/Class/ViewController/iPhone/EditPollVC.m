@@ -98,64 +98,14 @@
         //        }
         
     }
-    //    // OPTION 1 INPUT
-    //    count++;
-    //    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
-    //    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-    //    surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
-    //    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-    //    surveyOption.tag = count;
-    //    surveyOption.index = count;
-    //    surveyOption.input.placeholder = defaultText;
-    //    surveyOption.input.defaultText = defaultText;
-    //    surveyOption.input.returnKeyType = UIReturnKeyNext;
-    //    surveyOption.input.tag = kTagOption1;
-    //    surveyOption.input.delegate = self;
-    //    [self.scrollView addSubview:surveyOption];
-    //    [surveyOptions addObject:surveyOption];
-    //
-    //    // OPTION 2 INPUT
-    //    count++;
-    //    ypos += kInputFieldInterval;
-    //    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
-    //    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-    //    surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
-    //    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-    //    surveyOption.tag = count;
-    //    surveyOption.index = count;
-    //    surveyOption.input.placeholder = defaultText;
-    //    surveyOption.input.defaultText = defaultText;
-    //    surveyOption.input.returnKeyType = UIReturnKeyNext;
-    //    surveyOption.input.tag = kTagOption2;
-    //    surveyOption.input.delegate = self;
-    //
-    //    [self.scrollView addSubview:surveyOption];
-    //    [surveyOptions addObject:surveyOption];
-    //
-    //    // OPTION 3 INPUT
-    //    count++;
-    //    ypos += kInputFieldInterval;
-    //    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
-    //    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-    //    surveyOption = [[SurveyOptionWithPic alloc] initWithFrame:optionFrame];
-    //    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-    //    surveyOption.tag = count;
-    //    surveyOption.index = count;
-    //    surveyOption.input.placeholder = defaultText;
-    //    surveyOption.input.defaultText = defaultText;
-    //    surveyOption.input.returnKeyType = UIReturnKeyNext;
-    //    surveyOption.input.tag = kTagOption3;
-    //    surveyOption.input.delegate = self;
-    //
-    //    [self.scrollView addSubview:surveyOption];
-    //    [surveyOptions addObject:surveyOption];
+
     
     CGRect lowerFrame = CGRectMake(0, ypos, self.lowerForm.frame.size.width, self.lowerForm.frame.size.height);
     [self.lowerForm setFrame:lowerFrame];
     
     self.ckPublic.ckLabel.text = @"Public";
     self.ckPublic.tag = kTagPublic;
-    [self.ckPublic unselected];
+    [self.ckPublic selected];
     
     self.ckPrivate.ckLabel.text = @"Private";
     self.ckPrivate.tag = kTagPrivate;
@@ -167,10 +117,10 @@
     
     self.ckMultipleNo.ckLabel.text = @"No";
     self.ckMultipleNo.tag = kTagMultipleNo;
-    [self.ckMultipleNo unselected];
+    [self.ckMultipleNo selected];
     
-    allowPublic = -1;
-    allowMultiple = -1;
+    allowPublic = 1;
+    allowMultiple = 0;
     
     
     // register for keyboard notifications
@@ -202,7 +152,15 @@
     
     
 }
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
 
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        CGRect frame = self.view.frame;
+        frame.size.height += 20;
+        self.view.frame = frame;
+    }
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

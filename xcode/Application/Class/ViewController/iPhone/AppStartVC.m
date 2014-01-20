@@ -37,6 +37,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        CGRect frame = self.view.frame;
+        frame.size.height += 20;
+        self.view.frame = frame;
+    }
+
     // Do any additional setup after loading the view from its nib.
     
 //    TODO: determine if user needs to create profile
@@ -82,6 +88,8 @@
             
         } else if ([PFUser currentUser] != nil) {
             
+            user.system_id = u.objectId;
+            user.user_key = u.objectId;
             [DataModel shared].user = user;
             
             u = [PFUser currentUser];

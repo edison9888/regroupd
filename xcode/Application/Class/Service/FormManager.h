@@ -44,6 +44,7 @@
 - (void) apiSaveForm:(FormVO *)form callback:(void (^)(PFObject *))callback;
 - (void) apiLoadForm:(NSString *)formKey fetchAll:(BOOL)fetchAll callback:(void (^)(FormVO *form))callback;
 - (void) apiListForms:(NSString *)contactKey callback:(void (^)(NSArray *results))callback;
+- (void) apiRemoveForm:(NSString *)formKey callback:(void (^)(BOOL))callback;
 
 - (void) apiUpdateFormCounter:(NSString *)formKey withCount:(NSNumber *)count;
 

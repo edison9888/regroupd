@@ -34,7 +34,12 @@
 {
     [super viewDidLoad];
 //    CGRect frame = self.view.frame;
-    
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        CGRect frame = self.view.frame;
+        frame.size.height += 20;
+        self.view.frame = frame;
+    }
+
     CGRect scrollFrame = self.scrollView.frame;
     if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
         scrollFrame.origin.y += 20;

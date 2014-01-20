@@ -214,13 +214,19 @@ static NSString *kDoneLabel = @"Done";
 
         [cell.sendArrow addTarget:self action:@selector(checkButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         
-        if (![form.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
+        if ([form.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
+            cell.hostLabel.hidden = YES;
+            cell.hostField.hidden = YES;
+        } else {
+            cell.hostLabel.hidden = NO;
+            cell.hostField.hidden = NO;
             [contactSvc apiLoadContact:form.contact_key callback:^(PFObject *pfContact) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     ContactVO *c = [ContactVO readFromPFObject:pfContact];
                     cell.hostField.text = c.fullname;
                 });
             }];
+            
         }
 
     } @catch (NSException * e) {
@@ -330,12 +336,55 @@ static NSString *kDoneLabel = @"Done";
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         //add code here for when you hit delete
         
-        
-        NSDictionary *rowdata = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
-//        GroupVO *group = [GroupVO readFromDictionary:rowdata];
-//        [groupSvc deleteGroup:group];
-//        [self setEditing:NO animated:YES];
-//        [self performSearch:@""];
+        FormVO *form = [tableData objectAtIndex:indexPath.row];
+        if ([form.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
+            // User is owner of form.
+            [formSvc apiRemoveForm:form.system_id callback:^(BOOL success) {
+                if (success) {
+                    
+                    NSString *msg;
+                    
+                    if (form.type == FormType_RSVP) {
+                        [self setEditing:NO animated:YES];
+                        [self listMyForms];
+
+                        msg = @"This RSVP has been marked as cancelled";
+                        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:nil
+                                                                        message:msg
+                                                                       delegate:nil
+                                                              cancelButtonTitle:@"OK"
+                                                              otherButtonTitles:nil];
+                        
+                        [alert show];
+                    } else {
+                        msg = @"This form has been removed";
+                        [self.tableData removeObjectAtIndex:indexPath.row];
+                        [self.theTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+                    }
+                    
+                }
+                
+            }];
+
+        } else {
+            [formSvc apiListFormContacts:form.system_id contactKey:[DataModel shared].user.contact_key callback:^(NSArray *results) {
+                if (results) {
+                    int total = results.count;
+                    int index = 0;
+                    for (PFObject *pfObject in results) {
+                        NSLog(@"Deleting FormContact %@", pfObject.objectId);
+                        [pfObject deleteInBackground];
+                        index++;
+                        
+                        if (index == total) {
+                            [self setEditing:NO animated:YES];
+                            [self listMyForms];
+                            
+                        }
+                    }
+                }
+            }];
+        }
         
     }
 }

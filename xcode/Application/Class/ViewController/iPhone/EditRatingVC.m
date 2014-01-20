@@ -47,6 +47,12 @@
 {
     [super viewDidLoad];
 
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        CGRect frame = self.view.frame;
+        frame.size.height += 20;
+        self.view.frame = frame;
+    }
+
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
 
@@ -98,57 +104,6 @@
         
         
     }
-//    // OPTION 1 INPUT
-//    count++;
-//    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
-//    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-//    surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
-//    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-//    surveyOption.tag = count;
-//    surveyOption.index = count;
-//    surveyOption.input.placeholder = defaultText;
-////    surveyOption.input.defaultText = defaultText;
-//    surveyOption.input.returnKeyType = UIReturnKeyNext;
-//    surveyOption.input.tag = kTagOption1;
-//    surveyOption.input.delegate = self;
-//    [self.scrollView addSubview:surveyOption];
-//    [surveyOptions addObject:surveyOption];
-//    
-//    // OPTION 2 INPUT
-//    count++;
-//    ypos += kInputFieldInterval;
-//    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
-//    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-//    surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
-//    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-//    surveyOption.tag = count;
-//    surveyOption.index = count;
-//    surveyOption.input.placeholder = defaultText;
-////    surveyOption.input.defaultText = defaultText;
-//    surveyOption.input.returnKeyType = UIReturnKeyNext;
-//    surveyOption.input.tag = kTagOption2;
-//    surveyOption.input.delegate = self;
-//    
-//    [self.scrollView addSubview:surveyOption];
-//    [surveyOptions addObject:surveyOption];
-//    
-//    // OPTION 3 INPUT
-//    count++;
-//    ypos += kInputFieldInterval;
-//    defaultText = [NSString stringWithFormat:placeholderFmt, [formatter stringFromNumber:[NSNumber numberWithInt: count]]];
-//    optionFrame= CGRectMake(0, ypos, [DataModel shared].stageWidth, 60);
-//    surveyOption = [[SurveyOptionWidget alloc] initWithFrame:optionFrame];
-//    surveyOption.fieldLabel.text = [NSNumber numberWithInt:count].stringValue;
-//    surveyOption.tag = count;
-//    surveyOption.index = count;
-//    surveyOption.input.placeholder = defaultText;
-////    surveyOption.input.defaultText = defaultText;
-//    surveyOption.input.returnKeyType = UIReturnKeyNext;
-//    surveyOption.input.tag = kTagOption3;
-//    surveyOption.input.delegate = self;
-//    
-//    [self.scrollView addSubview:surveyOption];
-//    [surveyOptions addObject:surveyOption];
 
     self.lowerForm.hidden = NO;
     CGRect lowerFrame = CGRectMake(0, ypos, self.lowerForm.frame.size.width, self.lowerForm.frame.size.height);
@@ -156,13 +111,13 @@
     
     self.ckPublic.ckLabel.text = @"Public";
     self.ckPublic.tag = kTagPublic;
-    [self.ckPublic unselected];
+    [self.ckPublic selected];
     
     self.ckPrivate.ckLabel.text = @"Private";
     self.ckPrivate.tag = kTagPrivate;
     [self.ckPrivate unselected];
     
-    allowPublic = -1;
+    allowPublic = 1;
 
 //    fieldTags = @[@kTagSubject, @kTagLocation, @kTagDescription, @kTagStartDate, @kTagStartTime, @kTagEndDate, @kTagEndTime];
 
@@ -196,6 +151,17 @@
     
     
 }
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        CGRect frame = self.view.frame;
+        frame.size.height += 20;
+        self.view.frame = frame;
+    }
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -693,7 +659,7 @@
         
         form.name = self.subjectField.text;
         form.type = FormType_RATING;
-        form.status = FormStatus_DRAFT;
+//        form.status = FormStatus_DRAFT;
         form.allow_public = [NSNumber numberWithInt:allowPublic];
         
         __block NSString *imagefile;

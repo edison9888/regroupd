@@ -12,6 +12,7 @@
 #import "ContactManager.h"
 #import "UserManager.h"
 #import "NexmoSMS.h"
+#import "NSString+Rot13.h"
 
 @interface ProfileStart1VC ()
 
@@ -39,6 +40,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        CGRect frame = self.view.frame;
+        frame.size.height += 20;
+        self.view.frame = frame;
+    }
 
     CGSize scrollContentSize = CGSizeMake([DataModel shared].stageWidth, 400);
     self.scrollView.delegate = self;
@@ -240,14 +247,18 @@
     if (isOk) {
         
         ContactManager *contactSvc = [[ContactManager alloc] init];
-        UserManager *userSvc = [[UserManager alloc] init];
+//        UserManager *userSvc = [[UserManager alloc] init];
         
         NSString *phoneId = [contactSvc formatPhoneNumberAsE164:self.tf1.text];
         
+        NSString *password = [phoneId rot13];
+        NSLog(@"Set password = %@", password);
 //        [self readPhoneNumber:self.tf1.text];
         UserVO *user = [[UserVO alloc] init];
         user.phone = phoneId;
         user.username = phoneId;
+        user.password = password;
+        
         [DataModel shared].user = user;
 
         // TODO: Add country code and normalize
@@ -264,7 +275,6 @@
         [nexmo sendAuthMessageTo:number pin:code callback:^(NSString *response) {
             NSLog(@"Nexmo response: %@", response);
             user.smscode = code;
-            user.password = @"123456";
             [DataModel shared].user = user;
             
             [[[UIAlertView alloc] initWithTitle:@"INFO" message:@"A text message was sent to your phone with a 6-digit verification code." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];

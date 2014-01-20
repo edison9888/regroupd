@@ -47,8 +47,8 @@
     text = [dict valueForKey:@"type"];
     o.type = text.integerValue;
     
-    text = [dict valueForKey:@"status"];
-    o.status = text.integerValue;
+    number = [dict valueForKey:@"status"];
+    o.status = number;
 
     text = [dict valueForKey:@"start_time"];
     o.start_time = text;
@@ -119,6 +119,13 @@
 
     text = [data valueForKey:@"type"];
     o.type = text.integerValue;
+
+    if (data[@"status"]) {
+        number = [data valueForKey:@"status"];
+        o.status = number;
+    } else {
+        o.status = [NSNumber numberWithInt:-1];
+    }
 
     number = [data valueForKey:@"allow_public"];
     o.allow_public = number;
