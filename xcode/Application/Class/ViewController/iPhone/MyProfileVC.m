@@ -48,6 +48,7 @@
     self.scrollView.frame = scrollFrame;
     CGSize scrollContentSize = CGSizeMake(320, 400);
     self.scrollView.contentSize = scrollContentSize;
+//    self.scrollView.bounds = self.view.frame;
     
     self.scrollView.delegate = self;
     self.tfFirstName.delegate = self;
@@ -56,18 +57,19 @@
     keyboardIsShown = NO;
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
-    
-    CGRect modalFrame = self.photoModal.frame;
-    int ypos = -modalFrame.size.height;
-    int xpos = ([DataModel shared].stageWidth - modalFrame.size.width) / 2;
-    
-    modalFrame.origin.y = ypos;
-    modalFrame.origin.x = xpos;
-    
-    self.photoModal.layer.zPosition = 99;
-    self.photoModal.frame = modalFrame;
-    [self.scrollView addSubview:self.photoModal];
-    
+
+//    [self setupModal:self.photoModal];
+//    CGRect modalFrame = self.photoModal.frame;
+//    int ypos = -modalFrame.size.height;
+//    int xpos = ([DataModel shared].stageWidth - modalFrame.size.width) / 2;
+//    
+//    modalFrame.origin.y = ypos;
+//    modalFrame.origin.x = xpos;
+//    
+//    self.photoModal.layer.zPosition = 99;
+//    self.photoModal.frame = modalFrame;
+//    [self.scrollView addSubview:self.photoModal];
+//    
 
     [self.roundPic.layer setCornerRadius:66.0f];
     [self.roundPic.layer setMasksToBounds:YES];
@@ -206,6 +208,28 @@
 }
 
 #pragma mark - Modal
+
+-(void)setupModal:(UIView*)modalView
+{
+    
+    
+    CGRect modalFrame = modalView.frame;
+    
+    modalFrame.origin.y = [DataModel shared].stageHeight + 40;
+    
+    modalFrame.origin.x = ([DataModel shared].stageWidth - modalFrame.size.width ) / 2;
+    
+    modalView.layer.zPosition = 99;
+    modalView.layer.borderWidth = 1.0;
+    modalView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    modalView.layer.cornerRadius = 5.0;
+    
+    modalView.frame = modalFrame;
+    
+    if(![modalView isDescendantOfView:[self view]]) {
+        [self.view addSubview:modalView];
+    }
+}
 
 - (void) showModal {
     [self becomeFirstResponder];

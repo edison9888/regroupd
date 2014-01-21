@@ -118,7 +118,9 @@
     }
     
     status = 0;
-    sql = [NSString stringWithFormat:sqlTemplate, searchText, searchText, status, [DataModel shared].user.contact_key];
+    sqlTemplate = @"select distinct record_id, first_name, last_name from phonebook  where (first_name like '%%%@%%' or last_name like '%%%@%%') and status=%i order by last_name";
+//    sqlTemplate = @"select * from phonebook where (first_name like '%%%@%%' or last_name like '%%%@%%') and status=%i order by last_name";
+    sql = [NSString stringWithFormat:sqlTemplate, searchText, searchText, status];
     
     rs = [[SQLiteDB sharedConnection] executeQuery:sql];
     [otherContacts removeAllObjects];
@@ -438,21 +440,24 @@
                 [DataModel shared].contact = [ContactVO readFromPhonebook:rowdata];
                 [_delegate gotoSlideWithName:@"ContactInfo"];
                 
-                
-                //            [DataModel shared].action = kActionEDIT;
-                //            [_delegate gotoNextSlide];
-                
             }
         } @catch (NSException * e) {
             NSLog(@"Exception: %@", e);
         }
     } else if (indexPath.section == 1) {
-        NSDictionary *rowdata = [self.groupsData objectAtIndex:indexPath.row];
-        [DataModel shared].group = [GroupVO readFromDictionary:rowdata];
         
-        [DataModel shared].action = kActionEDIT;
-        [_delegate setBackPath:@"ContactsHome"];
-        [_delegate gotoSlideWithName:@"GroupInfo" andOverrideTransition:kPresentationTransitionPush|kPresentationTransitionLeft];
+        if (self.groupsData.count == 0) {
+            [self.theTableView deselectRowAtIndexPath:indexPath animated:YES];
+            return;
+        } else {
+            NSDictionary *rowdata = [self.groupsData objectAtIndex:indexPath.row];
+            [DataModel shared].group = [GroupVO readFromDictionary:rowdata];
+            
+            [DataModel shared].action = kActionEDIT;
+            [_delegate setBackPath:@"ContactsHome"];
+            [_delegate gotoSlideWithName:@"GroupInfo" andOverrideTransition:kPresentationTransitionPush|kPresentationTransitionLeft];
+            
+        }
 
     } else if (indexPath.section == 2) {
 
@@ -476,7 +481,6 @@
                 }
             }
         }
-        [self.theTableView deselectRowAtIndexPath:indexPath animated:YES];
 
     }
     
