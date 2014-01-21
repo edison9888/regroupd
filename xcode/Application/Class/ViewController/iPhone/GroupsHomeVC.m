@@ -8,9 +8,6 @@
 
 #import "GroupsHomeVC.h"
 
-static NSString *kEditLabel = @"Edit";
-static NSString *kDoneLabel = @"Done";
-
 @interface GroupsHomeVC ()
 
 @end

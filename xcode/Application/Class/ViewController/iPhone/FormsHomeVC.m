@@ -12,8 +12,6 @@
 #import "UIColor+ColorWithHex.h"
 #import "NSDate+Extensions.h"
 
-static NSString *kEditLabel = @"Edit";
-static NSString *kDoneLabel = @"Done";
 
 @interface FormsHomeVC ()
 

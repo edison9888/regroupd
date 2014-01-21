@@ -306,19 +306,6 @@
 }
 
 
-//- (NSDictionary *) readPFObjectAsDictionary:(PFObject *) data {
-//    NSArray * allKeys = [data allKeys];
-//    
-//    NSMutableDictionary * dict = [[NSMutableDictionary alloc] init];
-//    
-//    for (NSString * key in allKeys) {
-//        
-//        [dict setObject:[data objectForKey:key] forKey:key];
-//        
-//    }
-//    return dict;
-//}
-
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -345,6 +332,67 @@
 }
 
 
+// Override to support conditional editing of the table view.
+// This only needs to be implemented if you are going to be returning NO
+// for some items. By default, all items are editable.
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Return YES if you want the specified item to be editable.
+    
+    return YES;
+}
+
+
+
+// Override to support editing the table view.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"%s", __FUNCTION__);
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        //add code here for when you hit delete
+        
+        ChatVO *chat = [tableData objectAtIndex:indexPath.row];
+        
+        [chatSvc apiModifyChat:chat.system_id removeContact:[DataModel shared].user.contact_key callback:^(PFObject *pfChat) {
+            NSLog(@"ready to delete local chat db");
+            if (pfChat) {
+                [chatSvc deleteChat:chat];
+                [self setEditing:NO animated:YES];
+                [self performSearch:@""];
+            }
+        }];
+        
+    }
+}
+
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
+    
+    [super setEditing:(BOOL)editing animated:(BOOL)animated];
+    
+    
+    [self.theTableView setEditing:editing];
+    
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO; // i also tried to  return YES;
+}
+
+// Select the editing style of each cell
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    
+    return UITableViewCellEditingStyleDelete;
+}
+
+// Override to support conditional rearranging of the table view.
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Return NO if you do not want the item to be re-orderable.
+    return NO;
+}
+
+
+
 #pragma mark - Action handlers
 
 - (IBAction)tapAddButton
@@ -357,6 +405,26 @@
 
 - (IBAction)tapEditButton
 {
+    if (inEditMode) {
+        inEditMode = NO;
+        [self.editButton setTitle:kEditLabel forState:UIControlStateNormal];
+        
+        [self setEditing:inEditMode animated:YES];
+        
+        
+        [self.theTableView reloadData];
+        
+    } else {
+        inEditMode = YES;
+        [self setEditing:inEditMode animated:YES];
+        
+        [self.editButton setTitle:kDoneLabel forState:UIControlStateNormal];
+        
+        [self.theTableView reloadData];
+        
+        
+    }
+
     
 }
 @end

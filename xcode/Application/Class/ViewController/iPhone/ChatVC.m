@@ -7,6 +7,8 @@
 //
 
 #import "ChatVC.h"
+#import <QuartzCore/QuartzCore.h>
+
 #import "DataModel.h"
 #import "Constants.h"
 
@@ -59,6 +61,7 @@
 #define kDrawerHeight 180
 #define kDrawerItemsStartX 10
 #define kDrawerItemsStartY 55
+#define kCreateLinkWidth 120
 
 #define kTagTopDrawer   13
 #define kTagSendButton   33
@@ -579,7 +582,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         itemWidth = txtSize.width + 25;
         
         if (xpos + itemWidth > self.drawerContents.frame.size.width - kDrawerItemsStartX * 2) {
-            xpos = 0;
+            xpos = kDrawerItemsStartX;
             ypos += kNameWidgetRowHeight;
             
         }
@@ -599,16 +602,34 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         index++;
         
     }
-    
-    ypos += kNameWidgetRowHeight + 10;
+
+    CGRect frame = self.drawerContents.frame;
+
+    if (xpos > 200) {
+        ypos += kNameWidgetRowHeight;
+    }
     float delta = 0;
     
     // Determine if group already exists
     
+    theFont = [UIFont fontWithName:@"Raleway-Bold" size:11];
+
+    UIButton *createGroupLink = [UIButton buttonWithType:UIButtonTypeCustom];
+    createGroupLink.backgroundColor = [UIColor clearColor];
+    createGroupLink.titleLabel.font = theFont;
+    createGroupLink.titleLabel.textColor = [UIColor whiteColor];
+//    createGroupLink.titleLabel.text = @"New group from list";
+    [createGroupLink setTitle:@"New group from list" forState:UIControlStateNormal];
+    CGRect linkFrame = CGRectMake(frame.size.width - kCreateLinkWidth - 10, ypos, kCreateLinkWidth, 25);
+    createGroupLink.frame = linkFrame;
+    [createGroupLink addTarget:self action:@selector(tapCreateGroupLink:) forControlEvents:UIControlEventTouchUpInside];
     
+    [self.drawerContents addSubview:createGroupLink];
     // Resize outer drawer frame and view
+
+    ypos += kNameWidgetRowHeight;
     
-    CGRect frame = self.drawerContents.frame;
+
     //    float originalY = self.topDrawer.frame.origin.y;
     float originalHeight = frame.size.height;
     
@@ -1756,6 +1777,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         //        self.cancelHotspot.backgroundColor = [UIColor clearColor];
     });
     [self hideAttachModal];
+}
+
+- (void) tapCreateGroupLink:(id)sender {
+    NSLog(@"%s", __FUNCTION__);
+    
+    
 }
 
 #pragma mark - Chat message handling

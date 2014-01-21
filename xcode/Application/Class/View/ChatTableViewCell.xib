@@ -14,10 +14,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="315" height="49"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView autoresizesSubviews="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" image="tablecell_opaque_bg.png" id="15">
-                        <rect key="frame" x="0.0" y="0.0" width="315" height="50"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </imageView>
                     <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Names" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" id="5" customClass="AltLabel">
                         <rect key="frame" x="35" y="13" width="280" height="23"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -40,6 +36,5 @@
     </objects>
     <resources>
         <image name="icon_chat_off.png" width="12" height="12"/>
-        <image name="tablecell_opaque_bg.png" width="315" height="50"/>
     </resources>
 </document>

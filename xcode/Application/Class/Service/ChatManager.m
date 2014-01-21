@@ -242,6 +242,22 @@
 }
 - (void) deleteChat:(ChatVO *) chat {
     
+    
+    NSString *sql;
+    BOOL success;
+    
+    sql = @"delete from chat where system_id=?";
+    
+    success = [[SQLiteDB sharedConnection] executeUpdate:sql,
+               chat.system_id
+               ];
+    
+    if (!success) {
+        NSLog(@"####### SQL Delete failed #######");
+    } else {
+        NSLog(@"====== SQL DELETE SUCCESS ======");
+    }
+
 }
 - (NSMutableArray *) listChats:(int)type {
     return nil;
@@ -439,6 +455,40 @@
         }
     }];
 }
+- (void) apiModifyChat:(NSString *)chatKey removeContact:(NSString *)contactKey callback:(void (^)(PFObject *pfChat))callback {
+    
+    PFQuery *query = [PFQuery queryWithClassName:kChatDB];
+    [query whereKey:@"objectId" equalTo:chatKey];
+    
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *pfObject, NSError *error) {
+        if (error) {
+            return;
+        }
+        if (pfObject) {
+            
+            NSArray *contactKeys = (NSArray *) [pfObject valueForKey:@"contact_keys"];
+            int index = 0;
+            NSMutableArray *resultKeys = [[NSMutableArray alloc] init];
+            @try {
+                for (NSString *key in contactKeys) {
+                    if (![key isEqualToString:contactKey]) {
+                        [resultKeys addObject:key];
+                    }
+                    index++;
+                }
+            }
+            @catch (NSException *exception) {
+                NSLog(@"ERROR %@", exception);
+            }
+            
+            pfObject[@"contact_keys"] = resultKeys;
+            
+            [pfObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                callback(pfObject);
+            }];
+        }
+    }];
+}
 
 - (void) apiFindChatsByContactKeys:(NSArray *)contactKeys callback:(void (^)(NSArray *results))callback {
     PFQuery *query = [PFQuery queryWithClassName:kChatDB];
@@ -507,9 +557,6 @@
     }];
 }
 
-- (NSMutableArray *) asyncListChatMessages:(NSString *)objectId afterDate:(NSDate *)date {
-    return nil;
-}
 /*
  async nested PFQueries.
  -- get the list of chat messages and convert to array of ChatMessageVO
@@ -551,15 +598,6 @@
         
         
     }];
-}
-- (NSMutableArray *) asyncListChatContacts:(NSArray *)objectIds {
-    PFQuery *query = [PFQuery queryWithClassName:kContactDB];
-    [query whereKey:@"objectId" containedIn:objectIds];
-    
-    [query findObjectsInBackgroundWithBlock:^(NSArray *msgs, NSError *error) {
-        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"chatContactsLoaded" object:msgs]];
-    }];
-    return nil;
 }
 
 #pragma mark - ChatForm API

@@ -39,6 +39,7 @@
 - (void) apiListChats:(NSString *)userId callback:(void (^)(NSArray *results))callback;
 - (void) apiSaveChat:(ChatVO *)chat callback:(void (^)(PFObject *object))callback;
 - (void) apiUpdateChatCounter:(NSString *)chatId;
+- (void) apiModifyChat:(NSString *)chatKey removeContact:(NSString *)contactKey callback:(void (^)(PFObject *pfChat))callback;
 
 - (void) apiFindChatsByContactKeys:(NSArray *)contactKeys callback:(void (^)(NSArray *results))callback;
 
@@ -49,8 +50,6 @@
 - (NSString *) apiSaveChat:(ChatVO *) chat;
 
 - (void) apiListChatMessages:(NSString *)objectId afterDate:(NSDate *)date callback:(void (^)(NSArray *results))callback;
-- (NSMutableArray *) asyncListChatMessages:(NSString *)objectId afterDate:(NSDate *)date;
-- (NSMutableArray *) asyncListChatContacts:(NSArray *)objectIds;
 
 // ChatForm API
 - (void) apiSaveChatForm:(NSString *)chatId formId:(NSString *)formId callback:(void (^)(PFObject *object))callback;

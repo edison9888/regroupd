@@ -24,6 +24,9 @@
 #define k_formResponseEntered @"formResponseEntered"
 #define k_showFormDetails @"showFormDetails"
 
+#define kEditLabel  @"Edit"
+#define kDoneLabel  @"Done"
+
 
 extern uint const kLabelDarkGrey444242;
 extern uint const kLabelLightBlue02c1ff;

@@ -22,6 +22,8 @@
     NSMutableArray *tableData;
 //    NSMutableArray *chatsArray;
     
+    BOOL inEditMode;
+    
     ChatManager *chatSvc;
     ContactManager *contactSvc;
     NSMutableSet *contactKeySet;
