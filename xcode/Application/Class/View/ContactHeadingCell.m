@@ -1,14 +1,16 @@
 //
-//  ContactTableViewCell.m
+//  ContactHeadingCell.m
 //  Blocpad
 //
 //  Created by Hugh Lang on 4/8/13.
 //
 //
 
-#import "ContactTableViewCell.h"
+#import "ContactHeadingCell.h"
+#import <QuartzCore/QuartzCore.h>
+#import "UIColor+ColorWithHex.h"
 
-@implementation ContactTableViewCell
+@implementation ContactHeadingCell
 
 @synthesize titleLabel;
 
@@ -19,28 +21,17 @@
     if (self) {
         // Initialization code
 //        self.selectionStyle = UITableViewCellSelectionStyleGray;
-        
+        self.layer.backgroundColor = [UIColor colorWithHexValue:0x0D7DAC].CGColor;
+        self.contentView.backgroundColor = [UIColor blueColor];
     }
     return self;
 }
 
 - (NSString *) reuseIdentifier {
-    return @"ContactTableCell";
+    return kContactHeadingCell_ID;
 }
 
 
-//////http://stackoverflow.com/questions/11920156/custom-uitableviewcell-selection-style
-//- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
-//{
-//    if (highlighted) {
-//        self.titleLabel.textColor = [UIColor blackColor];
-//    } else {
-//        self.titleLabel.textColor = [UIColor blackColor];
-//    }
-//    [super setHighlighted:highlighted animated:animated];
-//    
-//    
-//}
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {

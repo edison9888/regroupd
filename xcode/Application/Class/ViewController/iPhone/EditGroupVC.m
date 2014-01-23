@@ -138,6 +138,29 @@
 
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if ([[DataModel shared].action isEqualToString:@"popup"]) {
+        contactKeys = [[DataModel shared].chat.contact_keys mutableCopy];
+        
+        ContactVO *contact;
+        for (NSString *key in contactKeys) {
+            if ([key isEqualToString:[DataModel shared].user.contact_key]) {
+                NSLog(@"Ignore current user");
+            } else {
+                if ([[DataModel shared].contactCache objectForKey:key]) {
+                    contact = [[DataModel shared].contactCache objectForKey:key];
+                    [contactsArray addObject:contact];
+                } else {
+                    NSLog(@"ContactCache lookup failed for key %@", key);
+                }
+            }
+        }
+        [self reloadNameWidgets];
+    }
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -539,8 +562,13 @@
 //            BOOL exists = [groupSvc checkGroupContact:groupId contactId:contactId.intValue];
                 [groupSvc saveGroupContact:groupId contactKey:contactKey];
         }
-        
-        [_delegate gotoSlideWithName:@"GroupsHome"];
+        if ([[DataModel shared].action isEqualToString:@"popup"]) {
+            [self dismissViewControllerAnimated:YES completion:^{
+                [DataModel shared].action = nil;
+            }];
+        } else {
+            [_delegate gotoSlideWithName:@"GroupsHome"];
+        }
     } else {
         [[[UIAlertView alloc] initWithTitle:@"Try again" message:@"Please add at least one contact" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }
@@ -550,6 +578,14 @@
 
 - (IBAction)tapCancelButton
 {
-    [_delegate goBack];
+    
+    if ([[DataModel shared].action isEqualToString:@"popup"]) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            [DataModel shared].action = nil;
+        }];
+    } else {
+        [_delegate goBack];
+        
+    }
 }
 @end

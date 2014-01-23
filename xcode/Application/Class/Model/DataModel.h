@@ -33,6 +33,8 @@
 #define kSetting_Notifications_Show_Preview @"Setting_Notifications_Show_Preview"
 #define kSetting_Add_To_Calendar            @"Setting_Add_To_Calendar"
 
+#define kAction_New_Group_From_List         @"Action_New_Group_From_List"
+
 @interface DataModel : NSObject {
     NSMutableDictionary *contactData;
     NSString *action;

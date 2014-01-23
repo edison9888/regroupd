@@ -8,6 +8,9 @@
 
 #import "ContactsHomeVC.h"
 #import "ContactTableViewCell.h"
+#import "ContactHeadingCell.h"
+#import "OtherContactCell.h"
+
 #import "UIColor+ColorWithHex.h"
 
 #define kStatusAvailable @"Available"
@@ -41,7 +44,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     contactSvc = [[ContactManager alloc] init];
-
+    
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
     self.theTableView.backgroundColor = [UIColor clearColor];
@@ -53,34 +56,40 @@
     CGRect searchFrame = CGRectMake(10,57,300,32);
     
     ccSearchBar = [[CCSearchBar alloc] initWithFrame:searchFrame];
+    [self.theTableView setSeparatorColor:[UIColor colorWithHexValue:0xEEEEEEE]];
+
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
         ccSearchBar.layer.borderColor = [UIColor colorWithHexValue:0xAAAAAA].CGColor;
         ccSearchBar.layer.borderWidth = 1.0;
         ccSearchBar.layer.cornerRadius = 3;
+        [self.theTableView setSeparatorInset:UIEdgeInsetsZero];
+
     }
     
     ccSearchBar.delegate = self;
     [self.view addSubview:ccSearchBar];
     [self.view.layer setCornerRadius:3.0];
     self.view.backgroundColor = [UIColor clearColor];
-
+    
     self.contactsData =[[NSMutableArray alloc]init];
     self.groupsData =[[NSMutableArray alloc]init];
     self.otherContacts =[[NSMutableArray alloc]init];
     
-//    [self populateFromAddressBook];
-//    self.contactsData =[[NSMutableArray alloc]init];
+    //    [self populateFromAddressBook];
+    //    self.contactsData =[[NSMutableArray alloc]init];
     
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
+    
+    
     [self performSearch:@""];
-
+    
     [self performSelector:@selector(preparePhonebook:)
                withObject:nil
                afterDelay:3.0];
     
-
-//    [self preparePhonebook];
+    
+    //    [self preparePhonebook];
 }
 
 - (void)didReceiveMemoryWarning
@@ -98,48 +107,43 @@
 
 - (void)performSearch:(NSString *)searchText
 {
-    
-    NSString *sqlTemplate;
-    sqlTemplate = @"select * from phonebook where (first_name like '%%%@%%' or last_name like '%%%@%%') and status=%i and contact_key<>'%@' order by last_name";
-    
-    isLoading = YES;
-    int status;
     NSString *sql;
     
-    status = 1;
-    sql = [NSString stringWithFormat:sqlTemplate, searchText, searchText, status, [DataModel shared].user.contact_key];
-    
-    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
     [contactsData removeAllObjects];
+    [self buildAvailableContactsList:searchText];
+    //
+    //    if (searchText.length > 0) {
+    //
+    //    }
+    //    sqlTemplate = @"select * from phonebook where (first_name like '%%%@%%' or last_name like '%%%@%%') and status=%i and contact_key<>'%@' order by last_name";
+    //
+    //    isLoading = YES;
+    //    int status;
+    //
+    //    status = 1;
+    //    sql = [NSString stringWithFormat:sqlTemplate, searchText, searchText, status, [DataModel shared].user.contact_key];
+    //
+    //    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+    //
+    //    while ([rs next]) {
+    //        NSDictionary *dict =[rs resultDictionary];
+    //        [contactsData addObject:dict];
+    //    }
     
-    while ([rs next]) {
-        NSDictionary *dict =[rs resultDictionary];
-        [contactsData addObject:dict];
-    }
     
-    status = 0;
-    sqlTemplate = @"select distinct record_id, first_name, last_name from phonebook  where (first_name like '%%%@%%' or last_name like '%%%@%%') and status=%i order by last_name";
-//    sqlTemplate = @"select * from phonebook where (first_name like '%%%@%%' or last_name like '%%%@%%') and status=%i order by last_name";
-    sql = [NSString stringWithFormat:sqlTemplate, searchText, searchText, status];
-    
-    rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+    // ################ other contacts ##################
     [otherContacts removeAllObjects];
+    [self buildOtherContactsList:searchText];
     
-    while ([rs next]) {
-        
-        NSDictionary *dict =[rs resultDictionary];
-        [otherContacts addObject:dict];
-    }
-    NSLog(@"otherContacts %i", otherContacts.count);
-
+    
     [self.groupsData removeAllObjects];
     
     sql = @"select * from groups where name like '%%%@%%' order by name";
     sql = [NSString stringWithFormat:sql, searchText];
-
+    
     isLoading = YES;
     
-    rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
     
     while ([rs next]) {
         NSDictionary *dict =[rs resultDictionary];
@@ -152,18 +156,128 @@
     [self.theTableView reloadData];
     
 }
-
+- (void) buildAvailableContactsList:(NSString *)searchText {
+    FMResultSet *rs;
+    
+    if (searchText.length > 0) {
+        int status = 1;
+        NSString *sql = @"select distinct record_id, first_name, last_name from phonebook  where (first_name like '%%%@%%' or last_name like '%%%@%%') and status=%i order by last_name";
+        //    sqlTemplate = @"select * from phonebook where (first_name like '%%%@%%' or last_name like '%%%@%%') and status=%i order by last_name";
+        sql = [NSString stringWithFormat:sql, searchText, searchText, status];
+        
+        rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+        [otherContacts removeAllObjects];
+        
+        while ([rs next]) {
+            
+            NSDictionary *dict =[rs resultDictionary];
+            [otherContacts addObject:dict];
+        }
+        NSLog(@"otherContacts %i", otherContacts.count);
+        
+    } else {
+        
+        NSMutableArray *tmpArray = [[NSMutableArray alloc] init];
+        
+        NSString *alphaSql = @"select distinct CASE last_name  WHEN '' THEN substr(first_name, 1, 1) ELSE substr(last_name, 1, 1) END as alpha, CASE last_name  WHEN '' THEN first_name ELSE last_name END as sortval, pb.first_name, pb.last_name, pb.contact_key, pb.phone from phonebook pb where status=1 order by sortval, first_name";
+        
+        rs = [[SQLiteDB sharedConnection] executeQuery:alphaSql];
+        
+        while ([rs next]) {
+            NSDictionary *dict =[rs resultDictionary];
+            [tmpArray addObject:dict];
+        }
+        NSString *alpha;
+        NSString *lastAlpha = @"";
+        NSDictionary *sectionDict;
+        int pointer = 0;
+        
+        for (NSDictionary *dict in tmpArray) {
+            alpha = [dict objectForKey:@"alpha"];
+            
+            if ([alpha isEqualToString:lastAlpha]) {
+                [contactsData addObject:dict];
+                
+            } else {
+                sectionDict = [[NSMutableDictionary alloc] init];
+                [sectionDict setValue:alpha forKey:@"heading"];
+                [contactsData addObject:sectionDict];
+                [contactsData addObject:dict];
+                lastAlpha = alpha;
+            }
+            pointer++;
+        }
+        
+        NSLog(@"contactsData %i", contactsData.count);
+    }
+}
+- (void) buildOtherContactsList:(NSString *)searchText {
+    FMResultSet *rs;
+    
+    if (searchText.length > 0) {
+        int status = 0;
+        NSString *sql = @"select distinct record_id, first_name, last_name from phonebook  where (first_name like '%%%@%%' or last_name like '%%%@%%') and status=%i order by last_name";
+        //    sqlTemplate = @"select * from phonebook where (first_name like '%%%@%%' or last_name like '%%%@%%') and status=%i order by last_name";
+        sql = [NSString stringWithFormat:sql, searchText, searchText, status];
+        
+        rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+        [otherContacts removeAllObjects];
+        
+        while ([rs next]) {
+            
+            NSDictionary *dict =[rs resultDictionary];
+            [otherContacts addObject:dict];
+        }
+        NSLog(@"otherContacts %i", otherContacts.count);
+        
+    } else {
+        
+        NSMutableArray *tmpArray = [[NSMutableArray alloc] init];
+        
+        NSString *alphaSql = @"select distinct CASE last_name  WHEN '' THEN substr(first_name, 1, 1) ELSE substr(last_name, 1, 1) END as alpha, CASE last_name  WHEN '' THEN first_name ELSE last_name END as sortval, pb.record_id, pb.first_name, pb.last_name from phonebook pb where status=0 order by sortval, first_name";
+        
+        rs = [[SQLiteDB sharedConnection] executeQuery:alphaSql];
+        
+        while ([rs next]) {
+            NSDictionary *dict =[rs resultDictionary];
+            [tmpArray addObject:dict];
+        }
+        NSString *alpha;
+        NSString *lastAlpha = @"";
+        NSDictionary *sectionDict;
+        int pointer = 0;
+        [otherContacts removeAllObjects];
+        
+        for (NSDictionary *dict in tmpArray) {
+            alpha = [dict objectForKey:@"alpha"];
+            
+            if ([alpha isEqualToString:lastAlpha]) {
+                [otherContacts addObject:dict];
+                
+            } else {
+                sectionDict = [[NSMutableDictionary alloc] init];
+                [sectionDict setValue:alpha forKey:@"heading"];
+                [otherContacts addObject:sectionDict];
+                [otherContacts addObject:dict];
+                lastAlpha = alpha;
+            }
+            pointer++;
+        }
+        
+        NSLog(@"otherContacts %i", otherContacts.count);
+    }
+}
 - (void) preparePhonebook:(id)sender {
     
-//    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-//    [self.hud setLabelText:@"Loading..."];
+    //    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    //    [self.hud setLabelText:@"Loading..."];
     
     [contactSvc purgePhonebook];
     NSMutableArray *people = [contactSvc readAddressBook];
     NSLog(@"Found addressbook contacts to load qty:%i", people.count);
     
     [contactSvc bulkLoadPhonebook:[people copy]];
-
+    
     NSMutableArray *others = [contactSvc listPhonebookByStatus:0];
     NSMutableArray *numbers = [[NSMutableArray alloc] init];
     NSDictionary *dict;
@@ -276,7 +390,7 @@
             break;
             
         case 2:
-            title = @"Invite to re:group'd";
+            title = @"Invite friends to re:group'd";
             break;
             
         default:
@@ -332,89 +446,155 @@
     return 0;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.section == 0) {
+        NSDictionary *rowdata = [contactsData objectAtIndex:indexPath.row];
+        if ([rowdata objectForKey:@"heading"]) {
+            return 25;
+        } else {
+            return 50;
+        }
+    } else if (indexPath.section == 1) {
+        return 50;
+    } else if (indexPath.section == 2) {
+        NSDictionary *rowdata = [otherContacts objectAtIndex:indexPath.row];
+        if ([rowdata objectForKey:@"heading"]) {
+            return 25;
+        } else {
+            return 40;
+        }
+    } else {
+        return 50;
+    }
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    static NSString *CellIdentifier = @"ContactTableCell";
-    static NSString *CellNib = @"ContactTableViewCell";
+    //    static NSString *CellIdentifier = @"ContactTableCell";
+    //    static NSString *CellNib = @"ContactTableViewCell";
     
     if (indexPath.section == 0) {
         
-        // TODO: replace this with generic UITableViewCell for performance
-        ContactTableViewCell *cell = (ContactTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        @try {
-            
-            if (cell == nil) {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:CellNib owner:self options:nil];
-                cell = (ContactTableViewCell *)[nib objectAtIndex:0];
-                cell.selectionStyle = UITableViewCellSelectionStyleGray;
-            }
-            
-            if (contactsData.count > 0) {
-                NSDictionary *rowData = (NSDictionary *) [contactsData objectAtIndex:indexPath.row];
-//                cell.titleLabel.text = [NSString stringWithFormat:kFullNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
-                cell.titleLabel.text = [self readFullnameFromDictionary:rowData];
-                cell.statusLabel.text = kStatusAvailable;
+        NSDictionary *rowdata = (NSDictionary *) [contactsData objectAtIndex:indexPath.row];
+        //        UITableViewCell *cell = (ContactTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if ([rowdata objectForKey:@"heading"]) {
+            ContactHeadingCell *cell = (ContactHeadingCell *)[tableView dequeueReusableCellWithIdentifier:kContactHeadingCell_ID];
+            @try {
                 
-            } else {
-                cell.titleLabel.text = @"No contacts";
-                cell.statusLabel.text = @"";
+                if (cell == nil) {
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"ContactHeadingCell" owner:self options:nil];
+                    cell = (ContactHeadingCell *)[nib objectAtIndex:0];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                }
+                
+                cell.titleLabel.text = [rowdata objectForKey:@"heading"];
+                
+            } @catch (NSException * e) {
+                NSLog(@"Exception: %@", e);
             }
             
-        } @catch (NSException * e) {
-            NSLog(@"Exception: %@", e);
+            return cell;
+            
+        } else {
+            // TODO: replace this with generic UITableViewCell for performance
+            ContactTableViewCell *cell = (ContactTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kContactTableViewCell_ID];
+            @try {
+                
+                if (cell == nil) {
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"ContactTableViewCell" owner:self options:nil];
+                    cell = (ContactTableViewCell *)[nib objectAtIndex:0];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                }
+                
+                if (contactsData.count > 0) {
+                    //                cell.titleLabel.text = [NSString stringWithFormat:kFullNameFormat, [rowdata objectForKey:@"first_name"], [rowdata objectForKey:@"last_name"]];
+                    cell.titleLabel.text = [self readFullnameFromDictionary:rowdata];
+                    cell.statusLabel.text = kStatusAvailable;
+                    
+                } else {
+                    cell.titleLabel.text = @"No contacts";
+                    cell.statusLabel.text = @"";
+                }
+                
+            } @catch (NSException * e) {
+                NSLog(@"Exception: %@", e);
+            }
+            
+            return cell;
         }
-        
-        return cell;
-        
     } else if  (indexPath.section == 1) {
         // Groups
-        
-        ContactTableViewCell *cell = (ContactTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        OtherContactCell *cell = (OtherContactCell *)[tableView dequeueReusableCellWithIdentifier:kOtherContactCell_ID];
         @try {
             
             if (cell == nil) {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:CellNib owner:self options:nil];
-                cell = (ContactTableViewCell *)[nib objectAtIndex:0];
-                cell.selectionStyle = UITableViewCellSelectionStyleGray;
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OtherContactCell" owner:self options:nil];
+                cell = (OtherContactCell *)[nib objectAtIndex:0];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
+            
             if (groupsData.count > 0) {
                 NSDictionary *rowdata = [self.groupsData objectAtIndex:indexPath.row];
                 NSString *name = [rowdata objectForKey:@"name"];
                 cell.titleLabel.text = name;
-                cell.statusLabel.text = @"";
                 
             } else {
                 cell.titleLabel.text = @"No groups";
-                cell.statusLabel.text = @"";
             }
-            
-        } @catch (NSException * e) {
-            NSLog(@"Exception: %@", e);
-        }
-
-        return cell;
-    } else if (indexPath.section == 2) {
-        ContactTableViewCell *cell = (ContactTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        @try {
-            
-            if (cell == nil) {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:CellNib owner:self options:nil];
-                cell = (ContactTableViewCell *)[nib objectAtIndex:0];
-                cell.selectionStyle = UITableViewCellSelectionStyleGray;
-            }
-            
-            NSDictionary *rowData = (NSDictionary *) [otherContacts objectAtIndex:indexPath.row];
-            cell.titleLabel.text = [self readFullnameFromDictionary:rowData];
-
-            cell.statusLabel.text = @"";
             
         } @catch (NSException * e) {
             NSLog(@"Exception: %@", e);
         }
         
         return cell;
+    } else if (indexPath.section == 2) {
+        
+        NSDictionary *rowdata = (NSDictionary *) [otherContacts objectAtIndex:indexPath.row];
+        //        UITableViewCell *cell = (ContactTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if ([rowdata objectForKey:@"heading"]) {
+            ContactHeadingCell *cell = (ContactHeadingCell *)[tableView dequeueReusableCellWithIdentifier:kContactHeadingCell_ID];
+            @try {
+                
+                if (cell == nil) {
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"ContactHeadingCell" owner:self options:nil];
+                    cell = (ContactHeadingCell *)[nib objectAtIndex:0];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                }
+                
+                cell.titleLabel.text = [rowdata objectForKey:@"heading"];
+                
+            } @catch (NSException * e) {
+                NSLog(@"Exception: %@", e);
+            }
+            
+            return cell;
+            
+        } else {
+            OtherContactCell *cell = (OtherContactCell *)[tableView dequeueReusableCellWithIdentifier:kOtherContactCell_ID];
+            @try {
+                
+                if (cell == nil) {
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OtherContactCell" owner:self options:nil];
+                    cell = (OtherContactCell *)[nib objectAtIndex:0];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                }
+                
+                cell.titleLabel.text = [self readFullnameFromDictionary:rowdata];
+                
+            } @catch (NSException * e) {
+                NSLog(@"Exception: %@", e);
+            }
+            
+            return cell;
+            
+        }
+        
+        
         
         
     }
@@ -422,16 +602,16 @@
     
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 50;
-}
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
     if (indexPath.section == 0) {
         @try {
-            if (indexPath != nil) {
+            NSDictionary *rowdata = [contactsData objectAtIndex:indexPath.row];
+            if ([rowdata objectForKey:@"heading"]) {
+                return;
+            } else {
                 NSLog(@"Selected row %i", indexPath.row);
                 
                 selectedIndex = indexPath.row;
@@ -458,36 +638,41 @@
             [_delegate gotoSlideWithName:@"GroupInfo" andOverrideTransition:kPresentationTransitionPush|kPresentationTransitionLeft];
             
         }
-
+        
     } else if (indexPath.section == 2) {
-
+        
         NSDictionary *rowdata = [otherContacts objectAtIndex:indexPath.row];
         
-        ContactVO *contact = [ContactVO readFromPhonebook:rowdata];
-        
-        if (contact.record_id != nil) {
-            contact = [contactSvc readContactFromAddressBook:contact.record_id];
+        if ([rowdata objectForKey:@"heading"]) {
+            return;
+        } else {
+            ContactVO *contact = [ContactVO readFromPhonebook:rowdata];
             
-            
-            if (contact) {
-                BOOL success = YES;
-                if (contact.phoneNumbers.count > 0) {
-                    success = [self createSMSInvite:contact.phoneNumbers];
-                }
-                if (!success && contact.email != nil) {
-                    [self createEmailInvite:contact.email];
-                } else {
-                    // Do nothing or display alert
+            if (contact.record_id != nil) {
+                contact = [contactSvc readContactFromAddressBook:contact.record_id];
+                
+                
+                if (contact) {
+                    BOOL success = YES;
+                    if (contact.phoneNumbers.count > 0) {
+                        success = [self createSMSInvite:contact.phoneNumbers];
+                    }
+                    if (!success && contact.email != nil) {
+                        [self createEmailInvite:contact.email];
+                    } else {
+                        // Do nothing or display alert
+                    }
                 }
             }
+            
         }
-
+        
     }
     
     
 }
 
-#pragma mark - MessageUI 
+#pragma mark - MessageUI
 
 - (BOOL) createEmailInvite:(NSString *)email {
     // Email Content
@@ -545,9 +730,9 @@
 
 - (IBAction)tapAddButton
 {
-//    //    BOOL isOk = YES;
-//    NSNotification* showMaskNotification = [NSNotification notificationWithName:@"showMaskNotification" object:nil];
-//    [[NSNotificationCenter defaultCenter] postNotification:showMaskNotification];
+    //    //    BOOL isOk = YES;
+    //    NSNotification* showMaskNotification = [NSNotification notificationWithName:@"showMaskNotification" object:nil];
+    //    [[NSNotificationCenter defaultCenter] postNotification:showMaskNotification];
     
     [self showModal];
     
@@ -659,10 +844,10 @@
     NSLog(@"%s", __FUNCTION__);
     [self hideModal];
     [self dismissViewControllerAnimated:YES completion:NULL];
-
+    
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
-
+    
     [self preparePhonebook:nil];
 }
 
@@ -695,7 +880,7 @@
     NSNumber *recordId = [NSNumber numberWithInt:abRecordID];
     
     NSLog(@"RecordId = %@", recordId);
-
+    
     if (recordId > 0) {
         CFErrorRef err;
         ABAddressBookRef ab = ABAddressBookCreateWithOptions(NULL, &err);
@@ -767,14 +952,14 @@
     
 }
 
-- (NSString *) readFullnameFromDictionary:(NSDictionary *)rowData {
-//    NSLog(@"lastname %@", [rowData objectForKey:@"last_name"]);
-    if ([rowData objectForKey:@"first_name"] != nil && [rowData objectForKey:@"last_name"] == nil) {
-        return [rowData objectForKey:@"first_name"];
-    } else if ([rowData objectForKey:@"first_name"] == nil && [rowData objectForKey:@"last_name"] != nil) {
-        return [rowData objectForKey:@"last_name"];
+- (NSString *) readFullnameFromDictionary:(NSDictionary *)rowdata {
+    //    NSLog(@"lastname %@", [rowdata objectForKey:@"last_name"]);
+    if ([rowdata objectForKey:@"first_name"] != nil && [rowdata objectForKey:@"last_name"] == nil) {
+        return [rowdata objectForKey:@"first_name"];
+    } else if ([rowdata objectForKey:@"first_name"] == nil && [rowdata objectForKey:@"last_name"] != nil) {
+        return [rowdata objectForKey:@"last_name"];
     } else {
-        return [NSString stringWithFormat:kFullNameFormat, [rowData objectForKey:@"first_name"], [rowData objectForKey:@"last_name"]];
+        return [NSString stringWithFormat:kFullNameFormat, [rowdata objectForKey:@"first_name"], [rowdata objectForKey:@"last_name"]];
     }
 }
 

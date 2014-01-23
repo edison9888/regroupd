@@ -28,6 +28,7 @@
 #import "EditPollVC.h"
 #import "EditRatingVC.h"
 #import "EditRSVPVC.h"
+#import "EditGroupVC.h"
 
 #import "UIBubbleTableView.h"
 #import "UIBubbleTableViewDataSource.h"
@@ -40,7 +41,6 @@
 #define kAlertClearMessages 2
 #define kAlertClearMessages 2
 
-#define kBaseTagForNameWidget   900
 
 
 @interface ChatVC ()
@@ -68,6 +68,7 @@
 #define kTagAttachModalBG 666
 #define kTagPhotoModalBG  667
 #define kTagFormModalBG  668
+#define kBaseTagForNameWidget   900
 
 #define kAlphaDisabled  0.8f
 
@@ -116,7 +117,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     msgTimeFormat = [[NSDateFormatter alloc] init];
     [msgTimeFormat setDateFormat:@"h:mm a"];
-    //    [msgTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm"];
+//    [msgTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm"];
     
     
     inputHeight = 0;
@@ -799,8 +800,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         NSLog(@"widget height = %f", msgView.dynamicHeight);
         msgFrame.size.height = msgView.dynamicHeight;
         msgView.frame = msgFrame;
+        
         msgView.timeLabel.text = [msgTimeFormat stringFromDate:msg.createdAt];
         
+//        msg.createdAt = nil;
         //        bubble = [NSBubbleData dataWithView:msgView date:msg.createdAt type:BubbleTypeMine insets:UIEdgeInsetsMake(2, 5, 2, 5)];
         bubble = [NSBubbleData dataWithView:msgView date:msg.createdAt type:BubbleTypeMine insets:viewInset];
         bubble.iconFile = contact.pfPhoto;
@@ -1576,9 +1579,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         if (ypos - drawerMinTop < drawerMaxTop - ypos) {
             // Slide back up
             targetPoint = CGPointMake(sender.view.center.x, drawerMinTop + (sender.view.frame.size.height / 2));
-            
+            drawerIsOpen = NO;
         } else {
             targetPoint = CGPointMake(sender.view.center.x, drawerMaxTop + (sender.view.frame.size.height / 2));
+            drawerIsOpen = YES;
             // Slide back down
         }
         [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
@@ -1598,6 +1602,25 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     //    }
     
 }
+
+- (void) toggleTopDrawer {
+    if (drawerIsOpen) {
+        CGPoint targetPoint = CGPointMake(self.drawerView.center.x, drawerMinTop + (self.drawerView.frame.size.height / 2));
+        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.drawerView.center = targetPoint;
+        } completion:nil];
+        drawerIsOpen = NO;
+
+    } else {
+        CGPoint targetPoint = CGPointMake(self.drawerView.center.x, drawerMaxTop + (self.drawerView.frame.size.height / 2));
+        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.drawerView.center = targetPoint;
+        } completion:nil];
+        drawerIsOpen = YES;
+    }
+}
+
+
 -(void)singleTap:(UITapGestureRecognizer*)sender
 {
     NSLog(@"%s", __FUNCTION__);
@@ -1626,23 +1649,29 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 case kTagFormModalBG:
                     [self hideFormSelector];
                     break;
+                case kTagTopDrawer:
+                    [self toggleTopDrawer];
+                    break;
                     
             }
-            int nameIndex = subview.tag - kBaseTagForNameWidget;
-            if (nameIndex >= 0 && nameIndex <= 99) {
-                @try {
-                    NSString *key = (NSString *) [[DataModel shared].chat.contact_keys objectAtIndex:nameIndex];
-                    ContactVO *contact = (ContactVO *) [[DataModel shared].contactCache objectForKey:key];
-                    [DataModel shared].contact = contact;
-                    self.contactInfoVC = [[ContactInfoVC alloc] initWithNibName:@"ContactInfoVC" bundle:nil];
-                    [DataModel shared].action = @"popup";
-                    [self presentViewController:self.contactInfoVC animated:YES completion:nil];
+            if (subview.tag >= kBaseTagForNameWidget) {
+                int nameIndex = subview.tag - kBaseTagForNameWidget;
+                if (nameIndex >= 0 && nameIndex <= 99) {
+                    @try {
+                        NSString *key = (NSString *) [[DataModel shared].chat.contact_keys objectAtIndex:nameIndex];
+                        ContactVO *contact = (ContactVO *) [[DataModel shared].contactCache objectForKey:key];
+                        [DataModel shared].contact = contact;
+                        self.contactInfoVC = [[ContactInfoVC alloc] initWithNibName:@"ContactInfoVC" bundle:nil];
+                        [DataModel shared].action = @"popup";
+                        [self presentViewController:self.contactInfoVC animated:YES completion:nil];
+                        
+                    }
+                    @catch (NSException *exception) {
+                        NSLog(@"ERROR >>>>>>>> %@", exception);
+                    }
+                    
                     
                 }
-                @catch (NSException *exception) {
-                    NSLog(@"ERROR >>>>>>>> %@", exception);
-                }
-                
                 
             }
         }
@@ -1781,7 +1810,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void) tapCreateGroupLink:(id)sender {
     NSLog(@"%s", __FUNCTION__);
-    
+    [DataModel shared].action = @"popup";
+    EditGroupVC *editGroupVC = [[EditGroupVC alloc] init];
+    [self presentViewController:editGroupVC animated:YES completion:nil];
     
 }
 

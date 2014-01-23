@@ -558,6 +558,10 @@
 		1EFEA248182FB99500FEE9E4 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EFEA247182FB99500FEE9E4 /* CoreTelephony.framework */; };
 		1EFEA24B182FBFA500FEE9E4 /* NBPhoneNumberMetadata.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1EFEA249182FBFA500FEE9E4 /* NBPhoneNumberMetadata.plist */; };
 		1EFEA24C182FBFA500FEE9E4 /* NBPhoneNumberMetadataForTesting.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1EFEA24A182FBFA500FEE9E4 /* NBPhoneNumberMetadataForTesting.plist */; };
+		1EFF7740188F65E200EAC1B3 /* ContactHeadingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EFF773E188F65E200EAC1B3 /* ContactHeadingCell.m */; };
+		1EFF7741188F65E200EAC1B3 /* ContactHeadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EFF773F188F65E200EAC1B3 /* ContactHeadingCell.xib */; };
+		1EFF7745188F6F7000EAC1B3 /* OtherContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EFF7742188F6F7000EAC1B3 /* OtherContactCell.m */; };
+		1EFF7746188F6F7000EAC1B3 /* OtherContactCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1EFF7743188F6F7000EAC1B3 /* OtherContactCell.xib */; };
 		800F4C92170264A6001D2C50 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 800F4C91170264A6001D2C50 /* SenTestingKit.framework */; };
 		800F4C93170264A6001D2C50 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02B80A9F1518FA8600DE3F39 /* UIKit.framework */; };
 		800F4C94170264A6001D2C50 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02B80AA11518FA8600DE3F39 /* Foundation.framework */; };
@@ -1295,6 +1299,12 @@
 		1EFEA247182FB99500FEE9E4 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		1EFEA249182FBFA500FEE9E4 /* NBPhoneNumberMetadata.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = NBPhoneNumberMetadata.plist; sourceTree = "<group>"; };
 		1EFEA24A182FBFA500FEE9E4 /* NBPhoneNumberMetadataForTesting.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = NBPhoneNumberMetadataForTesting.plist; sourceTree = "<group>"; };
+		1EFF773D188F65E200EAC1B3 /* ContactHeadingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactHeadingCell.h; sourceTree = "<group>"; };
+		1EFF773E188F65E200EAC1B3 /* ContactHeadingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactHeadingCell.m; sourceTree = "<group>"; };
+		1EFF773F188F65E200EAC1B3 /* ContactHeadingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactHeadingCell.xib; sourceTree = "<group>"; };
+		1EFF7742188F6F7000EAC1B3 /* OtherContactCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OtherContactCell.m; sourceTree = "<group>"; };
+		1EFF7743188F6F7000EAC1B3 /* OtherContactCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OtherContactCell.xib; sourceTree = "<group>"; };
+		1EFF7744188F6F7000EAC1B3 /* OtherContactCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OtherContactCell.h; sourceTree = "<group>"; };
 		800F4C90170264A6001D2C50 /* Regroupd Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Regroupd Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		800F4C91170264A6001D2C50 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		80BED3561703C27200816DE3 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -1573,9 +1583,15 @@
 				1E59F12117FC873900EE2902 /* ChatTableViewCell.h */,
 				1E59F12217FC873900EE2902 /* ChatTableViewCell.m */,
 				1E59F12317FC873900EE2902 /* ChatTableViewCell.xib */,
+				1EFF773D188F65E200EAC1B3 /* ContactHeadingCell.h */,
+				1EFF773E188F65E200EAC1B3 /* ContactHeadingCell.m */,
+				1EFF773F188F65E200EAC1B3 /* ContactHeadingCell.xib */,
 				1EC3DE1F180F204C008E2D3F /* ContactTableViewCell.h */,
 				1EC3DE20180F204C008E2D3F /* ContactTableViewCell.m */,
 				1EC3DE21180F204C008E2D3F /* ContactTableViewCell.xib */,
+				1EFF7744188F6F7000EAC1B3 /* OtherContactCell.h */,
+				1EFF7742188F6F7000EAC1B3 /* OtherContactCell.m */,
+				1EFF7743188F6F7000EAC1B3 /* OtherContactCell.xib */,
 				1E928165177FB68F008A583C /* CCSearchBar.h */,
 				1E928166177FB68F008A583C /* CCSearchBar.m */,
 				1E928167177FB68F008A583C /* CCTableViewCell.h */,
@@ -2595,6 +2611,7 @@
 				1E4B78491803535900A8812D /* modal_vertical_divider@2x.png in Resources */,
 				1E928222177FB690008A583C /* key5.png in Resources */,
 				1E928223177FB690008A583C /* key5@2x.png in Resources */,
+				1EFF7746188F6F7000EAC1B3 /* OtherContactCell.xib in Resources */,
 				1E2E123618633E9400F6B875 /* rating_track_left_end@2x.png in Resources */,
 				1EBB5946184D136C00CE084D /* group_check_off@2x.png in Resources */,
 				1E928224177FB690008A583C /* key6.png in Resources */,
@@ -2681,6 +2698,7 @@
 				1E9282EF177FDCEB008A583C /* icon_buyfaxes.png in Resources */,
 				1E9282F0177FDCEB008A583C /* icon_contacts.png in Resources */,
 				1E9282F1177FDCEB008A583C /* icon_newfax.png in Resources */,
+				1EFF7741188F65E200EAC1B3 /* ContactHeadingCell.xib in Resources */,
 				1EA0B46218087CFD004C4DDA /* btn_rsvp_no_off@2x.png in Resources */,
 				1EC44C5718130CC100F4A2C2 /* ContactsHomeVC.xib in Resources */,
 				1E9282F2177FDCEB008A583C /* icon_profile.png in Resources */,
@@ -3020,6 +3038,7 @@
 				1E928297177FB690008A583C /* UIView+Helper.m in Sources */,
 				1E928298177FB690008A583C /* AnimationModel.m in Sources */,
 				1E928299177FB690008A583C /* PresentationModel.m in Sources */,
+				1EFF7740188F65E200EAC1B3 /* ContactHeadingCell.m in Sources */,
 				1E92829A177FB690008A583C /* SlideModel.m in Sources */,
 				1E92829B177FB690008A583C /* BaseComponentView.m in Sources */,
 				1EFEA241182FB97300FEE9E4 /* NBPhoneMetaData.m in Sources */,
@@ -3074,6 +3093,7 @@
 				1E9282B9177FB690008A583C /* SBJsonWriter.m in Sources */,
 				1EFEA240182FB97300FEE9E4 /* NBNumberFormat.m in Sources */,
 				1EF463341783AE1C00D38DBB /* UserVO.m in Sources */,
+				1EFF7745188F6F7000EAC1B3 /* OtherContactCell.m in Sources */,
 				1E0AEC651793860D00710FDE /* TabBarView.m in Sources */,
 				1E4E3582186CB6B100FA29DC /* AltTextView.m in Sources */,
 				1E76F4A917961283007EF5B0 /* ContactVO.m in Sources */,

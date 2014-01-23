@@ -34,6 +34,8 @@
     UIView *bgLayer;
     ContactManager *contactSvc;
     
+    
+    
 }
 @property (nonatomic, strong) MBProgressHUD *hud;
 

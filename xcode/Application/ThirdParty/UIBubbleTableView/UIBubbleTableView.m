@@ -127,18 +127,19 @@
         
         NSDate *last = [NSDate dateWithTimeIntervalSince1970:0];
         NSMutableArray *currentSection = nil;
-#if !__has_feature(objc_arc)
-        currentSection = [[[NSMutableArray alloc] init] autorelease];
-#else
-        currentSection = [[NSMutableArray alloc] init];
-#endif
         
         for (int i = 0; i < count; i++)
         {
             NSBubbleData *data = (NSBubbleData *)[bubbleData objectAtIndex:i];
-            
+            double seconds = [data.date timeIntervalSinceDate:last];
+//            NSLog(@"%@ compared to %@ seconds delta = %f", data.date, last, seconds);
             if ([data.date timeIntervalSinceDate:last] > self.snapInterval)
             {
+#if !__has_feature(objc_arc)
+                currentSection = [[[NSMutableArray alloc] init] autorelease];
+#else
+                currentSection = [[NSMutableArray alloc] init];
+#endif
                 [self.bubbleSection addObject:currentSection];
             }
             
@@ -157,6 +158,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     int result = [self.bubbleSection count];
+//    NSLog(@"Number of sections %i", result);
     if (self.typingBubble != NSBubbleTypingTypeNobody) result++;
     return result;
 }

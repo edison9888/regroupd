@@ -45,6 +45,7 @@
     
     float drawerMinTop;
     float drawerMaxTop;
+    BOOL drawerIsOpen;
     
     CGPoint  offset; // unused
     UIResponder *_currentFocus;

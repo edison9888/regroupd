@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "ContactVO.h"
 
+#define kContactTableViewCell_ID  @"ContactTableViewCell_ID"
+
 @interface ContactTableViewCell : UITableViewCell {
     UILabel *titleLabel;
     
