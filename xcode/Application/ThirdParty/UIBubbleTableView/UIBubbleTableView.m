@@ -125,15 +125,26 @@
              return [bubbleData1.date compare:bubbleData2.date];            
          }];
         
+        
         NSDate *last = [NSDate dateWithTimeIntervalSince1970:0];
+
+        NSString *lastDateLabel;
+        NSString *currentDateLabel;
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"yyyy-MM-dd"];
+        
         NSMutableArray *currentSection = nil;
         
         for (int i = 0; i < count; i++)
         {
             NSBubbleData *data = (NSBubbleData *)[bubbleData objectAtIndex:i];
-            double seconds = [data.date timeIntervalSinceDate:last];
+//            double seconds = [data.date timeIntervalSinceDate:last];
 //            NSLog(@"%@ compared to %@ seconds delta = %f", data.date, last, seconds);
-            if ([data.date timeIntervalSinceDate:last] > self.snapInterval)
+            
+            currentDateLabel = [formatter stringFromDate:data.date];
+//            NSLog(@"%@ compared to %@", currentDateLabel, lastDateLabel);
+            if (![currentDateLabel isEqualToString:lastDateLabel])
+//            if ([data.date timeIntervalSinceDate:last] > self.snapInterval)
             {
 #if !__has_feature(objc_arc)
                 currentSection = [[[NSMutableArray alloc] init] autorelease];
@@ -144,6 +155,7 @@
             }
             
             [currentSection addObject:data];
+            lastDateLabel = currentDateLabel;
             last = data.date;
         }
     }

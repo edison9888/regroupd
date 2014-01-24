@@ -73,10 +73,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
     // scrollview setup
     navbarHeight = 50;
-    
-    CGRect scrollFrame = CGRectMake(0, navbarHeight,[DataModel shared].stageWidth, [DataModel shared].stageHeight - navbarHeight);
+    CGRect scrollFrame = self.scrollView.frame;
+    scrollFrame.size.height = [DataModel shared].stageHeight - navbarHeight;
     self.scrollView.frame = scrollFrame;
-    CGSize scrollContentSize = CGSizeMake([DataModel shared].stageWidth, 800);
+    CGSize scrollContentSize = CGSizeMake([DataModel shared].stageWidth, 650);
     self.scrollView.contentSize = scrollContentSize;
     self.scrollView.delegate = self;
     
@@ -130,13 +130,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     self.ckAllowOthersNo.tag = kTagAllowOthersNo;
     [self.ckAllowOthersNo selected];
     
-    NSArray *fields = @[ self.subjectField,
-                         self.tfStartDate,
-                         self.tfStartTime,
-                         self.tfEndDate,
-                         self.tfEndTime,
-                         self.whereField,
-                         self.descriptionField ];
     
 //    [self setKeyboardControls:[[BSKeyboardControls alloc] initWithFields:fields]];
 //    [self.keyboardControls setDelegate:self];
@@ -270,27 +263,27 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 - (void) showKeyboard:(CGSize)keyboardSize
 {
-    // resize the noteView
     CGRect viewFrame = self.scrollView.frame;
     // I'm also subtracting a constant kTabBarHeight because my UIScrollView was offset by the UITabBar so really only the portion of the keyboard that is leftover pass the UITabBar is obscuring my UIScrollView.
-    viewFrame.size.height -= (keyboardSize.height - navbarHeight);
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    // The kKeyboardAnimationDuration I am using is 0.3
-    [UIView setAnimationDuration:0.3];
+    viewFrame.size.height = [DataModel shared].stageHeight - keyboardSize.height - 50;
+    viewFrame.origin.y = 0;
+    NSLog(@"Set scrollView height to %f", viewFrame.size.height);
     [self.scrollView setFrame:viewFrame];
-    [UIView commitAnimations];
+    
+//    [UIView beginAnimations:nil context:NULL];
+//    [UIView setAnimationBeginsFromCurrentState:YES];
+//    // The kKeyboardAnimationDuration I am using is 0.3
+//    [UIView setAnimationDuration:0.3];
+//    [UIView commitAnimations];
     
     keyboardIsShown = YES;
     
 }
 - (void) hideKeyboard:(CGSize)keyboardSize
 {
-    // resize the scrollview
     CGRect viewFrame = self.scrollView.frame;
     // I'm also subtracting a constant kTabBarHeight because my UIScrollView was offset by the UITabBar so really only the portion of the keyboard that is leftover pass the UITabBar is obscuring my UIScrollView.
-    viewFrame.size.height = [DataModel shared].stageHeight - 44;
+    viewFrame.size.height = [DataModel shared].stageHeight - viewFrame.origin.y;
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];
@@ -302,22 +295,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     keyboardIsShown = NO;
     
 }
-//- (void) updateScrollView {
-//    NSLog(@"%s tag=%i", __FUNCTION__, fieldIndex);
-//    
-//    CGRect aRect = self.view.frame;
-//    
-//    aRect.size.height -= keyboardHeight;
-//    CGRect targetFrame = _currentField.frame;
-//    
-//    targetFrame.origin.y += 40;
-//    
-////        [self.scrollView setContentOffset:CGPointMake(0.0, currentOption.frame.origin.y-keyboardHeight) animated:YES];
-//    if (!CGRectContainsPoint(aRect, targetFrame.origin) ) {
-//        [self.scrollView scrollRectToVisible:targetFrame animated:YES];
-//    }
-//    
-//}
 
 #pragma mark - Date Picker and Date methods
 
@@ -328,29 +305,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void) datePickerValueChanged:(id)sender{
     NSLog(@"%s fieldIndex=%i", __FUNCTION__, fieldIndex);
     _currentField.text = [DateTimeUtils printDatePartFromDate:self.datePicker.date];
-
-//    switch (fieldIndex) {
-//        case kTagStartDate:
-//            
-//            self.tfStartDate.text = [DateTimeUtils printDatePartFromDate:self.datePicker.date];
-//            break;
-//            
-//        case kTagStartTime:
-//            
-//            self.tfStartTime.text = [DateTimeUtils printTimePartFromDate:self.datePicker.date];
-//            break;
-//            
-//        case kTagEndDate:
-//            
-//            self.tfEndDate.text = [DateTimeUtils printDatePartFromDate:self.datePicker.date];
-//            break;
-//            
-//        case kTagEndTime:
-//            
-//            self.tfEndTime.text = [DateTimeUtils printTimePartFromDate:self.datePicker.date];
-//            break;
-//            
-//    }
 
 }
 
@@ -393,36 +347,36 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [fancyField setActiveStyle:nil];
     
     
-    CGRect textFieldRect = [self.view.window convertRect:textField.bounds fromView:textField];
-    CGRect viewRect = [self.view.window convertRect:self.view.bounds fromView:self.view];
-    
-    CGFloat midline = textFieldRect.origin.y + 0.5 * textFieldRect.size.height;
-    CGFloat numerator = midline - viewRect.origin.y - MINIMUM_SCROLL_FRACTION * viewRect.size.height;
-    CGFloat denominator = (MAXIMUM_SCROLL_FRACTION - MINIMUM_SCROLL_FRACTION) * viewRect.size.height;
-    CGFloat heightFraction = numerator / denominator;
-    
-    if (heightFraction < 0.0)
-    {
-        heightFraction = 0.0;
-    }
-    else if (heightFraction > 1.0)
-    {
-        heightFraction = 1.0;
-    }
-    
-    animatedDistance = floor(PORTRAIT_KEYBOARD_HEIGHT * heightFraction);
-    
-    CGRect viewFrame = self.view.frame;
-    viewFrame.origin.y -= animatedDistance;
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
-    
-    [self.view setFrame:viewFrame];
-    
-    [UIView commitAnimations];
-    
+//    CGRect textFieldRect = [self.view.window convertRect:textField.bounds fromView:textField];
+//    CGRect viewRect = [self.view.window convertRect:self.view.bounds fromView:self.view];
+//    
+//    CGFloat midline = textFieldRect.origin.y + 0.5 * textFieldRect.size.height;
+//    CGFloat numerator = midline - viewRect.origin.y - MINIMUM_SCROLL_FRACTION * viewRect.size.height;
+//    CGFloat denominator = (MAXIMUM_SCROLL_FRACTION - MINIMUM_SCROLL_FRACTION) * viewRect.size.height;
+//    CGFloat heightFraction = numerator / denominator;
+//    
+//    if (heightFraction < 0.0)
+//    {
+//        heightFraction = 0.0;
+//    }
+//    else if (heightFraction > 1.0)
+//    {
+//        heightFraction = 1.0;
+//    }
+//    
+//    animatedDistance = floor(PORTRAIT_KEYBOARD_HEIGHT * heightFraction);
+//    
+//    CGRect viewFrame = self.view.frame;
+//    viewFrame.origin.y -= animatedDistance;
+//    
+//    [UIView beginAnimations:nil context:NULL];
+//    [UIView setAnimationBeginsFromCurrentState:YES];
+//    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
+//    
+//    [self.view setFrame:viewFrame];
+//    
+//    [UIView commitAnimations];
+//    
     fieldIndex = textField.tag;
     NSDate *pickDate;
     pickDate = self.datePicker.date;
@@ -461,16 +415,16 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
 }
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-    CGRect viewFrame = self.view.frame;
-    viewFrame.origin.y += animatedDistance;
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
-    
-    [self.view setFrame:viewFrame];
-    
-    [UIView commitAnimations];
+//    CGRect viewFrame = self.view.frame;
+//    viewFrame.origin.y += animatedDistance;
+//    
+//    [UIView beginAnimations:nil context:NULL];
+//    [UIView setAnimationBeginsFromCurrentState:YES];
+//    [UIView setAnimationDuration:KEYBOARD_ANIMATION_DURATION];
+//    
+//    [self.view setFrame:viewFrame];
+//    
+//    [UIView commitAnimations];
     
 //    [self.keyboardControls.activeField resignFirstResponder];
 //    [textField resignFirstResponder];
@@ -800,91 +754,91 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 #pragma mark Keyboard Controls Delegate
 
-- (void)keyboardControlsBeforeMove:(BSKeyboardControls *)keyboardControls currentField:(UIView *)field inDirection:(BSKeyboardControlsDirection)direction {
-    NSLog(@"%s at field %i", __FUNCTION__, fieldIndex);
-    
-    NSDate *pickDate;
-    if (_currentField.text.length == 0) {
-        switch (fieldIndex) {
-                
-            case kTagStartDate:
-                pickDate = self.datePicker.date;
-                
-                _currentField.text = [DateTimeUtils printDatePartFromDate:pickDate];
-                if (self.tfEndDate.text.length == 0) {
-                    self.tfEndDate.text = _currentField.text;
-                    
-                }
-                break;
-                
-            case kTagStartTime:
-                pickDate = self.datePicker.date;
-                _currentField.text = [DateTimeUtils printTimePartFromDate:pickDate];
-                if (self.tfEndTime.text.length == 0) {
-                    self.tfEndTime.text = _currentField.text;
-                }
-                
-                break;
-                
-            case kTagEndDate:
-                pickDate = self.datePicker.date;
-                _currentField.text = [DateTimeUtils printDatePartFromDate:pickDate];
-                
-                break;
-                
-            case kTagEndTime:
-                
-                pickDate = self.datePicker.date;
-                _currentField.text = [DateTimeUtils printTimePartFromDate:pickDate];
-                break;
-        }
-    }
-    
-}
-
-
-- (void)keyboardControls:(BSKeyboardControls *)keyboardControls selectedField:(UIView *)field inDirection:(BSKeyboardControlsDirection)direction
-{
-    
-}
-
-
-- (void)keyboardControlsDonePressed:(BSKeyboardControls *)controls
-{
-    NSLog(@"%s at field %i", __FUNCTION__, fieldIndex);
-    
-    NSDate *pickDate;
-    switch (fieldIndex) {
-            
-        case kTagStartDate:
-            pickDate = self.datePicker.date;
-            
-            _currentField.text = [DateTimeUtils printDatePartFromDate:pickDate];
-            break;
-            
-        case kTagStartTime:
-            pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils printTimePartFromDate:pickDate];
-            
-            break;
-            
-        case kTagEndDate:
-            pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils printDatePartFromDate:pickDate];            
-            break;
-            
-        case kTagEndTime:
-            
-            pickDate = self.datePicker.date;
-            _currentField.text = [DateTimeUtils printTimePartFromDate:pickDate];
-            break;
-    }
-    
-    [_currentField resignFirstResponder];
-    
-//    [self.scrollView scrollRectToVisible:self.view.frame animated:YES];
-    
-}
+//- (void)keyboardControlsBeforeMove:(BSKeyboardControls *)keyboardControls currentField:(UIView *)field inDirection:(BSKeyboardControlsDirection)direction {
+//    NSLog(@"%s at field %i", __FUNCTION__, fieldIndex);
+//    
+//    NSDate *pickDate;
+//    if (_currentField.text.length == 0) {
+//        switch (fieldIndex) {
+//                
+//            case kTagStartDate:
+//                pickDate = self.datePicker.date;
+//                
+//                _currentField.text = [DateTimeUtils printDatePartFromDate:pickDate];
+//                if (self.tfEndDate.text.length == 0) {
+//                    self.tfEndDate.text = _currentField.text;
+//                    
+//                }
+//                break;
+//                
+//            case kTagStartTime:
+//                pickDate = self.datePicker.date;
+//                _currentField.text = [DateTimeUtils printTimePartFromDate:pickDate];
+//                if (self.tfEndTime.text.length == 0) {
+//                    self.tfEndTime.text = _currentField.text;
+//                }
+//                
+//                break;
+//                
+//            case kTagEndDate:
+//                pickDate = self.datePicker.date;
+//                _currentField.text = [DateTimeUtils printDatePartFromDate:pickDate];
+//                
+//                break;
+//                
+//            case kTagEndTime:
+//                
+//                pickDate = self.datePicker.date;
+//                _currentField.text = [DateTimeUtils printTimePartFromDate:pickDate];
+//                break;
+//        }
+//    }
+//    
+//}
+//
+//
+//- (void)keyboardControls:(BSKeyboardControls *)keyboardControls selectedField:(UIView *)field inDirection:(BSKeyboardControlsDirection)direction
+//{
+//    
+//}
+//
+//
+//- (void)keyboardControlsDonePressed:(BSKeyboardControls *)controls
+//{
+//    NSLog(@"%s at field %i", __FUNCTION__, fieldIndex);
+//    
+//    NSDate *pickDate;
+//    switch (fieldIndex) {
+//            
+//        case kTagStartDate:
+//            pickDate = self.datePicker.date;
+//            
+//            _currentField.text = [DateTimeUtils printDatePartFromDate:pickDate];
+//            break;
+//            
+//        case kTagStartTime:
+//            pickDate = self.datePicker.date;
+//            _currentField.text = [DateTimeUtils printTimePartFromDate:pickDate];
+//            
+//            break;
+//            
+//        case kTagEndDate:
+//            pickDate = self.datePicker.date;
+//            _currentField.text = [DateTimeUtils printDatePartFromDate:pickDate];            
+//            break;
+//            
+//        case kTagEndTime:
+//            
+//            pickDate = self.datePicker.date;
+//            _currentField.text = [DateTimeUtils printTimePartFromDate:pickDate];
+//            break;
+//    }
+//    
+//    [_currentField resignFirstResponder];
+//    
+////    [self.scrollView scrollRectToVisible:self.view.frame animated:YES];
+//    
+//}
 
 #pragma mark - picker actions
 
@@ -935,7 +889,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         [self dismissViewControllerAnimated:YES completion:nil];
     } else {
         [DataModel shared].form = theForm;
-        [_delegate gotoSlideWithName:@"FormSend"];
+        [_delegate gotoSlideWithName:@"FormSend" returnPath:@"FormsHome"];
 //        [_delegate gotoSlideWithName:@"FormsHome"];
     }
     
@@ -948,6 +902,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 {
     NSNumber *index = (NSNumber *) [notification object];
     fieldIndex = index.intValue;
+    [_currentField resignFirstResponder];
     
     NSLog(@"%s for index %i", __FUNCTION__, fieldIndex);
     [self showModal];

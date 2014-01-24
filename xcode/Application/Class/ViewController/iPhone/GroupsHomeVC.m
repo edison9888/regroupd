@@ -145,10 +145,12 @@
         UIImage *image = [UIImage imageNamed:@"groups_cell_arrow.png"];
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         CGRect frame = CGRectMake(0.0, 0.0, image.size.width, image.size.height);
+//        UIImageView *arrow = [[UIImageView alloc] initWithImage:image];
+//        arrow.frame = frame;
         button.frame = frame;
         [button setBackgroundImage:image forState:UIControlStateNormal];
         
-//        [button addTarget:self action:@selector(checkButtonTapped:event:)  forControlEvents:UIControlEventTouchUpInside];
+        [button addTarget:self action:@selector(checkButtonTapped:)  forControlEvents:UIControlEventTouchUpInside];
         button.backgroundColor = [UIColor clearColor];
         cell.accessoryView = button;
         
@@ -190,6 +192,37 @@
     
     
 }
+
+
+- (void)checkButtonTapped:(id)sender
+{
+    NSLog(@"%s", __FUNCTION__);
+    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.theTableView];
+    NSIndexPath *indexPath = [self.theTableView indexPathForRowAtPoint:buttonPosition];
+    
+    if (indexPath != nil)
+    {
+        
+        NSLog(@"button index %@", indexPath);
+        
+        NSLog(@"Selected row %i", indexPath.row);
+        
+        selectedIndex = indexPath.row;
+        NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
+        
+        [DataModel shared].group = [GroupVO readFromDictionary:rowdata];
+        
+        [DataModel shared].action = kActionEDIT;
+        [_delegate gotoSlideWithName:@"ManageGroup" returnPath:@"GroupsHome"];
+        
+    }
+}
+
+- (void) tapCellAccessory:(id)sender {
+    NSLog(@"%s", __FUNCTION__);
+    
+}
+
 
 // Override to support conditional editing of the table view.
 // This only needs to be implemented if you are going to be returning NO

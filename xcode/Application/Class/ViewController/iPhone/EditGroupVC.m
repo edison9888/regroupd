@@ -225,6 +225,11 @@
 {
     NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
     [textField resignFirstResponder];
+    if (textField.tag == kTagNameField) {
+        UITextField *txfSearchField = [ccSearchBar valueForKey:@"_searchField"];
+        [txfSearchField becomeFirstResponder];
+//        [self.ccSearchBar.inputView.]
+    }
     return YES;
 }
 
@@ -242,6 +247,10 @@
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
     return YES;
 }
+
+
+
+
 
 
 #pragma mark - UISearchBar

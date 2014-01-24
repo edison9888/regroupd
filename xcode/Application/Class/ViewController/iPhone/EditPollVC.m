@@ -53,7 +53,7 @@
     // scrollview setup
     navbarHeight = 50;
     
-    CGRect scrollFrame = CGRectMake(0, navbarHeight,[DataModel shared].stageWidth, [DataModel shared].stageHeight - navbarHeight);
+    CGRect scrollFrame = CGRectMake(0, 0,[DataModel shared].stageWidth, [DataModel shared].stageHeight - navbarHeight);
     self.scrollView.frame = scrollFrame;
     CGSize scrollContentSize = CGSizeMake([DataModel shared].stageWidth, 700);
     self.scrollView.contentSize = scrollContentSize;
@@ -221,7 +221,7 @@
     // resize the noteView
     CGRect viewFrame = self.scrollView.frame;
     // I'm also subtracting a constant kTabBarHeight because my UIScrollView was offset by the UITabBar so really only the portion of the keyboard that is leftover pass the UITabBar is obscuring my UIScrollView.
-    viewFrame.size.height -= (keyboardSize.height - navbarHeight);
+    viewFrame.size.height = [DataModel shared].stageHeight - keyboardSize.height - viewFrame.origin.y;
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];
@@ -376,7 +376,7 @@
                     [self.ckMultipleNo selected];
                     allowMultiple = 0;
                     break;
-                case 666:
+                case 667:
                     [self hideModal];
                     break;
                     
@@ -391,7 +391,7 @@
 #pragma mark - Modal
 
 - (void) showModal {
-    [self becomeFirstResponder];
+//    [self becomeFirstResponder];
     
     CGRect fullscreen = CGRectMake(0, 0, [DataModel shared].stageWidth, [DataModel shared].stageHeight);
     bgLayer = [[UIView alloc] initWithFrame:fullscreen];
@@ -399,7 +399,7 @@
     bgLayer.alpha = 0.8;
     bgLayer.tag = 1000;
     bgLayer.layer.zPosition = 9;
-    bgLayer.tag = 666;
+    bgLayer.tag = 667;
     [self.view addSubview:bgLayer];
     
     
@@ -434,6 +434,11 @@
 
 - (void) hideModal {
     
+    if (bgLayer != nil) {
+        [bgLayer removeFromSuperview];
+        bgLayer = nil;
+    }
+
     CGRect modalFrame = self.photoModal.frame;
     float ypos = -modalFrame.size.height - 40;
     modalFrame.origin.y = ypos;
@@ -446,10 +451,6 @@
                          self.photoModal.frame = modalFrame;
                      }
                      completion:^(BOOL finished){
-                         if (bgLayer != nil) {
-                             [bgLayer removeFromSuperview];
-                             bgLayer = nil;
-                         }
                          
                      }];
     
@@ -457,6 +458,7 @@
 }
 
 - (IBAction)tapCancelButton {
+    [self hideModal];
     if ([[DataModel shared].action isEqualToString:@"popup"]) {
         [DataModel shared].action = @"";
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -623,7 +625,7 @@
         [self dismissViewControllerAnimated:YES completion:nil];
     } else {
         [DataModel shared].form = theForm;
-        [_delegate gotoSlideWithName:@"FormSend"];
+        [_delegate gotoSlideWithName:@"FormSend" returnPath:@"FormsHome"];
 //        [_delegate gotoSlideWithName:@"FormsHome"];
     }
 }
@@ -635,6 +637,7 @@
 {
     NSNumber *index = (NSNumber *) [notification object];
     optionIndex = index.intValue;
+    [_currentField resignFirstResponder];
     
     NSLog(@"%s for index %i", __FUNCTION__, optionIndex);
     [self showModal];

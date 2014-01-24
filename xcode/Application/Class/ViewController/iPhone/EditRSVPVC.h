@@ -14,12 +14,12 @@
 #import "FancyTextField.h"
 #import "BrandUITextField.h"
 #import "FancyDateTimeField.h"
-#import "BSKeyboardControls.h"
+//#import "BSKeyboardControls.h"
 #import "FormManager.h"
 #import "MBProgressHUD.h"
 
 
-@interface EditRSVPVC : SlideViewController<UIScrollViewDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate, BSKeyboardControlsDelegate> {
+@interface EditRSVPVC : SlideViewController<UIScrollViewDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate> {
 
     FormManager *formSvc;
     NSDateFormatter *dateFormatter;
@@ -66,7 +66,6 @@
 
 
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
-@property (nonatomic, retain) IBOutlet UIView *lowerForm;
 
 @property (nonatomic, strong) IBOutlet UIView *photoHolder;
 @property (nonatomic, strong) IBOutlet UIImageView *roundPic;

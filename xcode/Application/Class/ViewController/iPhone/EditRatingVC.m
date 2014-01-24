@@ -60,7 +60,7 @@
     navbarHeight = 50;
     inputHeight = 0;
     
-    CGRect scrollFrame = CGRectMake(0, navbarHeight,[DataModel shared].stageWidth, [DataModel shared].stageHeight - navbarHeight);
+    CGRect scrollFrame = CGRectMake(0, 0,[DataModel shared].stageWidth, [DataModel shared].stageHeight - navbarHeight);
     self.scrollView.frame = scrollFrame;
     CGSize scrollContentSize = CGSizeMake([DataModel shared].stageWidth, 800);
     self.scrollView.contentSize = scrollContentSize;
@@ -231,7 +231,7 @@
     // resize the noteView
     CGRect viewFrame = self.scrollView.frame;
     // I'm also subtracting a constant kTabBarHeight because my UIScrollView was offset by the UITabBar so really only the portion of the keyboard that is leftover pass the UITabBar is obscuring my UIScrollView.
-    viewFrame.size.height -= (keyboardSize.height - navbarHeight);
+    viewFrame.size.height = [DataModel shared].stageHeight - keyboardSize.height - viewFrame.origin.y;
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];
@@ -248,7 +248,7 @@
     // resize the scrollview
     CGRect viewFrame = self.scrollView.frame;
     // I'm also subtracting a constant kTabBarHeight because my UIScrollView was offset by the UITabBar so really only the portion of the keyboard that is leftover pass the UITabBar is obscuring my UIScrollView.
-    viewFrame.size.height += (keyboardSize.height - navbarHeight);
+    viewFrame.size.height = [DataModel shared].stageHeight - 50;
     
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];
@@ -799,7 +799,7 @@
         [self dismissViewControllerAnimated:YES completion:nil];
     } else {
         [DataModel shared].form = theForm;
-        [_delegate gotoSlideWithName:@"FormSend"];
+        [_delegate gotoSlideWithName:@"FormSend" returnPath:@"FormsHome"];
 //        [_delegate gotoSlideWithName:@"FormsHome"];
     }
 }
@@ -811,7 +811,8 @@
 {
     NSNumber *index = (NSNumber *) [notification object];
     optionIndex = index.intValue;
-    
+    [_currentFocus resignFirstResponder];
+
     NSLog(@"%s for index %i", __FUNCTION__, optionIndex);
     [self showModal];
     

@@ -1000,6 +1000,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 - (void)hideFormSelectorNotificationHandler:(NSNotification*)notification
 {
+    [self hideFormSelector];
+    [self hideAttachModal];
+
     if (notification.object != nil) {
         self.attachedForm = (FormVO *) notification.object;
         attachmentType = self.attachedForm.type;
@@ -1032,13 +1035,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 option = [FormOptionVO readFromPFObject:result];
                 [self.attachedForm.options addObject:option];
             }
-            [self hideFormSelector];
-            [self hideAttachModal];
         }];
         
     } else {
-        [self hideFormSelector];
-        [self hideAttachModal];
+        
+        // Do nothing
     }
     
 }
@@ -1519,9 +1520,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSNumber *index = (NSNumber *) [notification object];
     fieldIndex = index.intValue;
     
-    NSLog(@"%s for index %i", __FUNCTION__, fieldIndex);
-    [self showAttachModal];
-    
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)Picker {
@@ -1820,18 +1818,19 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void) insertMessageInChat {
     
-    spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    CGFloat halfButtonHeight = self.sendButton.bounds.size.height / 2;
-    CGFloat buttonWidth = self.sendButton.bounds.size.width;
-    spinner.center = CGPointMake(buttonWidth / 2, halfButtonHeight);
-    [self.sendButton addSubview:spinner];
-    [spinner startAnimating];
-    self.sendButton.enabled = NO;
 
     //    [self.bubbleTable becomeFirstResponder];
     //    self.sendButton.enabled = NO;
     if (!hasAttachment) {
         if (self.inputField.text.length > 0) {
+            spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            CGFloat halfButtonHeight = self.sendButton.bounds.size.height / 2;
+            CGFloat buttonWidth = self.sendButton.bounds.size.width;
+            spinner.center = CGPointMake(buttonWidth / 2, halfButtonHeight);
+            [self.sendButton addSubview:spinner];
+            [spinner startAnimating];
+            self.sendButton.enabled = NO;
+
             ChatMessageVO *msg = [[ChatMessageVO alloc] init];
             
             NSString *chatText = [self.inputField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -1896,7 +1895,13 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     if (hasAttachment) {
 //        self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
 //        [self.hud setLabelText:@"Sending"];
-        
+        spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        CGFloat halfButtonHeight = self.sendButton.bounds.size.height / 2;
+        CGFloat buttonWidth = self.sendButton.bounds.size.width;
+        spinner.center = CGPointMake(buttonWidth / 2, halfButtonHeight);
+        [self.sendButton addSubview:spinner];
+        [spinner startAnimating];
+        self.sendButton.enabled = NO;
         if (self.attachedForm != nil) {
             
             [formCache setObject:self.attachedForm forKey:self.attachedForm.system_id];
@@ -2109,6 +2114,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 #pragma mark - Create new form handlers
 
 - (IBAction)tapCreatePollButton {
+    [self hideAttachModal];
+
     [DataModel shared].action = @"popup";
     [DataModel shared].didSaveOK = NO;
     
@@ -2124,6 +2131,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
 }
 - (IBAction)tapCreateRatingButton {
+    [self hideAttachModal];
     [DataModel shared].action = @"popup";
     [DataModel shared].didSaveOK = NO;
 
@@ -2138,6 +2146,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
 }
 - (IBAction)tapCreateRSVPButton {
+    [self hideAttachModal];
+
     [DataModel shared].action = @"popup";
     [DataModel shared].didSaveOK = NO;
 

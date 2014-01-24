@@ -81,6 +81,27 @@
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
     
+    // register for keyboard notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:self.view.window];
+    // register for keyboard notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:self.view.window];
+
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
+                                             
+                                             initWithTarget:self action:@selector(singleTap:)];
+    
+    // Specify that the gesture must be a single tap
+    
+    tapRecognizer.numberOfTapsRequired = 1;
+    
+    [self.view addGestureRecognizer:tapRecognizer];
+
     
     [self performSearch:@""];
     
@@ -111,24 +132,6 @@
     
     [contactsData removeAllObjects];
     [self buildAvailableContactsList:searchText];
-    //
-    //    if (searchText.length > 0) {
-    //
-    //    }
-    //    sqlTemplate = @"select * from phonebook where (first_name like '%%%@%%' or last_name like '%%%@%%') and status=%i and contact_key<>'%@' order by last_name";
-    //
-    //    isLoading = YES;
-    //    int status;
-    //
-    //    status = 1;
-    //    sql = [NSString stringWithFormat:sqlTemplate, searchText, searchText, status, [DataModel shared].user.contact_key];
-    //
-    //    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-    //
-    //    while ([rs next]) {
-    //        NSDictionary *dict =[rs resultDictionary];
-    //        [contactsData addObject:dict];
-    //    }
     
     
     // ################ other contacts ##################
@@ -166,14 +169,13 @@
         sql = [NSString stringWithFormat:sql, searchText, searchText, status];
         
         rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-        [otherContacts removeAllObjects];
         
         while ([rs next]) {
             
             NSDictionary *dict =[rs resultDictionary];
-            [otherContacts addObject:dict];
+            [contactsData addObject:dict];
         }
-        NSLog(@"otherContacts %i", otherContacts.count);
+        NSLog(@"contactsData %i", contactsData.count);
         
     } else {
         
@@ -221,7 +223,6 @@
         sql = [NSString stringWithFormat:sql, searchText, searchText, status];
         
         rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-        [otherContacts removeAllObjects];
         
         while ([rs next]) {
             
@@ -342,7 +343,7 @@
  */
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
-    [ccSearchBar setShowsCancelButton:NO animated:YES];
+    [ccSearchBar setShowsCancelButton:YES animated:YES];
     
     self.theTableView.allowsSelection = YES;
     self.theTableView.scrollEnabled = YES;
@@ -360,6 +361,8 @@
     
     //    self.theTableView.hidden = YES;
     selectedIndex = -1;
+    UITextField *txfSearchField = [ccSearchBar valueForKey:@"_searchField"];
+    [txfSearchField resignFirstResponder];
     
 }
 
@@ -368,10 +371,75 @@
     // SomeService is just a dummy class representing some
     // api that you are using to do the search
     NSLog(@"search text=%@", _searchBar.text);
+    UITextField *txfSearchField = [ccSearchBar valueForKey:@"_searchField"];
+    [txfSearchField resignFirstResponder];
     
     [self performSearch:_searchBar.text];
     
 }
+
+
+
+- (void)keyboardWillHide:(NSNotification *)n
+{
+#ifdef kDEBUG
+    NSLog(@"===== %s", __FUNCTION__);
+#endif
+    NSDictionary* userInfo = [n userInfo];
+    
+    // get the size of the keyboard
+    CGSize keyboardSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    [self hideKeyboard:keyboardSize];
+}
+
+- (void)keyboardWillShow:(NSNotification *)n
+{
+#ifdef kDEBUG
+    NSLog(@"===== %s", __FUNCTION__);
+#endif
+    // This is an ivar I'm using to ensure that we do not do the frame size adjustment on the UIScrollView if the keyboard is already shown.  This can happen if the user, after fixing editing a UITextField, scrolls the resized UIScrollView to another UITextField and attempts to edit the next UITextField.  If we were to resize the UIScrollView again, it would be disastrous.  NOTE: The keyboard notification will fire even when the keyboard is already shown.
+    if (keyboardIsShown) {
+        return;
+    }
+    
+    NSDictionary* userInfo = [n userInfo];
+    
+    // get the size of the keyboard
+    CGSize keyboardSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    [self showKeyboard:keyboardSize];
+    
+}
+- (void) showKeyboard:(CGSize)keyboardSize
+{
+    // resize the noteView
+    CGRect viewFrame = self.theTableView.frame;
+    // I'm also subtracting a constant kTabBarHeight because my UIScrollView was offset by the UITabBar so really only the portion of the keyboard that is leftover pass the UITabBar is obscuring my UIScrollView.
+    viewFrame.size.height = [DataModel shared].stageHeight - keyboardSize.height - viewFrame.origin.y;
+    
+    [self.theTableView setFrame:viewFrame];
+    keyboardIsShown = YES;
+    
+}
+- (void) hideKeyboard:(CGSize)keyboardSize
+{
+    // resize the scrollview
+    CGRect viewFrame = self.theTableView.frame;
+    // I'm also subtracting a constant kTabBarHeight because my UIScrollView was offset by the UITabBar so really only the portion of the keyboard that is leftover pass the UITabBar is obscuring my UIScrollView.
+    viewFrame.size.height = [DataModel shared].stageHeight - viewFrame.origin.y;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    // The kKeyboardAnimationDuration I am using is 0.3
+    [UIView setAnimationDuration:0.3];
+    
+    [self.theTableView setFrame:viewFrame];
+    [UIView commitAnimations];
+    
+    keyboardIsShown = NO;
+    
+}
+
 
 #pragma mark - UITableViewDataSource
 
@@ -449,23 +517,31 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0) {
-        NSDictionary *rowdata = [contactsData objectAtIndex:indexPath.row];
-        if ([rowdata objectForKey:@"heading"]) {
-            return 25;
+        if (contactsData.count > 0) {
+            NSDictionary *rowdata = [contactsData objectAtIndex:indexPath.row];
+            if ([rowdata objectForKey:@"heading"]) {
+                return 25;
+            } else {
+                return 50;
+            }
         } else {
-            return 50;
+            return 40;
         }
     } else if (indexPath.section == 1) {
-        return 50;
+        return 40;
     } else if (indexPath.section == 2) {
-        NSDictionary *rowdata = [otherContacts objectAtIndex:indexPath.row];
-        if ([rowdata objectForKey:@"heading"]) {
-            return 25;
+        if (otherContacts.count > 0) {
+            NSDictionary *rowdata = [otherContacts objectAtIndex:indexPath.row];
+            if ([rowdata objectForKey:@"heading"]) {
+                return 25;
+            } else {
+                return 40;
+            }
         } else {
             return 40;
         }
     } else {
-        return 50;
+        return 40;
     }
 }
 
@@ -477,54 +553,74 @@
     //    static NSString *CellNib = @"ContactTableViewCell";
     
     if (indexPath.section == 0) {
-        
-        NSDictionary *rowdata = (NSDictionary *) [contactsData objectAtIndex:indexPath.row];
-        //        UITableViewCell *cell = (ContactTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        if ([rowdata objectForKey:@"heading"]) {
-            ContactHeadingCell *cell = (ContactHeadingCell *)[tableView dequeueReusableCellWithIdentifier:kContactHeadingCell_ID];
-            @try {
-                
-                if (cell == nil) {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"ContactHeadingCell" owner:self options:nil];
-                    cell = (ContactHeadingCell *)[nib objectAtIndex:0];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                }
-                
-                cell.titleLabel.text = [rowdata objectForKey:@"heading"];
-                
-            } @catch (NSException * e) {
-                NSLog(@"Exception: %@", e);
-            }
-            
-            return cell;
-            
-        } else {
+        if (contactsData.count == 0) {
             // TODO: replace this with generic UITableViewCell for performance
-            ContactTableViewCell *cell = (ContactTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kContactTableViewCell_ID];
+            OtherContactCell *cell = (OtherContactCell *)[tableView dequeueReusableCellWithIdentifier:kContactTableViewCell_ID];
             @try {
                 
                 if (cell == nil) {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"ContactTableViewCell" owner:self options:nil];
-                    cell = (ContactTableViewCell *)[nib objectAtIndex:0];
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OtherContactCell" owner:self options:nil];
+                    cell = (OtherContactCell *)[nib objectAtIndex:0];
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 }
                 
-                if (contactsData.count > 0) {
-                    //                cell.titleLabel.text = [NSString stringWithFormat:kFullNameFormat, [rowdata objectForKey:@"first_name"], [rowdata objectForKey:@"last_name"]];
-                    cell.titleLabel.text = [self readFullnameFromDictionary:rowdata];
-                    cell.statusLabel.text = kStatusAvailable;
-                    
-                } else {
-                    cell.titleLabel.text = @"No contacts";
-                    cell.statusLabel.text = @"";
-                }
+                cell.titleLabel.text = @"No contacts";
                 
             } @catch (NSException * e) {
                 NSLog(@"Exception: %@", e);
             }
             
             return cell;
+        } else {
+            NSDictionary *rowdata = (NSDictionary *) [contactsData objectAtIndex:indexPath.row];
+            //        UITableViewCell *cell = (ContactTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            
+            if ([rowdata objectForKey:@"heading"]) {
+                ContactHeadingCell *cell = (ContactHeadingCell *)[tableView dequeueReusableCellWithIdentifier:kContactHeadingCell_ID];
+                @try {
+                    
+                    if (cell == nil) {
+                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"ContactHeadingCell" owner:self options:nil];
+                        cell = (ContactHeadingCell *)[nib objectAtIndex:0];
+                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    }
+                    
+                    cell.titleLabel.text = [rowdata objectForKey:@"heading"];
+                    
+                } @catch (NSException * e) {
+                    NSLog(@"Exception: %@", e);
+                }
+                
+                return cell;
+                
+            } else {
+                // TODO: replace this with generic UITableViewCell for performance
+                ContactTableViewCell *cell = (ContactTableViewCell *)[tableView dequeueReusableCellWithIdentifier:kContactTableViewCell_ID];
+                @try {
+                    
+                    if (cell == nil) {
+                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"ContactTableViewCell" owner:self options:nil];
+                        cell = (ContactTableViewCell *)[nib objectAtIndex:0];
+                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    }
+                    
+                    if (contactsData.count > 0) {
+                        //                cell.titleLabel.text = [NSString stringWithFormat:kFullNameFormat, [rowdata objectForKey:@"first_name"], [rowdata objectForKey:@"last_name"]];
+                        cell.titleLabel.text = [self readFullnameFromDictionary:rowdata];
+                        cell.statusLabel.text = kStatusAvailable;
+                        
+                    } else {
+                        cell.titleLabel.text = @"No contacts";
+                        cell.statusLabel.text = @"";
+                    }
+                    
+                } @catch (NSException * e) {
+                    NSLog(@"Exception: %@", e);
+                }
+                
+                return cell;
+            }
+            
         }
     } else if  (indexPath.section == 1) {
         // Groups
@@ -553,28 +649,7 @@
         return cell;
     } else if (indexPath.section == 2) {
         
-        NSDictionary *rowdata = (NSDictionary *) [otherContacts objectAtIndex:indexPath.row];
-        //        UITableViewCell *cell = (ContactTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        if ([rowdata objectForKey:@"heading"]) {
-            ContactHeadingCell *cell = (ContactHeadingCell *)[tableView dequeueReusableCellWithIdentifier:kContactHeadingCell_ID];
-            @try {
-                
-                if (cell == nil) {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"ContactHeadingCell" owner:self options:nil];
-                    cell = (ContactHeadingCell *)[nib objectAtIndex:0];
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                }
-                
-                cell.titleLabel.text = [rowdata objectForKey:@"heading"];
-                
-            } @catch (NSException * e) {
-                NSLog(@"Exception: %@", e);
-            }
-            
-            return cell;
-            
-        } else {
+        if (otherContacts.count == 0) {
             OtherContactCell *cell = (OtherContactCell *)[tableView dequeueReusableCellWithIdentifier:kOtherContactCell_ID];
             @try {
                 
@@ -584,13 +659,56 @@
                     cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 }
                 
-                cell.titleLabel.text = [self readFullnameFromDictionary:rowdata];
+                cell.titleLabel.text = @"No contacts to invite";
                 
             } @catch (NSException * e) {
                 NSLog(@"Exception: %@", e);
             }
             
             return cell;
+            
+        } else {
+
+            NSDictionary *rowdata = (NSDictionary *) [otherContacts objectAtIndex:indexPath.row];
+            //        UITableViewCell *cell = (ContactTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            
+            if ([rowdata objectForKey:@"heading"]) {
+                ContactHeadingCell *cell = (ContactHeadingCell *)[tableView dequeueReusableCellWithIdentifier:kContactHeadingCell_ID];
+                @try {
+                    
+                    if (cell == nil) {
+                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"ContactHeadingCell" owner:self options:nil];
+                        cell = (ContactHeadingCell *)[nib objectAtIndex:0];
+                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    }
+                    
+                    cell.titleLabel.text = [rowdata objectForKey:@"heading"];
+                    
+                } @catch (NSException * e) {
+                    NSLog(@"Exception: %@", e);
+                }
+                
+                return cell;
+                
+            } else {
+                OtherContactCell *cell = (OtherContactCell *)[tableView dequeueReusableCellWithIdentifier:kOtherContactCell_ID];
+                @try {
+                    
+                    if (cell == nil) {
+                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OtherContactCell" owner:self options:nil];
+                        cell = (OtherContactCell *)[nib objectAtIndex:0];
+                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    }
+                    
+                    cell.titleLabel.text = [self readFullnameFromDictionary:rowdata];
+                    
+                } @catch (NSException * e) {
+                    NSLog(@"Exception: %@", e);
+                }
+                
+                return cell;
+                
+            }
             
         }
         
@@ -724,6 +842,21 @@
     }
     [self dismissViewControllerAnimated:YES completion:nil];
     
+}
+
+#pragma mark - Tap Gesture
+
+-(void)singleTap:(UITapGestureRecognizer*)sender
+{
+    NSLog(@"%s", __FUNCTION__);
+    if (UIGestureRecognizerStateEnded == sender.state)
+    {
+        if (keyboardIsShown) {
+            UITextField *txfSearchField = [ccSearchBar valueForKey:@"_searchField"];
+            [txfSearchField resignFirstResponder];
+            
+        }
+    }
 }
 
 #pragma mark - Action handlers

@@ -23,6 +23,8 @@
     
     CCSearchBar *ccSearchBar;
 
+    BOOL keyboardIsShown;
+    
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *contactsData;

@@ -122,8 +122,6 @@
     <resources>
         <image name="btn_aqua_bg_small.png" width="55" height="28"/>
         <image name="hbar_96x2.png" width="96" height="2"/>
-        <image name="hbar_96x2.png" width="96" height="2"/>
-        <image name="settings_big_button_bg.png" width="290" height="40"/>
         <image name="settings_big_button_bg.png" width="290" height="40"/>
         <image name="topnav_aqua_bg.png" width="320" height="50"/>
     </resources>

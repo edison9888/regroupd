@@ -68,7 +68,7 @@
                     <rect key="frame" x="0.0" y="50" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <subviews>
-                        <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="group name" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="mAB-B1-Z5U" userLabel="BrandUI Text Field - group name" customClass="BrandUITextField">
+                        <textField autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" tag="11" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="group name" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" id="mAB-B1-Z5U" userLabel="BrandUI Text Field - group name" customClass="BrandUITextField">
                             <rect key="frame" x="10" y="31" width="300" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
