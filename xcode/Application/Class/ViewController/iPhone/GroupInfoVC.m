@@ -156,16 +156,16 @@
     
     NSLog(@"Found contactKeys %@", contactKeys);
     [contactSvc apiLookupContacts:contactKeys callback:^(NSArray *results) {
-        NSMutableArray *namesArray = [[NSMutableArray alloc] init];
-        
-        ContactVO *contact;
-        for (NSString *key in contactKeys) {
-            contact = [[DataModel shared].contactCache objectForKey:key];
-            if (contact) {
-                [namesArray addObject:contact.fullname];
-            }
-        }
-        NSString *names = [namesArray componentsJoinedByString:@", "];
+//        NSMutableArray *namesArray = [[NSMutableArray alloc] init];
+//        
+//        ContactVO *contact;
+//        for (NSString *key in contactKeys) {
+//            contact = [[DataModel shared].contactCache objectForKey:key];
+//            if (contact) {
+//                [namesArray addObject:contact.fullname];
+//            }
+//        }
+//        NSString *names = [namesArray componentsJoinedByString:@", "];
         
         [chatSvc apiFindChatsByContactKeys:contactKeys callback:^(NSArray *results) {
             BOOL chatExists = NO;
@@ -185,7 +185,7 @@
             }
             if (chatExists) {
                 NSLog(@"Found existing chat");
-                chat.names = names;
+                chat.name = [DataModel shared].group.name;
                 [DataModel shared].chat = chat;
 
                 [DataModel shared].navIndex = 2;
@@ -197,7 +197,8 @@
             } else {
                 NSLog(@"Creating new chat");
                 ChatVO *chat = [[ChatVO alloc] init];
-                chat.names = names;
+                chat.name = [DataModel shared].group.name;
+                chat.status = [NSNumber numberWithInt:ChatStatus_GROUP];
                 chat.contact_keys = contactKeys;
                 
                 [chatSvc apiSaveChat:chat callback:^(PFObject *pfChat) {

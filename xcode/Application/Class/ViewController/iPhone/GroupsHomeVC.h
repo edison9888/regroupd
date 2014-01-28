@@ -9,11 +9,14 @@
 #import "SlideViewController.h"
 #import "SQLiteDB.h"
 #import "GroupTableViewCell.h"
+#import "GroupVO.h"
 #import "ContactVO.h"
 #import "GroupManager.h"
+#import "ChatManager.h"
 
 @interface GroupsHomeVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     GroupManager *groupSvc;
+    ChatManager *chatSvc;
     
     BOOL isLoading;
     BOOL inEditMode;

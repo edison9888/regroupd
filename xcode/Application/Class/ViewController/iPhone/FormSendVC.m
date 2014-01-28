@@ -508,7 +508,7 @@
         } else {
             NSLog(@"Creating new chat");
             chat = [[ChatVO alloc] init];
-            chat.names = @"";
+            chat.name = @"";
             chat.contact_keys = contactKeys.allObjects;
             
             [chatSvc apiSaveChat:chat callback:^(PFObject *pfChat) {

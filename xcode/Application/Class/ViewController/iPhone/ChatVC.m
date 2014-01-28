@@ -106,7 +106,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [super viewDidLoad];
     
     chatId = [DataModel shared].chat.system_id;
-    chatTitle = [DataModel shared].chat.names;
+    chatTitle = [DataModel shared].chat.name;
     dbChat = [DataModel shared].chat;
     
     if (chatTitle != nil && chatTitle.length > 0) {
@@ -117,8 +117,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     msgTimeFormat = [[NSDateFormatter alloc] init];
     [msgTimeFormat setDateFormat:@"h:mm a"];
-//    [msgTimeFormat setDateFormat:@"yyyy-MM-dd HH:mm"];
-    
     
     inputHeight = 0;
     
@@ -158,14 +156,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(hideFormSelectorNotificationHandler:)     name:@"hideFormSelectorNotification"
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(showImagePickerNotificationHandler:)     name:@"showImagePickerNotification"
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
                                                  name:UIKeyboardWillShowNotification
                                                object:nil];
@@ -175,13 +165,26 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(hideFormSelectorNotificationHandler:)     name:@"hideFormSelectorNotification"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(showImagePickerNotificationHandler:)     name:@"showImagePickerNotification"
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(formResponseEnteredHandler:)     name:k_formResponseEntered
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(showFormDetailsHandler:)     name:k_showFormDetails
                                                object:nil];
     
-    // Create and initialize a tap gesture
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatPushNotificationHandler:) name:k_chatPushNotificationReceived object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatRefreshNotificationHandler:) name:k_chatRefreshNotification object:nil];
+    
+    
+// Create and initialize a tap gesture
     
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
                                              
@@ -217,9 +220,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     //    - NSBubbleTypingTypeNone - no "now typing" bubble
     
     //    self.bubbleTable.typingBubble = NSBubbleTypingTypeSomebody;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatPushNotificationHandler:) name:k_chatPushNotificationReceived object:nil];
-    
-    
     /*
      http://stackoverflow.com/questions/6672677/how-to-use-uipangesturerecognizer-to-move-object-iphone-ipad
      */
@@ -444,105 +444,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self.bubbleTable scrollBubbleViewToBottomAnimated:NO];
 }
 
-#pragma mark - Notifications
-
-
-- (void)formResponseEnteredHandler:(NSNotification*)notification
-{
-    NSLog(@"%s", __FUNCTION__);
-    
-    @try {
-        
-        [[[UIAlertView alloc] initWithTitle:@"Thanks!" message:@"Response sent" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-        
-    }
-    @catch (NSException *exception) {
-        NSLog(@"########### Exception %@", exception);
-    }
-    
-    
-}
-
-- (void)showFormDetailsHandler:(NSNotification*)notification
-{
-    NSLog(@"%s", __FUNCTION__);
-    
-    if (notification.object) {
-        NSString *formKey = (NSString *) notification.object;
-        
-        if ([formCache objectForKey:formKey]) {
-            FormVO *theForm = (FormVO *) [formCache objectForKey:formKey];
-            [DataModel shared].form = theForm;
-            
-            
-            
-            switch (theForm.type) {
-                case FormType_POLL:
-                {
-                    BOOL allowView = NO;
-                    if (theForm.allow_public != nil) {
-                        if (theForm.allow_public.intValue == 1) {
-                            allowView = YES;
-                        }
-                    }
-                    if ([theForm.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
-                        allowView = YES;
-                    }
-                    if (allowView) {
-                        [DataModel shared].action = @"popup";
-                        PollDetailVC *pollDetailVC = [[PollDetailVC alloc] initWithNibName:@"PollDetailVC" bundle:nil];
-                        pollDetailVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-                        [self presentViewController:pollDetailVC animated:YES completion:nil];
-                        
-                        
-                    } else {
-                        [[[UIAlertView alloc] initWithTitle:nil message:kDetailsNotPublic delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-                    
-                    }
-                    
-                    break;
-                }
-                case FormType_RATING:
-                {
-                    BOOL allowView = NO;
-                    if (theForm.allow_public != nil) {
-                        if (theForm.allow_public.intValue == 1) {
-                            allowView = YES;
-                        }
-                    }
-                    if ([theForm.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
-                        allowView = YES;
-                    }
-                    if (allowView) {
-                        [DataModel shared].action = @"popup";
-                        RatingDetailVC *detailsVC = [[RatingDetailVC alloc] init];
-                        detailsVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-                        [self presentViewController:detailsVC animated:YES completion:nil];
-                    } else {
-                        [[[UIAlertView alloc] initWithTitle:nil message:kDetailsNotPublic delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-                        
-                    }
-                    
-                    break;
-                }
-                case FormType_RSVP:
-                {
-                    [DataModel shared].action = @"popup";
-                    RSVPDetailVC *detailsVC = [[RSVPDetailVC alloc] init];
-                    detailsVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-                    [self presentViewController:detailsVC animated:YES completion:nil];
-                    break;
-                }
-            }
-        } else {
-            NSLog(@"formKey not recognized in cache %@", formKey);
-        }
-        
-    }
-    
-    
-}
-
 #pragma mark - Load Data and Setup
 - (void) setupTopDrawer {
     
@@ -664,6 +565,106 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
 }
 
+#pragma mark - Notifications
+
+
+- (void)formResponseEnteredHandler:(NSNotification*)notification
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    @try {
+        
+        [[[UIAlertView alloc] initWithTitle:@"Thanks!" message:@"Response sent" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        
+    }
+    @catch (NSException *exception) {
+        NSLog(@"########### Exception %@", exception);
+    }
+    
+    
+}
+
+- (void)showFormDetailsHandler:(NSNotification*)notification
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    if (notification.object) {
+        NSString *formKey = (NSString *) notification.object;
+        
+        if ([formCache objectForKey:formKey]) {
+            FormVO *theForm = (FormVO *) [formCache objectForKey:formKey];
+            [DataModel shared].form = theForm;
+            
+            
+            
+            switch (theForm.type) {
+                case FormType_POLL:
+                {
+                    BOOL allowView = NO;
+                    if (theForm.allow_public != nil) {
+                        if (theForm.allow_public.intValue == 1) {
+                            allowView = YES;
+                        }
+                    }
+                    if ([theForm.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
+                        allowView = YES;
+                    }
+                    if (allowView) {
+                        [DataModel shared].action = @"popup";
+                        PollDetailVC *pollDetailVC = [[PollDetailVC alloc] initWithNibName:@"PollDetailVC" bundle:nil];
+                        pollDetailVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+                        [self presentViewController:pollDetailVC animated:YES completion:nil];
+                        
+                        
+                    } else {
+                        [[[UIAlertView alloc] initWithTitle:nil message:kDetailsNotPublic delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                        
+                    }
+                    
+                    break;
+                }
+                case FormType_RATING:
+                {
+                    BOOL allowView = NO;
+                    if (theForm.allow_public != nil) {
+                        if (theForm.allow_public.intValue == 1) {
+                            allowView = YES;
+                        }
+                    }
+                    if ([theForm.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
+                        allowView = YES;
+                    }
+                    if (allowView) {
+                        [DataModel shared].action = @"popup";
+                        RatingDetailVC *detailsVC = [[RatingDetailVC alloc] init];
+                        detailsVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+                        [self presentViewController:detailsVC animated:YES completion:nil];
+                    } else {
+                        [[[UIAlertView alloc] initWithTitle:nil message:kDetailsNotPublic delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                        
+                    }
+                    
+                    break;
+                }
+                case FormType_RSVP:
+                {
+                    [DataModel shared].action = @"popup";
+                    RSVPDetailVC *detailsVC = [[RSVPDetailVC alloc] init];
+                    detailsVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+                    [self presentViewController:detailsVC animated:YES completion:nil];
+                    break;
+                }
+            }
+        } else {
+            NSLog(@"formKey not recognized in cache %@", formKey);
+        }
+        
+    }
+    
+    
+}
+
+
 - (void)chatPushNotificationHandler:(NSNotification*)notification
 {
     NSLog(@"%s", __FUNCTION__);
@@ -681,6 +682,64 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
     
 }
+
+- (void)chatRefreshNotificationHandler:(NSNotification*)notification
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    chatTitle = [DataModel shared].chat.name;
+    if (chatTitle != nil && chatTitle.length > 0) {
+        self.navTitle.text = chatTitle;
+    }
+}
+
+
+- (void)hideFormSelectorNotificationHandler:(NSNotification*)notification
+{
+    [self hideFormSelector];
+    [self hideAttachModal];
+    
+    if (notification.object != nil) {
+        self.attachedForm = (FormVO *) notification.object;
+        attachmentType = self.attachedForm.type;
+        hasAttachment = YES;
+        NSLog(@"Form pick: %@", self.attachedForm.name);
+        self.sendButton.enabled = YES;
+        
+        switch (attachmentType) {
+            case FormType_POLL:
+            {
+                [self.attachButton setImage:[UIImage imageNamed:kAttachPollIconAqua] forState:UIControlStateNormal];
+                break;
+            }
+            case FormType_RATING:
+                [self.attachButton setImage:[UIImage imageNamed:kAttachRatingIconAqua] forState:UIControlStateNormal];
+                break;
+            case FormType_RSVP:
+                [self.attachButton setImage:[UIImage imageNamed:kAttachRSVPIconAqua] forState:UIControlStateNormal];
+                break;
+        }
+        
+        if (formSvc == nil) {
+            formSvc = [[FormManager alloc] init];
+        }
+        [formSvc apiListFormOptions:self.attachedForm.system_id callback:^(NSArray *results) {
+            self.attachedForm.options = [[NSMutableArray alloc] initWithCapacity:results.count];
+            FormOptionVO *option;
+            
+            for (PFObject *result in results) {
+                option = [FormOptionVO readFromPFObject:result];
+                [self.attachedForm.options addObject:option];
+            }
+        }];
+        
+    } else {
+        
+        // Do nothing
+    }
+    
+}
+
 
 #pragma mark - private helper methods
 
@@ -998,52 +1057,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }
     return nil;
 }
-- (void)hideFormSelectorNotificationHandler:(NSNotification*)notification
-{
-    [self hideFormSelector];
-    [self hideAttachModal];
-
-    if (notification.object != nil) {
-        self.attachedForm = (FormVO *) notification.object;
-        attachmentType = self.attachedForm.type;
-        hasAttachment = YES;
-        NSLog(@"Form pick: %@", self.attachedForm.name);
-        self.sendButton.enabled = YES;
-        
-        switch (attachmentType) {
-            case FormType_POLL:
-            {
-                [self.attachButton setImage:[UIImage imageNamed:kAttachPollIconAqua] forState:UIControlStateNormal];
-                break;
-            }
-            case FormType_RATING:
-                [self.attachButton setImage:[UIImage imageNamed:kAttachRatingIconAqua] forState:UIControlStateNormal];
-                break;
-            case FormType_RSVP:
-                [self.attachButton setImage:[UIImage imageNamed:kAttachRSVPIconAqua] forState:UIControlStateNormal];
-                break;
-        }
-        
-        if (formSvc == nil) {
-            formSvc = [[FormManager alloc] init];
-        }
-        [formSvc apiListFormOptions:self.attachedForm.system_id callback:^(NSArray *results) {
-            self.attachedForm.options = [[NSMutableArray alloc] initWithCapacity:results.count];
-            FormOptionVO *option;
-            
-            for (PFObject *result in results) {
-                option = [FormOptionVO readFromPFObject:result];
-                [self.attachedForm.options addObject:option];
-            }
-        }];
-        
-    } else {
-        
-        // Do nothing
-    }
-    
-}
-
 #pragma mark - UIBubbleTableViewDataSource implementation
 
 - (NSInteger)rowsForBubbleTable:(UIBubbleTableView *)tableView

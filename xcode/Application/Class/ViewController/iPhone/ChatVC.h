@@ -102,7 +102,7 @@
 @property (nonatomic, retain) UIImage *attachedPhoto;
 @property (nonatomic, retain) FormVO *attachedForm;
 
-@property (nonatomic, retain) UIView *bgLayer;
+//@property (nonatomic, retain) UIView *bgLayer;
 
 @property (nonatomic, retain) IBOutlet BrandUILabel *navTitle;
 @property (nonatomic, strong) IBOutlet UIBubbleTableView *bubbleTable;

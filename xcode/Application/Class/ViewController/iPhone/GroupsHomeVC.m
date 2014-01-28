@@ -7,6 +7,7 @@
 //
 
 #import "GroupsHomeVC.h"
+#import "DateTimeUtils.h"
 
 @interface GroupsHomeVC ()
 
@@ -33,6 +34,7 @@
     // Do any additional setup after loading the view from its nib.
     
     groupSvc = [[GroupManager alloc] init];
+    chatSvc = [[ChatManager alloc] init];
     
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
@@ -64,44 +66,60 @@
 - (void)performSearch:(NSString *)searchText
 {
     NSLog(@"%s: %@", __FUNCTION__, searchText);
+
+    NSMutableArray *groupsArray = [[NSMutableArray alloc] init];
     
-    if (searchText.length > 0) {
-        NSString *sqlTemplate = @"select * from groups where name like '%%%@%%' limit 20";
+    NSMutableSet *myChatKeys = [[NSMutableSet alloc] init];
+    GroupVO *group;
+    NSString *chatKey;
+    NSString *sql = @"select * from groups order by name";
+    
+    isLoading = YES;
+    
+//    NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+    [tableData removeAllObjects];
+    
+    while ([rs next]) {
         
-        isLoading = YES;
-        
-        NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
-        
-        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-        [tableData removeAllObjects];
-        
-        while ([rs next]) {
-            [tableData addObject:[rs resultDictionary]];
+        group = [GroupVO readFromDictionary:[rs resultDictionary]];
+        group.type = kGroupTypeLocal;
+        chatKey = group.chat_key;
+        if (chatKey != nil && chatKey.length > 0) {
+            [myChatKeys addObject:chatKey];
         }
-        isLoading = NO;
-        
-        [self.theTableView reloadData];
-        
-    } else {
-        NSString *sqlTemplate = @"select * from groups order by name";
-        
-        isLoading = YES;
-        
-        NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
-        
-        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-        [tableData removeAllObjects];
-        
-        while ([rs next]) {
-            NSDictionary *dict =[rs resultDictionary];
-            NSLog(@"Result %@", [dict objectForKey:@"name"]);
-            
-            [tableData addObject:dict];
-        }
-        isLoading = NO;
-        
-        [self.theTableView reloadData];
+        [groupsArray addObject:group];
     }
+    isLoading = NO;
+    
+//    NSLog(@"excludedKeys %@", myChatKeys);
+    
+    [chatSvc apiFindGroupChats:[DataModel shared].user.contact_key
+                    withStatus:[NSNumber numberWithInt:ChatStatus_GROUP]
+                     excluding:[myChatKeys allObjects] callback:^(NSArray *results) {
+
+                         for (PFObject *pfChat in results) {
+                             GroupVO *g = [GroupVO readFromPFChat:pfChat];
+                             g.type = kGroupTypeRemote;
+                             g.chat_key = pfChat.objectId;
+                             
+                             if (![myChatKeys containsObject:g.chat_key]) {
+//                                 NSLog(@"Adding chatKey %@", g.chat_key);
+                                 [groupsArray addObject:g];
+                             }
+                         }
+                         NSArray *sortedArray;
+                         sortedArray = [groupsArray sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+                             NSString *first = [(GroupVO*)a name];
+                             NSString *second = [(GroupVO*)b name];
+                             return [first compare:second];
+                         }];
+                         
+                         tableData = [sortedArray mutableCopy];
+                         [self.theTableView reloadData];
+                         
+                     }];
     
     
 }
@@ -139,20 +157,35 @@
             cell.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin  | UIViewAutoresizingFlexibleLeftMargin;
         }
         
-        NSDictionary *rowdata = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
-        cell.rowdata = rowdata;
+        GroupVO *group = (GroupVO *) [tableData objectAtIndex:indexPath.row];
+        cell.titleLabel.text = group.name;
+        NSString *datetext;
+        if (group.type == kGroupTypeLocal) {
+            
+            datetext = group.updated;
+            NSDate *updatedAt = [DateTimeUtils dateFromDBDateStringNoOffset:datetext];
+            datetext = [DateTimeUtils formatDecimalDate:updatedAt];
+            cell.dateLabel.text = datetext;
+
+            UIImage *image = [UIImage imageNamed:@"groups_cell_arrow.png"];
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            CGRect frame = CGRectMake(0.0, 0.0, image.size.width, image.size.height);
+            //        UIImageView *arrow = [[UIImageView alloc] initWithImage:image];
+            //        arrow.frame = frame;
+            button.frame = frame;
+            [button setBackgroundImage:image forState:UIControlStateNormal];
+            
+            [button addTarget:self action:@selector(checkButtonTapped:)  forControlEvents:UIControlEventTouchUpInside];
+            button.backgroundColor = [UIColor clearColor];
+            cell.accessoryView = button;
+
+        } else if (group.type == kGroupTypeRemote) {
+            datetext = [DateTimeUtils formatDecimalDate:group.updatedAt];
+            cell.dateLabel.text = datetext;
+        }
         
-        UIImage *image = [UIImage imageNamed:@"groups_cell_arrow.png"];
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        CGRect frame = CGRectMake(0.0, 0.0, image.size.width, image.size.height);
-//        UIImageView *arrow = [[UIImageView alloc] initWithImage:image];
-//        arrow.frame = frame;
-        button.frame = frame;
-        [button setBackgroundImage:image forState:UIControlStateNormal];
-        
-        [button addTarget:self action:@selector(checkButtonTapped:)  forControlEvents:UIControlEventTouchUpInside];
-        button.backgroundColor = [UIColor clearColor];
-        cell.accessoryView = button;
+//        cell.dateLabel.text = group.chat_key;
+
         
     } @catch (NSException * e) {
         NSLog(@"Exception: %@", e);
@@ -202,9 +235,7 @@
     
     if (indexPath != nil)
     {
-        
         NSLog(@"button index %@", indexPath);
-        
         NSLog(@"Selected row %i", indexPath.row);
         
         selectedIndex = indexPath.row;

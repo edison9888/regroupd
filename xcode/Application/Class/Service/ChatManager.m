@@ -209,8 +209,8 @@
         success = [[SQLiteDB sharedConnection] executeUpdate:sql,
                    chat.system_id,
                    chat.name,
-                   [NSNumber numberWithInt:chat.type],
-                   [NSNumber numberWithInt:chat.status],
+                   chat.type,
+                   chat.status,
                    [NSNumber numberWithDouble:0],
                    [NSNumber numberWithDouble:0],
                    dt,
@@ -428,12 +428,33 @@
     }];
     
 }
+
+- (void) apiFindGroupChats:(NSString *)userId
+                withStatus:(NSNumber *)status
+                 excluding:(NSArray *)excludedKeys callback:(void (^)(NSArray *results))callback {
+    
+    PFQuery *query = [PFQuery queryWithClassName:kChatDB];
+    [query whereKey:@"contact_keys" containsAllObjectsInArray:@[userId]];
+    [query whereKey:@"status" equalTo:status];
+    [query whereKey:@"objectId" notContainedIn:excludedKeys];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        callback(results);
+    }];
+    
+}
+
 - (void) apiSaveChat:(ChatVO *)chat callback:(void (^)(PFObject *object))callback{
     
     PFObject *data = [PFObject objectWithClassName:kChatDB];
     
+    if (chat.system_id != nil) {
+        data.objectId = chat.system_id;
+    }
     if (chat.name != nil) {
         data[@"name"] = chat.name;
+    }
+    if (chat.status != nil) {
+        data[@"status"] = chat.status;
     }
     data[@"user"] = [PFUser currentUser];
     data[@"contact_keys"] = chat.contact_keys;
@@ -647,21 +668,21 @@
 }
 #pragma mark - Synchronous API -- to be deprecated
 
-- (NSString *) apiSaveChat:(ChatVO *) chat {
-    
-    PFObject *data = [PFObject objectWithClassName:kChatDB];
-    
-    if (chat.name != nil) {
-        data[@"name"] = chat.name;
-    }
-    data[@"user"] = [PFUser currentUser];
-    data[@"contact_keys"] = chat.contact_keys;
-    [data save];
-    
-    NSLog(@"Saved chat with objectId %@", data.objectId);
-    return data.objectId;
-    
-}
+//- (NSString *) apiSaveChat:(ChatVO *) chat {
+//    
+//    PFObject *data = [PFObject objectWithClassName:kChatDB];
+//    
+//    if (chat.name != nil) {
+//        data[@"name"] = chat.name;
+//    }
+//    data[@"user"] = [PFUser currentUser];
+//    data[@"contact_keys"] = chat.contact_keys;
+//    [data save];
+//    
+//    NSLog(@"Saved chat with objectId %@", data.objectId);
+//    return data.objectId;
+//    
+//}
 
 
 

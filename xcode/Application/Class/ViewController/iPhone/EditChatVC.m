@@ -401,20 +401,23 @@
         
         chat.contact_keys = [contactKeys copy];
         
-        NSString *objectId = [chatSvc apiSaveChat:chat];
-        NSString *channelId = [@"chat_" stringByAppendingString:objectId];
-        
-        PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-        [currentInstallation addUniqueObject:channelId forKey:@"channels"];
-        [currentInstallation saveInBackground];
-        
-        chat.system_id = objectId;
-        
-        [chatSvc saveChat:chat];
-        
-        [DataModel shared].chat = chat;
-        
-        [_delegate gotoSlideWithName:@"Chat"];
+        [chatSvc apiSaveChat:chat callback:^(PFObject *object) {
+            
+            NSString *channelId = [@"chat_" stringByAppendingString:object.objectId];
+            
+            PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+            [currentInstallation addUniqueObject:channelId forKey:@"channels"];
+            [currentInstallation saveInBackground];
+            
+            chat.system_id = object.objectId;
+            
+            [chatSvc saveChat:chat];
+            
+            [DataModel shared].chat = chat;
+            
+            [_delegate gotoSlideWithName:@"Chat"];
+            
+        }];
         
     } else {
         [[[UIAlertView alloc] initWithTitle:@"Try again" message:@"Please add at least one contact" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];

@@ -33,7 +33,7 @@
 - (void)setRowdata:(ChatVO *)chat
 {
     rowdata = chat;
-    self.titleLabel.text = chat.names;
+    self.titleLabel.text = chat.name;
 //    if (chat.names != nil) {
 //        self.titleLabel.text = chat.names;
 //    } else {

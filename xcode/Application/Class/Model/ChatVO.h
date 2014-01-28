@@ -6,6 +6,13 @@
 //
 //
 
+
+typedef enum {
+	ChatStatus_CLOSED = -1,
+	ChatStatus_NORMAL = 0,
+	ChatStatus_GROUP = 1
+}ChatStatus;
+
 #import <Foundation/Foundation.h>
 #import <Parse/Parse.h>
 
@@ -16,8 +23,8 @@
 @property (nonatomic, retain) NSString *user_key;
 @property (nonatomic, retain) NSString *system_id;
 @property (nonatomic, retain) NSString *name;
-@property int type;
-@property int status;
+@property (nonatomic, retain) NSNumber *type;
+@property (nonatomic, retain) NSNumber *status;
 @property (nonatomic, retain) NSDate *createdAt;
 @property (nonatomic, retain) NSDate *updatedAt;
 
@@ -32,7 +39,7 @@
 @property (nonatomic, retain) NSArray *contact_ids;  // for objectIds
 
 // Transient fields
-@property (nonatomic, retain) NSString *names;
+//@property (nonatomic, retain) NSString *names;
 @property (nonatomic, retain) NSMutableArray *messages;
 @property (nonatomic, retain) NSMutableArray *contacts;
 @property (nonatomic, retain) NSMutableDictionary *contactMap;

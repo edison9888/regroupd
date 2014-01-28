@@ -16,6 +16,7 @@
 #define k_chatContactsLoaded @"chatContactsLoaded"
 #define k_chatPushNotificationReceived @"chatPushNotificationReceived"
 #define k_backgroundPushNotificationReceived @"backgroundPushNotificationReceived"
+#define k_chatRefreshNotification      @"chatRefreshNotification"
 
 #define k_formSaveCompleteNotification @"formSaveCompleteNotification"
 #define k_pollSaveCompleteNotification @"pollSaveCompleteNotification"

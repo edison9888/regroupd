@@ -80,12 +80,14 @@
     NSString *dt = [DateTimeUtils dbDateTimeStampFromDate:now];
     NSLog(@"dt %@", dt);
     
+    if (group.chat_key == nil) {
+        group.chat_key = @"";
+    }
     @try {
-        sql = @"INSERT into groups (name, type, status, created, updated) values (?, ?, ?, ?, ?);";
+        sql = @"INSERT into groups (name, chat_key, created, updated) values (?, ?, ?, ?);";
         success = [[SQLiteDB sharedConnection] executeUpdate:sql,
                    group.name,
-                   [NSNumber numberWithInt:1],
-                   [NSNumber numberWithInt:1],
+                   group.chat_key,
                    dt,
                    dt
                    ];
@@ -144,12 +146,11 @@
     NSString *dt = [DateTimeUtils dbDateTimeStampFromDate:now];
     NSLog(@"dt %@", dt);
     
-    sql = @"UPDATE groups set system_id=?, name=?, type=?, status=?, updated=? where group_id=?";
+    sql = @"UPDATE groups set system_id=?, name=?, chat_key=?, updated=? where group_id=?";
     success = [[SQLiteDB sharedConnection] executeUpdate:sql,
                group.system_id,
                group.name,
-               group.type,
-               group.status,
+               group.chat_key,
                dt,
                [NSNumber numberWithInt:group.group_id]
                ];

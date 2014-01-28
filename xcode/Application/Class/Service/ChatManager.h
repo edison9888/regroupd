@@ -37,6 +37,11 @@
 // API functions
 - (void)apiLoadChat:(NSString *)objectId callback:(void (^)(ChatVO *chat))callback;
 - (void) apiListChats:(NSString *)userId callback:(void (^)(NSArray *results))callback;
+
+- (void) apiFindGroupChats:(NSString *)userId
+                withStatus:(NSNumber *)status
+                 excluding:(NSArray *)excludedKeys callback:(void (^)(NSArray *results))callback;
+
 - (void) apiSaveChat:(ChatVO *)chat callback:(void (^)(PFObject *object))callback;
 - (void) apiUpdateChatCounter:(NSString *)chatId;
 - (void) apiModifyChat:(NSString *)chatKey removeContact:(NSString *)contactKey callback:(void (^)(PFObject *pfChat))callback;
@@ -47,7 +52,7 @@
 - (void)apiSaveChatMessage:(ChatMessageVO *)msg withPhoto:(UIImage *)saveImage callback:(void (^)(PFObject *object))callback;
 
 // Syncrhonous API functions
-- (NSString *) apiSaveChat:(ChatVO *) chat;
+//- (NSString *) apiSaveChat:(ChatVO *) chat;
 
 - (void) apiListChatMessages:(NSString *)objectId afterDate:(NSDate *)date callback:(void (^)(NSArray *results))callback;
 

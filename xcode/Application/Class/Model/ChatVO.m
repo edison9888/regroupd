@@ -36,13 +36,13 @@
 
     text = [data valueForKey:@"name"];
     o.name = text;
-    o.names = text;
+//    o.names = text;
     
-    text = [data valueForKey:@"type"];
-    o.type = text.integerValue;
+    number = [data valueForKey:@"type"];
+    o.type = number;
     
-    text = [data valueForKey:@"status"];
-    o.status = text.integerValue;
+    number = [data valueForKey:@"status"];
+    o.status = number;
     
     text = [data valueForKey:@"created"];
     o.created = text;
@@ -68,6 +68,7 @@
 + (ChatVO *) readFromPFObject:(PFObject *)data {
     ChatVO *o = [[ChatVO alloc] init];
     NSString *text;
+    NSNumber *number;
 
     o.system_id = data.objectId;
     o.createdAt = data.createdAt;
@@ -82,11 +83,11 @@
     text = [data valueForKey:@"name"];
     o.name = text;
     
-    text = [data valueForKey:@"type"];
-    o.type = text.integerValue;
+    number = [data valueForKey:@"type"];
+    o.type = number;
     
-    text = [data valueForKey:@"status"];
-    o.status = text.integerValue;
+    number = [data valueForKey:@"status"];
+    o.status = number;
         
     o.contact_keys = (NSArray *) [data valueForKey:@"contact_keys"];
 

@@ -559,6 +559,10 @@
         group.system_id = @"";
         group.status = 0;
         group.type = 1;
+
+        if ([[DataModel shared].action isEqualToString:@"popup"]) {
+            group.chat_key = [DataModel shared].chat.system_id;
+        }
         
         if (groupSvc == nil) {
             groupSvc = [[GroupManager alloc] init];
@@ -572,8 +576,17 @@
                 [groupSvc saveGroupContact:groupId contactKey:contactKey];
         }
         if ([[DataModel shared].action isEqualToString:@"popup"]) {
-            [self dismissViewControllerAnimated:YES completion:^{
-                [DataModel shared].action = nil;
+            ChatVO *chat = [DataModel shared].chat;
+            chat.name = self.groupName.text;
+            chat.status = [NSNumber numberWithInt:ChatStatus_GROUP];
+            
+            [chatSvc apiSaveChat:chat callback:^(PFObject *object) {
+                [DataModel shared].chat = chat;
+                [[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:k_chatRefreshNotification object:nil]];
+
+                [self dismissViewControllerAnimated:YES completion:^{
+                    [DataModel shared].action = nil;
+                }];
             }];
         } else {
             [_delegate gotoSlideWithName:@"GroupsHome"];

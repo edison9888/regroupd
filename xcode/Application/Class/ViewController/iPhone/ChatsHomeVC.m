@@ -81,7 +81,7 @@
     ChatVO *chat;
     while ([rs next]) {
         chat = [ChatVO readFromDictionary:[rs resultDictionary]];
-        NSLog(@"chat.names = %@", chat.names);
+        NSLog(@"chat.names = %@", chat.name);
         [tableData addObject:chat];
     }
     isLoading = NO;
@@ -137,35 +137,37 @@
         
         NSMutableArray *chatsArray = [[NSMutableArray alloc] initWithCapacity:results.count];
         ChatVO *chat;
-        ChatVO *dbChat;
+//        ChatVO *dbChat;
         
         for (PFObject* result in results) {
             
             NSArray *keys = [result objectForKey:@"contact_keys"];
-            NSLog(@"contact keys = %@", keys);
-            [contactKeySet addObjectsFromArray:keys];
-
-            chat = [ChatVO readFromPFObject:result];
-            BOOL isBlocked = NO;
-            if (keys.count == 2) {
-                // This is an individual chat. One of the keys belongs to current user.
-                for (NSString *key in keys) {
-                    if (![key isEqualToString:[DataModel shared].user.contact_key]) {
-                        if ([_blockedKeys containsObject:key]) {
-                            NSLog(@"Found blocked individual chat with key %@", key);
-                            isBlocked = YES;
+            
+            if (keys.count > 1) {
+                
+                NSLog(@"contact keys = %@", keys);
+                [contactKeySet addObjectsFromArray:keys];
+                
+                chat = [ChatVO readFromPFObject:result];
+                BOOL isBlocked = NO;
+                if (keys.count == 2) {
+                    // This is an individual chat. One of the keys belongs to current user.
+                    for (NSString *key in keys) {
+                        if (![key isEqualToString:[DataModel shared].user.contact_key]) {
+                            if ([_blockedKeys containsObject:key]) {
+                                NSLog(@"Found blocked individual chat with key %@", key);
+                                isBlocked = YES;
+                            }
                         }
                     }
+                    
+                }
+                if (isBlocked) {
+                    continue;
                 }
                 
+                [chatsArray addObject:chat];
             }
-            if (isBlocked) {
-                continue;
-            }
-            
-            [chatsArray addObject:chat];
-            
-            
         }
         
         // Loads phonebookCache
@@ -216,8 +218,12 @@
                     
                     
                 }
-                NSString *names = [namesArray componentsJoinedByString:@", "];
-                chat.names = names;
+                if (chat.name == nil || chat.name.length == 0) {
+                    NSString *names = [namesArray componentsJoinedByString:@", "];
+                    chat.name = names;
+                } else {
+//                    chat.names = chat.name;
+                }
                 
                 ChatVO *lookup = [chatSvc loadChatByKey:chat.system_id];
                 if (lookup == nil) {
@@ -228,7 +234,7 @@
                 } else {
                     // ignore
 //                    [chatSvc updateChatStatus:chat.system_id name:chat.names readtime:[NSNumber numberWithDouble:0.0]];
-                    [chatSvc updateChat:chat.system_id withName:names];
+                    [chatSvc updateChat:chat.system_id withName:chat.name];
                     NSTimeInterval serverTime = [chat.updatedAt timeIntervalSince1970];
                     
 //                    NSLog(@"Compare localTime %f vs. serverTime %f", lookup.read_timestamp.doubleValue, serverTime);
