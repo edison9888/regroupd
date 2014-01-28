@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="addModal" destination="1F6-hh-zH8" id="FPx-nr-UNU"/>
                 <outlet property="navTitle" destination="19" id="OcH-Yy-zIZ"/>
+                <outlet property="sendButton" destination="UE1-7q-RED" id="gNF-ad-B0V"/>
                 <outlet property="theTableView" destination="30" id="31"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>

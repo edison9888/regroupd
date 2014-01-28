@@ -151,79 +151,113 @@
     if (contactSvc == nil) {
         contactSvc = [[ContactManager alloc] init];
     }
-    NSMutableArray *contactKeys = [groupSvc listGroupContactKeys:[DataModel shared].group.group_id];
-    [contactKeys addObject:[DataModel shared].user.contact_key];
     
-    NSLog(@"Found contactKeys %@", contactKeys);
-    [contactSvc apiLookupContacts:contactKeys callback:^(NSArray *results) {
-//        NSMutableArray *namesArray = [[NSMutableArray alloc] init];
-//        
-//        ContactVO *contact;
-//        for (NSString *key in contactKeys) {
-//            contact = [[DataModel shared].contactCache objectForKey:key];
-//            if (contact) {
-//                [namesArray addObject:contact.fullname];
-//            }
-//        }
-//        NSString *names = [namesArray componentsJoinedByString:@", "];
+    if ([DataModel shared].group.chat_key != nil) {
+        NSLog(@"Found existing chat");
         
-        [chatSvc apiFindChatsByContactKeys:contactKeys callback:^(NSArray *results) {
-            BOOL chatExists = NO;
-            ChatVO *chat;
-            if (results && results.count > 0) {
-                for (PFObject *pfChat in results) {
-                    if (pfChat[@"contact_keys"]) {
-                        NSArray *keys =pfChat[@"contact_keys"];
-                        if (keys.count == contactKeys.count) {
-                            // exact match.
-                            chat = [ChatVO readFromPFObject:pfChat];
-                            chatExists = YES;
-                            break;
-                        }
-                    }
-                }
-            }
-            if (chatExists) {
-                NSLog(@"Found existing chat");
-                chat.name = [DataModel shared].group.name;
-                [DataModel shared].chat = chat;
-
-                [DataModel shared].navIndex = 2;
-                NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
-                [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
-
-//                [_delegate gotoSlideWithName:@"Chat" andOverrideTransition:kPresentationTransitionFade];
-                
-            } else {
-                NSLog(@"Creating new chat");
-                ChatVO *chat = [[ChatVO alloc] init];
-                chat.name = [DataModel shared].group.name;
-                chat.status = [NSNumber numberWithInt:ChatStatus_GROUP];
-                chat.contact_keys = contactKeys;
-                
-                [chatSvc apiSaveChat:chat callback:^(PFObject *pfChat) {
-                    
-                    // Adding push notifications subscription
-                    
-                    NSString *channelId = [@"chat_" stringByAppendingString:pfChat.objectId];
-                    
-                    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-                    [currentInstallation addUniqueObject:channelId forKey:@"channels"];
-                    [currentInstallation saveInBackground];
-                    
-                    chat.system_id = pfChat.objectId;
-                    
-                    [chatSvc saveChat:chat];
-                    
-                    [DataModel shared].chat = chat;
-                    
-                    [DataModel shared].navIndex = 2;
-                    NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
-                    [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
-                }];
-            }
+        [chatSvc apiLoadChat:[DataModel shared].group.chat_key callback:^(ChatVO *chat) {
+            chat.name = [DataModel shared].group.name;
+            [DataModel shared].chat = chat;
+            
+            [DataModel shared].navIndex = 2;
+            NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
+            [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
         }];
-    }];
+
+    } else {
+        NSLog(@"Creating new chat");
+        NSMutableArray *contactKeys = [groupSvc listGroupContactKeys:[DataModel shared].group.group_id];
+        [contactKeys addObject:[DataModel shared].user.contact_key];
+        
+        ChatVO *chat = [[ChatVO alloc] init];
+        chat.name = [DataModel shared].group.name;
+        chat.status = [NSNumber numberWithInt:ChatStatus_GROUP];
+        chat.contact_keys = contactKeys;
+        
+        [chatSvc apiSaveChat:chat callback:^(PFObject *pfChat) {
+            
+            // Adding push notifications subscription
+            
+            NSString *channelId = [@"chat_" stringByAppendingString:pfChat.objectId];
+            
+            PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+            [currentInstallation addUniqueObject:channelId forKey:@"channels"];
+            [currentInstallation saveInBackground];
+            
+            chat.system_id = pfChat.objectId;
+            
+            [chatSvc saveChat:chat];
+            
+            [DataModel shared].chat = chat;
+            
+            [DataModel shared].navIndex = 2;
+            NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
+            [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
+        }];
+    }
+//    NSMutableArray *contactKeys = [groupSvc listGroupContactKeys:[DataModel shared].group.group_id];
+//    [contactKeys addObject:[DataModel shared].user.contact_key];
+//
+//    NSLog(@"Found contactKeys %@", contactKeys);
+//    [contactSvc apiLookupContacts:contactKeys callback:^(NSArray *results) {
+//        
+//        [chatSvc apiFindChatsByContactKeys:contactKeys callback:^(NSArray *results) {
+//            BOOL chatExists = NO;
+//            ChatVO *chat;
+//            if (results && results.count > 0) {
+//                for (PFObject *pfChat in results) {
+//                    if (pfChat[@"contact_keys"]) {
+//                        NSArray *keys =pfChat[@"contact_keys"];
+//                        if (keys.count == contactKeys.count) {
+//                            // exact match.
+//                            chat = [ChatVO readFromPFObject:pfChat];
+//                            chatExists = YES;
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//            if (chatExists) {
+//                NSLog(@"Found existing chat");
+//                chat.name = [DataModel shared].group.name;
+//                [DataModel shared].chat = chat;
+//
+//                [DataModel shared].navIndex = 2;
+//                NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
+//                [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
+//
+////                [_delegate gotoSlideWithName:@"Chat" andOverrideTransition:kPresentationTransitionFade];
+//                
+//            } else {
+//                NSLog(@"Creating new chat");
+//                ChatVO *chat = [[ChatVO alloc] init];
+//                chat.name = [DataModel shared].group.name;
+//                chat.status = [NSNumber numberWithInt:ChatStatus_GROUP];
+//                chat.contact_keys = contactKeys;
+//                
+//                [chatSvc apiSaveChat:chat callback:^(PFObject *pfChat) {
+//                    
+//                    // Adding push notifications subscription
+//                    
+//                    NSString *channelId = [@"chat_" stringByAppendingString:pfChat.objectId];
+//                    
+//                    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+//                    [currentInstallation addUniqueObject:channelId forKey:@"channels"];
+//                    [currentInstallation saveInBackground];
+//                    
+//                    chat.system_id = pfChat.objectId;
+//                    
+//                    [chatSvc saveChat:chat];
+//                    
+//                    [DataModel shared].chat = chat;
+//                    
+//                    [DataModel shared].navIndex = 2;
+//                    NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
+//                    [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
+//                }];
+//            }
+//        }];
+//    }];
     
 }
 - (IBAction)tapManageButton {

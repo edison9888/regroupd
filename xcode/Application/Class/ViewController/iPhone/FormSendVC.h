@@ -54,7 +54,8 @@
 
 
 @property (nonatomic, strong) IBOutlet UIButton *editButton;
-@property (nonatomic, strong) IBOutlet UIButton *addButton;
+
+@property (nonatomic, strong) IBOutlet UIButton *sendButton;
 
 @property (nonatomic, strong) IBOutlet UIView *addModal;
 

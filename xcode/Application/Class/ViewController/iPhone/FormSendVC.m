@@ -473,6 +473,7 @@
 
 - (IBAction)tapDoneButton {
     NSMutableSet *contactKeys = [[NSMutableSet alloc] init];
+    self.sendButton.enabled = NO;
     
     [contactKeys addObjectsFromArray:contactSet.allObjects];
     NSMutableArray *keys;
