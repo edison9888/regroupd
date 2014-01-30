@@ -105,7 +105,7 @@
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
-                                <action selector="tapAttachButton" destination="-1" eventType="touchUpInside" id="rGe-d7-60v"/>
+                                <action selector="tapInputArea" destination="-1" eventType="touchUpInside" id="SUs-gV-LSV"/>
                             </connections>
                         </button>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" id="5JB-Ai-Vv9" customClass="FancyTextView">

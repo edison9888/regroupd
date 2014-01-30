@@ -7,6 +7,8 @@
 //
 
 #import "EditRSVPVC.h"
+#import <EventKit/EventKit.h>
+
 #import "FormVO.h"
 #import "FormOptionVO.h"
 #import "UIAlertView+Helper.h"
@@ -217,6 +219,65 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     response.option_key = yesOption.system_id;
     
     [formSvc apiSaveFormResponse:response callback:^(PFObject *object) {
+ 
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:kSetting_Add_To_Calendar]) {
+            
+            NSLog(@"Saving event to user calendar");
+            EKEventStore *eventStore = [[EKEventStore alloc] init];
+            
+            
+            
+            if([eventStore respondsToSelector:@selector(requestAccessToEntityType:completion:)])
+            {
+                // iOS 6 and later
+                // This line asks user's permission to access his calendar
+                [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error)
+                 {
+                     if (granted) // user user is ok with it
+                     {
+                         EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
+                         event.calendar  = [eventStore defaultCalendarForNewEvents];
+                         event.title     = theForm.name;
+                         event.location  = theForm.location;
+                         event.notes     = theForm.details;
+                         event.startDate = theForm.eventStartsAt;
+                         event.endDate   = theForm.eventEndsAt;
+                         event.allDay    = NO;
+                         NSError *err;
+                         
+                         [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+                         
+                         if(err)
+                             NSLog(@"unable to save event to the calendar!: Error= %@", err);
+                         
+                     }
+                 }];
+            }
+            
+            // iOS < 6
+            else
+            {
+                EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
+                event.calendar  = [eventStore defaultCalendarForNewEvents];
+                event.title     = theForm.name;
+                event.location  = theForm.location;
+                event.notes     = theForm.details;
+                event.startDate = theForm.eventStartsAt;
+                event.endDate   = theForm.eventEndsAt;
+                event.allDay    = NO;
+                
+                NSError *err;
+                
+                [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+                
+                if(err)
+                    NSLog(@"unable to save event to the calendar!: Error= %@", err);
+                
+            }
+            
+        } else {
+            // do nothing
+        }
         
         [[[UIAlertView alloc] initWithTitle:@"Success" message:@"RSVP created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }];

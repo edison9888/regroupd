@@ -65,6 +65,7 @@
 
 #define kTagTopDrawer   13
 #define kTagSendButton   33
+#define kTagMessageBubble   188
 #define kTagAttachModalBG 666
 #define kTagPhotoModalBG  667
 #define kTagFormModalBG  668
@@ -105,14 +106,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 {
     [super viewDidLoad];
     
-    chatId = [DataModel shared].chat.system_id;
-    chatTitle = [DataModel shared].chat.name;
-    dbChat = [DataModel shared].chat;
-    
-    if (chatTitle != nil && chatTitle.length > 0) {
-        self.navTitle.text = chatTitle;
-        
-    }
     
     
     msgTimeFormat = [[NSDateFormatter alloc] init];
@@ -147,7 +140,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     defaultInputFrameHeight = inputFrame.size.height;
     [self.inputField setContentInset:UIEdgeInsetsMake(0.0, 4.0, 0.0, -10.0)];
-    
+    self.inputField.keyboardAppearance = UIKeyboardAppearanceDefault;
     
     // Keyboard events
     // Setup notifications
@@ -179,9 +172,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                              selector:@selector(showFormDetailsHandler:)     name:k_showFormDetails
                                                object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatPushNotificationHandler:) name:k_chatPushNotificationReceived object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatRefreshNotificationHandler:) name:k_chatRefreshNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(titleRefreshNotificationHandler:) name:k_titleRefreshNotification object:nil];
     
     
 // Create and initialize a tap gesture
@@ -191,7 +184,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                              initWithTarget:self action:@selector(singleTap:)];
     
     // Specify that the gesture must be a single tap
-    
+    tapRecognizer.delaysTouchesEnded = NO;
     tapRecognizer.numberOfTapsRequired = 1;
     tapRecognizer.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tapRecognizer];
@@ -206,6 +199,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     // Interval of 120 means that if the next messages comes in 2 minutes since the last message, it will be added into the same group.
     // Groups are delimited with header which contains date and time for the first message in the group.
     
+    // NOTE: This value is not used. 
     self.bubbleTable.snapInterval = 86400;
     
     // The line below enables avatar support. Avatar can be specified for each bubble with .avatar property of NSBubbleData.
@@ -224,17 +218,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
      http://stackoverflow.com/questions/6672677/how-to-use-uipangesturerecognizer-to-move-object-iphone-ipad
      */
     
-    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-    
-    NSString *channelId = [@"chat_" stringByAppendingString:chatId];
-    //        [currentInstallation addUniqueObject:[DataModel shared].chat.system_id forKey:@"channels"];
-    [currentInstallation addUniqueObject:channelId forKey:@"channels"];
-    [currentInstallation saveInBackground];
-    
-    [chatSvc apiLoadChat:chatId callback:^(ChatVO *chat) {
-        liveChat = chat;
-        [self loadChatMessages];
-    }];
+    [self initializeChat];
 }
 
 - (void)didReceiveMemoryWarning
@@ -250,6 +234,31 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 #pragma mark - Data loaders
 
+- (void) initializeChat {
+    chatId = [DataModel shared].chat.system_id;
+    chatTitle = [DataModel shared].chat.name;
+    dbChat = [DataModel shared].chat;
+    
+    if (chatTitle != nil && chatTitle.length > 0) {
+        self.navTitle.text = chatTitle;
+        
+    }
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    
+    NSString *channelId = [@"chat_" stringByAppendingString:chatId];
+    //        [currentInstallation addUniqueObject:[DataModel shared].chat.system_id forKey:@"channels"];
+    [currentInstallation addUniqueObject:channelId forKey:@"channels"];
+    [currentInstallation saveInBackground];
+    
+    [self.inputField resignFirstResponder];
+    [self resetChatUI];
+    [chatSvc apiLoadChat:chatId callback:^(ChatVO *chat) {
+        liveChat = chat;
+        [self loadChatMessages];
+    }];
+
+
+}
 - (void) loadChatMessages
 {
 //    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -665,25 +674,26 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 
 
-- (void)chatPushNotificationHandler:(NSNotification*)notification
+- (void)chatRefreshNotificationHandler:(NSNotification*)notification
 {
     NSLog(@"%s", __FUNCTION__);
     if (notification.object) {
         ChatMessageVO *msg = (ChatMessageVO *) notification.object;
         
         if ([msg.chat_key isEqualToString:chatId]) {
-            
+            NSLog(@"Message for current chat received");
             [self loadChatMessages];
             
             
         } else {
             NSLog(@"Message for another chat %@", msg.chat_key);
+            [self initializeChat];
         }
     }
     
 }
 
-- (void)chatRefreshNotificationHandler:(NSNotification*)notification
+- (void)titleRefreshNotificationHandler:(NSNotification*)notification
 {
     NSLog(@"%s", __FUNCTION__);
     
@@ -853,7 +863,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         }
         // my message
         ChatMessageWidget *msgView = [[ChatMessageWidget alloc] initWithFrame:msgFrame message:msg isOwner:YES];
-        msgView.tag = 188;
+        msgView.tag = kTagMessageBubble;
         
         
         NSLog(@"widget height = %f", msgView.dynamicHeight);
@@ -886,7 +896,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         }
         
         ChatMessageWidget *msgView = [[ChatMessageWidget alloc] initWithFrame:msgFrame message:msg isOwner:NO];
-        msgView.tag = 188;
+        msgView.tag = kTagMessageBubble;
         
         NSLog(@"widget height = %f", msgView.dynamicHeight);
         msgFrame.size.height = msgView.dynamicHeight;
@@ -1362,8 +1372,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     //    bgLayer.tag = kTagFormModalBG;
     //    [self.view addSubview:bgLayer];
     
-    
-    self.formSelectorVC = [[FormSelectorVC alloc] initWithNibName:@"FormSelectorVC" bundle:nil];
+    if (self.formSelectorVC == nil) {
+        self.formSelectorVC = [[FormSelectorVC alloc] initWithNibName:@"FormSelectorVC" bundle:nil];
+    }
     CGRect panelFrame = self.formSelectorVC.view.frame;
     panelFrame.origin.y = [DataModel shared].stageHeight + 10;
     
@@ -1399,6 +1410,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     CGRect modalFrame = self.formSelectorVC.view.frame;
     int ypos = [DataModel shared].stageHeight + 10;
     modalFrame.origin.y = ypos;
+    [self becomeFirstResponder];
     
     [UIView animateWithDuration:0.5
                           delay:0
@@ -1457,7 +1469,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self.attachButton setSelected:NO];
     
 }
-
+- (IBAction)tapInputArea {
+    [self.inputField becomeFirstResponder];
+}
 
 - (IBAction)modalCameraButton {
     NSLog(@"%s", __FUNCTION__);

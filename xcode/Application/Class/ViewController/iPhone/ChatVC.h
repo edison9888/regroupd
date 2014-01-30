@@ -148,6 +148,7 @@
 - (IBAction)tapAttachButton;
 - (IBAction)tapSendButton;
 - (IBAction)tapDetachButton;
+- (IBAction)tapInputArea;
 
 - (IBAction)tapCreatePollButton;
 - (IBAction)tapCreateRatingButton;

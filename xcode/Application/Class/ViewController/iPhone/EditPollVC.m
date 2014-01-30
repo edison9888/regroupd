@@ -388,6 +388,10 @@
     }
 }
 
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+    NSLog(@"%s", __FUNCTION__);
+    
+}
 #pragma mark - Modal
 
 - (void) showModal {

@@ -179,8 +179,12 @@
         [chatSvc apiLoadChat:msg.chat_key callback:^(ChatVO *chat) {
             [DataModel shared].chat =  chat;
             
-            if (![_activeSlide.slideModel.name isEqualToString:@"Chat"]) {
+            if ([_activeSlide.slideModel.name isEqualToString:@"Chat"]) {
+                [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatRefreshNotification object:msg]];
+
+            } else {
                 [_activeSlide.delegate gotoSlideWithName:@"Chat" andOverrideTransition:kPresentationTransitionFade];
+
             }
         }];
         

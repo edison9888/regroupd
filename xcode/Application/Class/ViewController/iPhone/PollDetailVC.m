@@ -215,41 +215,41 @@
     [self.theTableView reloadData];
 }
 
-- (void) loadFormOptions {
-    
-    @try {
-        
-        NSMutableArray *results = [[NSMutableArray alloc] init];
-        
-        NSString *sql = @"select * from form_option where form_id=?";
-        
-        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
-                           [NSNumber numberWithInt:[DataModel shared].form.form_id]];
-        
-        NSDictionary *dict;
-        NSString *filename;
-        
-        while ([rs next]) {
-            dict = [rs resultDictionary];
-            filename = (NSString *) [dict valueForKey:@"imagefile"];
-            [results addObject:dict];
-        }
-        
-        self.carouselVC = [[SideScrollVC alloc] initWithData:results];
-        
-        CGRect carouselFrame = CGRectMake(0, 0, 320, 300);
-        self.carouselVC.view.frame = carouselFrame;
-        [self.browseView addSubview:self.carouselVC.view];
-        
-        [self.browseView sendSubviewToBack:self.carouselVC.view];
-        
-    }
-    @catch (NSException *exception) {
-        NSLog(@"%@", exception);
-    }
-    
-    
-}
+//- (void) loadFormOptions {
+//    
+//    @try {
+//        
+//        NSMutableArray *results = [[NSMutableArray alloc] init];
+//        
+//        NSString *sql = @"select * from form_option where form_id=?";
+//        
+//        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
+//                           [NSNumber numberWithInt:[DataModel shared].form.form_id]];
+//        
+//        NSDictionary *dict;
+//        NSString *filename;
+//        
+//        while ([rs next]) {
+//            dict = [rs resultDictionary];
+//            filename = (NSString *) [dict valueForKey:@"imagefile"];
+//            [results addObject:dict];
+//        }
+//        
+//        self.carouselVC = [[SideScrollVC alloc] initWithData:results];
+//        
+//        CGRect carouselFrame = CGRectMake(0, 0, 320, 300);
+//        self.carouselVC.view.frame = carouselFrame;
+//        [self.browseView addSubview:self.carouselVC.view];
+//        
+//        [self.browseView sendSubviewToBack:self.carouselVC.view];
+//        
+//    }
+//    @catch (NSException *exception) {
+//        NSLog(@"%@", exception);
+//    }
+//    
+//    
+//}
 
 - (void)pageUpdateNotificationHandler:(NSNotification*)notification
 {

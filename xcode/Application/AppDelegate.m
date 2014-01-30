@@ -199,6 +199,12 @@
     NSLog(@"%s", __FUNCTION__);
     // http://www.rqgg.net/topic/zpnnq-on-off-setting-for-push-notification-at-app-level.html
     // http://stackoverflow.com/questions/5056689/didreceiveremotenotification-when-in-background
+    
+    /*
+     http://www.rememberthemilk.com/help/?ctx=ipad.push.troubleshooting.unlocklaunch
+     
+     */
+    
     /*
      NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
      @"Increment", @"badge",
@@ -241,10 +247,12 @@
 //        [PFPush handlePush:userInfo];
         
         if ( application.applicationState == UIApplicationStateActive ) {
+            NSLog(@"UIApplicationStateActive app already in the foreground");
             [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatPushNotificationReceived object:msg]];
             
         } else {
-            
+            NSLog(@"UIApplicationStateActive app brought from background to foreground");
+            [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatPushNotificationReceived object:msg]];
         }
         
         self.lastMessage = nil;

@@ -152,8 +152,8 @@
         contactSvc = [[ContactManager alloc] init];
     }
     
-    if ([DataModel shared].group.chat_key != nil) {
-        NSLog(@"Found existing chat");
+    if ([DataModel shared].group.chat_key != nil && [DataModel shared].group.chat_key.length > 0) {
+        NSLog(@"Found existing chat_key=%@", [DataModel shared].group.chat_key);
         
         [chatSvc apiLoadChat:[DataModel shared].group.chat_key callback:^(ChatVO *chat) {
             chat.name = [DataModel shared].group.name;
@@ -176,23 +176,33 @@
         
         [chatSvc apiSaveChat:chat callback:^(PFObject *pfChat) {
             
-            // Adding push notifications subscription
-            
-            NSString *channelId = [@"chat_" stringByAppendingString:pfChat.objectId];
-            
-            PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-            [currentInstallation addUniqueObject:channelId forKey:@"channels"];
-            [currentInstallation saveInBackground];
-            
-            chat.system_id = pfChat.objectId;
-            
-            [chatSvc saveChat:chat];
-            
-            [DataModel shared].chat = chat;
-            
-            [DataModel shared].navIndex = 2;
-            NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
-            [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
+            if (!pfChat) {
+                NSLog(@"apiSaveChat failed");
+            } else {
+                // Adding push notifications subscription
+                NSLog(@"Saving group chat_key %@", pfChat.objectId);
+                GroupVO *group = [DataModel shared].group;
+                group.chat_key = pfChat.objectId;
+                [groupSvc updateGroup:group];
+                
+                
+                NSString *channelId = [@"chat_" stringByAppendingString:pfChat.objectId];
+                
+                PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+                [currentInstallation addUniqueObject:channelId forKey:@"channels"];
+                [currentInstallation saveInBackground];
+                
+                chat.system_id = pfChat.objectId;
+                
+                [chatSvc saveChat:chat];
+                
+                [DataModel shared].chat = chat;
+                
+                [DataModel shared].navIndex = 2;
+                NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
+                [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
+                
+            }
         }];
     }
 //    NSMutableArray *contactKeys = [groupSvc listGroupContactKeys:[DataModel shared].group.group_id];

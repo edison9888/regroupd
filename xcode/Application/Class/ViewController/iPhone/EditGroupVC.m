@@ -88,6 +88,7 @@
     
     UITextField *txfSearchField = [ccSearchBar valueForKey:@"_searchField"];
     txfSearchField.tag = kTagSearchField;
+//    txfSearchField.keyboardAppearance = 
 //    txfSearchField.delegate = self;
     
     self.groupName.delegate = self;
@@ -582,7 +583,7 @@
             
             [chatSvc apiSaveChat:chat callback:^(PFObject *object) {
                 [DataModel shared].chat = chat;
-                [[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:k_chatRefreshNotification object:nil]];
+                [[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:k_titleRefreshNotification object:nil]];
 
                 [self dismissViewControllerAnimated:YES completion:^{
                     [DataModel shared].action = nil;
