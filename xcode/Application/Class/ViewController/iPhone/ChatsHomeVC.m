@@ -9,7 +9,7 @@
 #import "ChatsHomeVC.h"
 #import "ChatVO.h"
 
-#define kTimestampDelay 10
+#define kTimestampDelay 100
 
 @interface ChatsHomeVC ()
 
@@ -328,7 +328,8 @@
             
             [DataModel shared].chat = (ChatVO *)[tableData objectAtIndex:indexPath.row];
             NSLog(@"Fetching chat %@ with cutoffDate %@", [DataModel shared].chat.system_id, [DataModel shared].chat.cutoffDate);
-
+            [DataModel shared].mode = @"Chats";
+            [_delegate setBackPath:@"ChatsHome"];
             [_delegate gotoSlideWithName:@"Chat"];
             
         }

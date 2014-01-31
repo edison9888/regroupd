@@ -209,8 +209,9 @@
     NSLog(@"dt %@", dt);
     
     @try {
-        sql = @"INSERT into chat (system_id, name, type, status, clear_timestamp, read_timestamp, created, updated) values (?, ?, ?, ?, ?, ?, ?, ?);";
+        sql = @"INSERT into chat (user_key, system_id, name, type, status, clear_timestamp, read_timestamp, created, updated) values (?, ?, ?, ?, ?, ?, ?, ?, ?);";
         success = [[SQLiteDB sharedConnection] executeUpdate:sql,
+                   chat.user_key,
                    chat.system_id,
                    chat.name,
                    chat.type,

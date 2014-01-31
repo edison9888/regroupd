@@ -158,10 +158,9 @@
         [chatSvc apiLoadChat:[DataModel shared].group.chat_key callback:^(ChatVO *chat) {
             chat.name = [DataModel shared].group.name;
             [DataModel shared].chat = chat;
-            
-            [DataModel shared].navIndex = 2;
-            NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
-            [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
+            [DataModel shared].mode = @"Groups";
+            [_delegate setBackPath:@"GroupsHome"];
+            [_delegate gotoSlideWithName:@"Chat"];
         }];
 
     } else {
@@ -197,10 +196,13 @@
                 [chatSvc saveChat:chat];
                 
                 [DataModel shared].chat = chat;
-                
-                [DataModel shared].navIndex = 2;
-                NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
-                [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
+                [DataModel shared].mode = @"Groups";
+                [_delegate setBackPath:@"GroupsHome"];
+                [_delegate gotoSlideWithName:@"Chat"];
+
+//                [DataModel shared].navIndex = 2;
+//                NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
+//                [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
                 
             }
         }];

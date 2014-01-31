@@ -141,6 +141,7 @@
 @property (nonatomic, strong) IBOutlet UIButton *createRSVPHotspot;
 
 @property (nonatomic, strong) IBOutlet UIButton *detachButton;
+@property (nonatomic, strong) IBOutlet UIButton *backButton;
 
 
 - (IBAction)tapCancelButton;

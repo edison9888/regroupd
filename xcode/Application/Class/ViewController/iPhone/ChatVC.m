@@ -106,6 +106,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 {
     [super viewDidLoad];
     
+    if ([[DataModel shared].mode isEqualToString:@"Chats"]) {
+        [self.backButton setTitle:@"Chats" forState:UIControlStateNormal];
+    } else {
+        [self.backButton setTitle:@"Groups" forState:UIControlStateNormal];
+    }
     
     
     msgTimeFormat = [[NSDateFormatter alloc] init];
@@ -296,25 +301,30 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                     [formKeySet addObject:msg.form_key];
                 }
             }
-            __block int index=0;
-            int total = contactKeySet.count;
-            for (NSString *contactKey in contactKeySet) {
-                [contactSvc apiLoadContact:contactKey callback:^(PFObject *pfContact) {
-                    ContactVO *contact;
-                    if (pfContact) {
-                        contact = [ContactVO readFromPFObject:pfContact];
-                        [[DataModel shared].contactCache setObject:contact forKey:contactKey];
-                    }
-                    index++;
-                    if (index == total) {
-                        [self loadFormData];
-                    }
-                }];
-            }
             
+            [contactSvc apiLookupContacts:[DataModel shared].chat.contact_keys callback:^(NSArray *results) {
+                [self loadFormData];
+            }];
+//            __block int index=0;
+//            int total = contactKeySet.count;
+//            for (NSString *contactKey in contactKeySet) {
+//                [contactSvc apiLoadContact:contactKey callback:^(PFObject *pfContact) {
+//                    ContactVO *contact;
+//                    if (pfContact) {
+//                        contact = [ContactVO readFromPFObject:pfContact];
+//                        [[DataModel shared].contactCache setObject:contact forKey:contactKey];
+//                    }
+//                    index++;
+//                    if (index == total) {
+//                        [self loadFormData];
+//                    }
+//                }];
+//            }
         } else {
+            [contactSvc apiLookupContacts:[DataModel shared].chat.contact_keys callback:^(NSArray *results) {
+                [self loadFormData];
+            }];
             liveChat.messages = [results mutableCopy];
-            [self renderChatMessages:liveChat];
             
         }
         
@@ -447,10 +457,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     //    [MBProgressHUD hideHUDForView:self.view animated:NO];
     NSLog(@"Ready to reload table");
-    [self setupTopDrawer];
     
     [self.bubbleTable reloadData];
     [self.bubbleTable scrollBubbleViewToBottomAnimated:NO];
+
+    [self setupTopDrawer];
+
 }
 
 #pragma mark - Load Data and Setup
@@ -1430,7 +1442,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 #pragma mark IBActions
 - (IBAction)tapCancelButton {
-    [_delegate gotoSlideWithName:@"ChatsHome"];
+    [_delegate goBack];
+//    [_delegate gotoSlideWithName:@"ChatsHome"];
     
 }
 - (IBAction)tapClearButton {
@@ -1532,7 +1545,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             break;
         }
         default:
-            [_delegate gotoSlideWithName:@"ChatHome"];
+            [_delegate gotoSlideWithName:@"ChatsHome"];
             break;
             
     }

@@ -299,7 +299,7 @@
         target = (NSString *)[_pathArray lastObject];
         [_pathArray removeLastObject];
         NSLog(@"goBack to %@", target);
-        [self gotoSlideWithName:target];
+        [self gotoSlideWithName:target andOverrideTransition:kPresentationTransitionRight|kPresentationTransitionPush];
     }
 }
 - (void)setBackPath:(NSString *)_path {

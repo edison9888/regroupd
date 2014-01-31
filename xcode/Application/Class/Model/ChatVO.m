@@ -77,8 +77,10 @@
     text = [data valueForKey:@"chat_id"];
     o.chat_id = text.integerValue;
     
-    text = [data valueForKey:@"user_key"];
-    o.user_key = text;
+    if (data[@"user"]) {
+        PFObject *pfUser = data[@"user"];
+        o.user_key = pfUser.objectId;
+    }
     
     text = [data valueForKey:@"name"];
     o.name = text;

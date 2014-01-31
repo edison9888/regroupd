@@ -48,6 +48,7 @@
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
     self.theTableView.backgroundColor = [UIColor clearColor];
+    self.theTableView.userInteractionEnabled = YES;
     
     CGRect tableFrame = self.theTableView.frame;
     tableFrame.size.height = [DataModel shared].stageHeight - tableFrame.origin.y - 50;
@@ -98,8 +99,10 @@
     
     // Specify that the gesture must be a single tap
     
+    tapRecognizer.delaysTouchesEnded = NO;
     tapRecognizer.numberOfTapsRequired = 1;
-    
+    tapRecognizer.cancelsTouchesInView = NO;
+
     [self.view addGestureRecognizer:tapRecognizer];
 
     

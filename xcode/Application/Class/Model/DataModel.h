@@ -68,6 +68,7 @@
 @property (nonatomic, retain) NSMutableDictionary *chatCache;
 
 @property (nonatomic, retain) NSString *action;
+@property (nonatomic, retain) NSString *mode;
 @property (nonatomic, retain) NSString *timestampText;
 @property (nonatomic, retain) UIImage *anonymousImage;
 @property (nonatomic, retain) UIImage *defaultImage;

@@ -29,7 +29,7 @@
 
 @synthesize navIndex;
 @synthesize formType;
-@synthesize action;
+@synthesize action, mode;
 
 static DataModel *instance = nil;
 

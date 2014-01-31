@@ -9,6 +9,8 @@
 #import "GroupsHomeVC.h"
 #import "DateTimeUtils.h"
 
+#define kTimestampDelay 100
+
 @interface GroupsHomeVC ()
 
 @end
@@ -62,6 +64,101 @@
 }
 
 #pragma mark - Load Data
+
+- (void)listGroupChats:(id)sender
+{
+    NSLog(@"%s", __FUNCTION__);
+//    self.tableData =[[NSMutableArray alloc]init];
+    
+    if (chatSvc == nil) {
+        chatSvc = [[ChatManager alloc] init];
+    }
+    
+    [chatSvc apiListChats:[DataModel shared].user.contact_key status:[NSNumber numberWithInt:ChatStatus_GROUP]  callback:^(NSArray *results) {
+        NSLog(@"apiListChats response count %i", results.count);
+        if (results.count == 0) {
+            [MBProgressHUD hideHUDForView:self.view animated:NO];
+            [self.theTableView reloadData];
+            return;
+        }
+        
+        NSMutableArray *chatsArray = [[NSMutableArray alloc] initWithCapacity:results.count];
+        ChatVO *chat;
+        //        ChatVO *dbChat;
+        
+        for (PFObject* result in results) {
+            
+            NSArray *keys = [result objectForKey:@"contact_keys"];
+            
+            if (keys.count > 1) {
+                
+                NSLog(@"contact keys = %@", keys);
+                
+                chat = [ChatVO readFromPFObject:result];
+                
+                [chatsArray addObject:chat];
+            }
+        }
+        
+        for (ChatVO *chat in chatsArray) {
+            
+            ChatVO *lookup = [chatSvc loadChatByKey:chat.system_id];
+            if (lookup == nil) {
+                // need to add
+                if (chat.status == nil) {
+                    chat.status = [NSNumber numberWithInt:ChatStatus_GROUP];
+                }
+                [chatSvc saveChat:chat];
+                chat.hasNew = YES;
+                
+            } else {
+                // ignore
+//                [chatSvc updateChat:chat.system_id withName:chat.name status:[NSNumber numberWithInt:ChatStatus_GROUP]];
+                NSTimeInterval serverTime = [chat.updatedAt timeIntervalSince1970];
+                
+                if (lookup.read_timestamp.doubleValue + kTimestampDelay < serverTime) {
+                    chat.hasNew = YES;
+                } else {
+                    chat.hasNew = NO;
+                }
+            }
+            
+//            [tableData addObject:chat];
+            
+        }
+        
+    }];
+}
+
+//- (void)performSearch:(NSString *)searchText
+//{
+//    NSLog(@"%s: %@", __FUNCTION__, searchText);
+//    self.tableData =[[NSMutableArray alloc]init];
+//    
+//    NSString *sql = @"select * from chat where name is not null and status <> 1";
+//    
+//    isLoading = YES;
+//    
+//    //    NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
+//    
+//    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+//    [tableData removeAllObjects];
+//    ChatVO *chat;
+//    while ([rs next]) {
+//        chat = [ChatVO readFromDictionary:[rs resultDictionary]];
+//        NSLog(@"chat.names = %@", chat.name);
+//        [tableData addObject:chat];
+//    }
+//    isLoading = NO;
+//    
+//    [self.theTableView reloadData];
+//    
+//    //    [self performSelector:@selector(preloadData:)
+//    //               withObject:nil
+//    //               afterDelay:1.0];
+////    [self listGroupChats:<#(id)#>];
+//    
+//}
 
 - (void)performSearch:(NSString *)searchText
 {
@@ -119,6 +216,11 @@
                          tableData = [sortedArray mutableCopy];
                          [self.theTableView reloadData];
                          
+                         
+                         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                             [self listGroupChats:nil];
+                         });
+
                      }];
     
     
@@ -184,7 +286,7 @@
             cell.dateLabel.text = datetext;
         }
         
-//        cell.dateLabel.text = group.chat_key;
+        cell.dateLabel.text = group.chat_key;
 
         
     } @catch (NSException * e) {
@@ -217,6 +319,58 @@
             [DataModel shared].group = group;
 
             if (group.chat_key != nil && group.chat_key.length > 0) {
+                __weak typeof(self) weakSelf = self;
+                [chatSvc apiLoadChat:group.chat_key callback:^(ChatVO *chat) {
+                    [DataModel shared].chat = chat;
+                    [DataModel shared].mode = @"Groups";
+                    [weakSelf.delegate setBackPath:@"GroupsHome"];
+                    [weakSelf.delegate gotoSlideWithName:@"Chat"];
+                }];
+            } else {
+                
+                NSLog(@"Creating new chat");
+                NSMutableArray *contactKeys = [groupSvc listGroupContactKeys:group.group_id];
+                [contactKeys addObject:[DataModel shared].user.contact_key];
+                
+                ChatVO *chat = [[ChatVO alloc] init];
+                chat.name = group.name;
+                chat.status = [NSNumber numberWithInt:ChatStatus_GROUP];
+                chat.contact_keys = contactKeys;
+                __weak typeof(self) weakSelf = self;
+
+                [chatSvc apiSaveChat:chat callback:^(PFObject *pfChat) {
+                    
+                    if (!pfChat) {
+                        NSLog(@"apiSaveChat failed");
+                    } else {
+                        // Adding push notifications subscription
+                        NSLog(@"Saving group chat_key %@", pfChat.objectId);
+//                        GroupVO *group = [DataModel shared].group;
+                        group.chat_key = pfChat.objectId;
+                        [groupSvc updateGroup:group];
+                        
+                        NSString *channelId = [@"chat_" stringByAppendingString:pfChat.objectId];
+                        
+                        PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+                        [currentInstallation addUniqueObject:channelId forKey:@"channels"];
+                        [currentInstallation saveInBackground];
+                        
+                        chat.system_id = pfChat.objectId;
+                        
+                        [chatSvc saveChat:chat];
+                        
+                        [DataModel shared].chat = chat;
+                        [DataModel shared].mode = @"Groups";
+                        
+                        [weakSelf.delegate setBackPath:@"GroupsHome"];
+                        [weakSelf.delegate gotoSlideWithName:@"Chat"];
+
+//                        [DataModel shared].navIndex = 2;
+//                        NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
+//                        [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
+                        
+                    }
+                }];
                 
             }
             
@@ -286,15 +440,6 @@
     [super setEditing:(BOOL)editing animated:(BOOL)animated];
     [self.theTableView setEditing:editing];
     
-//    if (inEditMode) {
-//        [super setEditing:(BOOL)editing animated:(BOOL)animated];
-//    } else {
-//        
-//    }
-//    if (editing)
-//        self.editingFromEditButton = YES;
-//    self.editingFromEditButton = NO;
-    // Other code you may want at this point...
 }
 
 - (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath

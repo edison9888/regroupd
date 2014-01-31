@@ -8,6 +8,8 @@
 
 #import "SlideViewController.h"
 #import "SQLiteDB.h"
+#import "MBProgressHUD.h"
+
 #import "GroupTableViewCell.h"
 #import "GroupVO.h"
 #import "ContactVO.h"

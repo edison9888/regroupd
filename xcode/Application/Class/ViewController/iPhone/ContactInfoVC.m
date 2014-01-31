@@ -159,7 +159,9 @@
         if (chatExists) {
             
             [DataModel shared].chat = chat;
-            [_delegate gotoSlideWithName:@"Chat" andOverrideTransition:kPresentationTransitionFade];
+            [DataModel shared].mode = @"Chats";
+            [_delegate setBackPath:@"ChatsHome"];
+            [_delegate gotoSlideWithName:@"Chat"];
             
         } else {
             ChatVO *chat = [[ChatVO alloc] init];
@@ -181,6 +183,8 @@
                 
                 [DataModel shared].chat = chat;
                 
+                [DataModel shared].mode = @"Chats";
+                [_delegate setBackPath:@"ChatsHome"];
                 [_delegate gotoSlideWithName:@"Chat"];
             }];
         }

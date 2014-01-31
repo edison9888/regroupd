@@ -415,6 +415,8 @@
             
             [DataModel shared].chat = chat;
             
+            [DataModel shared].mode = @"Chats";
+            [_delegate setBackPath:@"ChatsHome"];
             [_delegate gotoSlideWithName:@"Chat"];
             
         }];

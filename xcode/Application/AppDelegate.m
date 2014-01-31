@@ -38,11 +38,11 @@
     //    https://www.parse.com/apps/quickstart#ios/native/existing
     
     //   regroupd beta
-//    [Parse setApplicationId:@"Gsrcl3UknJ3j8W4muWT8zEEB17ZAY01Ws3ErdDfs"
-//                  clientKey:@"qXWPl6rK8rwlVFyCjBxDzDedUyGGhI0a8yvWrnYG"];
+    [Parse setApplicationId:@"Gsrcl3UknJ3j8W4muWT8zEEB17ZAY01Ws3ErdDfs"
+                  clientKey:@"qXWPl6rK8rwlVFyCjBxDzDedUyGGhI0a8yvWrnYG"];
     // regroupd db 2
-    [Parse setApplicationId:@"zP5FnTdNCqQ1r6JmBgCDEJPvKhENEOoR04gwWYXF"
-                  clientKey:@"dHExtS7YpfNp8uKOHcBKY1me7Xzl4w2s5zFeHtrv"];
+//    [Parse setApplicationId:@"zP5FnTdNCqQ1r6JmBgCDEJPvKhENEOoR04gwWYXF"
+//                  clientKey:@"dHExtS7YpfNp8uKOHcBKY1me7Xzl4w2s5zFeHtrv"];
     
     //    [PFUser enableAutomaticUser];
     
