@@ -2331,9 +2331,9 @@
 			isa = PBXGroup;
 			children = (
 				1EC44C8018130D0C00F4A2C2 /* Groups */,
+				1EC44C7D18130CE000F4A2C2 /* Chats */,
 				1EC44C7F18130CED00F4A2C2 /* Forms */,
 				1EC44C7E18130CE700F4A2C2 /* Contacts */,
-				1EC44C7D18130CE000F4A2C2 /* Chats */,
 				1EC44C7C18130CC900F4A2C2 /* Setup */,
 			);
 			path = iPhone;

@@ -7,6 +7,9 @@
 //
 
 #import "ChatManager.h"
+#import "GroupManager.h"
+#import "FormManager.h"
+
 #import "SQLiteDB.h"
 #import "DateTimeUtils.h"
 #import "DataModel.h"
@@ -31,15 +34,16 @@
     
 }
 
-- (void) updateChat:(NSString *)chatKey withName:(NSString *)name {
+- (void) updateChat:(NSString *)chatKey withName:(NSString *)name status:(NSNumber *)status {
     
     NSString *sql;
     BOOL success;
     
     @try {
-        sql = @"UPDATE chat set name=? where system_id=?";
+        sql = @"UPDATE chat set name=?, status=? where system_id=?";
         success = [[SQLiteDB sharedConnection] executeUpdate:sql,
                    name,
+                   status,
                    chatKey
                    ];
         
@@ -257,7 +261,7 @@
     } else {
         NSLog(@"====== SQL DELETE SUCCESS ======");
     }
-
+    
 }
 - (NSMutableArray *) listChats:(int)type {
     return nil;
@@ -418,10 +422,16 @@
     }
 }
 
-- (void) apiListChats:(NSString *)userId callback:(void (^)(NSArray *results))callback {
+- (void) apiListChats:(NSString *)userId status:(NSNumber *)status callback:(void (^)(NSArray *results))callback {
     PFQuery *query = [PFQuery queryWithClassName:kChatDB];
     [query whereKey:@"contact_keys" containsAllObjectsInArray:@[userId]];
-    
+    if (status) {
+        if (status.intValue == ChatStatus_GROUP) {
+            [query whereKey:@"status" equalTo:status];
+        } else {
+            [query whereKey:@"status" notEqualTo:[NSNumber numberWithInt:ChatStatus_GROUP]];
+        }
+    }
     [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
         
         callback(results);
@@ -520,6 +530,249 @@
     }];
     
 }
+/*
+ Method for sending a message to a contact and you don't know if a chat exists already.
+ */
+- (void) apiSendMessageToContact:(ChatMessageVO *)msg contact:(ContactVO *)contact callback:(void (^)(ChatVO *chat))callback{
+    FormManager *formSvc = [[FormManager alloc] init];
+    
+    NSArray *contactKeys = [NSArray arrayWithObjects:contact.system_id, [DataModel shared].user.contact_key, nil];
+    
+    [self apiFindChatsByContactKeys:contactKeys callback:^(NSArray *results) {
+        BOOL chatExists = NO;
+        ChatVO *chat;
+        if (results && results.count > 0) {
+            for (PFObject *pfChat in results) {
+                if (pfChat[@"contact_keys"]) {
+                    NSArray *keys =pfChat[@"contact_keys"];
+                    if (keys.count == 2) {
+                        // exact match.
+                        chat = [ChatVO readFromPFObject:pfChat];
+                        chatExists = YES;
+                        break;
+                    }
+                }
+            }
+        }
+        if (chatExists) {
+            msg.chat_key = chat.system_id;
+            [self apiSaveChatMessage:msg callback:^(PFObject *pfMessage) {
+                if (pfMessage) {
+                    if (msg.form_key == nil || msg.form_key.length == 0 ) {
+                        callback(chat);
+                        
+                    } else {
+                        [formSvc apiLookupFormContacts:msg.form_key contactKeys:contactKeys callback:^(NSArray *savedKeys) {
+                            
+                            NSMutableSet *unsavedKeySet = [[NSMutableSet alloc] init];
+                            
+                            for (NSString *key in chat.contact_keys) {
+                                
+                                if (![savedKeys containsObject:key]) {
+                                    [unsavedKeySet addObject:key];
+                                }
+                            }
+                            if (unsavedKeySet.count == 0) {
+                                callback(chat);
+                            } else {
+                                [formSvc apiBatchSaveFormContacts:msg.form_key contactKeys:[unsavedKeySet allObjects] callback:^(NSArray *savedKeys) {
+                                    NSLog(@"Saved form contacts count %i", savedKeys.count);
+                                    
+                                    callback(chat);
+                                    
+                                }];
+                            }
+                        }];
+                        
+                    }
+                    
+                } else {
+                    NSLog(@"Chat message was not saved");
+                    callback(nil);
+                }
+            }];
+            
+            
+            
+        } else {
+            ChatVO *chat = [[ChatVO alloc] init];
+            
+            chat.contact_keys = contactKeys;
+            chat.status = [NSNumber numberWithInt:ChatStatus_NORMAL];
+            NSString *chatname = @"%@, %@";
+            chatname = [NSString stringWithFormat:chatname, contact.fullname, [DataModel shared].myContact.fullname];
+            chat.name = chatname;
+            //            chat.name =
+            [self apiSaveChat:chat callback:^(PFObject *pfChat) {
+                
+                // Adding push notifications subscription
+                chat.system_id = pfChat.objectId;
+                
+                [self saveChat:chat];
+                msg.chat_key = chat.system_id;
+                [self apiSaveChatMessage:msg callback:^(PFObject *pfMessage) {
+                    if (pfMessage) {
+                        if (msg.form_key == nil || msg.form_key.length == 0 ) {
+                            callback(chat);
+                            
+                        } else {
+                            [formSvc apiLookupFormContacts:msg.form_key contactKeys:contactKeys callback:^(NSArray *savedKeys) {
+                                
+                                NSMutableSet *unsavedKeySet = [[NSMutableSet alloc] init];
+                                
+                                for (NSString *key in chat.contact_keys) {
+                                    
+                                    if (![savedKeys containsObject:key]) {
+                                        [unsavedKeySet addObject:key];
+                                    }
+                                }
+                                if (unsavedKeySet.count == 0) {
+                                    callback(chat);
+                                } else {
+                                    [formSvc apiBatchSaveFormContacts:msg.form_key contactKeys:[unsavedKeySet allObjects] callback:^(NSArray *savedKeys) {
+                                        NSLog(@"Saved form contacts count %i", savedKeys.count);
+                                        
+                                        callback(chat);
+                                        
+                                    }];
+                                }
+                            }];
+                            
+                        }
+                        
+                    } else {
+                        NSLog(@"Chat message was not saved");
+                        callback(nil);
+                    }
+                }];
+            }];
+        }
+    }];
+    
+    
+}
+- (void) apiSendMessageToGroup:(ChatMessageVO *)msg group:(GroupVO *)group callback:(void (^)(ChatVO *chat))callback{
+    
+    GroupManager *groupSvc = [[GroupManager alloc] init];
+    FormManager *formSvc = [[FormManager alloc] init];
+    
+    if (group.chat_key != nil && group.chat_key.length > 0) {
+        NSLog(@"Found existing chat_key=%@", group.chat_key);
+        
+        [self apiLoadChat:group.chat_key callback:^(ChatVO *chat) {
+            // Send message
+            msg.chat_key = chat.system_id;
+            [self apiSaveChatMessage:msg callback:^(PFObject *pfMessage) {
+                if (pfMessage) {
+                    if (msg.form_key == nil || msg.form_key.length == 0 ) {
+                        callback(chat);
+                        
+                    } else {
+                        [formSvc apiLookupFormContacts:msg.form_key contactKeys:chat.contact_keys callback:^(NSArray *savedKeys) {
+                            
+                            NSMutableSet *unsavedKeySet = [[NSMutableSet alloc] init];
+                            
+                            for (NSString *key in chat.contact_keys) {
+                                
+                                if (![savedKeys containsObject:key]) {
+                                    [unsavedKeySet addObject:key];
+                                }
+                            }
+                            
+                            if (unsavedKeySet.count == 0) {
+                                callback(chat);
+                            } else {
+                                [formSvc apiBatchSaveFormContacts:msg.form_key contactKeys:[unsavedKeySet allObjects] callback:^(NSArray *savedKeys) {
+                                    NSLog(@"Saved form contacts count %i", savedKeys.count);
+                                    
+                                    callback(chat);
+                                    
+                                }];
+                            }
+                        }];
+                        
+                    }
+                    
+                } else {
+                    NSLog(@"Chat message was not saved");
+                    callback(nil);
+                }
+            }];
+            
+        }];
+        
+    } else {
+        NSLog(@"Creating new chat");
+        
+        NSMutableArray *contactKeys = [groupSvc listGroupContactKeys:group.group_id];
+        [contactKeys addObject:[DataModel shared].user.contact_key];
+        
+        ChatVO *chat = [[ChatVO alloc] init];
+        chat.name = group.name;
+        chat.status = [NSNumber numberWithInt:ChatStatus_GROUP];
+        chat.contact_keys = contactKeys;
+        
+        [self apiSaveChat:chat callback:^(PFObject *pfChat) {
+            
+            if (!pfChat) {
+                NSLog(@"apiSaveChat failed");
+                callback(nil);
+            } else {
+                // Adding push notifications subscription
+                NSLog(@"Saving group chat_key %@", pfChat.objectId);
+                //                GroupVO *group = [DataModel shared].group;
+                group.chat_key = pfChat.objectId;
+                [groupSvc updateGroup:group];
+                
+                chat.system_id = pfChat.objectId;
+                
+                [self saveChat:chat];
+                
+                msg.chat_key = chat.system_id;
+                
+                [self apiSaveChatMessage:msg callback:^(PFObject *pfMessage) {
+                    if (pfMessage) {
+                        if (msg.form_key == nil || msg.form_key.length == 0 ) {
+                            
+                            callback(chat);
+                        } else {
+                            [formSvc apiLookupFormContacts:msg.form_key contactKeys:chat.contact_keys callback:^(NSArray *savedKeys) {
+                                
+                                NSMutableSet *unsavedKeySet = [[NSMutableSet alloc] init];
+                                
+                                for (NSString *key in chat.contact_keys) {
+                                    
+                                    if (![savedKeys containsObject:key]) {
+                                        [unsavedKeySet addObject:key];
+                                    }
+                                }
+                                
+                                if (unsavedKeySet.count == 0) {
+                                    callback(chat);
+                                } else {
+                                    [formSvc apiBatchSaveFormContacts:msg.form_key contactKeys:[unsavedKeySet allObjects] callback:^(NSArray *savedKeys) {
+                                        NSLog(@"Saved form contacts count %i", savedKeys.count);
+                                        callback(chat);
+                                        
+                                    }];
+                                }
+                            }];
+                            
+                        }
+                        
+                    } else {
+                        NSLog(@"Chat message was not saved");
+                    }
+                }];
+                
+                
+            }
+        }];
+    }
+    
+}
+
+#pragma mark - ChatMessage API
 
 - (void) apiSaveChatMessage:(ChatMessageVO *)msg callback:(void (^)(PFObject *object))callback{
     
@@ -669,16 +922,16 @@
 #pragma mark - Synchronous API -- to be deprecated
 
 //- (NSString *) apiSaveChat:(ChatVO *) chat {
-//    
+//
 //    PFObject *data = [PFObject objectWithClassName:kChatDB];
-//    
+//
 //    if (chat.name != nil) {
 //        data[@"name"] = chat.name;
 //    }
 //    data[@"user"] = [PFUser currentUser];
 //    data[@"contact_keys"] = chat.contact_keys;
 //    [data save];
-//    
+//
 //    NSLog(@"Saved chat with objectId %@", data.objectId);
 //    return data.objectId;
 //    

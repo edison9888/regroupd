@@ -9,6 +9,7 @@
 #import "FormSendVC.h"
 #import "GroupContactCell.h"
 #import "UIColor+ColorWithHex.h"
+#import "GroupVO.h"
 
 #define kStatusAvailable @"Available"
 
@@ -74,6 +75,8 @@
     self.groupsData =[[NSMutableArray alloc]init];
     contactSet = [[NSMutableSet alloc] init];
     groupSet = [[NSMutableSet alloc] init];
+    groupPicks = [[NSMutableDictionary alloc] init];
+    contactPicks = [[NSMutableDictionary alloc] init];
     
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
@@ -289,10 +292,12 @@
                 status = 0;
                 [tmpCell setStatus:status];
                 [contactSet removeObject:key];
+                [contactPicks removeObjectForKey:key];
             } else {
                 status = 1;
                 [tmpCell setStatus:status];
                 [contactSet addObject:key];
+                [contactPicks setObject:rowdata forKey:key];
             }
             
         } @catch (NSException * e) {
@@ -314,10 +319,12 @@
                 status = 0;
                 [tmpCell setStatus:status];
                 [groupSet removeObject:groupId];
+                [groupPicks removeObjectForKey:groupId];
             } else {
                 status = 1;
                 [tmpCell setStatus:status];
                 [groupSet addObject:groupId];
+                [groupPicks setObject:rowdata forKey:groupId];
             }
         } @catch (NSException * e) {
             NSLog(@"Exception: %@", e);
@@ -370,20 +377,6 @@
 
 #pragma mark - Action handlers
 
-- (IBAction)tapAddButton
-{
-    //    //    BOOL isOk = YES;
-    //    NSNotification* showMaskNotification = [NSNotification notificationWithName:@"showMaskNotification" object:nil];
-    //    [[NSNotificationCenter defaultCenter] postNotification:showMaskNotification];
-    
-    [self showModal];
-    
-}
-
-- (IBAction)tapEditButton
-{
-    
-}
 
 - (void) showModal {
     
@@ -472,9 +465,14 @@
 }
 
 - (IBAction)tapDoneButton {
-    NSMutableSet *contactKeys = [[NSMutableSet alloc] init];
-    self.sendButton.enabled = NO;
     
+    
+    self.sendButton.enabled = NO;
+    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [self.hud setLabelText:@"Saving"];
+
+    [self processSelectedGroups];
+/*
     [contactKeys addObjectsFromArray:contactSet.allObjects];
     NSMutableArray *keys;
     
@@ -531,11 +529,82 @@
             }];
         }
     }];
-
+*/
     
     
     
     //    [_delegate goBack];
+}
+
+- (void) processSelectedContacts {
+    
+    int total = contactSet.count;
+    __block int index = 0;
+    
+    if (total == 0) {
+        // FINISH
+        [MBProgressHUD hideHUDForView:self.view animated:NO];
+
+        return;
+    }
+    NSDictionary *dict;
+    ContactVO *contact;
+
+    for (NSString *key in contactSet) {
+        
+        NSLog(@"Sending form to individual %@", key);
+        
+        dict = [contactPicks objectForKey:key];
+        contact = [ContactVO readFromDictionary:dict];
+        
+        ChatMessageVO *msg = [[ChatMessageVO alloc] init];
+        msg.form_key = [DataModel shared].form.system_id;
+        msg.contact_key = [DataModel shared].user.contact_key;
+        [chatSvc apiSendMessageToContact:msg contact:contact callback:^(ChatVO *chat) {
+            
+            index++;
+            if (index == total) {
+                // finished here
+                [MBProgressHUD hideHUDForView:self.view animated:NO];
+                
+            }
+        }];
+    }
+}
+
+- (void) processSelectedGroups {
+    if (groupSet.count == 0) {
+        [self processSelectedContacts];
+        return;
+    }
+    int total = groupSet.count;
+    __block int index = 0;
+    NSDictionary *data;
+    GroupVO *group;
+    
+    for (NSNumber *groupId in groupSet) {
+        data = [groupPicks objectForKey:groupId];
+        
+        if (data) {
+            group = [GroupVO readFromDictionary:data];
+            ChatMessageVO *msg = [[ChatMessageVO alloc] init];
+            msg.form_key = [DataModel shared].form.system_id;
+            msg.contact_key = [DataModel shared].user.contact_key;
+            
+            [chatSvc apiSendMessageToGroup:msg group:group callback:^(ChatVO *chat) {
+                index++;
+                if (index == total) {
+                    [self processSelectedContacts];
+                }
+            }];
+        } else {
+            NSLog(@"Group not found %@", groupId);
+            index++;
+            if (index == total) {
+                [self processSelectedContacts];
+            }
+        }
+    }
 }
 
 - (void) sendFormInChat:(ChatVO *)chat {
@@ -547,7 +616,8 @@
     msg.form_key = [DataModel shared].form.system_id;
     
     // FIXME: Need to remove blocked users
-    
+    __weak typeof(self) weakSelf = self;
+
     [chatSvc apiSaveChatMessage:msg callback:^(PFObject *pfMessage) {
         if (pfMessage) {
             
@@ -615,10 +685,10 @@
                 [push setData:data];
                 [push sendPushInBackground];
                 
-                [MBProgressHUD hideHUDForView:self.view animated:NO];
+                [MBProgressHUD hideHUDForView:weakSelf.view animated:NO];
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:nil
                                                                 message:@"Your form was successfully sent to all recipients."
-                                                               delegate:self
+                                                               delegate:weakSelf
                                                       cancelButtonTitle:@"OK"
                                                       otherButtonTitles:nil];
                 

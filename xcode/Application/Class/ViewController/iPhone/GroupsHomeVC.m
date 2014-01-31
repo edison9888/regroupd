@@ -213,10 +213,12 @@
             selectedIndex = indexPath.row;
             NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
             
-            [DataModel shared].group = [GroupVO readFromDictionary:rowdata];
-            
-            [DataModel shared].action = kActionEDIT;
-            [_delegate gotoSlideWithName:@"GroupInfo" returnPath:@"GroupsHome"];
+            GroupVO *group = [GroupVO readFromDictionary:rowdata];
+            [DataModel shared].group = group;
+
+            if (group.chat_key != nil && group.chat_key.length > 0) {
+                
+            }
             
         }
     } @catch (NSException * e) {
@@ -244,7 +246,7 @@
         [DataModel shared].group = [GroupVO readFromDictionary:rowdata];
         
         [DataModel shared].action = kActionEDIT;
-        [_delegate gotoSlideWithName:@"ManageGroup" returnPath:@"GroupsHome"];
+        [_delegate gotoSlideWithName:@"GroupInfo" returnPath:@"GroupsHome"];
         
     }
 }

@@ -36,8 +36,8 @@
     
     NSMutableSet *contactSet;
     NSMutableSet *groupSet;
-//    NSMutableDictionary *contactPicks;
-//    NSMutableDictionary *groupPicks;
+    NSMutableDictionary *contactPicks;
+    NSMutableDictionary *groupPicks;
     
     
 }

@@ -48,7 +48,7 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [self performSearch:nil];
-//    [self preloadData];
+//    [self preloadData:nil];
     
 }
 - (void)didReceiveMemoryWarning
@@ -70,7 +70,7 @@
     NSLog(@"%s: %@", __FUNCTION__, searchText);
     self.tableData =[[NSMutableArray alloc]init];
 
-    NSString *sql = @"select * from chat where name is not null and status > -1";
+    NSString *sql = @"select * from chat where name is not null and status <> 1";
     
     isLoading = YES;
     
@@ -126,7 +126,7 @@
     }
     
     
-    [chatSvc apiListChats:[DataModel shared].user.contact_key callback:^(NSArray *results) {
+    [chatSvc apiListChats:[DataModel shared].user.contact_key status:[NSNumber numberWithInt:ChatStatus_NORMAL]  callback:^(NSArray *results) {
         fetchCount++;
         NSLog(@"apiListChats response count %i", results.count);
         if (results.count == 0) {
@@ -228,16 +228,17 @@
                 ChatVO *lookup = [chatSvc loadChatByKey:chat.system_id];
                 if (lookup == nil) {
                     // need to add
+                    if (chat.status == nil) {
+                        chat.status = [NSNumber numberWithInt:ChatStatus_NORMAL];
+                    }
                     [chatSvc saveChat:chat];
                     chat.hasNew = YES;
                     
                 } else {
                     // ignore
-//                    [chatSvc updateChatStatus:chat.system_id name:chat.names readtime:[NSNumber numberWithDouble:0.0]];
-                    [chatSvc updateChat:chat.system_id withName:chat.name];
+                    [chatSvc updateChat:chat.system_id withName:chat.name status:[NSNumber numberWithInt:ChatStatus_NORMAL]];
                     NSTimeInterval serverTime = [chat.updatedAt timeIntervalSince1970];
                     
-//                    NSLog(@"Compare localTime %f vs. serverTime %f", lookup.read_timestamp.doubleValue, serverTime);
                     
                     if (lookup.read_timestamp.doubleValue + kTimestampDelay < serverTime) {
                         chat.hasNew = YES;
