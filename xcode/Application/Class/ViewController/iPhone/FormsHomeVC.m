@@ -38,15 +38,14 @@
     // Reset action
     typeFilter = 0;
     
-    CGRect scrollFrame = self.theTableView.frame;
-    scrollFrame.size.height -= 50;
-    NSLog(@"Set scroll frame height to %f", scrollFrame.size.height);
-
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
     self.theTableView.backgroundColor = [UIColor colorWithHexValue:0xEFEFEF];
-    self.theTableView.frame = scrollFrame;
-    
+
+    CGRect tableFrame = self.theTableView.frame;
+    tableFrame.size.height = [DataModel shared].stageHeight - tableFrame.origin.y - 50;
+    self.theTableView.frame = tableFrame;
+
 //    self.theTableView.separatorColor = [UIColor grayColor];
     self.tableData =[[NSMutableArray alloc]init];
     

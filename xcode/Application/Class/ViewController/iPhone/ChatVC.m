@@ -1442,6 +1442,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 #pragma mark IBActions
 - (IBAction)tapCancelButton {
+    if ([[DataModel shared].mode isEqualToString:@"Chats"]) {
+        [_delegate setBackPath:@"ChatsHome"];
+    } else {
+        [_delegate setBackPath:@"GroupsHome"];
+    }
+
     [_delegate goBack];
 //    [_delegate gotoSlideWithName:@"ChatsHome"];
     

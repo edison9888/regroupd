@@ -77,8 +77,12 @@
     self.theTableView.hidden = YES;
     [self.theTableView setSeparatorColor:[UIColor grayColor]];
     
-    
     self.theTableView.backgroundColor = [UIColor clearColor];
+    
+    CGRect tableFrame = self.theTableView.frame;
+    tableFrame.size.height = [DataModel shared].stageHeight - tableFrame.origin.y;
+    self.theTableView.frame = tableFrame;
+
     
     self.tableData =[[NSMutableArray alloc]init];
     

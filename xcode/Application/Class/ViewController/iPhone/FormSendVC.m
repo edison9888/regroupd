@@ -544,6 +544,7 @@
     if (total == 0) {
         // FINISH
         [MBProgressHUD hideHUDForView:self.view animated:NO];
+        [_delegate gotoSlideWithName:@"FormsHome" andOverrideTransition:kPresentationTransitionFade];
 
         return;
     }
@@ -555,7 +556,7 @@
         NSLog(@"Sending form to individual %@", key);
         
         dict = [contactPicks objectForKey:key];
-        contact = [ContactVO readFromDictionary:dict];
+        contact = [ContactVO readFromPhonebook:dict];
         
         ChatMessageVO *msg = [[ChatMessageVO alloc] init];
         msg.form_key = [DataModel shared].form.system_id;
@@ -566,6 +567,7 @@
             if (index == total) {
                 // finished here
                 [MBProgressHUD hideHUDForView:self.view animated:NO];
+                [_delegate gotoSlideWithName:@"FormsHome" andOverrideTransition:kPresentationTransitionFade];
                 
             }
         }];

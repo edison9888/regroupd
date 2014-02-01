@@ -172,12 +172,12 @@
     NSLog(@"Current screen is %@", _activeSlide.slideModel.name);
     if (notification.object != nil) {
         ChatMessageVO *msg = (ChatMessageVO *) notification.object;
-        
         if (chatSvc == nil) {
             chatSvc = [[ChatManager alloc] init];
         }
         [chatSvc apiLoadChat:msg.chat_key callback:^(ChatVO *chat) {
             [DataModel shared].chat =  chat;
+            [DataModel shared].mode = @"Chats";
             
             if ([_activeSlide.slideModel.name isEqualToString:@"Chat"]) {
                 [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_chatRefreshNotification object:msg]];

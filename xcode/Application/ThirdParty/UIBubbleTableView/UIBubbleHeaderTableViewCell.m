@@ -36,7 +36,7 @@
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 //    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-    [dateFormatter setDateFormat:@"dd/MM/yy"];
+    [dateFormatter setDateFormat:@"MM/dd/yy"];
     NSString *text = [dateFormatter stringFromDate:value];
 #if !__has_feature(objc_arc)
     [dateFormatter release];

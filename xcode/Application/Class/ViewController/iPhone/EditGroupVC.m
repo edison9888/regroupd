@@ -104,6 +104,10 @@
     self.theTableView.hidden = NO;
     [self.theTableView setSeparatorColor:[UIColor grayColor]];
     
+    CGRect tableFrame = self.theTableView.frame;
+    tableFrame.size.height = [DataModel shared].stageHeight - tableFrame.origin.y;
+    self.theTableView.frame = tableFrame;
+
     
     self.theTableView.backgroundColor = [UIColor clearColor];
     

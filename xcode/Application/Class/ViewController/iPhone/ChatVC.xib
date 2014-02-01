@@ -125,7 +125,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="20">
-                            <rect key="frame" x="243" y="7" width="70" height="36"/>
+                            <rect key="frame" x="255" y="7" width="60" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.31372549020000001" green="0.61960784310000006" blue="0.6705882353" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="15"/>
@@ -144,7 +144,7 @@
                     <color key="backgroundColor" red="0.15686274510000001" green="0.81176470590000005" blue="0.91764705879999997" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="6">
-                    <rect key="frame" x="5" y="8" width="70" height="36"/>
+                    <rect key="frame" x="5" y="8" width="60" height="36"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.31372549020000001" green="0.61960784310000006" blue="0.6705882353" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="15"/>

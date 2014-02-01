@@ -182,7 +182,7 @@
 {
     [MBProgressHUD hideHUDForView:self.view animated:NO];
     NSLog(@"===== %s", __FUNCTION__);
-    [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Form created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    [[[UIAlertView alloc] initWithTitle:@"Success" message:@"Rating created successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     
     
     

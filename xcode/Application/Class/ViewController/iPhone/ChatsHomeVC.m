@@ -39,6 +39,10 @@
     self.theTableView.dataSource = self;
     self.theTableView.backgroundColor = [UIColor clearColor];
     
+    CGRect tableFrame = self.theTableView.frame;
+    tableFrame.size.height = [DataModel shared].stageHeight - tableFrame.origin.y - 50;
+    self.theTableView.frame = tableFrame;
+
     
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];

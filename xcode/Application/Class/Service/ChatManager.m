@@ -537,7 +537,8 @@
 - (void) apiSendMessageToContact:(ChatMessageVO *)msg contact:(ContactVO *)contact callback:(void (^)(ChatVO *chat))callback{
     FormManager *formSvc = [[FormManager alloc] init];
     
-    NSArray *contactKeys = [NSArray arrayWithObjects:contact.system_id, [DataModel shared].user.contact_key, nil];
+    NSArray *contactKeys = @[contact.system_id, [DataModel shared].user.contact_key];
+//    NSArray *contactKeys = [NSArray arrayWithObjects:contact.system_id, [DataModel shared].user.contact_key, nil];
     
     [self apiFindChatsByContactKeys:contactKeys callback:^(NSArray *results) {
         BOOL chatExists = NO;

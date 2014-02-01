@@ -157,14 +157,14 @@
             }
         }
         if (chatExists) {
-            
+            chat.name = [DataModel shared].contact.fullname;
             [DataModel shared].chat = chat;
             [DataModel shared].mode = @"Chats";
             [_delegate setBackPath:@"ChatsHome"];
             [_delegate gotoSlideWithName:@"Chat"];
             
         } else {
-            ChatVO *chat = [[ChatVO alloc] init];
+            chat = [[ChatVO alloc] init];
             
             chat.contact_keys = contactKeys;
             
@@ -181,6 +181,8 @@
                 
                 [chatSvc saveChat:chat];
                 
+                chat.name = [DataModel shared].contact.fullname;
+
                 [DataModel shared].chat = chat;
                 
                 [DataModel shared].mode = @"Chats";

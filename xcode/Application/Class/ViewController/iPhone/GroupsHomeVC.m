@@ -42,6 +42,10 @@
     self.theTableView.dataSource = self;
     self.theTableView.backgroundColor = [UIColor clearColor];
     
+    CGRect tableFrame = self.theTableView.frame;
+    tableFrame.size.height = [DataModel shared].stageHeight - tableFrame.origin.y - 50;
+    self.theTableView.frame = tableFrame;
+    
     self.tableData =[[NSMutableArray alloc]init];
         
     NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
@@ -286,7 +290,7 @@
             cell.dateLabel.text = datetext;
         }
         
-        cell.dateLabel.text = group.chat_key;
+//        cell.dateLabel.text = group.chat_key;
 
         
     } @catch (NSException * e) {
