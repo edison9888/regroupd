@@ -241,6 +241,11 @@
     if ([userInfo objectForKey:@"dt"]) {
         msg.createdAt = (NSDate *)[userInfo objectForKey:@"dt"];
     }
+    
+    if (msg.contact_key == nil || msg.chat_key == nil || msg.system_id == nil) {
+        NSLog(@"Empty msg for userInfo %@", userInfo);
+        return;
+    }
     if ([msg.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
         // ignore
     } else {

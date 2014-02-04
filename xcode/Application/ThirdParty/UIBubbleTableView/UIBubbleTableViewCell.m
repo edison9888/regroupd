@@ -74,7 +74,14 @@
     CGFloat height = self.data.view.frame.size.height;
 
     
-    CGFloat x = (type == BubbleTypeSomeoneElse) ? 0 : self.frame.size.width - width - self.data.insets.left - self.data.insets.right;
+    CGFloat x;
+    
+    if (type == BubbleTypeSomeoneElse) {
+        x= 4;
+    } else {
+        x = self.frame.size.width - width - self.data.insets.left - self.data.insets.right - 4;
+        
+    }
     CGFloat y = 0;
     
     // Adjusting the x coordinate for avatar

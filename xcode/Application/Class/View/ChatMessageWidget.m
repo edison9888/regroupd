@@ -36,7 +36,7 @@
         self.msgView.userInteractionEnabled = NO;
         
         float ypos = kContentTop;
-        
+        float imageLeft = kContentLeft;
         if (msg.message != nil && msg.message.length > 0) {
             self.msgView.hidden = NO;
 //            [self.msgView setFont:theFont];
@@ -78,11 +78,13 @@
             [self.msgView setTextColor:[UIColor blackColor]];
             [self.nameLabel setTextColor:[UIColor colorWithHexValue:0x0d7dac]];
             [self.timeLabel setTextColor:[UIColor colorWithHexValue:0x8496a0]];
+            
+            imageLeft += 7;
         }
         
 
         if (msg.photo != nil || msg.pfPhoto != nil) {
-            CGRect photoFrame = CGRectMake(kContentLeft, ypos, kContentWidth, kContentHeight);
+            CGRect photoFrame = CGRectMake(imageLeft, ypos, kContentWidth, kContentHeight);
             self.photoView = [[PFImageView alloc] initWithFrame:photoFrame];
             [self.photoView.layer setCornerRadius:8];
             [self.photoView.layer setMasksToBounds:YES];

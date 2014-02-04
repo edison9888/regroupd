@@ -85,9 +85,10 @@
         surveyOption.tag = count;
         surveyOption.index = count;
         surveyOption.input.placeholder = defaultText;
-        surveyOption.input.defaultText = defaultText;
+//        surveyOption.input.defaultText = defaultText;
         surveyOption.input.returnKeyType = UIReturnKeyNext;
-        surveyOption.input.tag = count + 10;
+        surveyOption.input.tag = count + kTagOptionBase;
+
         surveyOption.input.delegate = self;
         [self.scrollView addSubview:surveyOption];
         [surveyOptions addObject:surveyOption];
@@ -308,7 +309,19 @@
     [fancyField setActiveStyle:nil];
     
     _currentField = textField;
-    optionIndex = textField.tag;
+//    optionIndex = textField.tag;
+    optionIndex = textField.tag - kTagOptionBase - 1;
+
+    textField.placeholder = nil;
+    
+//    SurveyOptionWithPic *widget = (SurveyOptionWithPic *) [surveyOptions objectAtIndex:optionIndex];
+//    NSString *defaultText = widget.input.defaultText;
+//    
+//    if ([textField.text isEqualToString:defaultText]) {
+//        textField.text = nil;
+//        textField.placeholder = nil;
+//    }
+
     [self updateScrollView];
     
     
