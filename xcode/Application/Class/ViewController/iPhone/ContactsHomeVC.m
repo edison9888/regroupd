@@ -798,7 +798,7 @@
 - (BOOL) createEmailInvite:(NSString *)email {
     // Email Content
     NSString *subject = @"Join re:group'd";
-    NSString *message = @"Hey you! Check out Re:group'd, the world's only group messenger that let's you create and share polls, ratings, and RSVPs: www.getregroupd.com";
+    NSString *message = @"Hey! Check out re:group'd, an awesome new chatting app for your smartphone! Download it today at www.getregroupd.com";
     // To address
     NSArray *toRecipents = [NSArray arrayWithObject:email];
     

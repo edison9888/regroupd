@@ -97,8 +97,9 @@
     [self.searchView addSubview:ccSearchBar];
     [self.searchView.layer setCornerRadius:3.0];
     
-    self.searchView.backgroundColor = [UIColor clearColor];
-    
+//    self.searchView.backgroundColor = [UIColor clearColor];
+    self.searchView.backgroundColor = [UIColor colorWithHexValue:kSearchViewBGColor];
+  
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
     self.theTableView.hidden = NO;
@@ -266,14 +267,20 @@
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
     [ccSearchBar setShowsCancelButton:NO animated:YES];
     
+    UITextField *txfSearchField = [ccSearchBar valueForKey:@"_searchField"];
+    _currentField = txfSearchField;
+
     self.theTableView.allowsSelection = YES;
     self.theTableView.scrollEnabled = YES;
-    
+
+    float keyboardHeight = 220;
     CGRect viewFrame = self.scrollView.frame;
-    viewFrame.size.height = [DataModel shared].stageHeight - keyboardSize.height - viewFrame.origin.y;
+    viewFrame.size.height = [DataModel shared].stageHeight - keyboardHeight - viewFrame.origin.y;
+    
+    NSLog(@"Set scrollView height to %f", viewFrame.size.height);
     
     CGRect targetFrame = self.searchView.frame;
-    //    targetFrame.origin.y += targetFrame.size.height;
+//    targetFrame.origin.y += 100;
     
     self.scrollView.frame = viewFrame;
     //    self.scrollView.contentSize = CGSizeMake([DataModel shared].stageWidth, self.saveButton.frame.origin.y + 50);
@@ -330,7 +337,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"%s", __FUNCTION__);
     static NSString *CellIdentifier = @"ContactTVC";
     UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     @try {
@@ -477,6 +483,7 @@
         if (keyboardIsShown) {
             [_currentField resignFirstResponder];
             [_currentField endEditing:YES];
+            
         }
         
         UIView* view = sender.view;

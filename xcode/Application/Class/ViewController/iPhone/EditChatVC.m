@@ -99,6 +99,18 @@
     tapRecognizer.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tapRecognizer];
 
+    // register for keyboard notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:self.view.window];
+    // register for keyboard notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:self.view.window];
+    
+
     [self performSearch:@""];
 
 //    [self performSearch:@""];
@@ -117,6 +129,43 @@
     return YES;
 }
 
+#pragma mark - Keyboard event handlers
+
+/*
+ SEE: http://stackoverflow.com/questions/1126726/how-to-make-a-uitextfield-move-up-when-keyboard-is-present/2703756#2703756
+ */
+- (void)keyboardWillHide:(NSNotification *)n
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    CGRect viewFrame = self.scrollView.frame;
+    // I'm also subtracting a constant kTabBarHeight because my UIScrollView was offset by the UITabBar so really only the portion of the keyboard that is leftover pass the UITabBar is obscuring my UIScrollView.
+    viewFrame.size.height = [DataModel shared].stageHeight - viewFrame.origin.y;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    // The kKeyboardAnimationDuration I am using is 0.3
+    [UIView setAnimationDuration:0.3];
+    
+    [self.scrollView setFrame:viewFrame];
+    [UIView commitAnimations];
+    
+    keyboardIsShown = NO;
+    
+}
+
+- (void)keyboardWillShow:(NSNotification *)n
+{
+    NSLog(@"%s", __FUNCTION__);
+    if (keyboardIsShown) {
+        return;
+    }
+    NSDictionary* userInfo = [n userInfo];
+    keyboardSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    keyboardIsShown = YES;
+    
+}
 
 #pragma mark - UISearchBar
 /*
@@ -126,6 +175,9 @@
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
     [ccSearchBar setShowsCancelButton:NO animated:YES];
     
+    UITextField *txfSearchField = [ccSearchBar valueForKey:@"_searchField"];
+    _currentField = txfSearchField;
+
     self.theTableView.allowsSelection = YES;
     self.theTableView.scrollEnabled = YES;
 }
@@ -200,7 +252,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 54;
+    return 36;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -318,6 +370,12 @@
     NSLog(@"%s", __FUNCTION__);
     if (UIGestureRecognizerStateEnded == sender.state)
     {
+        
+        if (keyboardIsShown) {
+            [_currentField resignFirstResponder];
+            [_currentField endEditing:YES];
+        }
+
         UIView* view = sender.view;
         CGPoint loc = [sender locationInView:view];
         UIView* subview = [view hitTest:loc withEvent:nil];

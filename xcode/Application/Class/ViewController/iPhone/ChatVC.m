@@ -241,7 +241,11 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     
 }
-
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self setupClearChatsLayer];
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -1487,15 +1491,16 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 - (IBAction)tapClearButton {
     NSLog(@"%s", __FUNCTION__);
+    [self showClearChatsLayer];
     
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Please confirm"
-                                                    message:@"Do you want to clear all messages?"
-                                                   delegate:self
-                                          cancelButtonTitle:@"No"
-                                          otherButtonTitles:@"Yes", nil];
-    
-    alert.tag = kAlertClearMessages;
-    [alert show];
+//    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Please confirm"
+//                                                    message:@"Do you want to clear all messages?"
+//                                                   delegate:self
+//                                          cancelButtonTitle:@"No"
+//                                          otherButtonTitles:@"Yes", nil];
+//    
+//    alert.tag = kAlertClearMessages;
+//    [alert show];
     
     
 }
@@ -1521,6 +1526,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self.attachButton setSelected:NO];
     
 }
+
+
 - (IBAction)tapInputArea {
     [self.inputField becomeFirstResponder];
 }
@@ -2255,6 +2262,64 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     }];
     
     
+}
+
+#pragma mark - Clear Chats
+
+- (IBAction)tapClearChatsYes {
+    NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
+    NSLog(@"timestamp = %f", seconds);
+    
+    [chatSvc updateClearTimestamp:chatId cleartime:[NSNumber numberWithDouble:seconds]];
+    dbChat = [chatSvc loadChatByKey:chatId];
+    [self loadChatMessages];
+
+    [self hideClearChatsLayer];
+    
+}
+- (IBAction)tapClearChatsNo {
+    [self hideClearChatsLayer];
+}
+
+- (void) setupClearChatsLayer {
+    CGRect frame = self.clearChatsLayer.frame;
+    
+    frame.origin.y = [DataModel shared].stageHeight + 40;
+    frame.origin.x = 0;
+    self.clearChatsLayer.frame = frame;
+    
+    [self.view addSubview:self.clearChatsLayer];
+    
+}
+- (void) showClearChatsLayer {
+    CGRect frame = self.clearChatsLayer.frame;
+    frame.origin.y = [DataModel shared].stageHeight - frame.size.height;
+    
+    [UIView animateWithDuration:0.5
+                          delay:0
+                        options:(UIViewAnimationCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction)
+                     animations:^{
+                         self.clearChatsLayer.frame = frame;
+                     }
+                     completion:^(BOOL finished){
+                     }];
+
+}
+- (void) hideClearChatsLayer {
+    CGRect frame = self.clearChatsLayer.frame;
+    
+    frame.origin.y = [DataModel shared].stageHeight + 40;
+    frame.origin.x = 0;
+
+    [UIView animateWithDuration:0.5
+                          delay:0
+                        options:(UIViewAnimationCurveEaseInOut|UIViewAnimationOptionAllowUserInteraction)
+                     animations:^{
+                         self.clearChatsLayer.frame = frame;
+                     }
+                     completion:^(BOOL finished){
+                     }];
+
 }
 
 @end

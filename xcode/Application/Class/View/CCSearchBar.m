@@ -38,10 +38,10 @@ NSString *kDefaultText = @"search by name";
         NSLog(@"%s setup searchField", __FUNCTION__);
         searchField.textColor = [UIColor darkGrayColor];
         searchField.backgroundColor = [UIColor clearColor];
-        [searchField setFont:[UIFont fontWithName:@"Avenir-Medium" size:14]];
+        [searchField setFont:[UIFont fontWithName:@"Raleway" size:14]];
 //        searchField.leftView = nil;
         [searchField setBorderStyle:UITextBorderStyleNone];
-        searchField.placeholder = kDefaultText;
+//        searchField.placeholder = kDefaultText;
         
 //        http://stackoverflow.com/questions/1340224/iphone-uitextfield-change-placeholder-text-color
         [searchField setValue:[UIColor colorWithHexValue:0xdfdfdf]

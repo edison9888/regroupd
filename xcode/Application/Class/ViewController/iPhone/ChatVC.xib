@@ -25,6 +25,7 @@
                 <outlet property="bubbleTable" destination="YhV-Zy-cDk" id="XsO-d0-GEO"/>
                 <outlet property="cancelHotspot" destination="60" id="IH5-Cg-dxn"/>
                 <outlet property="chatBar" destination="VL9-59-RBu" id="oCj-cg-eIn"/>
+                <outlet property="clearChatsLayer" destination="ZoI-gW-EIb" id="chp-MO-ds4"/>
                 <outlet property="createPollHotspot" destination="pPi-MN-HHD" id="kBP-Or-del"/>
                 <outlet property="createRSVPHotspot" destination="f6H-gZ-kx8" id="rKt-IU-exC"/>
                 <outlet property="createRatingHotspot" destination="bcm-X8-VH9" id="nc8-2c-abe"/>
@@ -446,8 +447,58 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
         </view>
+        <view autoresizesSubviews="NO" contentMode="scaleToFill" id="ZoI-gW-EIb" userLabel="View - actionsheet">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="440"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Klr-bW-tBL" userLabel="BrandUI Label - name" customClass="BrandUILabel">
+                    <rect key="frame" x="52" y="65" width="217" height="108"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <string key="text" base64-UTF8="YES">
+QXJlIHlvdSBzdXJlIHlvdSADd2FudCB0byBjbGVhciBhbGwgY2hhdHMgaW4gdGhpcyBncm91cD8
+</string>
+                    <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="22"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button autoresizesSubviews="NO" opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="EYd-DX-OeG" customClass="BrandUIButton">
+                    <rect key="frame" x="89" y="209" width="143" height="37"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="20"/>
+                    <state key="normal" title="yes" backgroundImage="actionsheet_button_bg_aqua.png">
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="highlighted">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="tapClearChatsYes" destination="-1" eventType="touchUpInside" id="fYG-XO-YJr"/>
+                    </connections>
+                </button>
+                <button autoresizesSubviews="NO" opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="as3-aM-DYS" customClass="BrandUIButton">
+                    <rect key="frame" x="89" y="259" width="143" height="37"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="20"/>
+                    <state key="normal" title="no" backgroundImage="actionsheet_button_bg_gray.png">
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="highlighted">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="tapClearChatsNo" destination="-1" eventType="touchUpInside" id="myB-dN-948"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.18039215689999999" green="0.22352941179999999" blue="0.25098039220000001" alpha="1" colorSpace="calibratedRGB"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+        </view>
     </objects>
     <resources>
+        <image name="actionsheet_button_bg_aqua.png" width="142" height="37"/>
+        <image name="actionsheet_button_bg_gray.png" width="142" height="37"/>
         <image name="btn_aqua_bg_small.png" width="55" height="28"/>
         <image name="btn_chat_send.png" width="55" height="28"/>
         <image name="chat_attach_panel.png" width="320" height="263"/>

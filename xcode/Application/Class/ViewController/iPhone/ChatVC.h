@@ -151,6 +151,7 @@
 - (IBAction)tapDetachButton;
 - (IBAction)tapInputArea;
 
+
 - (IBAction)tapCreatePollButton;
 - (IBAction)tapCreateRatingButton;
 - (IBAction)tapCreateRSVPButton;
@@ -169,6 +170,10 @@
 
 - (void) resetChatUI;
 - (void) insertMessageInChat;
+
+@property (nonatomic, strong) IBOutlet UIView *clearChatsLayer;
+- (IBAction)tapClearChatsYes;
+- (IBAction)tapClearChatsNo;
 
 
 @end
