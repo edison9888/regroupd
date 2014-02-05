@@ -78,7 +78,7 @@
         chatSvc = [[ChatManager alloc] init];
     }
     
-    [chatSvc apiListChats:[DataModel shared].user.contact_key status:[NSNumber numberWithInt:ChatStatus_GROUP]  callback:^(NSArray *results) {
+    [chatSvc apiListChats:[DataModel shared].user.contact_key status:[NSNumber numberWithInt:ChatType_GROUP]  callback:^(NSArray *results) {
         NSLog(@"apiListChats response count %i", results.count);
         if (results.count == 0) {
             [MBProgressHUD hideHUDForView:self.view animated:NO];
@@ -110,7 +110,7 @@
             if (lookup == nil) {
                 // need to add
                 if (chat.status == nil) {
-                    chat.status = [NSNumber numberWithInt:ChatStatus_GROUP];
+                    chat.status = [NSNumber numberWithInt:ChatType_GROUP];
                 }
                 [chatSvc saveChat:chat];
                 chat.hasNew = YES;
@@ -197,7 +197,7 @@
 //    NSLog(@"excludedKeys %@", myChatKeys);
     
     [chatSvc apiFindGroupChats:[DataModel shared].user.contact_key
-                    withStatus:[NSNumber numberWithInt:ChatStatus_GROUP]
+                    withStatus:[NSNumber numberWithInt:ChatType_GROUP]
                      excluding:[myChatKeys allObjects] callback:^(NSArray *results) {
 
                          for (PFObject *pfChat in results) {
@@ -338,7 +338,7 @@
                 
                 ChatVO *chat = [[ChatVO alloc] init];
                 chat.name = group.name;
-                chat.status = [NSNumber numberWithInt:ChatStatus_GROUP];
+                chat.status = [NSNumber numberWithInt:ChatType_GROUP];
                 chat.contact_keys = contactKeys;
                 __weak typeof(self) weakSelf = self;
 

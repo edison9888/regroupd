@@ -472,68 +472,6 @@
     [self.hud setLabelText:@"Saving"];
 
     [self processSelectedGroups];
-/*
-    [contactKeys addObjectsFromArray:contactSet.allObjects];
-    NSMutableArray *keys;
-    
-    for (NSNumber *groupId in groupSet) {
-        keys = [groupSvc listGroupContactKeys:groupId.intValue];
-        [contactKeys addObjectsFromArray:keys];
-    }
-    
-    [contactKeys addObject:[DataModel shared].user.contact_key];
-    
-    [chatSvc apiFindChatsByContactKeys:contactKeys.allObjects callback:^(NSArray *results) {
-        BOOL chatExists = NO;
-        ChatVO *chat;
-        if (results && results.count > 0) {
-            for (PFObject *pfChat in results) {
-                if (pfChat[@"contact_keys"]) {
-                    NSArray *keys =pfChat[@"contact_keys"];
-                    if (keys.count == contactKeys.count) {
-                        // exact match.
-                        chat = [ChatVO readFromPFObject:pfChat];
-                        chatExists = YES;
-                        break;
-                    }
-                }
-            }
-        }
-        if (chatExists) {
-            NSLog(@"Found existing chat");
-            [self sendFormInChat:chat];
-            
-            
-        } else {
-            NSLog(@"Creating new chat");
-            chat = [[ChatVO alloc] init];
-            chat.name = @"";
-            chat.contact_keys = contactKeys.allObjects;
-            
-            [chatSvc apiSaveChat:chat callback:^(PFObject *pfChat) {
-                
-                // Adding push notifications subscription
-                
-                NSString *channelId = [@"chat_" stringByAppendingString:pfChat.objectId];
-                
-                PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-                [currentInstallation addUniqueObject:channelId forKey:@"channels"];
-                [currentInstallation saveInBackground];
-                
-                chat.system_id = pfChat.objectId;
-                
-                [chatSvc saveChat:chat];
-                
-                [self sendFormInChat:chat];
-                
-            }];
-        }
-    }];
-*/
-    
-    
-    
-    //    [_delegate goBack];
 }
 
 - (void) processSelectedContacts {
@@ -641,14 +579,15 @@
             }];
             
             
-            [chatSvc apiSaveChatForm:msg.chat_key formId:msg.form_key callback:^(PFObject *object) {
+//            [chatSvc apiSaveChatForm:msg.chat_key formId:msg.form_key callback:^(PFObject *object) {
                 // Build a target query: everyone in the chat room except for this device.
                 // See also: http://blog.parse.com/2012/07/23/targeting-pushes-from-a-device/
                 PFQuery *query = [PFInstallation query];
                 
                 NSString *channelId = [@"chat_" stringByAppendingString:chat.system_id];
                 [query whereKey:@"channels" equalTo:channelId];
-                
+                [query whereKey:@"installationId" notEqualTo:[PFInstallation currentInstallation].installationId];
+
                 NSLog(@"form type = %i", [DataModel shared].form.type);
                 NSString *msgtext = @"%@ posted a new %@: %@";
                 NSString *formTitle = [DataModel shared].form.name;
@@ -695,7 +634,7 @@
                                                       otherButtonTitles:nil];
                 
                 [alert show];
-            }];
+//            }];
         } else {
             NSLog(@"Chat message was not saved");
         }

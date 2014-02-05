@@ -583,7 +583,7 @@
         if ([[DataModel shared].action isEqualToString:@"popup"]) {
             ChatVO *chat = [DataModel shared].chat;
             chat.name = self.groupName.text;
-            chat.status = [NSNumber numberWithInt:ChatStatus_GROUP];
+            chat.status = [NSNumber numberWithInt:ChatType_GROUP];
             
             [chatSvc apiSaveChat:chat callback:^(PFObject *object) {
                 [DataModel shared].chat = chat;

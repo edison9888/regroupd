@@ -684,6 +684,22 @@
     
 }
 
+- (void) apiCountFormContacts:(NSString *)formKey excluding:(NSString *)contactKey callback:(void (^)(int rowcount))callback{
+    PFQuery *query = [PFQuery queryWithClassName:kFormContactDB];
+    
+    [query whereKey:@"form" equalTo:[PFObject objectWithoutDataWithClassName:kFormDB objectId:formKey]];
+    
+    if (contactKey != nil) {
+        [query whereKey:@"contact" notEqualTo:[PFObject objectWithoutDataWithClassName:kContactDB objectId:contactKey]];
+    }
+    
+    
+    [query countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
+        callback(number);
+    }];
+    
+}
+
 /*
  
  Find contact keys already saved. Useful in finding contact keys that need to be saved

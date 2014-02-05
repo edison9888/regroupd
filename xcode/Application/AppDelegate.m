@@ -41,8 +41,8 @@
     [Parse setApplicationId:@"Gsrcl3UknJ3j8W4muWT8zEEB17ZAY01Ws3ErdDfs"
                   clientKey:@"qXWPl6rK8rwlVFyCjBxDzDedUyGGhI0a8yvWrnYG"];
     // regroupd db 2
-//    [Parse setApplicationId:@"zP5FnTdNCqQ1r6JmBgCDEJPvKhENEOoR04gwWYXF"
-//                  clientKey:@"dHExtS7YpfNp8uKOHcBKY1me7Xzl4w2s5zFeHtrv"];
+//    [Parse setApplicationId:@"M3gX0FcXgjfrewKE8ijo5mEsE7A2hst37NjYj8Yz"
+//                  clientKey:@"Ni6wdptCKt0S5c6LIardPm3tdGn3jKheSWs8HX7K"];
     
     //    [PFUser enableAutomaticUser];
     

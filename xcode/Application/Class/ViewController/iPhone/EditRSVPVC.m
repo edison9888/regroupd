@@ -705,7 +705,12 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         return;
         
     }
-
+    
+    if ([date1 compare:date2] == NSOrderedDescending) {
+        NSString *dateMsg = @"The start date must be before the end date.";
+        [[[UIAlertView alloc] initWithTitle:@"Sorry" message:dateMsg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        return;
+    }
     if (isOK) {
 //        FormManager *formSvc = [[FormManager alloc] init];
         self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -737,15 +742,17 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                     NSString *formId = pfForm.objectId;
                     form.system_id = formId;
                     NSArray *answers = @[kResponseYes, kResponseMaybe, kResponseNo];
+                    __block int index = 0;
+                    int total = answers.count;
                     
-                    for (int i=1; i<=answers.count; i++) {
+                    for (int i=0; i<answers.count; i++) {
                         
                         FormOptionVO *option;
                         
                         option = [[FormOptionVO alloc] init];
                         
-                        option.name =[answers objectAtIndex:i-1];
-                        option.position = i;
+                        option.name =[answers objectAtIndex:i];
+                        option.position = i + 1;
                         
                         [formSvc apiSaveFormOption:option formId:formId callback:^(PFObject *object) {
                             NSLog(@"Save option %i", i);
@@ -753,7 +760,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                             if ([optionName isEqualToString:@"Yes"]) {
                                 yesOption = [FormOptionVO readFromPFObject:object];
                             }
-                            if (i == answers.count) {
+                            index++;
+                            
+                            if (index == total) {
                                 [DataModel shared].didSaveOK = YES;
                                 theForm = form;
                                 

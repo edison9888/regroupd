@@ -92,6 +92,7 @@
     o.status = number;
         
     o.contact_keys = (NSArray *) [data valueForKey:@"contact_keys"];
+    o.removed_keys = (NSArray *) [data valueForKey:@"removed_keys"];
 
     return o;
 }

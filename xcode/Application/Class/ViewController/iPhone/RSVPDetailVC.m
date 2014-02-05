@@ -153,34 +153,39 @@
             NSLog(@"FIXING COUNTER NOW. Runs in background.");
             [formSvc apiUpdateFormCounter:[DataModel shared].form.system_id withCount:[NSNumber numberWithInt:results.count]];
         }
-        
-        [chatSvc apiListChatForms:nil formKey:[DataModel shared].form.system_id callback:^(NSArray *results) {
-            __block int index = 0;
-            int total = results.count;
-            if (total == 0) {
-                [contactKeys addObjectsFromArray:[idSet allObjects]];
-                [self lookupContactData];
-            } else {
-                
-                for (PFObject *result in results) {
-                    PFObject *pfChat = result[@"chat"];
-                    [pfChat fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-                        if (pfChat[@"contact_keys"]) {
-                            NSArray *keys = pfChat[@"contact_keys"];
-                            
-                            [idSet addObjectsFromArray:keys];
-                            contactTotal += keys.count - 1;
-                        }
-                        index ++;
-                        if (index == total) {
-                            [contactKeys addObjectsFromArray:[idSet allObjects]];
-                            [self lookupContactData];
-                        }
-                    }];
-                }
-            }
-            
+
+        [formSvc apiCountFormContacts:[DataModel shared].form.system_id excluding:[DataModel shared].user.contact_key callback:^(int rowcount) {
+            contactTotal = rowcount;
+            [self lookupContactData];
         }];
+
+//        [chatSvc apiListChatForms:nil formKey:[DataModel shared].form.system_id callback:^(NSArray *results) {
+//            __block int index = 0;
+//            int total = results.count;
+//            if (total == 0) {
+//                [contactKeys addObjectsFromArray:[idSet allObjects]];
+//                [self lookupContactData];
+//            } else {
+//                
+//                for (PFObject *result in results) {
+//                    PFObject *pfChat = result[@"chat"];
+//                    [pfChat fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+//                        if (pfChat[@"contact_keys"]) {
+//                            NSArray *keys = pfChat[@"contact_keys"];
+//                            
+//                            [idSet addObjectsFromArray:keys];
+//                            contactTotal += keys.count - 1;
+//                        }
+//                        index ++;
+//                        if (index == total) {
+//                            [contactKeys addObjectsFromArray:[idSet allObjects]];
+//                            [self lookupContactData];
+//                        }
+//                    }];
+//                }
+//            }
+//            
+//        }];
         
     }];
     

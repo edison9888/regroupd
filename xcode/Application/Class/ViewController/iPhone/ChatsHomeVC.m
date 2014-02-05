@@ -74,7 +74,7 @@
     NSLog(@"%s: %@", __FUNCTION__, searchText);
     self.tableData =[[NSMutableArray alloc]init];
 
-    NSString *sql = @"select * from chat where name is not null and status <> 1";
+    NSString *sql = @"select * from chat where name is not null and status==0";
     
     isLoading = YES;
     
@@ -130,7 +130,7 @@
     }
     
     
-    [chatSvc apiListChats:[DataModel shared].user.contact_key status:[NSNumber numberWithInt:ChatStatus_NORMAL]  callback:^(NSArray *results) {
+    [chatSvc apiListChats:[DataModel shared].user.contact_key status:[NSNumber numberWithInt:ChatType_INFORMAL]  callback:^(NSArray *results) {
         fetchCount++;
         NSLog(@"apiListChats response count %i", results.count);
         if (results.count == 0) {
@@ -233,14 +233,14 @@
                 if (lookup == nil) {
                     // need to add
                     if (chat.status == nil) {
-                        chat.status = [NSNumber numberWithInt:ChatStatus_NORMAL];
+                        chat.status = [NSNumber numberWithInt:ChatType_INFORMAL];
                     }
                     [chatSvc saveChat:chat];
                     chat.hasNew = YES;
                     
                 } else {
                     // ignore
-                    [chatSvc updateChat:chat.system_id withName:chat.name status:[NSNumber numberWithInt:ChatStatus_NORMAL]];
+                    [chatSvc updateChat:chat.system_id withName:chat.name status:[NSNumber numberWithInt:ChatType_INFORMAL]];
                     NSTimeInterval serverTime = [chat.updatedAt timeIntervalSince1970];
                     
                     
@@ -361,16 +361,44 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         //add code here for when you hit delete
         
-        ChatVO *chat = [tableData objectAtIndex:indexPath.row];
+        ChatVO *_chat = [tableData objectAtIndex:indexPath.row];
         
-        [chatSvc apiModifyChat:chat.system_id removeContact:[DataModel shared].user.contact_key callback:^(PFObject *pfChat) {
-            NSLog(@"ready to delete local chat db");
-            if (pfChat) {
-                [chatSvc deleteChat:chat];
-                [self setEditing:NO animated:YES];
-                [self performSearch:@""];
+        [chatSvc updateChatStatus:_chat.system_id status:-1];
+
+        [chatSvc apiLoadChat:_chat.system_id callback:^(ChatVO *theChat) {
+            if (theChat.removed_keys == nil) {
+                
+                theChat.removed_keys = [NSArray arrayWithObject:[DataModel shared].user.contact_key];
+                [chatSvc apiSaveChat:theChat callback:^(PFObject *object) {
+                    [tableData removeObjectAtIndex:indexPath.row];
+                    [self.theTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+                    
+                }];
+            } else {
+                if ([theChat.removed_keys containsObject:[DataModel shared].user.contact_key]) {
+                    [tableData removeObjectAtIndex:indexPath.row];
+                    [self.theTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+                    
+                } else {
+                    NSMutableArray *removedKeys = [theChat.removed_keys mutableCopy];
+                    [removedKeys addObject:[DataModel shared].user.contact_key];
+                    theChat.removed_keys = [removedKeys copy];
+                    [chatSvc apiSaveChat:theChat callback:^(PFObject *object) {
+                        [tableData removeObjectAtIndex:indexPath.row];
+                        [self.theTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+                        
+                    }];
+                }
             }
         }];
+//        [chatSvc apiModifyChat:chat.system_id removeContact:[DataModel shared].user.contact_key callback:^(PFObject *pfChat) {
+//            NSLog(@"ready to delete local chat db");
+//            if (pfChat) {
+//                [chatSvc deleteChat:chat];
+//                [self setEditing:NO animated:YES];
+//                [self performSearch:@""];
+//            }
+//        }];
         
     }
 }

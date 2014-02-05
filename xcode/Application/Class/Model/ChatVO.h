@@ -8,10 +8,11 @@
 
 
 typedef enum {
-	ChatStatus_CLOSED = -1,
-	ChatStatus_NORMAL = 0,
-	ChatStatus_GROUP = 1
-}ChatStatus;
+	ChatType_REMOVED = -2,
+	ChatType_BLOCKED = -1,
+	ChatType_INFORMAL = 0,
+	ChatType_GROUP = 1
+}ChatType;
 
 #import <Foundation/Foundation.h>
 #import <Parse/Parse.h>
@@ -36,6 +37,7 @@ typedef enum {
 @property (nonatomic, retain) NSString *updated;
 
 @property (nonatomic, retain) NSArray *contact_keys; // for phoneIds
+@property (nonatomic, retain) NSArray *removed_keys; // for phoneIds
 @property (nonatomic, retain) NSArray *contact_ids;  // for objectIds
 
 // Transient fields

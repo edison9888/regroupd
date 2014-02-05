@@ -423,14 +423,15 @@
     }
 }
 
-- (void) apiListChats:(NSString *)userId status:(NSNumber *)status callback:(void (^)(NSArray *results))callback {
+- (void) apiListChats:(NSString *)contactKey status:(NSNumber *)status callback:(void (^)(NSArray *results))callback {
     PFQuery *query = [PFQuery queryWithClassName:kChatDB];
-    [query whereKey:@"contact_keys" containsAllObjectsInArray:@[userId]];
+    [query whereKey:@"contact_keys" containsAllObjectsInArray:@[contactKey]];
+    [query whereKey:@"removed_keys" notContainedIn:@[contactKey]];
     if (status) {
-        if (status.intValue == ChatStatus_GROUP) {
+        if (status.intValue == ChatType_GROUP) {
             [query whereKey:@"status" equalTo:status];
         } else {
-            [query whereKey:@"status" notEqualTo:[NSNumber numberWithInt:ChatStatus_GROUP]];
+            [query whereKey:@"status" notEqualTo:[NSNumber numberWithInt:ChatType_GROUP]];
         }
     }
     [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
@@ -469,6 +470,12 @@
     }
     data[@"user"] = [PFUser currentUser];
     data[@"contact_keys"] = chat.contact_keys;
+
+    if (chat.removed_keys != nil) {
+        data[@"removed_keys"] = chat.removed_keys;
+    }
+    
+    
     [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         NSLog(@"Saved chat with objectId %@", data.objectId);
         callback(data);
@@ -525,7 +532,8 @@
 - (void) apiFindChatsByContactKeys:(NSArray *)contactKeys callback:(void (^)(NSArray *results))callback {
     PFQuery *query = [PFQuery queryWithClassName:kChatDB];
     [query whereKey:@"contact_keys" containsAllObjectsInArray:contactKeys];
-    
+//    [query whereKey:@"removed_keys" notContainedIn:@[contactKey]];
+
     [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
         callback(results);
     }];
@@ -600,7 +608,7 @@
             ChatVO *chat = [[ChatVO alloc] init];
             
             chat.contact_keys = contactKeys;
-            chat.status = [NSNumber numberWithInt:ChatStatus_NORMAL];
+            chat.status = [NSNumber numberWithInt:ChatType_INFORMAL];
             NSString *chatname = @"%@, %@";
             chatname = [NSString stringWithFormat:chatname, contact.fullname, [DataModel shared].myContact.fullname];
             chat.name = chatname;
@@ -711,7 +719,7 @@
         
         ChatVO *chat = [[ChatVO alloc] init];
         chat.name = group.name;
-        chat.status = [NSNumber numberWithInt:ChatStatus_GROUP];
+        chat.status = [NSNumber numberWithInt:ChatType_GROUP];
         chat.contact_keys = contactKeys;
         
         [self apiSaveChat:chat callback:^(PFObject *pfChat) {

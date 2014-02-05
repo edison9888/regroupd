@@ -128,35 +128,39 @@
             
             [contactSvc lookupContactsFromPhonebook:contactKeys];
             
-            
-            [chatSvc apiListChatForms:nil formKey:[DataModel shared].form.system_id callback:^(NSArray *results) {
-                __block int index = 0;
-                int total = results.count;
-                if (total == 0) {
-                    [self loadFormData];
-                } else {
-                    
-                    for (PFObject *result in results) {
-                        PFObject *pfChat = result[@"chat"];
-                        [pfChat fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-                            if (pfChat[@"contact_keys"]) {
-                                NSArray *keys = pfChat[@"contact_keys"];
-                                
-                                for (NSString *k in keys) {
-                                    if (![k isEqualToString:[DataModel shared].user.contact_key]) {
-                                        [recipientKeySet addObject:k];
-                                    }
-                                }
-                            }
-                            index ++;
-                            if (index == total) {
-                                [self loadFormData];
-                            }
-                        }];
-                    }
-                }
-                
+            [formSvc apiCountFormContacts:[DataModel shared].form.system_id excluding:[DataModel shared].user.contact_key callback:^(int rowcount) {
+                contactTotal = rowcount;
+                [self loadFormData];
             }];
+            
+//            [chatSvc apiListChatForms:nil formKey:[DataModel shared].form.system_id callback:^(NSArray *results) {
+//                __block int index = 0;
+//                int total = results.count;
+//                if (total == 0) {
+//                    [self loadFormData];
+//                } else {
+//                    
+//                    for (PFObject *result in results) {
+//                        PFObject *pfChat = result[@"chat"];
+//                        [pfChat fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+//                            if (pfChat[@"contact_keys"]) {
+//                                NSArray *keys = pfChat[@"contact_keys"];
+//                                
+//                                for (NSString *k in keys) {
+//                                    if (![k isEqualToString:[DataModel shared].user.contact_key]) {
+//                                        [recipientKeySet addObject:k];
+//                                    }
+//                                }
+//                            }
+//                            index ++;
+//                            if (index == total) {
+//                                [self loadFormData];
+//                            }
+//                        }];
+//                    }
+//                }
+//                
+//            }];
         }];
         
     }];

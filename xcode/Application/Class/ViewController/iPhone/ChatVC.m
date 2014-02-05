@@ -153,14 +153,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(hideFormSelectorNotificationHandler:)     name:@"hideFormSelectorNotification"
@@ -225,6 +217,31 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     [self initializeChat];
 }
+
+- (void) viewWillAppear:(BOOL)animated {
+    NSLog(@"%s", __FUNCTION__);
+    [super viewWillAppear:animated];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+
+}
+- (void) viewWillDisappear:(BOOL)animated
+{
+    NSLog(@"%s", __FUNCTION__);
+    [super viewWillDisappear:animated];
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -372,11 +389,14 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                     
                                     for (PFObject *result in results) {
                                         response = [FormResponseVO readFromPFObject:result];
-                                        response.answerTotal = [NSNumber numberWithInt:1];
-                                        response.ratingCount = [NSNumber numberWithInt:1];
-                                        response.ratingTotal = response.rating;
-                                        
-                                        [form.responsesMap setObject:response forKey:response.option_key];
+                                        if (response.option_key != nil) {
+                                            
+                                            response.answerTotal = [NSNumber numberWithInt:1];
+                                            response.ratingCount = [NSNumber numberWithInt:1];
+                                            response.ratingTotal = response.rating;
+                                            
+                                            [form.responsesMap setObject:response forKey:response.option_key];
+                                        }
                                     }
                                     
                                 } else {
@@ -718,9 +738,22 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void)hideFormSelectorNotificationHandler:(NSNotification*)notification
 {
+    NSLog(@"%s", __FUNCTION__);
+
     [self hideFormSelector];
     [self hideAttachModal];
+    [self resetChatUI];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
     
+
     if (notification.object != nil) {
         self.attachedForm = (FormVO *) notification.object;
         attachmentType = self.attachedForm.type;
@@ -1993,7 +2026,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                             NSLog(@"Saved form contacts count %i", savedKeys.count);
                             
                         }];
-                        [chatSvc apiSaveChatForm:msg.chat_key formId:msg.form_key callback:^(PFObject *object) {
+//                        [chatSvc apiSaveChatForm:msg.chat_key formId:msg.form_key callback:^(PFObject *object) {
                             // Build a target query: everyone in the chat room except for this device.
                             // See also: http://blog.parse.com/2012/07/23/targeting-pushes-from-a-device/
                             PFQuery *query = [PFInstallation query];
@@ -2044,7 +2077,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                             NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
                             [chatSvc updateChatReadTime:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
                             
-                        }];
+//                        }];
                         
                     }];
                 } else {
@@ -2116,7 +2149,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
 }
 - (void) resetChatUI {
+    
     CGRect scrollFrame = self.bubbleTable.frame;
+    scrollFrame.origin.y = 50;
     
     [spinner stopAnimating];
     [spinner removeFromSuperview];
@@ -2169,6 +2204,16 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [DataModel shared].didSaveOK = NO;
     
     EditPollVC *editPollVC = [[EditPollVC alloc] init];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
+
     [self presentViewController:editPollVC animated:YES completion:^{
         
 //        if ([DataModel shared].didSaveOK) {

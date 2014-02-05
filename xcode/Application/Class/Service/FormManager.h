@@ -62,6 +62,8 @@
 
 - (void) apiSaveFormContact:(NSString *)formKey contactKey:(NSString *)contactKey callback:(void (^)(PFObject *object))callback;
 - (void) apiListFormContacts:(NSString *)formKey contactKey:(NSString *)contactKey callback:(void (^)(NSArray *results))callback;
+- (void) apiCountFormContacts:(NSString *)formKey excluding:(NSString *)contactKey callback:(void (^)(int rowcount))callback;
+
 - (void) apiLookupFormContacts:(NSString *)formKey contactKeys:(NSArray *)contactKeys callback:(void (^)(NSArray *savedKeys))callback;
 - (void) apiBatchSaveFormContacts:(NSString *)formKey contactKeys:(NSArray *)contactKeys callback:(void (^)(NSArray *savedKeys))callback;
 - (void) apiFindReceivedForms:(NSString *)contactKey callback:(void (^)(NSArray *results))callback;
