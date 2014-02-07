@@ -474,6 +474,9 @@
     if (chat.removed_keys != nil) {
         data[@"removed_keys"] = chat.removed_keys;
     }
+    if (chat.contact_names != nil) {
+        data[@"contact_names"] = chat.contact_names;
+    }
     
     
     [data saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -533,6 +536,7 @@
     PFQuery *query = [PFQuery queryWithClassName:kChatDB];
     [query whereKey:@"contact_keys" containsAllObjectsInArray:contactKeys];
 //    [query whereKey:@"removed_keys" notContainedIn:@[contactKey]];
+    [query whereKey:@"status" notEqualTo:[NSNumber numberWithInt:ChatType_GROUP]];
 
     [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
         callback(results);

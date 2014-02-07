@@ -268,22 +268,32 @@
         NSString *datetext;
         if (group.type == kGroupTypeLocal) {
             
-            datetext = group.updated;
-            NSDate *updatedAt = [DateTimeUtils dateFromDBDateStringNoOffset:datetext];
-            datetext = [DateTimeUtils formatDecimalDate:updatedAt];
+            datetext = group.created;
+            NSDate *createdAt = [DateTimeUtils dateFromDBDateString:datetext];
+            datetext = [DateTimeUtils formatDecimalDate:createdAt];
             cell.dateLabel.text = datetext;
-
-            UIImage *image = [UIImage imageNamed:@"groups_cell_arrow.png"];
+            
+            
+            UIImage *image = [UIImage imageNamed:@"cell_arrow_big.png"];
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-            CGRect frame = CGRectMake(0.0, 0.0, image.size.width, image.size.height);
-            //        UIImageView *arrow = [[UIImageView alloc] initWithImage:image];
-            //        arrow.frame = frame;
+            CGRect frame = CGRectMake(0.0, 0.0, 44, 54);
+            
+//            button.layer.borderColor = [UIColor grayColor].CGColor;
+//            button.layer.borderWidth = 1;
+            
+            button.imageEdgeInsets = UIEdgeInsetsMake(0, 12, 0, 12);
             button.frame = frame;
-            [button setBackgroundImage:image forState:UIControlStateNormal];
+            [button setImage:image forState:UIControlStateNormal];
             
             [button addTarget:self action:@selector(checkButtonTapped:)  forControlEvents:UIControlEventTouchUpInside];
             button.backgroundColor = [UIColor clearColor];
+            
             cell.accessoryView = button;
+            
+//            CGRect accFrame = cell.accessoryView.frame;
+//            accFrame.origin.x +=20;
+//            cell.accessoryView.frame = accFrame;
+            
 
         } else if (group.type == kGroupTypeRemote) {
             datetext = [DateTimeUtils formatDecimalDate:group.updatedAt];
@@ -308,18 +318,14 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-#ifdef DEBUGX
-    NSLog(@"%s", __FUNCTION__);
-#endif
     
     @try {
         if (indexPath != nil) {
             NSLog(@"Selected row %i", indexPath.row);
             
             selectedIndex = indexPath.row;
-            NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
-            
-            GroupVO *group = [GroupVO readFromDictionary:rowdata];
+            GroupVO *group = (GroupVO *) [tableData objectAtIndex:indexPath.row];
+
             [DataModel shared].group = group;
 
             if (group.chat_key != nil && group.chat_key.length > 0) {
@@ -390,6 +396,7 @@
 - (void)checkButtonTapped:(id)sender
 {
     NSLog(@"%s", __FUNCTION__);
+    
     CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.theTableView];
     NSIndexPath *indexPath = [self.theTableView indexPathForRowAtPoint:buttonPosition];
     
@@ -399,9 +406,8 @@
         NSLog(@"Selected row %i", indexPath.row);
         
         selectedIndex = indexPath.row;
-        NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
-        
-        [DataModel shared].group = [GroupVO readFromDictionary:rowdata];
+        GroupVO *group = (GroupVO *) [tableData objectAtIndex:indexPath.row];
+        [DataModel shared].group = group;
         
         [DataModel shared].action = kActionEDIT;
         [_delegate gotoSlideWithName:@"GroupInfo" returnPath:@"GroupsHome"];
@@ -429,9 +435,16 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         //add code here for when you hit delete
         
-        NSDictionary *rowdata = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
-        GroupVO *group = [GroupVO readFromDictionary:rowdata];
-        [groupSvc deleteGroup:group];
+        
+        GroupVO *group = (GroupVO *) [tableData objectAtIndex:indexPath.row];
+        if (group.type == kGroupTypeLocal) {
+            
+            
+        } else if (group.type == kGroupTypeRemote) {
+            
+        }
+        
+//        [groupSvc deleteGroup:group];
         [self setEditing:NO animated:YES];
         [self performSearch:@""];
         

@@ -12,6 +12,7 @@
 #define kTagScrollView  99
 #define kTagNameLabel   101
 #define kTagBGLayer     666
+#define kTagFormBG     667
 
 @interface MyProfileVC ()
 
@@ -461,8 +462,17 @@
             case kTagScrollView:
                 if (keyboardIsShown) {
                     [_currentField resignFirstResponder];
-                    keyboardIsShown = NO;
 
+                }
+                break;
+            case kTagBGLayer:
+                if (keyboardIsShown) {
+                    [_currentField resignFirstResponder];
+                }
+                break;
+            case kTagFormBG:
+                if (keyboardIsShown) {
+                    [_currentField resignFirstResponder];
                 }
                 break;
             case kTagNameLabel:

@@ -378,45 +378,48 @@
             NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
             
             ContactVO *contact = [ContactVO readFromPhonebook:rowdata];
-            [contactsArray addObject:contact];
             
-            [contactKeys addObject:contact.system_id];
-            
-            CGSize txtSize = [contact.fullname sizeWithFont:theFont];
-            float itemWidth = 0;
-            itemWidth = txtSize.width + 25;
-
-            if (xpos + itemWidth > self.selectionsView.frame.size.width) {
-                xpos = 0;
-                ypos += kNameWidgetRowHeight;
+            if (![contactKeys containsObject:contact.system_id]) {
+                [contactsArray addObject:contact];
                 
-            }
-            
-            if (ypos + kNameWidgetRowHeight > self.selectionsView.frame.size.height) {
-                CGRect sframe = self.selectionsView.frame;
-                sframe.size.height += kNameWidgetRowHeight;
-                self.selectionsView.frame = sframe;
+                [contactKeys addObject:contact.system_id];
                 
-                CGRect searchFrame = self.searchView.frame;
-                if (sframe.origin.y + sframe.size.height > searchFrame.origin.y) {
-                    searchFrame.origin.y += kNameWidgetRowHeight;
-                    searchFrame.size.height -= kNameWidgetRowHeight;
-                    self.searchView.frame = searchFrame;
+                CGSize txtSize = [contact.fullname sizeWithFont:theFont];
+                float itemWidth = 0;
+                itemWidth = txtSize.width + 25;
+                
+                if (xpos + itemWidth > self.selectionsView.frame.size.width) {
+                    xpos = 0;
+                    ypos += kNameWidgetRowHeight;
+                    
                 }
+                
+                if (ypos + kNameWidgetRowHeight > self.selectionsView.frame.size.height) {
+                    CGRect sframe = self.selectionsView.frame;
+                    sframe.size.height += kNameWidgetRowHeight;
+                    self.selectionsView.frame = sframe;
+                    
+                    CGRect searchFrame = self.searchView.frame;
+                    if (sframe.origin.y + sframe.size.height > searchFrame.origin.y) {
+                        searchFrame.origin.y += kNameWidgetRowHeight;
+                        searchFrame.size.height -= kNameWidgetRowHeight;
+                        self.searchView.frame = searchFrame;
+                    }
+                }
+                CGRect itemFrame = CGRectMake(xpos, ypos, itemWidth, 25);
+                NameWidget *item = [[NameWidget alloc] initWithFrame:itemFrame andStyle:widgetStyle];
+                
+                item.itemKey = contact.contact_key;
+                [item setFieldLabel:contact.fullname];
+                [item setIcon:xicon];
+                
+                item.tag = kBaseTagForNameWidget + contactsArray.count - 1;
+                xpos += itemWidth + kNameWidgetGap;
+                [self.selectionsView addSubview:item];
+                
+                self.ccSearchBar.text = @"";
+                [self performSearch:@""];
             }
-            CGRect itemFrame = CGRectMake(xpos, ypos, itemWidth, 25);
-            NameWidget *item = [[NameWidget alloc] initWithFrame:itemFrame andStyle:widgetStyle];
-            
-            item.itemKey = contact.contact_key;
-            [item setFieldLabel:contact.fullname];
-            [item setIcon:xicon];
-            
-            item.tag = kBaseTagForNameWidget + contactsArray.count - 1;
-            xpos += itemWidth + kNameWidgetGap;
-            [self.selectionsView addSubview:item];
-            
-            self.ccSearchBar.text = @"";
-            [self performSearch:@""];
             
         }
     } @catch (NSException * e) {

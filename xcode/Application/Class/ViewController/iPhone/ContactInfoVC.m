@@ -67,15 +67,15 @@
 #pragma mark - Data Load
 
 - (void) refreshView {
+    self.blockButton.userInteractionEnabled = NO;
+//    self.blockButton.enabled = NO;
     
-    self.blockButton.enabled = NO;
-    
-    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    CGFloat halfButtonHeight = self.blockButton.bounds.size.height / 2;
-    CGFloat buttonWidth = self.blockButton.bounds.size.width;
-    indicator.center = CGPointMake(buttonWidth - halfButtonHeight , halfButtonHeight);
-    [self.blockButton addSubview:indicator];
-    [indicator startAnimating];
+//    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+//    CGFloat halfButtonHeight = self.blockButton.bounds.size.height / 2;
+//    CGFloat buttonWidth = self.blockButton.bounds.size.width;
+//    indicator.center = CGPointMake(buttonWidth - halfButtonHeight , halfButtonHeight);
+//    [self.blockButton addSubview:indicator];
+//    [indicator startAnimating];
     
     
     if ([DataModel shared].contact != nil && [DataModel shared].contact.system_id != nil) {
@@ -89,8 +89,9 @@
             [contactSvc apiPrivacyLookupBlock:[DataModel shared].user.contact_key
                                    blockedKey:[DataModel shared].contact.system_id
                                      callback:^(PFObject *pfObject) {
-                                         self.blockButton.enabled = YES;
-                                         [indicator stopAnimating];
+                                         self.blockButton.userInteractionEnabled = YES;
+//                                         self.blockButton.enabled = YES;
+//                                         [indicator stopAnimating];
 
                                          if (pfObject) {
                                              isBlocked = YES;
@@ -140,6 +141,10 @@
     }
     NSArray *contactKeys = @[[DataModel shared].user.contact_key, [DataModel shared].contact.system_id];
     
+    NSArray *namesArray = @[[DataModel shared].myContact.fullname, [DataModel shared].contact.fullname];
+    
+    NSString *names = [namesArray componentsJoinedByString:@", "];
+    
     [chatSvc apiFindChatsByContactKeys:contactKeys callback:^(NSArray *results) {
         BOOL chatExists = NO;
         ChatVO *chat;
@@ -158,7 +163,10 @@
         }
         if (chatExists) {
             chat.name = [DataModel shared].contact.fullname;
+            chat.contact_names = namesArray;
+
             [DataModel shared].chat = chat;
+            
             [DataModel shared].mode = @"Chats";
             [_delegate setBackPath:@"ChatsHome"];
             [_delegate gotoSlideWithName:@"Chat"];
@@ -166,6 +174,9 @@
         } else {
             chat = [[ChatVO alloc] init];
             
+            
+            chat.name = names;
+            chat.contact_names = namesArray;
             chat.contact_keys = contactKeys;
             
             [chatSvc apiSaveChat:chat callback:^(PFObject *pfChat) {

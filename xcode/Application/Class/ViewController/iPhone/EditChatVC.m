@@ -74,7 +74,8 @@
     
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
-    self.theTableView.hidden = YES;
+    self.theTableView.hidden = NO;
+
     [self.theTableView setSeparatorColor:[UIColor grayColor]];
     
     self.theTableView.backgroundColor = [UIColor clearColor];
@@ -266,45 +267,49 @@
             NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
             
             ContactVO *contact = [ContactVO readFromPhonebook:rowdata];
-            [contactsArray addObject:contact];
             
-            [contactKeys addObject:contact.system_id];
-            
-            CGSize txtSize = [contact.fullname sizeWithFont:theFont];
-            float itemWidth = 0;
-            itemWidth = txtSize.width + 25;
-            
-            if (xpos + itemWidth > self.selectionsView.frame.size.width) {
-                xpos = 0;
-                ypos += kNameWidgetRowHeight;
+            if (![contactKeys containsObject:contact.system_id]) {
                 
-            }
-            
-            if (ypos + kNameWidgetRowHeight > self.selectionsView.frame.size.height) {
-                CGRect sframe = self.selectionsView.frame;
-                sframe.size.height += kNameWidgetRowHeight;
-                self.selectionsView.frame = sframe;
+                [contactsArray addObject:contact];
                 
-                CGRect searchFrame = self.searchView.frame;
-                if (sframe.origin.y + sframe.size.height > searchFrame.origin.y) {
-                    searchFrame.origin.y += kNameWidgetRowHeight;
-                    searchFrame.size.height -= kNameWidgetRowHeight;
-                    self.searchView.frame = searchFrame;
+                [contactKeys addObject:contact.system_id];
+                
+                CGSize txtSize = [contact.fullname sizeWithFont:theFont];
+                float itemWidth = 0;
+                itemWidth = txtSize.width + 25;
+                
+                if (xpos + itemWidth > self.selectionsView.frame.size.width) {
+                    xpos = 0;
+                    ypos += kNameWidgetRowHeight;
+                    
                 }
+                
+                if (ypos + kNameWidgetRowHeight > self.selectionsView.frame.size.height) {
+                    CGRect sframe = self.selectionsView.frame;
+                    sframe.size.height += kNameWidgetRowHeight;
+                    self.selectionsView.frame = sframe;
+                    
+                    CGRect searchFrame = self.searchView.frame;
+                    if (sframe.origin.y + sframe.size.height > searchFrame.origin.y) {
+                        searchFrame.origin.y += kNameWidgetRowHeight;
+                        searchFrame.size.height -= kNameWidgetRowHeight;
+                        self.searchView.frame = searchFrame;
+                    }
+                }
+                CGRect itemFrame = CGRectMake(xpos, ypos, itemWidth, 25);
+                NameWidget *item = [[NameWidget alloc] initWithFrame:itemFrame andStyle:widgetStyle];
+                
+                item.itemKey = contact.contact_key;
+                [item setFieldLabel:contact.fullname];
+                [item setIcon:xicon];
+                
+                item.tag = kBaseTagForNameWidget + contactsArray.count - 1;
+                xpos += itemWidth + kNameWidgetGap;
+                [self.selectionsView addSubview:item];
+                //            }
+                self.ccSearchBar.text = @"";
+                [self performSearch:@""];
             }
-            CGRect itemFrame = CGRectMake(xpos, ypos, itemWidth, 25);
-            NameWidget *item = [[NameWidget alloc] initWithFrame:itemFrame andStyle:widgetStyle];
-            
-            item.itemKey = contact.contact_key;
-            [item setFieldLabel:contact.fullname];
-            [item setIcon:xicon];
-            
-            item.tag = kBaseTagForNameWidget + contactsArray.count - 1;
-            xpos += itemWidth + kNameWidgetGap;
-            [self.selectionsView addSubview:item];
-            //            }
-            self.ccSearchBar.text = @"";
-            [self performSearch:@""];
 
             
         }
@@ -459,29 +464,73 @@
         
         [contactKeys addObject:[DataModel shared].user.contact_key];
         
-        ChatVO *chat = [[ChatVO alloc] init];
+        NSMutableArray *namesArray = [NSMutableArray array];
+        for (ContactVO *contact in contactsArray) {
+            [namesArray addObject:contact.fullname];
+        }
         
-        chat.contact_keys = [contactKeys copy];
+        NSString *names = [namesArray componentsJoinedByString:@", "];
+
+        [namesArray addObject:[DataModel shared].myContact.fullname];
         
-        [chatSvc apiSaveChat:chat callback:^(PFObject *object) {
-            
-            NSString *channelId = [@"chat_" stringByAppendingString:object.objectId];
-            
-            PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-            [currentInstallation addUniqueObject:channelId forKey:@"channels"];
-            [currentInstallation saveInBackground];
-            
-            chat.system_id = object.objectId;
-            
-            [chatSvc saveChat:chat];
-            
-            [DataModel shared].chat = chat;
-            
-            [DataModel shared].mode = @"Chats";
-            [_delegate setBackPath:@"ChatsHome"];
-            [_delegate gotoSlideWithName:@"Chat"];
-            
+
+        [chatSvc apiFindChatsByContactKeys:contactKeys callback:^(NSArray *results) {
+            BOOL chatExists = NO;
+            ChatVO *chat;
+            if (results && results.count > 0) {
+                for (PFObject *pfChat in results) {
+                    if (pfChat[@"contact_keys"]) {
+                        NSArray *keys =pfChat[@"contact_keys"];
+                        if (keys.count == contactKeys.count) {
+                            // exact match.
+                            chat = [ChatVO readFromPFObject:pfChat];
+                            chatExists = YES;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (chatExists) {
+                chat.name = [DataModel shared].contact.fullname;
+                chat.name = names;
+                chat.contact_names = namesArray;
+                
+                [DataModel shared].chat = chat;
+                [DataModel shared].mode = @"Chats";
+                [_delegate setBackPath:@"ChatsHome"];
+                [_delegate gotoSlideWithName:@"Chat"];
+                
+            } else {
+                chat = [[ChatVO alloc] init];
+                chat.name = names;
+                chat.contact_names = namesArray;
+
+                chat.contact_keys = [contactKeys copy];
+                
+                [chatSvc apiSaveChat:chat callback:^(PFObject *object) {
+                    
+                    NSString *channelId = [@"chat_" stringByAppendingString:object.objectId];
+                    
+                    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+                    [currentInstallation addUniqueObject:channelId forKey:@"channels"];
+                    [currentInstallation saveInBackground];
+                    
+                    chat.system_id = object.objectId;
+                    
+                    [chatSvc saveChat:chat];
+                    
+                    [DataModel shared].chat = chat;
+                    
+                    [DataModel shared].mode = @"Chats";
+                    [_delegate setBackPath:@"ChatsHome"];
+                    [_delegate gotoSlideWithName:@"Chat"];
+                    
+                }];
+
+            }
         }];
+
+        
         
     } else {
         [[[UIAlertView alloc] initWithTitle:@"Try again" message:@"Please add at least one contact" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];

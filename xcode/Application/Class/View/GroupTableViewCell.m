@@ -19,7 +19,7 @@
 @implementation GroupTableViewCell
 
 @synthesize titleLabel;
-@synthesize rowdata;
+//@synthesize rowdata;
 
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -36,16 +36,17 @@
     return @"GroupTableCell";
 }
 
-- (void)setRowdata:(NSDictionary *)data
-{
-    rowdata = data;
-    self.titleLabel.text = [data objectForKey:@"name"];
-    NSString *datetext = (NSString *) [data objectForKey:@"updated"];
-    NSDate *updatedAt = [DateTimeUtils dateFromDBDateStringNoOffset:datetext];
-    datetext = [DateTimeUtils formatDecimalDate:updatedAt];
-    self.dateLabel.text = datetext;
+//- (void)setRowdata:(NSDictionary *)data
+//{
+//    rowdata = data;
+//    self.titleLabel.text = [data objectForKey:@"name"];
+//    NSString *datetext = (NSString *) [data objectForKey:@"updated"];
+//    NSDate *updatedAt = [DateTimeUtils dateFromDBDateStringNoOffset:datetext];
+//    datetext = [DateTimeUtils formatDecimalDate:updatedAt];
+//    self.dateLabel.text = datetext;
+//
+//}
 
-}
 - (void) setStatus:(int)status {
     
     if (status == 0) {
@@ -61,22 +62,26 @@
 {
     [super setSelected:selected animated:animated];
 }
-
-- (void)layoutSubviews
-{
+- (void)layoutSubviews {
     [super layoutSubviews];
-//    if ((state & UITableViewCellStateShowingDeleteConfirmationMask) == UITableViewCellStateShowingDeleteConfirmationMask) {
-    
-//    if (self.editing && self.contentView.frame.origin.x != 0) {
-//        NSLog(@"%s", __FUNCTION__);
-//
-//        CGRect frame = self.contentView.frame;
-//        CGFloat diff = LEFT_EDITING_MARGIN - frame.origin.x;
-//        frame.origin.x = LEFT_EDITING_MARGIN;
-//        frame.size.width -= diff;
-//        self.contentView.frame = frame;
-//    }
+    self.accessoryView.frame = CGRectMake(self.accessoryView.frame.origin.x + 15, 0, self.accessoryView.frame.size.width, self.accessoryView.frame.size.height);
+//    self.accessoryView.frame.origin.x = 20;
 }
+//- (void)layoutSubviews
+//{
+//    [super layoutSubviews];
+////    if ((state & UITableViewCellStateShowingDeleteConfirmationMask) == UITableViewCellStateShowingDeleteConfirmationMask) {
+//    
+////    if (self.editing && self.contentView.frame.origin.x != 0) {
+////        NSLog(@"%s", __FUNCTION__);
+////
+////        CGRect frame = self.contentView.frame;
+////        CGFloat diff = LEFT_EDITING_MARGIN - frame.origin.x;
+////        frame.origin.x = LEFT_EDITING_MARGIN;
+////        frame.size.width -= diff;
+////        self.contentView.frame = frame;
+////    }
+//}
 
 - (void)willTransitionToState:(UITableViewCellStateMask)state{
     

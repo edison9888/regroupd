@@ -47,7 +47,7 @@ static NSDateFormatter *shortDateFormatter;
 + (NSString *) formatDecimalDate:(NSDate *)date {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:kDecimalDateFormat];
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+//    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
     
     return [dateFormatter stringFromDate:date];
 }

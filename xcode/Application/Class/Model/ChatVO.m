@@ -93,6 +93,7 @@
         
     o.contact_keys = (NSArray *) [data valueForKey:@"contact_keys"];
     o.removed_keys = (NSArray *) [data valueForKey:@"removed_keys"];
+    o.contact_names = (NSArray *) [data valueForKey:@"contact_names"];
 
     return o;
 }

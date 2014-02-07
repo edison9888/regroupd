@@ -20,7 +20,7 @@
 @property (nonatomic, retain) IBOutlet AltLabel *titleLabel;
 @property (nonatomic, retain) IBOutlet AltLabel *dateLabel;
 
-@property (nonatomic, retain) NSDictionary *rowdata;
+//@property (nonatomic, retain) NSDictionary *rowdata;
 
 - (void) setStatus:(int)status;
 

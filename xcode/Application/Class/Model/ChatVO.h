@@ -36,7 +36,8 @@ typedef enum {
 @property (nonatomic, retain) NSString *created;
 @property (nonatomic, retain) NSString *updated;
 
-@property (nonatomic, retain) NSArray *contact_keys; // for phoneIds
+@property (nonatomic, retain) NSArray *contact_keys; // for keys
+@property (nonatomic, retain) NSArray *contact_names; // for names
 @property (nonatomic, retain) NSArray *removed_keys; // for phoneIds
 @property (nonatomic, retain) NSArray *contact_ids;  // for objectIds
 
