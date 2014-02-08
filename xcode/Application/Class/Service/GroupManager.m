@@ -71,6 +71,30 @@
     
 }
 
+- (GroupVO *) findGroupByChatKey:(NSString *)chatKey {
+    NSLog(@"%s", __FUNCTION__);
+    
+    NSString *sql = nil;
+    sql = @"select * from groups where chat_key=?";
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
+                       chatKey];
+    
+    NSDictionary *dict;
+    if ([rs next]) {
+        dict = [rs resultDictionary];
+    }
+    
+    if (dict != nil) {
+        GroupVO *result = [GroupVO readFromDictionary:dict];
+        
+        return result;
+    } else {
+        return nil;
+    }
+    
+}
+
 
 - (int) saveGroup:(GroupVO *) group {
     
@@ -83,13 +107,29 @@
     if (group.chat_key == nil) {
         group.chat_key = @"";
     }
+    
+    NSString *created;
+    NSString *updated;
+    
+    if (group.createdAt != nil) {
+        created = [DateTimeUtils dbDateTimeStampFromDate:group.createdAt];
+    } else {
+        created = dt;
+    }
+    if (group.updatedAt != nil) {
+        updated = [DateTimeUtils dbDateTimeStampFromDate:group.updatedAt];
+    } else {
+        updated = dt;
+    }
+
+    
     @try {
         sql = @"INSERT into groups (name, chat_key, created, updated) values (?, ?, ?, ?);";
         success = [[SQLiteDB sharedConnection] executeUpdate:sql,
                    group.name,
                    group.chat_key,
-                   dt,
-                   dt
+                   created,
+                   updated
                    ];
         
         if (!success) {

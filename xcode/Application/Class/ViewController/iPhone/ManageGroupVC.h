@@ -8,12 +8,16 @@
 
 #import "SlideViewController.h"
 #import "GroupManager.h"
+#import "ChatManager.h"
+
 #import "SQLiteDB.h"
 #import "ContactVO.h"
 
 @interface ManageGroupVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     
     GroupManager *groupSvc;
+    ChatManager *chatSvc;
+    
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *tableData;
@@ -28,7 +32,7 @@
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
 @property(retain) NSMutableArray *tableData;
-- (void)performSearch:(NSString *)searchText;
+//- (void)performSearch:(NSString *)searchText;
 
 @property (nonatomic, strong) IBOutlet UILabel *navTitle;
 @property (nonatomic, strong) IBOutlet UILabel *navCaption;

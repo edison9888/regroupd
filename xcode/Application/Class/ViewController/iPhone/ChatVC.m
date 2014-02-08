@@ -175,17 +175,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     
 // Create and initialize a tap gesture
-    
-    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
-                                             
-                                             initWithTarget:self action:@selector(singleTap:)];
-    
-    // Specify that the gesture must be a single tap
-    tapRecognizer.delaysTouchesEnded = NO;
-    tapRecognizer.numberOfTapsRequired = 1;
-    tapRecognizer.cancelsTouchesInView = NO;
-    [self.view addGestureRecognizer:tapRecognizer];
-    
     self.tableDataSource = [[NSMutableArray alloc] init];
     
     // Setup chat bubble config
@@ -607,6 +596,17 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     
     
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
+                                             
+                                             initWithTarget:self action:@selector(singleTap:)];
+    
+    // Specify that the gesture must be a single tap
+    tapRecognizer.delaysTouchesEnded = NO;
+    tapRecognizer.numberOfTapsRequired = 1;
+    tapRecognizer.cancelsTouchesInView = NO;
+    [self.view addGestureRecognizer:tapRecognizer];
+    
+
     
 }
 

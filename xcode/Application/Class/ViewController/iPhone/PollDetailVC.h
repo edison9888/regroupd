@@ -50,14 +50,14 @@
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
 @property(retain) NSMutableArray *tableData;
-- (void)performSearch:(NSString *)searchText;
 
+- (void)performSearch:(NSString *)searchText;
 
 - (IBAction)tapCloseButton;
 - (IBAction)tapLeftArrow;
 - (IBAction)tapRightArrow;
 
 
-- (void) loadFormOptions;
+//- (void) loadFormOptions;
 
 @end

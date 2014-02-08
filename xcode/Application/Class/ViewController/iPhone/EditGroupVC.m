@@ -64,12 +64,12 @@
     widgetStyle.bordercolor = 0x09a1bd;
     widgetStyle.corner = 2;
     widgetStyle.font = theFont;
-
+    
     nameWidgets = [[NSMutableArray alloc] init];
     
     if ([[DataModel shared].action isEqualToString:kActionADD]) {
         self.navTitle.text = @"New Group";
-//        self.groupName.text = @"new group";
+        //        self.groupName.text = @"new group";
         
     } else {
         self.navTitle.text = @"Edit Group";
@@ -88,8 +88,8 @@
     
     UITextField *txfSearchField = [ccSearchBar valueForKey:@"_searchField"];
     txfSearchField.tag = kTagSearchField;
-//    txfSearchField.keyboardAppearance = 
-//    txfSearchField.delegate = self;
+    //    txfSearchField.keyboardAppearance =
+    //    txfSearchField.delegate = self;
     
     self.groupName.delegate = self;
     self.groupName.tag = kTagNameField;
@@ -97,9 +97,9 @@
     [self.searchView addSubview:ccSearchBar];
     [self.searchView.layer setCornerRadius:3.0];
     
-//    self.searchView.backgroundColor = [UIColor clearColor];
+    //    self.searchView.backgroundColor = [UIColor clearColor];
     self.searchView.backgroundColor = [UIColor colorWithHexValue:kSearchViewBGColor];
-  
+    
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
     self.theTableView.hidden = NO;
@@ -108,7 +108,7 @@
     CGRect tableFrame = self.theTableView.frame;
     tableFrame.size.height = [DataModel shared].stageHeight - tableFrame.origin.y;
     self.theTableView.frame = tableFrame;
-
+    
     
     self.theTableView.backgroundColor = [UIColor clearColor];
     
@@ -126,7 +126,7 @@
     tapRecognizer.numberOfTapsRequired = 1;
     tapRecognizer.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tapRecognizer];
-
+    
     // register for keyboard notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
@@ -138,10 +138,10 @@
                                                  name:UIKeyboardWillHideNotification
                                                object:self.view.window];
     
-
+    
     [self performSearch:@""];
     
-
+    
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -202,7 +202,7 @@
     
     [self.scrollView setFrame:viewFrame];
     [UIView commitAnimations];
-
+    
     keyboardIsShown = NO;
     
 }
@@ -215,9 +215,9 @@
     }
     NSDictionary* userInfo = [n userInfo];
     keyboardSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-
+    
     keyboardIsShown = YES;
-
+    
 }
 
 #pragma mark - UITextField methods
@@ -234,7 +234,7 @@
     if (textField.tag == kTagNameField) {
         UITextField *txfSearchField = [ccSearchBar valueForKey:@"_searchField"];
         [txfSearchField becomeFirstResponder];
-//        [self.ccSearchBar.inputView.]
+        //        [self.ccSearchBar.inputView.]
     }
     return YES;
 }
@@ -242,7 +242,7 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     NSLog(@"%s tag=%i", __FUNCTION__, textField.tag);
     _currentField = textField;
-
+    
     
 }
 - (void)textFieldDidEndEditing:(UITextField *)textField {
@@ -269,10 +269,10 @@
     
     UITextField *txfSearchField = [ccSearchBar valueForKey:@"_searchField"];
     _currentField = txfSearchField;
-
+    
     self.theTableView.allowsSelection = YES;
     self.theTableView.scrollEnabled = YES;
-
+    
     float keyboardHeight = 220;
     CGRect viewFrame = self.scrollView.frame;
     viewFrame.size.height = [DataModel shared].stageHeight - keyboardHeight - viewFrame.origin.y;
@@ -280,17 +280,17 @@
     NSLog(@"Set scrollView height to %f", viewFrame.size.height);
     
     CGRect targetFrame = self.searchView.frame;
-//    targetFrame.origin.y += 100;
+    //    targetFrame.origin.y += 100;
     
     self.scrollView.frame = viewFrame;
     //    self.scrollView.contentSize = CGSizeMake([DataModel shared].stageWidth, self.saveButton.frame.origin.y + 50);
     [self.scrollView scrollRectToVisible:targetFrame animated:YES];
     
-
+    
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-
+    
     if (searchText.length > 0) {
         self.searchView.backgroundColor = [UIColor colorWithHexValue:kSearchViewBGColor];
         self.theTableView.hidden = NO;
@@ -492,13 +492,13 @@
         UIView* view = sender.view;
         CGPoint loc = [sender locationInView:view];
         UIView* subview = [view hitTest:loc withEvent:nil];
-//        CGPoint subloc = [sender locationInView:subview];
+        //        CGPoint subloc = [sender locationInView:subview];
         NSLog(@"hit tag = %i or subview.tag %i", view.tag, subview.tag);
         
         
         //            switch (subview.tag) {
         int nameIndex = subview.tag - kBaseTagForNameWidget;
-
+        
         if (nameIndex >= 0 && nameIndex <= 99) {
             [contactsArray removeObjectAtIndex:nameIndex];
             [contactKeys removeObjectAtIndex:nameIndex];
@@ -562,50 +562,74 @@
     //    BOOL isOk = YES;
     
     BOOL isOK = YES;
-    
+    NSString *theName = [self.groupName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
+//    NSString
     if (contactKeys.count == 0) {
         isOK = NO;
     }
     if (isOK) {
         
-        // TODO: save to group table
-        GroupVO *group = [[GroupVO alloc] init];
-        group.name = self.groupName.text;
-        group.system_id = @"";
-        group.status = 0;
-        group.type = 1;
-
-        if ([[DataModel shared].action isEqualToString:@"popup"]) {
-            group.chat_key = [DataModel shared].chat.system_id;
-        }
-        
         if (groupSvc == nil) {
             groupSvc = [[GroupManager alloc] init];
         }
-        int groupId = [groupSvc saveGroup:group];
         
-        NSLog(@"New groupId %i", groupId);
+        [contactKeys addObject:[DataModel shared].user.contact_key];
         
-        for (NSString* contactKey in contactKeys) {
-//            BOOL exists = [groupSvc checkGroupContact:groupId contactId:contactId.intValue];
-                [groupSvc saveGroupContact:groupId contactKey:contactKey];
-        }
-        if ([[DataModel shared].action isEqualToString:@"popup"]) {
-            ChatVO *chat = [DataModel shared].chat;
-            chat.name = self.groupName.text;
-            chat.status = [NSNumber numberWithInt:ChatType_GROUP];
+        ChatVO *chat = [[ChatVO alloc] init];
+        chat.name = theName;
+        chat.status = [NSNumber numberWithInt:ChatType_GROUP];
+        
+        chat.contact_keys = contactKeys;
+        
+        [chatSvc apiSaveChat:chat callback:^(PFObject *pfChat) {
             
-            [chatSvc apiSaveChat:chat callback:^(PFObject *object) {
-                [DataModel shared].chat = chat;
-                [[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:k_titleRefreshNotification object:nil]];
-
-                [self dismissViewControllerAnimated:YES completion:^{
-                    [DataModel shared].action = nil;
-                }];
-            }];
-        } else {
-            [_delegate gotoSlideWithName:@"GroupsHome"];
-        }
+            if (!pfChat) {
+                NSLog(@"apiSaveChat failed");
+            } else {
+                
+                chat.system_id = pfChat.objectId;
+                [chatSvc saveChat:chat];
+                
+                // Adding push notifications subscription
+                NSLog(@"Saving group chat_key %@", pfChat.objectId);
+                
+                GroupVO *group = [[GroupVO alloc] init];
+                group.name = theName;
+                group.system_id = @"";
+                group.chat_key = pfChat.objectId;
+                group.status = 1;
+                group.type = 1;
+                
+                int groupId = [groupSvc saveGroup:group];
+                for (NSString* contactKey in contactKeys) {
+                    //            BOOL exists = [groupSvc checkGroupContact:groupId contactId:contactId.intValue];
+                    [groupSvc saveGroupContact:groupId contactKey:contactKey];
+                }
+                
+                NSString *channelId = [@"chat_" stringByAppendingString:pfChat.objectId];
+                
+                PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+                [currentInstallation addUniqueObject:channelId forKey:@"channels"];
+                [currentInstallation saveInBackground];
+                
+                
+                if ([[DataModel shared].action isEqualToString:@"popup"]) {
+                    
+                    [DataModel shared].chat = chat;
+                    [[NSNotificationCenter defaultCenter] postNotification: [NSNotification notificationWithName:k_titleRefreshNotification object:nil]];
+                    
+                    [self dismissViewControllerAnimated:YES completion:^{
+                        [DataModel shared].action = nil;
+                    }];
+                } else {
+                    [_delegate gotoSlideWithName:@"GroupsHome"];
+                }
+                
+            }
+        }];
+        
+        
     } else {
         [[[UIAlertView alloc] initWithTitle:@"Try again" message:@"Please add at least one contact" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }

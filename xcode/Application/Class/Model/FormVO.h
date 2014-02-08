@@ -51,7 +51,7 @@ typedef enum {
 @property (nonatomic, retain) NSString *details;
 @property (nonatomic, retain) NSString *imagefile;
 @property int type;
-@property NSNumber *status;
+@property (nonatomic, retain) NSNumber *status;
 
 @property (nonatomic, retain) NSNumber *counter;
 

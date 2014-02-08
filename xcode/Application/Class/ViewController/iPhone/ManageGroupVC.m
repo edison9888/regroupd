@@ -37,6 +37,7 @@
 {
     [super viewDidLoad];
     groupSvc = [[GroupManager alloc] init];
+    chatSvc = [[ChatManager alloc] init];
 //
 //    - See more at: http://refactr.com/blog/2012/09/ios-tips-custom-fonts/#sthash.Qi1jzSHT.dpuf
     // Do any additional setup after loading the view from its nib.
@@ -68,6 +69,125 @@
 }
 
 
+
+#pragma mark - Load Data
+
+- (void) refreshGroupContacts {
+    NSString *chatId = [DataModel shared].group.chat_key;
+    int groupId = [DataModel shared].group.group_id;
+    
+    [chatSvc apiLoadChat:chatId callback:^(ChatVO *theChat) {
+        
+        for (NSString* contactKey in theChat.contact_keys) {
+            BOOL exists = [groupSvc checkGroupContact:groupId contacKey:contactKey];
+            if (!exists) {
+                NSLog(@"Adding new member %@", contactKey);
+                [groupSvc saveGroupContact:groupId contactKey:contactKey];
+                
+            }
+        }
+        
+    }];
+    
+}
+- (void)loadGroupContacts {
+    isLoading = YES;
+    
+    isSearching = NO;
+    
+    static NSString *alphaSql = @"select distinct CASE last_name  WHEN '' THEN substr(first_name, 1, 1) \
+    ELSE substr(last_name, 1, 1) END as alpha from phonebook where status=1 order by alpha";
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:alphaSql];
+    NSString *alpha;
+    alphasArray = [[NSMutableArray alloc] init];
+    while ([rs next]) {
+        alpha = [rs stringForColumnIndex:0];
+        [alphasArray addObject:alpha];
+    }
+    alphaMap = [[NSMutableDictionary alloc] initWithCapacity:alphasArray.count];
+    NSMutableArray *results;
+    for (NSString *letter in alphasArray) {
+        results = [[NSMutableArray alloc] init];
+        [alphaMap setObject:results forKey:letter];
+    }
+    
+    //    NSString *sql = @"select CASE last_name  WHEN '' THEN substr(first_name, 1, 1) ELSE substr(last_name, 1, 1) END as alpha, \
+    CASE last_name  WHEN '' THEN first_name ELSE last_name END as sortval, * from phonebook where status=1 and contact_key<>? \
+    order by sortval, first_name";
+    
+    NSString *sql = @"select distinct \
+    CASE last_name  WHEN '' THEN substr(first_name, 1, 1) ELSE substr(last_name, 1, 1) END as alpha, \
+    CASE last_name  WHEN '' THEN first_name ELSE last_name END as sortval, \
+    pb.first_name, pb.last_name, pb.contact_key, pb.phone from phonebook pb \
+    where status=1 and contact_key<>? order by sortval, first_name";
+    
+    [rs close];
+    
+    rs = [[SQLiteDB sharedConnection] executeQuery:sql, [DataModel shared].user.contact_key];
+    
+    while ([rs next]) {
+        NSDictionary *dict =[rs resultDictionary];
+        alpha = [rs stringForColumnIndex:0];
+        [((NSMutableArray *)[alphaMap objectForKey:alpha]) addObject:dict];
+    }
+    
+    
+    memberKeys = [groupSvc listGroupContactKeys:[DataModel shared].group.group_id];
+    selectionsMap = [[NSMutableDictionary alloc] initWithCapacity:memberKeys.count];
+    
+    for (NSString *key in memberKeys) {
+        [selectionsMap setObject:kMemberFlag forKey:key];
+    }
+    
+    isLoading = NO;
+    
+}
+//- (void)performSearch:(NSString *)searchText
+//{
+//    NSLog(@"%s: %@", __FUNCTION__, searchText);
+//    
+//    if (searchText.length > 0) {
+//        NSString *sqlTemplate = @"select * from phonebook where status=1 and contact_key<>'%@' and (first_name like '%%%@%%' or last_name like '%%%@%%') limit 20";
+//        
+//        isLoading = YES;
+//        
+//        NSString *sql = [NSString stringWithFormat:sqlTemplate, [DataModel shared].user.contact_key, searchText, searchText];
+//        NSLog(@"sql=%@", sql);
+//        
+//        
+//        [tableData removeAllObjects];
+//        
+//        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+//        while ([rs next]) {
+//            NSDictionary *dict =[rs resultDictionary];
+//            
+//            [tableData addObject:dict];
+//        }
+//        isLoading = NO;
+//        [self.theTableView reloadData];
+//        
+//    } else {
+//        NSString *sqlTemplate = @"select * from phonebook where status=1 and contact_key<>'%@' order by last_name";
+//        
+//        isLoading = YES;
+//        
+//        NSString *sql = [NSString stringWithFormat:sqlTemplate, [DataModel shared].user.contact_key, searchText];
+//        
+//        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+//        [tableData removeAllObjects];
+//        
+//        while ([rs next]) {
+//            NSDictionary *dict =[rs resultDictionary];
+//            
+//            [tableData addObject:dict];
+//        }
+//        isLoading = NO;
+//        
+//        [self.theTableView reloadData];
+//    }
+//    
+//}
 
 #pragma mark - UITableViewDataSource
 
@@ -255,105 +375,6 @@
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-}
-
-- (void)loadGroupContacts {
-    isLoading = YES;
-
-    isSearching = NO;
-    
-    static NSString *alphaSql = @"select distinct CASE last_name  WHEN '' THEN substr(first_name, 1, 1) \
-    ELSE substr(last_name, 1, 1) END as alpha from phonebook where status=1 order by alpha";
-    
-    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:alphaSql];
-    NSString *alpha;
-    alphasArray = [[NSMutableArray alloc] init];
-    while ([rs next]) {
-        alpha = [rs stringForColumnIndex:0];
-        [alphasArray addObject:alpha];
-    }
-    alphaMap = [[NSMutableDictionary alloc] initWithCapacity:alphasArray.count];
-    NSMutableArray *results;
-    for (NSString *letter in alphasArray) {
-        results = [[NSMutableArray alloc] init];
-        [alphaMap setObject:results forKey:letter];
-    }
-    
-//    NSString *sql = @"select CASE last_name  WHEN '' THEN substr(first_name, 1, 1) ELSE substr(last_name, 1, 1) END as alpha, \
-    CASE last_name  WHEN '' THEN first_name ELSE last_name END as sortval, * from phonebook where status=1 and contact_key<>? \
-    order by sortval, first_name";
-    
-    NSString *sql = @"select distinct \
-    CASE last_name  WHEN '' THEN substr(first_name, 1, 1) ELSE substr(last_name, 1, 1) END as alpha, \
-    CASE last_name  WHEN '' THEN first_name ELSE last_name END as sortval, \
-    pb.first_name, pb.last_name, pb.contact_key, pb.phone from phonebook pb \
-    where status=1 and contact_key<>? order by sortval, first_name";
-    
-    [rs close];
-    
-    rs = [[SQLiteDB sharedConnection] executeQuery:sql, [DataModel shared].user.contact_key];
-    
-    while ([rs next]) {
-        NSDictionary *dict =[rs resultDictionary];
-        alpha = [rs stringForColumnIndex:0];
-        [((NSMutableArray *)[alphaMap objectForKey:alpha]) addObject:dict];
-    }
-    
-    
-    memberKeys = [groupSvc listGroupContactKeys:[DataModel shared].group.group_id];
-    selectionsMap = [[NSMutableDictionary alloc] initWithCapacity:memberKeys.count];
-    
-    for (NSString *key in memberKeys) {
-        [selectionsMap setObject:kMemberFlag forKey:key];
-    }
-    
-    isLoading = NO;
-
-}
-- (void)performSearch:(NSString *)searchText
-{
-    NSLog(@"%s: %@", __FUNCTION__, searchText);
-    
-    if (searchText.length > 0) {
-        NSString *sqlTemplate = @"select * from phonebook where status=1 and contact_key<>'%@' and (first_name like '%%%@%%' or last_name like '%%%@%%') limit 20";
-        
-        isLoading = YES;
-        
-        NSString *sql = [NSString stringWithFormat:sqlTemplate, [DataModel shared].user.contact_key, searchText, searchText];
-        NSLog(@"sql=%@", sql);
-        
-        
-        [tableData removeAllObjects];
-
-        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-        while ([rs next]) {
-            NSDictionary *dict =[rs resultDictionary];
-            
-            [tableData addObject:dict];
-        }
-        isLoading = NO;
-        [self.theTableView reloadData];
-        
-    } else {
-        NSString *sqlTemplate = @"select * from phonebook where status=1 and contact_key<>'%@' order by last_name";
-        
-        isLoading = YES;
-        
-        NSString *sql = [NSString stringWithFormat:sqlTemplate, [DataModel shared].user.contact_key, searchText];
-        
-        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-        [tableData removeAllObjects];
-        
-        while ([rs next]) {
-            NSDictionary *dict =[rs resultDictionary];
-            
-            [tableData addObject:dict];
-        }
-        isLoading = NO;
-        
-        [self.theTableView reloadData];
-    }
     
 }
 

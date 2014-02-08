@@ -164,48 +164,48 @@
         }];
 
     } else {
-        NSLog(@"Creating new chat");
-        NSMutableArray *contactKeys = [groupSvc listGroupContactKeys:[DataModel shared].group.group_id];
-        [contactKeys addObject:[DataModel shared].user.contact_key];
-        
-        ChatVO *chat = [[ChatVO alloc] init];
-        chat.name = [DataModel shared].group.name;
-        chat.status = [NSNumber numberWithInt:ChatType_GROUP];
-        chat.contact_keys = contactKeys;
-        
-        [chatSvc apiSaveChat:chat callback:^(PFObject *pfChat) {
-            
-            if (!pfChat) {
-                NSLog(@"apiSaveChat failed");
-            } else {
-                // Adding push notifications subscription
-                NSLog(@"Saving group chat_key %@", pfChat.objectId);
-                GroupVO *group = [DataModel shared].group;
-                group.chat_key = pfChat.objectId;
-                [groupSvc updateGroup:group];
-                
-                
-                NSString *channelId = [@"chat_" stringByAppendingString:pfChat.objectId];
-                
-                PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-                [currentInstallation addUniqueObject:channelId forKey:@"channels"];
-                [currentInstallation saveInBackground];
-                
-                chat.system_id = pfChat.objectId;
-                
-                [chatSvc saveChat:chat];
-                
-                [DataModel shared].chat = chat;
-                [DataModel shared].mode = @"Groups";
-                [_delegate setBackPath:@"GroupsHome"];
-                [_delegate gotoSlideWithName:@"Chat"];
-
-//                [DataModel shared].navIndex = 2;
-//                NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
-//                [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
-                
-            }
-        }];
+//        NSLog(@"Creating new chat");
+//        NSMutableArray *contactKeys = [groupSvc listGroupContactKeys:[DataModel shared].group.group_id];
+//        [contactKeys addObject:[DataModel shared].user.contact_key];
+//        
+//        ChatVO *chat = [[ChatVO alloc] init];
+//        chat.name = [DataModel shared].group.name;
+//        chat.status = [NSNumber numberWithInt:ChatType_GROUP];
+//        chat.contact_keys = contactKeys;
+//        
+//        [chatSvc apiSaveChat:chat callback:^(PFObject *pfChat) {
+//            
+//            if (!pfChat) {
+//                NSLog(@"apiSaveChat failed");
+//            } else {
+//                // Adding push notifications subscription
+//                NSLog(@"Saving group chat_key %@", pfChat.objectId);
+//                GroupVO *group = [DataModel shared].group;
+//                group.chat_key = pfChat.objectId;
+//                [groupSvc updateGroup:group];
+//                
+//                
+//                NSString *channelId = [@"chat_" stringByAppendingString:pfChat.objectId];
+//                
+//                PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+//                [currentInstallation addUniqueObject:channelId forKey:@"channels"];
+//                [currentInstallation saveInBackground];
+//                
+//                chat.system_id = pfChat.objectId;
+//                
+//                [chatSvc saveChat:chat];
+//                
+//                [DataModel shared].chat = chat;
+//                [DataModel shared].mode = @"Groups";
+//                [_delegate setBackPath:@"GroupsHome"];
+//                [_delegate gotoSlideWithName:@"Chat"];
+//
+////                [DataModel shared].navIndex = 2;
+////                NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
+////                [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
+//                
+//            }
+//        }];
     }
     
 }

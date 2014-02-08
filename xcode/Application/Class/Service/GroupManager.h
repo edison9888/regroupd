@@ -14,6 +14,8 @@
 
 - (GroupVO *) loadGroup:(int)_groupId;
 - (GroupVO *) loadGroup:(int)_groupId fetchAll:(BOOL)all;
+
+- (GroupVO *) findGroupByChatKey:(NSString *)chatKey;
 - (int) saveGroup:(GroupVO *) group;
 - (void) deleteGroup:(GroupVO *) group;
 - (void) updateGroup:(GroupVO *) group;

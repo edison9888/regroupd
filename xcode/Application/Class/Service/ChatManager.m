@@ -208,6 +208,20 @@
     NSString *dt = [DateTimeUtils dbDateTimeStampFromDate:now];
     NSLog(@"dt %@", dt);
     
+    NSString *created;
+    NSString *updated;
+    
+    if (chat.createdAt != nil) {
+        created = [DateTimeUtils dbDateTimeStampFromDate:chat.createdAt];
+    } else {
+        created = dt;
+    }
+    if (chat.updatedAt != nil) {
+        updated = [DateTimeUtils dbDateTimeStampFromDate:chat.updatedAt];
+    } else {
+        updated = dt;
+    }
+    
     @try {
         sql = @"INSERT into chat (user_key, system_id, name, type, status, clear_timestamp, read_timestamp, created, updated) values (?, ?, ?, ?, ?, ?, ?, ?, ?);";
         success = [[SQLiteDB sharedConnection] executeUpdate:sql,
@@ -218,8 +232,8 @@
                    chat.status,
                    [NSNumber numberWithDouble:0],
                    [NSNumber numberWithDouble:0],
-                   dt,
-                   dt
+                   created,
+                   updated
                    ];
         
         if (!success) {
@@ -427,6 +441,9 @@
     PFQuery *query = [PFQuery queryWithClassName:kChatDB];
     [query whereKey:@"contact_keys" containsAllObjectsInArray:@[contactKey]];
 //    [query whereKey:@"removed_keys" notContainedIn:@[contactKey]];
+    
+    [query orderByDescending:@"createdAt"];
+
     if (status) {
         if (status.intValue == ChatType_GROUP) {
             [query whereKey:@"status" equalTo:status];

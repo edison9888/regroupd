@@ -47,9 +47,9 @@
     [super viewDidLoad];
 //    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     
-    UserManager *userSvc = [[UserManager alloc] init];
-    UserVO *user = [userSvc lookupDefaultUser];
-    [DataModel shared].user = user;
+//    UserManager *userSvc = [[UserManager alloc] init];
+//    UserVO *user = [userSvc lookupDefaultUser];
+//    [DataModel shared].user = user;
 
     NSNumber *numIndex;
     navMap = [[NSMutableDictionary alloc] init];

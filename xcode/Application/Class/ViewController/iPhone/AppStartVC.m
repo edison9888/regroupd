@@ -87,12 +87,12 @@
             [_delegate gotoSlideWithName:@"ProfileStart1"];
             
         } else if ([PFUser currentUser] != nil) {
+            u = [PFUser currentUser];
             
             user.system_id = u.objectId;
             user.user_key = u.objectId;
             [DataModel shared].user = user;
             
-            u = [PFUser currentUser];
             NSLog(@"Current user is %@, %@", u.username, u.objectId);
             [userSvc apiLookupContactForUser:u callback:^(PFObject *pfContact) {
                 if (pfContact != nil) {

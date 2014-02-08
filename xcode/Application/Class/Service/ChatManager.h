@@ -18,7 +18,6 @@
 - (int) saveChat:(ChatVO *) chat;
 - (void) deleteChat:(ChatVO *)chat;
 
-- (void) updateChat:(NSString *)chatKey withName:(NSString *)name;
 - (void) updateChat:(NSString *)chatKey withName:(NSString *)name status:(NSNumber *)number;
 
 - (void) updateChatReadTime:(NSString *)chatKey name:(NSString *)name readtime:(NSNumber *)readtime;
