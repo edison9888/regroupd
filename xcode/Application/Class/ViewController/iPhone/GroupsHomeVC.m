@@ -91,17 +91,24 @@
         //        ChatVO *dbChat;
         
         for (PFObject* result in results) {
+            chat = [ChatVO readFromPFObject:result];
+            BOOL isBlocked = NO;
             
-            NSArray *keys = [result objectForKey:@"contact_keys"];
+            NSArray *keys = chat.contact_keys;
+            if ([chat.removed_keys containsObject:[DataModel shared].user.contact_key]) {
+                isBlocked = YES;
+            }
             
-            if (keys.count > 1) {
-                
-                NSLog(@"contact keys = %@", keys);
-                
-                chat = [ChatVO readFromPFObject:result];
-                
+            if (keys.count < 2) {
+                isBlocked = YES;
                 [chatsArray addObject:chat];
             }
+            if (isBlocked) {
+                continue;
+            } else {
+                [chatsArray addObject:chat];
+            }
+
         }
         
         for (ChatVO *chat in chatsArray) {
@@ -120,7 +127,7 @@
 //                [chatSvc updateChat:chat.system_id withName:chat.name status:[NSNumber numberWithInt:ChatStatus_GROUP]];
                 NSTimeInterval serverTime = [chat.updatedAt timeIntervalSince1970];
                 
-                if (lookup.read_timestamp.doubleValue + kTimestampDelay < serverTime) {
+                if (lookup.read_timestamp.doubleValue < serverTime) {
                     chat.hasNew = YES;
                 } else {
                     chat.hasNew = NO;
@@ -196,6 +203,9 @@
     
 //    NSLog(@"excludedKeys %@", myChatKeys);
     
+    /*
+     Find group chats not already in local database
+     */
     [chatSvc apiFindGroupChats:[DataModel shared].user.contact_key
                     withStatus:[NSNumber numberWithInt:ChatType_GROUP]
                      excluding:[myChatKeys allObjects] callback:^(NSArray *results) {
