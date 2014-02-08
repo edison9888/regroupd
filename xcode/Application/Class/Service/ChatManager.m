@@ -426,7 +426,7 @@
 - (void) apiListChats:(NSString *)contactKey status:(NSNumber *)status callback:(void (^)(NSArray *results))callback {
     PFQuery *query = [PFQuery queryWithClassName:kChatDB];
     [query whereKey:@"contact_keys" containsAllObjectsInArray:@[contactKey]];
-    [query whereKey:@"removed_keys" notContainedIn:@[contactKey]];
+//    [query whereKey:@"removed_keys" notContainedIn:@[contactKey]];
     if (status) {
         if (status.intValue == ChatType_GROUP) {
             [query whereKey:@"status" equalTo:status];
@@ -492,6 +492,7 @@
             NSLog(@"apiUpdateChatCounter error: %@", error);
         }
         if (pfChat) {
+            pfChat[@"removed_keys"] = [NSArray array];
             [pfChat incrementKey:@"counter"];
             [pfChat saveInBackground];
         }

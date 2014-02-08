@@ -49,13 +49,15 @@
     NSLog(@"%s", __FUNCTION__);
     
     UIButton *button = (UIButton *) selector;
-    NSLog(@"hit tag=%i", button.tag);
-    
-    [DataModel shared].navIndex = button.tag;
-    
-    // post notification to switch to new tab (in ViewController)
-    NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
+    if (button.tag != [DataModel shared].navIndex) {
+        NSLog(@"hit tag=%i", button.tag);
+        
+        [DataModel shared].navIndex = button.tag;
+        
+        // post notification to switch to new tab (in ViewController)
+        NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:nil];
+        [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
+    }
     
     
     //    }

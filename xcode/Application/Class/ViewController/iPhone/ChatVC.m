@@ -1228,19 +1228,15 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     NSDictionary* info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     keyboardHeight = kbSize.height;
-    //    kbSize.height += kChatBarHeight;
-    //    NSLog(@"Keyboard height is %f", kbSize.height)
+    CGRect frame = self.bubbleTable.frame;
+    frame.size.height = [DataModel shared].stageHeight - keyboardHeight - self.bubbleTable.frame.origin.y;
+    chatFrameWithKeyboard = self.chatBar.frame;
+    chatFrameWithKeyboard.origin.y = [DataModel shared].stageHeight - keyboardHeight - chatFrameWithKeyboard.size.height;
     
     [UIView animateWithDuration:0.1f animations:^{
         
-        chatFrameWithKeyboard = self.chatBar.frame;
-        chatFrameWithKeyboard.origin.y -= keyboardHeight;
-        chatFrame = chatFrameWithKeyboard;
         self.chatBar.frame = chatFrameWithKeyboard;
         
-        CGRect frame = self.bubbleTable.frame;
-        //        frame.size.height = chatFrameWithKeyboard.origin.y - kChatBarHeight - kScrollViewTop;
-        frame.size.height -= kbSize.height;
         
         self.bubbleTable.frame = frame;
         [self.bubbleTable scrollBubbleViewToBottomAnimated:NO];
@@ -1904,79 +1900,75 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void) insertMessageInChat {
     
+    NSString *chatText = [self.inputField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
-    //    [self.bubbleTable becomeFirstResponder];
-    //    self.sendButton.enabled = NO;
-    if (!hasAttachment) {
-        if (self.inputField.text.length > 0) {
-            spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-            CGFloat halfButtonHeight = self.sendButton.bounds.size.height / 2;
-            CGFloat buttonWidth = self.sendButton.bounds.size.width;
-            spinner.center = CGPointMake(buttonWidth / 2, halfButtonHeight);
-            [self.sendButton addSubview:spinner];
-            [spinner startAnimating];
-            self.sendButton.enabled = NO;
-
-            ChatMessageVO *msg = [[ChatMessageVO alloc] init];
-            
-            NSString *chatText = [self.inputField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-            
-            if (chatText.length > 0) {
-                msg.message = chatText;
-                msg.contact_key = [DataModel shared].user.contact_key;
-                msg.chat_key = chatId;
-                msg.createdAt = [NSDate date];
-                
-                [chatSvc apiSaveChatMessage:msg callback:^(PFObject *pfMessage) {
-                    NSBubbleData *bubble;
-                    
-                    bubble = [self buildMessageBubble:msg];
-                    
-                    [self.tableDataSource addObject:bubble];
-                    [self.bubbleTable reloadData];
-                    [self resetChatUI];
-                    
-                    // Build a target query: everyone in the chat room except for this device.
-                    // See also: http://blog.parse.com/2012/07/23/targeting-pushes-from-a-device/
-                    PFQuery *query = [PFInstallation query];
-                    
-                    NSString *channelId = [@"chat_" stringByAppendingString:chatId];
-                    [query whereKey:@"channels" equalTo:channelId];
-                    [query whereKey:@"installationId" notEqualTo:[PFInstallation currentInstallation].installationId];
-                    
-                    //                    NSString *msgtext = @"New message from %@";
-                    NSString *msgtext = @"%@: %@";
-                    msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, msg.message];
-                    
-                    NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
-                                          msgtext, @"alert",
-                                          //                                      @"Increment", @"badge",
-                                          msg.contact_key, @"contact",
-                                          chatId, @"chat",
-                                          pfMessage.objectId, @"msg",
-                                          nil];
-                    // Create time interval
-                    NSTimeInterval interval = 60*60*24*7; // 1 week
-                    
-                    // Send push notification with expiration interval
-                    PFPush *push = [[PFPush alloc] init];
-                    [push expireAfterTimeInterval:interval];
-                    [push setQuery:query];
-                    //            [push setChannel:chatId];
-                    //            [push setMessage:chatId];
-                    [push setData:data];
-                    [push sendPushInBackground];
-                    
-                    NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
-                    [chatSvc updateChatReadTime:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
-                    
-                }];
-            }
-            //        [chatSvc apiSaveChatMessage:msg];
-        }
+    if (chatText.length > 0 && self.attachedPhoto == nil) {
+        spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        CGFloat halfButtonHeight = self.sendButton.bounds.size.height / 2;
+        CGFloat buttonWidth = self.sendButton.bounds.size.width;
+        spinner.center = CGPointMake(buttonWidth / 2, halfButtonHeight);
+        [self.sendButton addSubview:spinner];
+        [spinner startAnimating];
+        self.sendButton.enabled = NO;
         
-        return;
+        ChatMessageVO *msg = [[ChatMessageVO alloc] init];
+        
+        
+        if (chatText.length > 0) {
+            msg.message = chatText;
+            msg.contact_key = [DataModel shared].user.contact_key;
+            msg.chat_key = chatId;
+            msg.createdAt = [NSDate date];
+            
+            [chatSvc apiSaveChatMessage:msg callback:^(PFObject *pfMessage) {
+                NSBubbleData *bubble;
+                
+                bubble = [self buildMessageBubble:msg];
+                
+                [self.tableDataSource addObject:bubble];
+                [self.bubbleTable reloadData];
+//                [self resetChatUI];
+                
+                // Build a target query: everyone in the chat room except for this device.
+                // See also: http://blog.parse.com/2012/07/23/targeting-pushes-from-a-device/
+                PFQuery *query = [PFInstallation query];
+                
+                NSString *channelId = [@"chat_" stringByAppendingString:chatId];
+                [query whereKey:@"channels" equalTo:channelId];
+                [query whereKey:@"installationId" notEqualTo:[PFInstallation currentInstallation].installationId];
+                
+                //                    NSString *msgtext = @"New message from %@";
+                NSString *msgtext = @"%@: %@";
+                msgtext = [NSString stringWithFormat:msgtext, [DataModel shared].myContact.fullname, msg.message];
+                
+                NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      msgtext, @"alert",
+                                      //                                      @"Increment", @"badge",
+                                      msg.contact_key, @"contact",
+                                      chatId, @"chat",
+                                      pfMessage.objectId, @"msg",
+                                      nil];
+                // Create time interval
+                NSTimeInterval interval = 60*60*24*7; // 1 week
+                
+                // Send push notification with expiration interval
+                PFPush *push = [[PFPush alloc] init];
+                [push expireAfterTimeInterval:interval];
+                [push setQuery:query];
+                //            [push setChannel:chatId];
+                //            [push setMessage:chatId];
+                [push setData:data];
+                [push sendPushInBackground];
+                
+                NSTimeInterval seconds = [[NSDate date] timeIntervalSince1970];
+                [chatSvc updateChatReadTime:chatId name:chatTitle readtime:[NSNumber numberWithDouble:seconds]];
+                
+            }];
+        }
+        //        [chatSvc apiSaveChatMessage:msg];
     }
+    
+//    return;
     // Insert attachment if present. Reset inputs when done
     if (hasAttachment) {
 //        self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -2000,10 +1992,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             msg.form_key = self.attachedForm.system_id;
             msg.createdAt = [NSDate date];
 
-            if (self.inputField.text.length > 0) {
-                NSString *chatText = [self.inputField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-                msg.message = chatText;
-            }
+//            if (self.inputField.text.length > 0) {
+//                NSString *chatText = [self.inputField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+//                msg.message = chatText;
+//            }
             
             NSBubbleData *bubble;
             
@@ -2150,9 +2142,9 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             }];
             
         }
-        [self resetChatUI];
     }
     
+    [self resetChatUI];
     
 }
 - (void) resetChatUI {

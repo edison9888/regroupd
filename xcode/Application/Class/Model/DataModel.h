@@ -62,6 +62,7 @@
 @property (nonatomic, retain) GroupVO *group;
 
 @property (nonatomic, retain) NSMutableArray *formsList;
+@property (nonatomic, retain) NSMutableArray *chatsList;
 
 @property (nonatomic, retain) NSMutableDictionary *contactCache;
 @property (nonatomic, retain) NSMutableDictionary *phonebookCache;

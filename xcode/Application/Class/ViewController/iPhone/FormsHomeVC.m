@@ -43,7 +43,13 @@
     self.theTableView.backgroundColor = [UIColor colorWithHexValue:0xEFEFEF];
 
     CGRect tableFrame = self.theTableView.frame;
-    tableFrame.size.height = [DataModel shared].stageHeight - tableFrame.origin.y - 50;
+    
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        tableFrame.size.height = [DataModel shared].stageHeight - tableFrame.origin.y - 50;
+    } else {
+        tableFrame.size.height = [DataModel shared].stageHeight - tableFrame.origin.y - 30;
+    }
+
     self.theTableView.frame = tableFrame;
 
 //    self.theTableView.separatorColor = [UIColor grayColor];
@@ -212,8 +218,9 @@
         [cell.sendArrow addTarget:self action:@selector(checkButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         
         if ([form.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
-            cell.hostLabel.hidden = YES;
-            cell.hostField.hidden = YES;
+            cell.hostLabel.hidden = NO;
+            cell.hostField.hidden = NO;
+            cell.hostField.text = @"Me";
         } else {
             cell.hostLabel.hidden = NO;
             cell.hostField.hidden = NO;
@@ -246,11 +253,7 @@
     if (form.type == FormType_POLL || form.type == FormType_RATING) {
         return 66;
     } else {
-        if ([form.contact_key isEqualToString:[DataModel shared].user.contact_key]) {
-            return 100;
-        } else {
-            return 115;
-        }
+        return 115;
 
     }
 }

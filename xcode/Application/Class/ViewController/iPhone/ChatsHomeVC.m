@@ -9,7 +9,7 @@
 #import "ChatsHomeVC.h"
 #import "ChatVO.h"
 
-#define kTimestampDelay 100
+#define kTimestampDelay 2000
 
 @interface ChatsHomeVC ()
 
@@ -51,8 +51,8 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-    [self performSearch:nil];
-//    [self preloadData:nil];
+//    [self performSearch:nil];
+    [self preloadData:nil];
     
 }
 - (void)didReceiveMemoryWarning
@@ -102,12 +102,17 @@
 
 - (void) preloadData:(id)sender
 {
+    
+    if ([DataModel shared].chatsList != nil && [DataModel shared].chatsList.count > 0) {
+        self.tableData = [DataModel shared].chatsList;
+        [self.theTableView reloadData];
+    }
     contactSvc = [[ContactManager alloc] init];
     
     [contactSvc apiPrivacyListBlocks:[DataModel shared].user.contact_key callback:^(NSArray *keys) {
         _blockedKeys = keys;
         for (NSString *key in keys) {
-            [chatSvc updateChatStatus:key status:-1];
+            [chatSvc updateChatStatus:key status:ChatType_BLOCKED];
         }
         [self listMyChats:nil];
     }];
@@ -144,17 +149,14 @@
 //        ChatVO *dbChat;
         
         for (PFObject* result in results) {
+            chat = [ChatVO readFromPFObject:result];
+            BOOL isBlocked = NO;
             
-            NSArray *keys = [result objectForKey:@"contact_keys"];
-            
+            NSArray *keys = chat.contact_keys;
             if (keys.count > 1) {
-                
-                NSLog(@"contact keys = %@", keys);
-                [contactKeySet addObjectsFromArray:keys];
-                
-                chat = [ChatVO readFromPFObject:result];
-                BOOL isBlocked = NO;
-                if (keys.count == 2) {
+                if ([chat.removed_keys containsObject:[DataModel shared].user.contact_key]) {
+                    isBlocked = YES;
+                } else if (keys.count == 2) {
                     // This is an individual chat. One of the keys belongs to current user.
                     for (NSString *key in keys) {
                         if (![key isEqualToString:[DataModel shared].user.contact_key]) {
@@ -164,13 +166,19 @@
                             }
                         }
                     }
-                    
-                }
-                if (isBlocked) {
-                    continue;
                 }
                 
-                [chatsArray addObject:chat];
+                
+                if (isBlocked) {
+                    continue;
+                } else {
+                    NSLog(@"contact keys = %@", keys);
+                    [contactKeySet addObjectsFromArray:keys];
+                    
+                    [chatsArray addObject:chat];
+                    
+                }
+                
             }
         }
         
@@ -228,7 +236,16 @@
                 } else {
 //                    chat.names = chat.name;
                 }
-                
+                /*
+                 The problem is that deleted chats are being reactivated.
+                 Check if the chat is already stored locally. 
+                 If no, then it is new
+                 If yes, determine if the local read timestamp is earlier than the server read timestamp. 
+                    If yes, then there are new chats and you should convert the status to informal.  ##ERR: what if the chat was removed?
+                    If no, then check local status of chat is blocked or removed. 
+                    -- If yes, then ignore the chat
+                    -- If no, add the chat
+                 */
                 ChatVO *lookup = [chatSvc loadChatByKey:chat.system_id];
                 if (lookup == nil) {
                     // need to add
@@ -237,23 +254,37 @@
                     }
                     [chatSvc saveChat:chat];
                     chat.hasNew = YES;
+                    [tableData addObject:chat];
                     
                 } else {
                     // ignore
-                    [chatSvc updateChat:chat.system_id withName:chat.name status:[NSNumber numberWithInt:ChatType_INFORMAL]];
                     NSTimeInterval serverTime = [chat.updatedAt timeIntervalSince1970];
                     
+//                    NSLog(@"========= Chat name %@", chat.name);
+//                    NSLog(@"Compare server time %f", serverTime);
+//                    NSLog(@"Versus local time   %f", lookup.read_timestamp.doubleValue);
                     
-                    if (lookup.read_timestamp.doubleValue + kTimestampDelay < serverTime) {
+                    if (lookup.read_timestamp.doubleValue < serverTime) {
+                        
                         chat.hasNew = YES;
+                        [tableData addObject:chat];
+                        
                     } else {
                         chat.hasNew = NO;
+                        [tableData addObject:chat];
+//                        if (lookup.status.intValue == ChatType_REMOVED || lookup.status.intValue == ChatType_BLOCKED) {
+//                            
+//                        } else {
+//                            chat.hasNew = NO;
+//                            [tableData addObject:chat];
+//                            
+//                        }
                     }
                 }
 
-                [tableData addObject:chat];
                 
             }
+            [DataModel shared].chatsList = tableData;
             [MBProgressHUD hideHUDForView:self.view animated:NO];
             [self.theTableView reloadData];
             isLoading = NO;
@@ -363,7 +394,9 @@
         
         ChatVO *_chat = [tableData objectAtIndex:indexPath.row];
         
-        [chatSvc updateChatStatus:_chat.system_id status:-1];
+        [chatSvc updateChatStatus:_chat.system_id status:ChatType_REMOVED];
+//        [tableData removeObjectAtIndex:indexPath.row];
+//        [self.theTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
 
         [chatSvc apiLoadChat:_chat.system_id callback:^(ChatVO *theChat) {
             if (theChat.removed_keys == nil) {
@@ -391,6 +424,8 @@
                 }
             }
         }];
+        
+        
 //        [chatSvc apiModifyChat:chat.system_id removeContact:[DataModel shared].user.contact_key callback:^(PFObject *pfChat) {
 //            NSLog(@"ready to delete local chat db");
 //            if (pfChat) {
