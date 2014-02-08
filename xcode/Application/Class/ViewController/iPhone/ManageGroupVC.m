@@ -21,6 +21,7 @@
 @implementation ManageGroupVC
 
 @synthesize tableData;
+@synthesize theChat, theGroup;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -38,6 +39,9 @@
     [super viewDidLoad];
     groupSvc = [[GroupManager alloc] init];
     chatSvc = [[ChatManager alloc] init];
+    
+    self.theGroup = [DataModel shared].group;
+    
 //
 //    - See more at: http://refactr.com/blog/2012/09/ios-tips-custom-fonts/#sthash.Qi1jzSHT.dpuf
     // Do any additional setup after loading the view from its nib.
@@ -53,7 +57,7 @@
     
 //    [self performSearch:@""];
     isSearching = NO;
-    [self loadGroupContacts];
+    [self refreshGroupContacts];
     
 }
 
@@ -75,10 +79,10 @@
 - (void) refreshGroupContacts {
     NSString *chatId = [DataModel shared].group.chat_key;
     int groupId = [DataModel shared].group.group_id;
-    
-    [chatSvc apiLoadChat:chatId callback:^(ChatVO *theChat) {
+    __weak typeof(self) weakSelf = self;
+    [chatSvc apiLoadChat:chatId callback:^(ChatVO *_chat) {
         
-        for (NSString* contactKey in theChat.contact_keys) {
+        for (NSString* contactKey in _chat.contact_keys) {
             BOOL exists = [groupSvc checkGroupContact:groupId contacKey:contactKey];
             if (!exists) {
                 NSLog(@"Adding new member %@", contactKey);
@@ -86,7 +90,7 @@
                 
             }
         }
-        
+        [weakSelf loadGroupContacts];
     }];
     
 }
@@ -141,53 +145,55 @@
     }
     
     isLoading = NO;
+    [self.theTableView reloadData];
+
     
 }
-//- (void)performSearch:(NSString *)searchText
-//{
-//    NSLog(@"%s: %@", __FUNCTION__, searchText);
-//    
-//    if (searchText.length > 0) {
-//        NSString *sqlTemplate = @"select * from phonebook where status=1 and contact_key<>'%@' and (first_name like '%%%@%%' or last_name like '%%%@%%') limit 20";
-//        
-//        isLoading = YES;
-//        
-//        NSString *sql = [NSString stringWithFormat:sqlTemplate, [DataModel shared].user.contact_key, searchText, searchText];
-//        NSLog(@"sql=%@", sql);
-//        
-//        
-//        [tableData removeAllObjects];
-//        
-//        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-//        while ([rs next]) {
-//            NSDictionary *dict =[rs resultDictionary];
-//            
-//            [tableData addObject:dict];
-//        }
-//        isLoading = NO;
-//        [self.theTableView reloadData];
-//        
-//    } else {
-//        NSString *sqlTemplate = @"select * from phonebook where status=1 and contact_key<>'%@' order by last_name";
-//        
-//        isLoading = YES;
-//        
-//        NSString *sql = [NSString stringWithFormat:sqlTemplate, [DataModel shared].user.contact_key, searchText];
-//        
-//        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-//        [tableData removeAllObjects];
-//        
-//        while ([rs next]) {
-//            NSDictionary *dict =[rs resultDictionary];
-//            
-//            [tableData addObject:dict];
-//        }
-//        isLoading = NO;
-//        
-//        [self.theTableView reloadData];
-//    }
-//    
-//}
+- (void)performSearch:(NSString *)searchText
+{
+    NSLog(@"%s: %@", __FUNCTION__, searchText);
+    
+    if (searchText.length > 0) {
+        NSString *sqlTemplate = @"select * from phonebook where status=1 and contact_key<>'%@' and (first_name like '%%%@%%' or last_name like '%%%@%%') limit 20";
+        
+        isLoading = YES;
+        
+        NSString *sql = [NSString stringWithFormat:sqlTemplate, [DataModel shared].user.contact_key, searchText, searchText];
+        NSLog(@"sql=%@", sql);
+        
+        
+        [tableData removeAllObjects];
+        
+        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+        while ([rs next]) {
+            NSDictionary *dict =[rs resultDictionary];
+            
+            [tableData addObject:dict];
+        }
+        isLoading = NO;
+        [self.theTableView reloadData];
+        
+    } else {
+        NSString *sqlTemplate = @"select * from phonebook where status=1 and contact_key<>'%@' order by last_name";
+        
+        isLoading = YES;
+        
+        NSString *sql = [NSString stringWithFormat:sqlTemplate, [DataModel shared].user.contact_key, searchText];
+        
+        FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+        [tableData removeAllObjects];
+        
+        while ([rs next]) {
+            NSDictionary *dict =[rs resultDictionary];
+            
+            [tableData addObject:dict];
+        }
+        isLoading = NO;
+        
+        [self.theTableView reloadData];
+    }
+    
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -264,20 +270,20 @@
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
         }
         NSString *contactKey;
-        if (isSearching) {
-            NSDictionary *rowData = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
-            cell.titleLabel.text = [self readFullnameFromDictionary:rowData];
-            
-            contactKey = [rowData objectForKey:@"contact_key"];
-        } else {
-            
+//        if (isSearching) {
+//            NSDictionary *rowData = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
+//            cell.titleLabel.text = [self readFullnameFromDictionary:rowData];
+//            
+//            contactKey = [rowData objectForKey:@"contact_key"];
+//        } else {
+        
             NSString *letter = [alphasArray objectAtIndex:indexPath.section];
             NSMutableArray *results = (NSMutableArray *)[alphaMap objectForKey:letter];
             NSDictionary *rowData = (NSDictionary *) [results objectAtIndex:indexPath.row];
             
             cell.titleLabel.text = [self readFullnameFromDictionary:rowData];
             contactKey = [rowData objectForKey:@"contact_key"];
-        }
+//        }
         NSString *flag;
         if ([selectionsMap objectForKey:contactKey] != nil) {
             flag = (NSString *) [selectionsMap objectForKey:contactKey];
@@ -417,14 +423,23 @@
             }
         }
     }
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Success"
-                                                    message:@"Changes saved"
-                                                   delegate:self
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
     
-    [alert show];
-
+    NSMutableArray *contactKeys = [NSMutableArray arrayWithArray:selectionsMap.allKeys];
+    if (![contactKeys containsObject:[DataModel shared].user.contact_key]) {
+        [contactKeys addObject:[DataModel shared].user.contact_key];
+    }
+    
+    [chatSvc apiLoadChat:self.theGroup.chat_key callback:^(ChatVO *_chat) {
+        _chat.contact_keys = contactKeys;
+        [chatSvc apiSaveChat:_chat callback:^(PFObject *object) {
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Success"
+                                                            message:@"Changes saved"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }];
+    }];
     
 //    [_delegate goBack];
 }

@@ -18,6 +18,7 @@
     GroupManager *groupSvc;
     ChatManager *chatSvc;
     
+    
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *tableData;
@@ -32,6 +33,10 @@
 
 @property (nonatomic, retain) IBOutlet UITableView *theTableView;
 @property(retain) NSMutableArray *tableData;
+
+@property (nonatomic, retain) ChatVO *theChat;
+@property (nonatomic, retain) GroupVO *theGroup;
+
 //- (void)performSearch:(NSString *)searchText;
 
 @property (nonatomic, strong) IBOutlet UILabel *navTitle;

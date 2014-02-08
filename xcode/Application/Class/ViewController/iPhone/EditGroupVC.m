@@ -574,7 +574,9 @@
             groupSvc = [[GroupManager alloc] init];
         }
         
-        [contactKeys addObject:[DataModel shared].user.contact_key];
+        if (![contactKeys containsObject:[DataModel shared].user.contact_key]) {
+            [contactKeys addObject:[DataModel shared].user.contact_key];
+        }
         
         ChatVO *chat = [[ChatVO alloc] init];
         chat.name = theName;

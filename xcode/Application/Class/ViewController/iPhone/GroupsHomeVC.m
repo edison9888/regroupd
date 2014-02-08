@@ -352,11 +352,15 @@
             selectedIndex = indexPath.row;
             ChatVO *chat = (ChatVO *) [tableData objectAtIndex:indexPath.row];
             
-            [DataModel shared].chat = chat;
-            [DataModel shared].mode = @"Groups";
-            
-            [_delegate setBackPath:@"GroupsHome"];
-            [_delegate gotoSlideWithName:@"Chat"];
+            // Load from parse, because we need contact_keys
+            [chatSvc apiLoadChat:chat.system_id callback:^(ChatVO *theChat) {
+                [DataModel shared].chat = theChat;
+                [DataModel shared].mode = @"Groups";
+                
+                [_delegate setBackPath:@"GroupsHome"];
+                [_delegate gotoSlideWithName:@"Chat"];
+            }];
+
             
             //            if (group.chat_key != nil && group.chat_key.length > 0) {
             //                __weak typeof(self) weakSelf = self;
@@ -422,74 +426,6 @@
     
 }
 
-
-- (void)checkButtonTapped:(id)sender
-{
-    NSLog(@"%s", __FUNCTION__);
-    
-    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.theTableView];
-    NSIndexPath *indexPath = [self.theTableView indexPathForRowAtPoint:buttonPosition];
-    
-    if (indexPath != nil)
-    {
-        NSLog(@"button index %@", indexPath);
-        NSLog(@"Selected row %i", indexPath.row);
-        
-        selectedIndex = indexPath.row;
-        ChatVO *chat = (ChatVO *) [tableData objectAtIndex:indexPath.row];
-        
-        if ([chat.user_key isEqualToString:[DataModel shared].user.user_key]) {
-            
-            GroupVO *group = [groupSvc findGroupByChatKey:chat.system_id];
-            
-            if (group) {
-                [DataModel shared].group = group;
-                group.status = 1;
-                group.chat_key = chat.system_id;
-                [groupSvc updateGroup:group];
-                
-                [DataModel shared].action = kActionEDIT;
-                [_delegate gotoSlideWithName:@"GroupInfo" returnPath:@"GroupsHome"];
-                
-            } else {
-                
-                group = [[GroupVO alloc] init];
-                group.name = chat.name;
-                group.chat_key = chat.system_id;
-                group.status = 1;
-                group.type = 1;
-                group.createdAt = chat.createdAt;
-                group.updatedAt = chat.updatedAt;
-                
-                int groupId = [groupSvc saveGroup:group];
-                
-                NSLog(@"New groupId %i", groupId);
-                [chatSvc apiLoadChat:chat.system_id callback:^(ChatVO *theChat) {
-                    
-                    for (NSString* contactKey in theChat.contact_keys) {
-                        //            BOOL exists = [groupSvc checkGroupContact:groupId contactId:contactId.intValue];
-                        [groupSvc saveGroupContact:groupId contactKey:contactKey];
-                    }
-                    
-                    [DataModel shared].group = group;
-                    
-                    [DataModel shared].action = kActionEDIT;
-                    [_delegate gotoSlideWithName:@"GroupInfo" returnPath:@"GroupsHome"];
-                }];
-                
-            }
-            
-            
-        }
-        
-    }
-}
-
-//- (void) tapCellAccessory:(id)sender {
-//    NSLog(@"%s", __FUNCTION__);
-//
-//}
-//
 
 // Override to support conditional editing of the table view.
 // This only needs to be implemented if you are going to be returning NO
@@ -576,6 +512,78 @@
     // Return NO if you do not want the item to be re-orderable.
     return NO;
 }
+
+
+- (void)checkButtonTapped:(id)sender
+{
+    NSLog(@"%s", __FUNCTION__);
+    
+    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.theTableView];
+    NSIndexPath *indexPath = [self.theTableView indexPathForRowAtPoint:buttonPosition];
+    
+    if (indexPath != nil)
+    {
+        NSLog(@"button index %@", indexPath);
+        NSLog(@"Selected row %i", indexPath.row);
+        
+        selectedIndex = indexPath.row;
+        ChatVO *chat = (ChatVO *) [tableData objectAtIndex:indexPath.row];
+        
+        if ([chat.user_key isEqualToString:[DataModel shared].user.user_key]) {
+            
+            GroupVO *group = [groupSvc findGroupByChatKey:chat.system_id];
+            
+            if (group) {
+                [DataModel shared].group = group;
+                group.status = 1;
+                group.chat_key = chat.system_id;
+                [groupSvc updateGroup:group];
+                
+                [DataModel shared].action = kActionEDIT;
+                [_delegate gotoSlideWithName:@"GroupInfo" returnPath:@"GroupsHome"];
+                
+            } else {
+                
+                group = [[GroupVO alloc] init];
+                group.name = chat.name;
+                group.chat_key = chat.system_id;
+                group.status = 1;
+                group.type = 1;
+                group.createdAt = chat.createdAt;
+                group.updatedAt = chat.updatedAt;
+                
+                int groupId = [groupSvc saveGroup:group];
+                
+                NSLog(@"New groupId %i", groupId);
+                [chatSvc apiLoadChat:chat.system_id callback:^(ChatVO *theChat) {
+                    
+//                    for (NSString* contactKey in theChat.contact_keys) {
+//                        BOOL exists = [groupSvc checkGroupContact:groupId contacKey:contactKey];
+//                        if (!exists) {
+//                            NSLog(@"Adding new member %@", contactKey);
+//                            [groupSvc saveGroupContact:groupId contactKey:contactKey];
+//                        }
+//                    }
+                    
+                    [DataModel shared].group = group;
+                    
+                    [DataModel shared].action = kActionEDIT;
+                    [_delegate gotoSlideWithName:@"GroupInfo" returnPath:@"GroupsHome"];
+                }];
+                
+            }
+            
+            
+        }
+        
+    }
+}
+
+//- (void) tapCellAccessory:(id)sender {
+//    NSLog(@"%s", __FUNCTION__);
+//
+//}
+//
 
 
 #pragma mark - Action handlers

@@ -462,7 +462,9 @@
         
         NSLog(@"contact keys count = %i", contactKeys.count);
         
-        [contactKeys addObject:[DataModel shared].user.contact_key];
+        if (![contactKeys containsObject:[DataModel shared].user.contact_key]) {
+            [contactKeys addObject:[DataModel shared].user.contact_key];
+        }
         
         NSMutableArray *namesArray = [NSMutableArray array];
         for (ContactVO *contact in contactsArray) {
