@@ -38,6 +38,13 @@
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
     
+    CGRect frame = self.bodyView.frame;
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+    } else {
+        frame.size.height = [DataModel shared].stageHeight - frame.origin.y;
+        self.bodyView.frame = frame;
+    }
+
     contactSvc = [[ContactManager alloc] init];
     [self.roundPic.layer setCornerRadius:66.0f];
     [self.roundPic.layer setMasksToBounds:YES];
@@ -168,9 +175,13 @@
             [DataModel shared].chat = chat;
             
             [DataModel shared].mode = @"Chats";
-            [_delegate setBackPath:@"ChatsHome"];
-            [_delegate gotoSlideWithName:@"Chat"];
-            
+//            [_delegate setBackPath:@"ChatsHome"];
+//            [_delegate gotoSlideWithName:@"Chat"];
+
+            [DataModel shared].navIndex = 2;
+            NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
+            [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
+
         } else {
             chat = [[ChatVO alloc] init];
             
@@ -196,9 +207,13 @@
 
                 [DataModel shared].chat = chat;
                 
+//                [_delegate setBackPath:@"ChatsHome"];
+//                [_delegate gotoSlideWithName:@"Chat"];
                 [DataModel shared].mode = @"Chats";
-                [_delegate setBackPath:@"ChatsHome"];
-                [_delegate gotoSlideWithName:@"Chat"];
+                [DataModel shared].navIndex = 2;
+                NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
+                [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
+
             }];
         }
     }];

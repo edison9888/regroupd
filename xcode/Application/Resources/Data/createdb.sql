@@ -38,7 +38,7 @@ updated TEXT
 
 CREATE TABLE IF NOT EXISTS groups ( 
 group_id INTEGER PRIMARY KEY,  
-system_id TEXT,
+user_key TEXT,
 chat_key TEXT,
 name TEXT,
 type INT DEFAULT 1, 

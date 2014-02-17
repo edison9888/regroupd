@@ -27,6 +27,7 @@
 - (void) removeGroupContact:(int)groupId contactKey:(NSString *)contactKey;
 - (NSMutableArray *) listGroupContactKeys:(int)groupId;
 - (NSMutableArray *) listContactGroupIds:(NSString *)contactKey;
+- (NSMutableArray *) listContactGroupChatKeys:(NSString *)contactKey;
 
 - (NSMutableArray *) listContactGroups:(NSString *)contactKey;
 

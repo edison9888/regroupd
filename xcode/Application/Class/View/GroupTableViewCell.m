@@ -64,8 +64,12 @@
 }
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.accessoryView.frame = CGRectMake(self.accessoryView.frame.origin.x + 15, 0, self.accessoryView.frame.size.width, self.accessoryView.frame.size.height);
-//    self.accessoryView.frame.origin.x = 20;
+    
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        self.accessoryView.frame = CGRectMake(self.accessoryView.frame.origin.x + 15, 0, self.accessoryView.frame.size.width, self.accessoryView.frame.size.height);
+    } else {
+//        estSize = self.msgView.contentSize;
+    }
 }
 //- (void)layoutSubviews
 //{

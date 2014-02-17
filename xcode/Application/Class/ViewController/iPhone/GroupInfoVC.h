@@ -20,6 +20,8 @@
     ContactManager *contactSvc;
 }
 
+@property (nonatomic, strong) IBOutlet UIView *bodyView;
+
 @property (nonatomic, strong) IBOutlet UIImageView *roundPic;
 @property (nonatomic, strong) IBOutlet BrandUILabel *nameLabel;
 @property (nonatomic, strong) IBOutlet BrandUIButton *messageButton;

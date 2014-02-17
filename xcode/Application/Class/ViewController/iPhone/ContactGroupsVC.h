@@ -11,16 +11,18 @@
 #import "GroupContactCell.h"
 #import "ContactVO.h"
 #import "GroupManager.h"
+#import "ChatManager.h"
 
 @interface ContactGroupsVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     
     GroupManager *groupSvc;
+    ChatManager *chatSvc;
     
     BOOL isLoading;
     int selectedIndex;
     NSMutableArray *tableData;
     
-    NSMutableArray *memberKeys;
+    NSMutableArray *chatKeys;
     NSMutableDictionary *selectionsMap;
     
     NSString *theContactKey;

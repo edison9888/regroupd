@@ -19,6 +19,8 @@
     BOOL isBlocked;
 }
 
+@property (nonatomic, strong) IBOutlet UIView *bodyView;
+
 @property (nonatomic, strong) IBOutlet PFImageView *roundPic;
 @property (nonatomic, strong) IBOutlet BrandUILabel *nameLabel;
 @property (nonatomic, strong) IBOutlet BrandUIButton *messageButton;

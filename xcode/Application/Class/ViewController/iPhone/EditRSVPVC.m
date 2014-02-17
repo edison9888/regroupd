@@ -739,8 +739,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                 form.photo = formImage;
                 
                 [formSvc apiSaveForm:form callback:^(PFObject *pfForm) {
+                    theForm = [FormVO readFromPFObject:pfForm];
+
                     NSString *formId = pfForm.objectId;
-                    form.system_id = formId;
+                    
                     NSArray *answers = @[kResponseYes, kResponseMaybe, kResponseNo];
                     __block int index = 0;
                     int total = answers.count;
@@ -764,7 +766,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                             
                             if (index == total) {
                                 [DataModel shared].didSaveOK = YES;
-                                theForm = form;
                                 
                                 [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formSaveCompleteNotification object:nil]];
                             }
@@ -952,6 +953,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
     if ([[DataModel shared].action isEqualToString:@"popup"]) {
         [DataModel shared].action = @"";
+
+        [[DataModel shared].formsList insertObject:theForm atIndex:0];
 
         NSNotification* hideFormSelectorNotification = [NSNotification notificationWithName:@"hideFormSelectorNotification" object:theForm];
         [[NSNotificationCenter defaultCenter] postNotification:hideFormSelectorNotification];

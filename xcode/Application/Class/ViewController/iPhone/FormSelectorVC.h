@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "FormVO.h"
+#import "FormManager.h"
+
 #import "BrandUILabel.h"
 
 @interface FormSelectorVC : UIViewController<UITableViewDelegate, UITableViewDataSource> {
+    FormManager *formSvc;
+    NSMutableArray *allforms;
     NSMutableArray *tableData;
 }
 

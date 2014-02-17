@@ -15,11 +15,15 @@
 #import "CCSearchBar.h"
 #import "ContactVO.h"
 #import "ContactManager.h"
+#import "GroupManager.h"
 
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 //ABPersonViewControllerDelegate, 
 @interface ContactsHomeVC : SlideViewController<UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, ABNewPersonViewControllerDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate> {
+    
+    ContactManager *contactSvc;
+    GroupManager *groupSvc;
     
     CCSearchBar *ccSearchBar;
 
@@ -34,7 +38,6 @@
     NSMutableArray *otherContacts;
 
     UIView *bgLayer;
-    ContactManager *contactSvc;
     
     
     

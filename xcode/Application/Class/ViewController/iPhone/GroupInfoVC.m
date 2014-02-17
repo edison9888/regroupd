@@ -33,7 +33,14 @@
     
     NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
     [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
-    
+
+    CGRect frame = self.bodyView.frame;
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+    } else {
+        frame.size.height = [DataModel shared].stageHeight - frame.origin.y;
+        self.bodyView.frame = frame;
+    }
+
     
     [self.roundPic.layer setCornerRadius:66.0f];
     [self.roundPic.layer setMasksToBounds:YES];
@@ -159,8 +166,10 @@
             chat.name = [DataModel shared].group.name;
             [DataModel shared].chat = chat;
             [DataModel shared].mode = @"Groups";
-            [_delegate setBackPath:@"GroupsHome"];
-            [_delegate gotoSlideWithName:@"Chat"];
+            [DataModel shared].navIndex = 1;
+            NSNotification* switchNavNotification = [NSNotification notificationWithName:@"switchNavNotification" object:@"Chat"];
+            [[NSNotificationCenter defaultCenter] postNotification:switchNavNotification];
+
         }];
 
     } else {
@@ -212,7 +221,7 @@
 - (IBAction)tapManageButton {
     
     
-    [_delegate gotoSlideWithName:@"ManageGroup"];
+    [_delegate gotoSlideWithName:@"ManageGroup" returnPath:@"GroupInfo"];
     
 }
 - (IBAction)tapDeleteButton {

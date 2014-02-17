@@ -334,6 +334,7 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"%s", __FUNCTION__);
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        self.theTableView.userInteractionEnabled = NO;
         //add code here for when you hit delete
         
         FormVO *form = [tableData objectAtIndex:indexPath.row];
@@ -345,7 +346,7 @@
                     NSString *msg;
                     
                     if (form.type == FormType_RSVP) {
-                        [self setEditing:NO animated:YES];
+//                        [self setEditing:NO animated:YES];
                         [self listMyForms];
 
                         msg = @"This RSVP has been marked as cancelled";
@@ -355,11 +356,13 @@
                                                               cancelButtonTitle:@"OK"
                                                               otherButtonTitles:nil];
                         
+                        self.theTableView.userInteractionEnabled = YES;
                         [alert show];
                     } else {
                         msg = @"This form has been removed";
                         [self.tableData removeObjectAtIndex:indexPath.row];
                         [self.theTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+                        self.theTableView.userInteractionEnabled = YES;
                     }
                     
                 }
@@ -367,6 +370,7 @@
             }];
 
         } else {
+            NSLog(@"Deleting form contacts");
             [formSvc apiListFormContacts:form.system_id contactKey:[DataModel shared].user.contact_key callback:^(NSArray *results) {
                 if (results) {
                     int total = results.count;
@@ -379,7 +383,8 @@
                         if (index == total) {
                             [self setEditing:NO animated:YES];
                             [self listMyForms];
-                            
+                            self.theTableView.userInteractionEnabled = YES;
+
                         }
                     }
                 }
@@ -446,6 +451,7 @@
 {
     if (inEditMode) {
         inEditMode = NO;
+        
         [self.editButton setTitle:kEditLabel forState:UIControlStateNormal];
         
         [self setEditing:inEditMode animated:YES];

@@ -68,37 +68,37 @@
 
 
 #pragma mark - Data Load
-
-- (void)performSearch:(NSString *)searchText
-{
-    NSLog(@"%s: %@", __FUNCTION__, searchText);
-    self.tableData =[[NSMutableArray alloc]init];
-
-    NSString *sql = @"select * from chat where name is not null and status==0";
-    
-    isLoading = YES;
-    
-//    NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
-    
-    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-    [tableData removeAllObjects];
-    ChatVO *chat;
-    while ([rs next]) {
-        chat = [ChatVO readFromDictionary:[rs resultDictionary]];
-        NSLog(@"chat.names = %@", chat.name);
-        [tableData addObject:chat];
-    }
-    isLoading = NO;
-    
-    [self.theTableView reloadData];
-
-//    [self performSelector:@selector(preloadData:)
-//               withObject:nil
-//               afterDelay:1.0];
-    [self preloadData:nil];
-    
-}
-
+//
+//- (void)performSearch:(NSString *)searchText
+//{
+//    NSLog(@"%s: %@", __FUNCTION__, searchText);
+//    self.tableData =[[NSMutableArray alloc]init];
+//
+//    NSString *sql = @"select * from chat where name is not null and status==0 order by updated desc";
+//    
+//    isLoading = YES;
+//    
+////    NSString *sql = [NSString stringWithFormat:sqlTemplate, searchText];
+//    
+//    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+//    [tableData removeAllObjects];
+//    ChatVO *chat;
+//    while ([rs next]) {
+//        chat = [ChatVO readFromDictionary:[rs resultDictionary]];
+//        NSLog(@"chat.names = %@", chat.name);
+//        [tableData addObject:chat];
+//    }
+//    isLoading = NO;
+//    
+//    [self.theTableView reloadData];
+//
+////    [self performSelector:@selector(preloadData:)
+////               withObject:nil
+////               afterDelay:1.0];
+//    [self preloadData:nil];
+//    
+//}
+//
 
 - (void) preloadData:(id)sender
 {
@@ -237,7 +237,6 @@
 - (void) compareLocalAndRemoteChats:(NSMutableArray *)chatsArray {
     for (ChatVO *chat in chatsArray) {
         ChatVO *lookup = [chatSvc loadChatByKey:chat.system_id];
-        [DataModel shared].chatsList = tableData;
         if (lookup == nil) {
             // need to add
             if (chat.status == nil) {
@@ -262,6 +261,9 @@
                 [tableData addObject:chat];
             }
         }
+        
+        [DataModel shared].chatsList = tableData;
+
         [MBProgressHUD hideHUDForView:self.view animated:NO];
         [self.theTableView reloadData];
         isLoading = NO;

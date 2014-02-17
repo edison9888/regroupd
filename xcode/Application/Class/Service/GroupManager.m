@@ -107,6 +107,9 @@
     if (group.chat_key == nil) {
         group.chat_key = @"";
     }
+    if (group.user_key == nil) {
+        group.user_key = @"";
+    }
     
     NSString *created;
     NSString *updated;
@@ -124,10 +127,11 @@
 
     
     @try {
-        sql = @"INSERT into groups (name, chat_key, created, updated) values (?, ?, ?, ?);";
+        sql = @"INSERT into groups (user_key, chat_key, name, created, updated) values (?, ?, ?, ?, ?);";
         success = [[SQLiteDB sharedConnection] executeUpdate:sql,
-                   group.name,
+                   group.user_key,
                    group.chat_key,
+                   group.name,
                    created,
                    updated
                    ];
@@ -186,11 +190,11 @@
     NSString *dt = [DateTimeUtils dbDateTimeStampFromDate:now];
     NSLog(@"dt %@", dt);
     
-    sql = @"UPDATE groups set system_id=?, name=?, chat_key=?, updated=? where group_id=?";
+    sql = @"UPDATE groups set user_key=?, chat_key=?, name=?, updated=? where group_id=?";
     success = [[SQLiteDB sharedConnection] executeUpdate:sql,
-               group.system_id,
-               group.name,
+               group.user_key,
                group.chat_key,
+               group.name,
                dt,
                [NSNumber numberWithInt:group.group_id]
                ];
@@ -268,6 +272,31 @@
     while ([rs next]) {
         groupId = [rs intForColumnIndex:0];
         [results addObject:[NSNumber numberWithInt:groupId]];
+    }
+    return results;
+}
+
+/*
+ Given a contactKey, find the groups that the contact belongs, only for groups/chats owned by the current user.
+ 
+ */
+- (NSMutableArray *) listContactGroupChatKeys:(NSString *)contactKey {
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    
+    NSString *sql = @"select g.chat_key from groups g inner join group_contact gc on g.group_id=gc.group_id inner join chat c on g.chat_key=c.system_id where gc.contact_key=? and c.user_key=?";
+
+//    NSString *sqlt = @"select g.chat_key from groups g inner join group_contact gc on g.group_id=gc.group_id inner join chat c on g.chat_key=c.system_id where gc.contact_key='%@' and c.user_key='%@'";
+    
+    NSString *sqlt = @"select g.chat_key from groups g inner join group_contact gc on g.group_id=gc.group_id and gc.contact_key='%@' inner join chat c on g.chat_key=c.system_id and c.user_key='%@'";
+    sql = [NSString stringWithFormat:sqlt, contactKey, [DataModel shared].user.user_key];
+    NSLog(@"%@", sql);
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
+    
+    NSString *chatKey;
+    while ([rs next]) {
+        chatKey = [rs stringForColumnIndex:0];
+        [results addObject:chatKey];
     }
     return results;
 }

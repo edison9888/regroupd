@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GroupInfoVC">
             <connections>
                 <outlet property="actionsheet" destination="ier-AH-Gib" id="XVt-BE-IcW"/>
+                <outlet property="bodyView" destination="yeg-bx-w3N" id="eBi-0U-1v5"/>
                 <outlet property="messageButton" destination="Qcz-if-xpA" id="geT-m6-9yv"/>
                 <outlet property="nameLabel" destination="w4a-bA-3Vd" id="TL9-Kr-IrX"/>
                 <outlet property="roundPic" destination="weh-Ka-DS7" id="8KF-PG-4nk"/>
@@ -42,54 +43,62 @@
                         <action selector="tapBackButton" destination="-1" eventType="touchUpInside" id="mCD-IR-eRl"/>
                     </connections>
                 </button>
-                <imageView userInteractionEnabled="NO" tag="44" contentMode="scaleToFill" image="group_roundpic.png" id="weh-Ka-DS7" userLabel="Image View - thumbnail">
-                    <rect key="frame" x="94" y="73" width="132" height="132"/>
+                <view contentMode="scaleToFill" id="yeg-bx-w3N" userLabel="View - bodyView">
+                    <rect key="frame" x="0.0" y="50" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="group name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="w4a-bA-3Vd" userLabel="BrandUI Label - name" customClass="BrandUILabel">
-                    <rect key="frame" x="10" y="218" width="300" height="31"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="22"/>
-                    <color key="textColor" red="0.050980392156862744" green="0.49019607843137253" blue="0.67450980392156867" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Qcz-if-xpA" customClass="BrandUIButton">
-                    <rect key="frame" x="60" y="262" width="200" height="37"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="Message Group" backgroundImage="contact_btn_bg_aqua_large.png">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="tapMessageButton" destination="-1" eventType="touchUpInside" id="3Yo-0q-3Pv"/>
-                    </connections>
-                </button>
-                <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" image="hbar_96x2.png" id="la4-HG-2h1">
-                    <rect key="frame" x="20" y="318" width="280" height="1"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="zTI-Gg-JMK" customClass="BrandUIButton">
-                    <rect key="frame" x="60" y="337" width="200" height="37"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="Manage Group" backgroundImage="contact_btn_bg_gray_large.png">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="tapManageButton" destination="-1" eventType="touchUpInside" id="LTN-sa-8AV"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="eGo-6R-dcX" customClass="BrandUIButton">
-                    <rect key="frame" x="60" y="387" width="200" height="37"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="Delete Group" backgroundImage="contact_btn_bg_gray_large.png">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="tapDeleteButton" destination="-1" eventType="touchUpInside" id="nSq-Ra-K5r"/>
-                    </connections>
-                </button>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" tag="44" contentMode="scaleToFill" image="group_roundpic.png" id="weh-Ka-DS7" userLabel="Image View - thumbnail">
+                            <rect key="frame" x="94" y="20" width="132" height="132"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="group name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="w4a-bA-3Vd" userLabel="BrandUI Label - name" customClass="BrandUILabel">
+                            <rect key="frame" x="10" y="165" width="300" height="31"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="22"/>
+                            <color key="textColor" red="0.050980392156862744" green="0.49019607843137253" blue="0.67450980392156867" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Qcz-if-xpA" customClass="BrandUIButton">
+                            <rect key="frame" x="60" y="209" width="200" height="37"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Message Group" backgroundImage="contact_btn_bg_aqua_large.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="tapMessageButton" destination="-1" eventType="touchUpInside" id="3Yo-0q-3Pv"/>
+                            </connections>
+                        </button>
+                        <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" image="hbar_96x2.png" id="la4-HG-2h1">
+                            <rect key="frame" x="20" y="265" width="280" height="1"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="zTI-Gg-JMK" customClass="BrandUIButton">
+                            <rect key="frame" x="60" y="284" width="200" height="37"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Manage Group" backgroundImage="contact_btn_bg_gray_large.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="tapManageButton" destination="-1" eventType="touchUpInside" id="LTN-sa-8AV"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="eGo-6R-dcX" customClass="BrandUIButton">
+                            <rect key="frame" x="60" y="334" width="200" height="37"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Delete Group" backgroundImage="contact_btn_bg_gray_large.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="tapDeleteButton" destination="-1" eventType="touchUpInside" id="nSq-Ra-K5r"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.8666666666666667" green="0.88235294117647056" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                </view>
             </subviews>
             <color key="backgroundColor" red="0.8666666666666667" green="0.88235294117647056" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

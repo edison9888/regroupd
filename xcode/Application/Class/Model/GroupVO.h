@@ -14,7 +14,7 @@
 @interface GroupVO : NSObject
 
 @property int group_id;
-@property (nonatomic, retain) NSString *system_id;
+@property (nonatomic, retain) NSString *user_key;
 @property (nonatomic, retain) NSString *chat_key;
 
 @property (nonatomic, retain) NSString *name;
@@ -30,6 +30,6 @@
 @property (nonatomic, retain) NSMutableArray *contacts;
 
 + (GroupVO *) readFromDictionary:(NSDictionary *) dict;
-+ (GroupVO *) readFromPFChat:(PFObject *) data;
+//+ (GroupVO *) readFromPFChat:(PFObject *) data;
 
 @end

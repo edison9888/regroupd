@@ -10,7 +10,7 @@
 
 @implementation GroupVO
 
-@synthesize group_id, system_id, name, chat_key;
+@synthesize group_id, user_key, chat_key, name;
 @synthesize type, status, created, updated;
 @synthesize contacts;
 @synthesize createdAt, updatedAt;
@@ -22,8 +22,8 @@
     text = [dict valueForKey:@"group_id"];
     o.group_id = text.intValue;
     
-    text = [dict valueForKey:@"system_id"];
-    o.system_id = text;
+    text = [dict valueForKey:@"user_key"];
+    o.user_key = text;
     text = [dict valueForKey:@"chat_key"];
     o.chat_key = text;
     text = [dict valueForKey:@"name"];
@@ -44,7 +44,8 @@
     GroupVO *o = [[GroupVO alloc] init];
     NSString *text;
     
-    o.system_id = data.objectId;
+    o.chat_key = data.objectId;
+    
     o.createdAt = data.createdAt;
     o.updatedAt = data.updatedAt;
     

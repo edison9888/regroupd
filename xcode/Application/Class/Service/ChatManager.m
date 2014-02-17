@@ -442,13 +442,14 @@
     [query whereKey:@"contact_keys" containsAllObjectsInArray:@[contactKey]];
 //    [query whereKey:@"removed_keys" notContainedIn:@[contactKey]];
     
-    [query orderByDescending:@"createdAt"];
 
     if (status) {
         if (status.intValue == ChatType_GROUP) {
             [query whereKey:@"status" equalTo:status];
+            [query orderByDescending:@"createdAt"];
         } else {
             [query whereKey:@"status" notEqualTo:[NSNumber numberWithInt:ChatType_GROUP]];
+            [query orderByDescending:@"updatedAt"];
         }
     }
     [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
@@ -465,7 +466,11 @@
     PFQuery *query = [PFQuery queryWithClassName:kChatDB];
     [query whereKey:@"contact_keys" containsAllObjectsInArray:@[userId]];
     [query whereKey:@"status" equalTo:status];
-    [query whereKey:@"objectId" notContainedIn:excludedKeys];
+    [query orderByAscending:@"name"];
+    
+    if (excludedKeys != nil) {        
+        [query whereKey:@"objectId" notContainedIn:excludedKeys];
+    }
     [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
         callback(results);
     }];
@@ -561,9 +566,99 @@
     }];
     
 }
+
+- (void) apiRefreshLocalChatsAndGroups:(NSString *)contactKey callback:(void (^)(NSMutableArray *chats))callback {
+    NSLog(@"%s", __FUNCTION__);
+    
+    [self apiListChats:contactKey status:[NSNumber numberWithInt:ChatType_GROUP]  callback:^(NSArray *results) {
+        NSMutableArray *chatsArray = [[NSMutableArray alloc] initWithCapacity:results.count];
+        
+        NSLog(@"apiListChats response count %i", results.count);
+        if (results.count == 0) {
+            callback(chatsArray);
+        }
+        
+        ChatVO *chat;
+        //        ChatVO *dbChat;
+        
+        for (PFObject* result in results) {
+            chat = [ChatVO readFromPFObject:result];
+            BOOL isBlocked = NO;
+            
+            NSArray *keys = chat.contact_keys;
+            if ([chat.removed_keys containsObject:[DataModel shared].user.contact_key]) {
+                isBlocked = YES;
+            }
+            
+            
+            if (isBlocked) {
+                continue;
+            } else {
+                NSLog(@"contact keys = %@", keys);
+                
+                [chatsArray addObject:chat];
+                
+            }
+            
+        }
+        GroupManager *groupSvc = [[GroupManager alloc] init];
+
+        
+        for (ChatVO *chat in chatsArray) {
+            ChatVO *lookup = [self loadChatByKey:chat.system_id];
+            
+            if (lookup == nil) {
+                // need to add
+                if (chat.status == nil) {
+                    chat.status = [NSNumber numberWithInt:ChatType_GROUP];
+                }
+                [self saveChat:chat];
+                
+            } else {
+                
+            }
+            
+            GroupVO *group = [groupSvc findGroupByChatKey:chat.system_id];
+            int groupId = 0;
+            if (group == nil) {
+                group = [[GroupVO alloc] init];
+                group.name = chat.name;
+                group.user_key = chat.user_key;
+                group.chat_key = chat.system_id;
+                group.status = 1;
+                group.type = 1;
+                group.createdAt = chat.createdAt;
+                group.updatedAt = chat.updatedAt;
+                
+                groupId = [groupSvc saveGroup:group];
+                
+                
+            } else {
+                groupId = group.group_id;
+            }
+            
+            for (NSString* contactKey in chat.contact_keys) {
+                BOOL exists = [groupSvc checkGroupContact:groupId contacKey:contactKey];
+                if (!exists) {
+                    NSLog(@"Adding new member %@", contactKey);
+                    [groupSvc saveGroupContact:groupId contactKey:contactKey];
+                    
+                }
+            }
+
+        }
+        
+        
+        callback(chatsArray);
+    }];
+}
+
+
+#pragma mark - Send message helpers
 /*
  Method for sending a message to a contact and you don't know if a chat exists already.
  */
+    
 - (void) apiSendMessageToContact:(ChatMessageVO *)msg contact:(ContactVO *)contact callback:(void (^)(ChatVO *chat))callback{
     FormManager *formSvc = [[FormManager alloc] init];
     

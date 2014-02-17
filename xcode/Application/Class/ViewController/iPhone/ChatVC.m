@@ -1229,7 +1229,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     keyboardHeight = kbSize.height;
     CGRect frame = self.bubbleTable.frame;
-    frame.size.height = [DataModel shared].stageHeight - keyboardHeight - self.bubbleTable.frame.origin.y;
+    
+    frame.size.height = [DataModel shared].stageHeight - keyboardHeight - kChatBarHeight - kScrollViewTop;
+
+//    frame.size.height = [DataModel shared].stageHeight - keyboardHeight - self.bubbleTable.frame.origin.y;
     chatFrameWithKeyboard = self.chatBar.frame;
     chatFrameWithKeyboard.origin.y = [DataModel shared].stageHeight - keyboardHeight - chatFrameWithKeyboard.size.height;
     
@@ -1416,10 +1419,10 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     //    bgLayer.layer.zPosition = 8;
     //    bgLayer.tag = kTagFormModalBG;
     //    [self.view addSubview:bgLayer];
+    self.formSelectorVC = [[FormSelectorVC alloc] initWithNibName:@"FormSelectorVC" bundle:nil];
     
-    if (self.formSelectorVC == nil) {
-        self.formSelectorVC = [[FormSelectorVC alloc] initWithNibName:@"FormSelectorVC" bundle:nil];
-    }
+//    if (self.formSelectorVC == nil) {
+//    }
     CGRect panelFrame = self.formSelectorVC.view.frame;
     panelFrame.origin.y = [DataModel shared].stageHeight + 10;
     

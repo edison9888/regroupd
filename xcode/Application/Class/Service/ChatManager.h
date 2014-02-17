@@ -46,8 +46,9 @@
 - (void) apiSaveChat:(ChatVO *)chat callback:(void (^)(PFObject *object))callback;
 - (void) apiUpdateChatCounter:(NSString *)chatId;
 - (void) apiModifyChat:(NSString *)chatKey removeContact:(NSString *)contactKey callback:(void (^)(PFObject *pfChat))callback;
-
 - (void) apiFindChatsByContactKeys:(NSArray *)contactKeys callback:(void (^)(NSArray *results))callback;
+- (void) apiRefreshLocalChatsAndGroups:(NSString *)contactKey callback:(void (^)(NSMutableArray *chats))callback;
+
 - (void) apiSendMessageToContact:(ChatMessageVO *)msg contact:(ContactVO *)contact callback:(void (^)(ChatVO *chat))callback;
 - (void) apiSendMessageToGroup:(ChatMessageVO *)msg group:(GroupVO *)group callback:(void (^)(ChatVO *chat))callback;
 

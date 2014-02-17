@@ -52,8 +52,8 @@
     
     self.tableData =[[NSMutableArray alloc]init];
         
-    NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
+    NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
     
 //    [self performSearch:@""];
     isSearching = NO;
@@ -405,6 +405,7 @@
 - (IBAction)tapDoneButton {
     NSString *flag;
     
+    NSMutableArray *contactKeys = [NSMutableArray array];
     for (NSString *key in selectionsMap) {
         flag = (NSString *) [selectionsMap objectForKey:key];
         
@@ -413,6 +414,7 @@
             if (!exists) {
                 NSLog(@"Adding new member %@", key);
                 [groupSvc saveGroupContact:[DataModel shared].group.group_id contactKey:key];
+                [contactKeys addObject:key];
                 
             }
         } else if ([flag isEqualToString:kRemovedFlag]) {
@@ -424,7 +426,6 @@
         }
     }
     
-    NSMutableArray *contactKeys = [NSMutableArray arrayWithArray:selectionsMap.allKeys];
     if (![contactKeys containsObject:[DataModel shared].user.contact_key]) {
         [contactKeys addObject:[DataModel shared].user.contact_key];
     }

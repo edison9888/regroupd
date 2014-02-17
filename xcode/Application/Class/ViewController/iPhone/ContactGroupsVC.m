@@ -43,10 +43,11 @@
     
     self.tableData =[[NSMutableArray alloc]init];
         
-    NSNotification* showNavNotification = [NSNotification notificationWithName:@"showNavNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] postNotification:showNavNotification];
+    NSNotification* hideNavNotification = [NSNotification notificationWithName:@"hideNavNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:hideNavNotification];
     
     groupSvc = [[GroupManager alloc] init];
+    chatSvc = [[ChatManager alloc] init];
     
     NSString *title = @"%@'s Groups";
     title = [NSString stringWithFormat:title, [DataModel shared].contact.first_name];
@@ -71,6 +72,24 @@
 
 #pragma mark - Load data
 
+//- (void) refreshGroupContacts {
+////    __weak typeof(self) weakSelf = self;
+//    
+//    [chatSvc apiFindGroupChats:[DataModel shared].user.contact_key withStatus:[NSNumber numberWithInt:ChatType_GROUP] excluding:nil callback:^(NSArray *results) {
+//        for (PFObject *data in results) {
+//            ChatVO *chat = [ChatVO readFromPFObject:data];
+//            
+//            GroupVO *group = [groupSvc findGroupByChatKey:chat.system_id];
+//            
+//            if (group == nil) {
+//                
+//            }
+//            
+//        }
+//    }];
+//    
+//}
+
 
 - (void)performSearch:(NSString *)searchText
 {
@@ -79,16 +98,21 @@
     NSLog(@"%s: %@", __FUNCTION__, searchText);
 //    NSMutableArray *groups = [groupSvc listContactGroups:theContactKey];
     
-    memberKeys = [groupSvc listContactGroupIds:theContactKey];
-    selectionsMap = [[NSMutableDictionary alloc] initWithCapacity:memberKeys.count];
+    chatKeys = [groupSvc listContactGroupChatKeys:theContactKey];
     
-    for (NSString *key in memberKeys) {
+    NSLog(@"Found chatKeys %@", chatKeys);
+    selectionsMap = [[NSMutableDictionary alloc] initWithCapacity:chatKeys.count];
+    
+    for (NSString *key in chatKeys) {
         [selectionsMap setObject:kMemberFlag forKey:key];
     }
 
     NSMutableArray *results = [[NSMutableArray alloc] init];
     
-    NSString *sql = @"select * from groups order by updated desc";
+//    NSString *sql = @"select * from groups order by updated desc";
+    NSString *sql;
+    sql = @"select * from chat where status=1 and user_key='%@' order by name";
+    sql = [NSString stringWithFormat:sql, [DataModel shared].user.user_key];
     
     FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
     
@@ -134,13 +158,15 @@
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
         }
         
-        NSDictionary *rowData = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
-        cell.titleLabel.text = [rowData objectForKey:@"name"];
+        NSDictionary *rowdata = (NSDictionary *) [tableData objectAtIndex:indexPath.row];
+        cell.titleLabel.text = [rowdata objectForKey:@"name"];
+        NSString *chatKey = [rowdata objectForKey:@"system_id"];
         
-        NSNumber *groupId = [rowData objectForKey:@"group_id"];
+//        NSNumber *groupId = [rowdata objectForKey:@"group_id"];
         NSString *flag;
-        if ([selectionsMap objectForKey:groupId] != nil) {
-            flag = (NSString *) [selectionsMap objectForKey:groupId];
+        
+        if ([selectionsMap objectForKey:chatKey] != nil) {
+            flag = (NSString *) [selectionsMap objectForKey:chatKey];
             if ([flag isEqualToString:kMemberFlag] || [flag isEqualToString:kAddedFlag]) {
                 [cell setStatus:1];
             } else {
@@ -184,24 +210,25 @@
 
             selectedIndex = indexPath.row;
             NSDictionary *rowdata = [tableData objectAtIndex:indexPath.row];
-            NSNumber *groupId = [rowdata objectForKey:@"group_id"];
+//            NSNumber *groupId = [rowdata objectForKey:@"group_id"];
+            NSString *chatKey = [rowdata objectForKey:@"system_id"];
 
             NSString *flag;
-            flag = (NSString *) [selectionsMap objectForKey:groupId];
+            flag = (NSString *) [selectionsMap objectForKey:chatKey];
             if (flag == nil) {
                 if (status == 1) {
-                    [selectionsMap setObject:kAddedFlag forKey:groupId];
+                    [selectionsMap setObject:kAddedFlag forKey:chatKey];
                 } else {
                     
                     // This should not happen
-                    NSLog(@"Invalid state. Trying to remove group not in original set groupId = %@", groupId);
-                    [selectionsMap setObject:kRemovedFlag forKey:groupId];
+                    NSLog(@"Invalid state. Trying to remove group not in original set chatKey = %@", chatKey);
+                    [selectionsMap setObject:kRemovedFlag forKey:chatKey];
                 }
             } else {
                 if (status == 0) {
                     // Remove from group
                     if ([flag isEqualToString:kMemberFlag] || [flag isEqualToString:kAddedFlag]) {
-                        [selectionsMap setObject:kRemovedFlag forKey:groupId];
+                        [selectionsMap setObject:kRemovedFlag forKey:chatKey];
                     } else {
                         // Do nothing. This shouldn't happen
                     }
@@ -213,7 +240,7 @@
                         
                     } else {
                         // Do nothing. This shouldn't happen
-                        [selectionsMap setObject:kAddedFlag forKey:groupId];
+                        [selectionsMap setObject:kAddedFlag forKey:chatKey];
                         
                     }
                 }
@@ -247,32 +274,72 @@
 - (IBAction)tapDoneButton {
     NSString *flag;
     
-    for (NSNumber *num in selectionsMap) {
-        flag = (NSString *) [selectionsMap objectForKey:num];
+    NSMutableArray *updateChatKeys = [NSMutableArray array];
+
+    for (NSString *chatKey in selectionsMap) {
+        flag = (NSString *) [selectionsMap objectForKey:chatKey];
+        GroupVO *group = [groupSvc findGroupByChatKey:chatKey];
         
         if ([flag isEqualToString:kMemberFlag] || [flag isEqualToString:kAddedFlag]) {
-            BOOL exists = [groupSvc checkGroupContact:num.intValue contacKey:theContactKey];
-            if (!exists) {
-                NSLog(@"Adding new member from group %@", num);
-                [groupSvc saveGroupContact:num.intValue contactKey:theContactKey];
-                
+            if (group) {
+                BOOL exists = [groupSvc checkGroupContact:group.group_id contacKey:theContactKey];
+                if (!exists) {
+                    NSLog(@"Adding new member from group %@", group.name);
+                    [groupSvc saveGroupContact:group.group_id contactKey:theContactKey];
+                }
             }
         } else if ([flag isEqualToString:kRemovedFlag]) {
-            BOOL exists = [groupSvc checkGroupContact:num.intValue contacKey:theContactKey];
+            BOOL exists = [groupSvc checkGroupContact:group.group_id contacKey:theContactKey];
             if (exists) {
-                NSLog(@"Removing member from group %@", num);
-                [groupSvc removeGroupContact:num.intValue contactKey:theContactKey];
+                NSLog(@"Removing member from group %@", group.name);
+                [groupSvc removeGroupContact:group.group_id contactKey:theContactKey];
             }
         }
+        
+        if ([flag isEqualToString:kAddedFlag] || [flag isEqualToString:kRemovedFlag]) {
+            [updateChatKeys addObject:chatKey];
+        }
     }
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Success"
-                                                    message:@"Changes saved"
-                                                   delegate:self
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
+    int total = updateChatKeys.count;
+
+    __block int index = 0;
+    __block NSMutableArray *contactKeys;
     
-    [alert show];
     
+    for (NSString *chatKey in updateChatKeys) {
+        flag = (NSString *) [selectionsMap objectForKey:chatKey];
+
+        [chatSvc apiLoadChat:chatKey callback:^(ChatVO *_chat) {
+            
+            contactKeys = [_chat.contact_keys mutableCopy];
+            
+
+            if ([flag isEqualToString:kAddedFlag]) {
+                
+                NSLog(@"Adding contact to chat %@", chatKey);
+                [contactKeys addObject:theContactKey];
+            } else if ([flag isEqualToString:kRemovedFlag]) {
+                NSLog(@"Removing contact from chat %@", chatKey);
+                [contactKeys removeObject:theContactKey];
+            }
+
+            _chat.contact_keys = contactKeys;
+            
+            [chatSvc apiSaveChat:_chat callback:^(PFObject *object) {
+                index++;
+                if (index == total) {
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Success"
+                                                                    message:@"Changes saved"
+                                                                   delegate:self
+                                                          cancelButtonTitle:@"OK"
+                                                          otherButtonTitles:nil];
+                    [alert show];
+                    
+                }
+            }];
+        }];
+    }
+
     
     //    [_delegate goBack];
 }

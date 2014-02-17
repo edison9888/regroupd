@@ -668,8 +668,10 @@
         __block int position = 1;
         
         [formSvc apiSaveForm:form callback:^(PFObject *pfForm) {
+            theForm = [FormVO readFromPFObject:pfForm];
+
             NSString *formId = pfForm.objectId;
-            form.system_id = formId;
+//            form.system_id = formId;
             int total = surveyOptions.count;
             
             for (SurveyOptionWidget* surveyOption in surveyOptions) {
@@ -702,7 +704,6 @@
                         if (index > total) {
                             // Save this to insert in chat
                             [DataModel shared].didSaveOK = YES;
-                            theForm = form;
 
                             [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_formSaveCompleteNotification object:nil]];
                             
@@ -794,6 +795,8 @@
     if ([[DataModel shared].action isEqualToString:@"popup"]) {
         [DataModel shared].action = @"";
         
+        [[DataModel shared].formsList insertObject:theForm atIndex:0];
+
         NSNotification* hideFormSelectorNotification = [NSNotification notificationWithName:@"hideFormSelectorNotification" object:theForm];
         [[NSNotificationCenter defaultCenter] postNotification:hideFormSelectorNotification];
 

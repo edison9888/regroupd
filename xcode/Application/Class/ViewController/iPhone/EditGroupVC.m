@@ -591,6 +591,8 @@
             } else {
                 
                 chat.system_id = pfChat.objectId;
+                chat.user_key = [DataModel shared].user.user_key;
+                
                 [chatSvc saveChat:chat];
                 
                 // Adding push notifications subscription
@@ -598,7 +600,7 @@
                 
                 GroupVO *group = [[GroupVO alloc] init];
                 group.name = theName;
-                group.system_id = @"";
+                group.user_key = [DataModel shared].user.user_key;
                 group.chat_key = pfChat.objectId;
                 group.status = 1;
                 group.type = 1;

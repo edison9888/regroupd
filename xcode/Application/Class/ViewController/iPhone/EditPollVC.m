@@ -534,8 +534,11 @@
         
         __block NSString *imagefile;
         [formSvc apiSaveForm:form callback:^(PFObject *pfForm) {
+            
+            theForm = [FormVO readFromPFObject:pfForm];
             NSString *formId = pfForm.objectId;
-            form.system_id = formId;
+//            form.system_id = formId;
+//            form.user_key = pfF
             int total = surveyOptions.count;
             __block int index = 1;
             __block int position = 1;
@@ -571,7 +574,6 @@
                         NSLog(@"Save option %i", index);
                         if (index > total) {
                             [DataModel shared].didSaveOK = YES;
-                            theForm = form;
                             
                             [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:k_pollSaveCompleteNotification object:nil]];
                         }
@@ -635,6 +637,8 @@
     
     if ([[DataModel shared].action isEqualToString:@"popup"]) {
         [DataModel shared].action = @"";
+        
+        [[DataModel shared].formsList insertObject:theForm atIndex:0];
         
         NSNotification* hideFormSelectorNotification = [NSNotification notificationWithName:@"hideFormSelectorNotification" object:theForm];
         [[NSNotificationCenter defaultCenter] postNotification:hideFormSelectorNotification];

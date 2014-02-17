@@ -44,6 +44,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     contactSvc = [[ContactManager alloc] init];
+    groupSvc = [[GroupManager alloc] init];
     
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
@@ -144,8 +145,8 @@
     
     [self.groupsData removeAllObjects];
     
-    sql = @"select * from groups where name like '%%%@%%' order by name";
-    sql = [NSString stringWithFormat:sql, searchText];
+    sql = @"select * from chat where status=1 and user_key='%@' and name like '%%%@%%' order by name";
+    sql = [NSString stringWithFormat:sql, [DataModel shared].user.user_key, searchText];
     
     isLoading = YES;
     
@@ -752,11 +753,19 @@
             return;
         } else {
             NSDictionary *rowdata = [self.groupsData objectAtIndex:indexPath.row];
-            [DataModel shared].group = [GroupVO readFromDictionary:rowdata];
+            NSString *chatKey = [rowdata objectForKey:@"system_id"];
+            GroupVO *group = [groupSvc findGroupByChatKey:chatKey];
             
-            [DataModel shared].action = kActionEDIT;
-            [_delegate setBackPath:@"ContactsHome"];
-            [_delegate gotoSlideWithName:@"GroupInfo" andOverrideTransition:kPresentationTransitionPush|kPresentationTransitionLeft];
+            if (group) {
+                [DataModel shared].group = group;
+                
+                [DataModel shared].action = kActionEDIT;
+                [_delegate setBackPath:@"ContactsHome"];
+                [_delegate gotoSlideWithName:@"GroupInfo" andOverrideTransition:kPresentationTransitionPush|kPresentationTransitionLeft];
+                
+            } else {
+                NSLog(@"Could not find group by chatKey %@", chatKey);
+            }
             
         }
         

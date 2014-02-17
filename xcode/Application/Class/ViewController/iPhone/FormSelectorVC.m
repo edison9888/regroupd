@@ -33,6 +33,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    formSvc = [[FormManager alloc] init];
     
     self.theTableView.delegate = self;
     self.theTableView.dataSource = self;
@@ -40,10 +41,15 @@
 
     self.tableData =[[NSMutableArray alloc]init];
     // Do any additional setup after loading the view from its nib.
-    [self listFormsByType:[DataModel shared].formType];
 //    [self performSearch:nil];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self listFormsByType:[DataModel shared].formType];
+    
+    
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -125,13 +131,30 @@
     
     
 }
+- (void)refreshForms{
+    allforms =[[NSMutableArray alloc]init];
+    
+    [formSvc apiListForms:nil callback:^(NSArray *results) {
+        if (results) {
+            FormVO *form;
+            for (PFObject *result in results) {
+                form = [FormVO readFromPFObject:result];
+                [allforms addObject:form];
+            }
+            
+        }
+    }];
+    
+}
 - (void)listFormsByType:(int)formType
 {
     self.tableData =[[NSMutableArray alloc]init];
-    
+ 
     for (FormVO *form in [DataModel shared].formsList) {
-        if (form.type == formType) {
-            [self.tableData addObject:form];
+        if ([form.user_key isEqualToString:[PFUser currentUser].objectId]) {
+            if (form.type == formType) {
+                [self.tableData addObject:form];
+            }
         }
     }
     [self.theTableView reloadData];
