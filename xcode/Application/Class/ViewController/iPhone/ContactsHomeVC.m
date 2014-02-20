@@ -109,10 +109,16 @@
     
     [self performSearch:@""];
     
-    [self performSelector:@selector(preparePhonebook:)
-               withObject:nil
-               afterDelay:3.0];
     
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kSetting_Access_Contacts]) {
+        [self performSelector:@selector(preparePhonebook:)
+                   withObject:nil
+                   afterDelay:3.0];
+        
+    } else {
+        
+    }
+
     
     //    [self preparePhonebook];
 }

@@ -58,11 +58,14 @@
 
 - (IBAction)tapNoButton
 {
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kSetting_Access_Contacts];
+
     [_delegate gotoNextSlide];
 }
 
 - (IBAction)tapYesButton
 {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kSetting_Access_Contacts];
     [_delegate gotoNextSlide];
 }
 

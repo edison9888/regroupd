@@ -110,7 +110,13 @@
         ContactVO *contact = [ContactVO readFromPFObject:pfContact];
         [DataModel shared].myContact = contact;
 
-        [self preparePhonebook];
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:kSetting_Access_Contacts]) {
+            [self preparePhonebook];
+        } else {
+            [MBProgressHUD hideHUDForView:self.view animated:NO];
+            [[[UIAlertView alloc] initWithTitle:@"Thank you" message:@"Sign up complete." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        }
+        
     }];
 
     

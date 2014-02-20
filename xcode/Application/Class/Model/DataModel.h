@@ -32,6 +32,7 @@
 #define kSetting_Notifications_Enabled      @"Setting_Notifications_Enabled"
 #define kSetting_Notifications_Show_Preview @"Setting_Notifications_Show_Preview"
 #define kSetting_Add_To_Calendar            @"Setting_Add_To_Calendar"
+#define kSetting_Access_Contacts            @"Setting_Access_Contacts"
 
 #define kAction_New_Group_From_List         @"Action_New_Group_From_List"
 
