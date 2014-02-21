@@ -10,6 +10,7 @@
 
 @implementation ChatMessageVO
 
+
 /*
  message_id INTEGER PRIMARY KEY,
  chat_id INTEGER,
@@ -47,14 +48,17 @@
     text = [data valueForKey:@"message"];
     o.message = text;
     
-    text = [data valueForKey:@"type"];
-    o.type = text.integerValue;
+    number = [data valueForKey:@"type"];
+    o.type = number;
     
-    text = [data valueForKey:@"status"];
-    o.status = text.integerValue;
+    number = [data valueForKey:@"status"];
+    o.status = number;
     
     number = [data valueForKey:@"timestamp"];
     o.timestamp = number;
+    
+    o.createdAt = [NSDate dateWithTimeIntervalSince1970:o.timestamp.doubleValue];
+
     
     return o;
     
@@ -80,8 +84,17 @@
     text = [data valueForKey:@"form_id"];
     o.form_id = text.integerValue;
 
-    text = [data valueForKey:@"chat_key"];
-    o.chat_key = text;
+    if (data[@"chat"] != nil) {
+        PFObject *chat = [data valueForKey:@"chat"];
+        o.chat_key = chat.objectId;
+    }
+    if (data[@"photo"] != nil) {
+        PFFile *pfPhoto = [data valueForKey:@"photo"];
+        if (pfPhoto) {
+            o.pfPhoto = pfPhoto;
+            o.photo_url = pfPhoto.url;
+        }
+    }
 
     text = [data valueForKey:@"form_key"];
     o.form_key = text;
@@ -98,11 +111,6 @@
     text = [data valueForKey:@"attachment"];
     o.attachment = text;
     
-    text = [data valueForKey:@"type"];
-    o.type = text.integerValue;
-    
-    text = [data valueForKey:@"status"];
-    o.status = text.integerValue;
     
     text = [data valueForKey:@"created"];
     o.created = text;

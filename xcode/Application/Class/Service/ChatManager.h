@@ -26,10 +26,12 @@
 - (NSMutableArray *) listChats:(int)type;
 
 - (ChatMessageVO *) loadChatMessage:(int)_msgId;
+- (ChatMessageVO *) loadChatMessageByKey:(NSString *)messageKey;
+- (NSMutableArray *) listChatMessagesByChatKey:(NSString *)chatKey afterDate:(NSDate *)date;
+
 - (int) saveChatMessage:(ChatMessageVO *) msg;
 - (void) deleteChatMessage:(ChatMessageVO *)msg;
 - (void) updateChatMessage:(ChatMessageVO *)msg;
-- (NSMutableArray *) listChatMessages:(int)type;
 
 // System ID lookup
 - (ChatVO *) findChatBySystemId:(NSString *)objectId;

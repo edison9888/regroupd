@@ -195,6 +195,7 @@
                     }
                     chat.contact_names = namesArray;
                     chat.status = [NSNumber numberWithInt:ChatType_INFORMAL];
+                    
                     [chatSvc apiSaveChat:chat callback:^(PFObject *object) {
                         NSInteger pointer=[namesArray indexOfObject:[DataModel shared].myContact.fullname];
                         if(NSNotFound == pointer) {

@@ -269,9 +269,76 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self resetChatUI];
     [chatSvc apiLoadChat:chatId callback:^(ChatVO *chat) {
         liveChat = chat;
-        [self loadChatMessages];
+        [self fetchCachedMessages];
     }];
     
+    
+}
+
+- (void) fetchCachedMessages {
+//    [self.tableDataSource removeAllObjects];
+
+    dbChat = [chatSvc loadChatByKey:chatId];
+    formCache = [[NSMutableDictionary alloc]init];
+    formKeySet = [[NSMutableSet alloc] init];
+    
+    NSMutableArray *dbMessages = [chatSvc listChatMessagesByChatKey:chatId afterDate:dbChat.cutoffDate];
+    liveChat.messages = dbMessages;
+
+    NSDate *afterDate = nil;
+    if (dbMessages.count > 0) {
+        ChatMessageVO *lastMsg = [dbMessages lastObject];
+        afterDate = [NSDate dateWithTimeIntervalSince1970:lastMsg.timestamp.doubleValue];
+    }
+    
+    for (ChatMessageVO *msg in dbMessages) {
+        
+        if (msg.form_key && msg.form_key.length > 0) {
+            [formKeySet addObject:msg.form_key];
+        }
+    }
+
+    
+    
+    [contactSvc apiLookupContacts:[DataModel shared].chat.contact_keys callback:^(NSArray *results) {
+        [self loadFormData];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self fetchRemoteMessages:afterDate];
+        });
+    }];
+
+//    [self loadChatMessages];
+}
+
+- (void) fetchRemoteMessages:(NSDate *)afterDate {
+    
+    NSLog(@"Fetching chat %@ with cutoffDate %@", chatId, afterDate);
+    [chatSvc apiListChatMessages:chatId afterDate:afterDate callback:^(NSArray *results) {
+        
+        if (results.count > 0) {
+            
+            for (ChatMessageVO *msg in results) {
+                
+                ChatMessageVO *lookup;
+                lookup = [chatSvc loadChatMessageByKey:msg.system_id];
+                if (lookup == nil) {
+                    [chatSvc saveChatMessage:msg];
+                }
+                [liveChat.messages addObject:msg];
+                //                [contactKeySet addObject:msg.contact_key];
+                if (msg.form_key && msg.form_key.length > 0) {
+                    [formKeySet addObject:msg.form_key];
+                }
+            }
+            [self loadFormData];
+            
+        } else {
+            
+            [self loadFormData];
+            
+        }
+        
+    }];
     
 }
 - (void) loadChatMessages
@@ -292,21 +359,18 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     // Auto subscribe user to push notifications for this chat objectId
     
     formCache = [[NSMutableDictionary alloc]init];
-    [self.tableDataSource removeAllObjects];
-    
-    dbChat = [chatSvc loadChatByKey:chatId];
     
     NSLog(@"Fetching chat %@ with cutoffDate %@", chatId, dbChat.cutoffDate);
     [chatSvc apiListChatMessages:chatId afterDate:dbChat.cutoffDate callback:^(NSArray *results) {
         
         if (results.count > 0) {
-            contactKeySet = [[NSMutableSet alloc] init];
+//            contactKeySet = [[NSMutableSet alloc] init];
             formKeySet = [[NSMutableSet alloc] init];
             
             //            self.imageMap = [[NSMutableDictionary alloc] initWithCapacity:liveChat.contact_keys.count];
             liveChat.messages = [results mutableCopy];
             for (ChatMessageVO *msg in liveChat.messages) {
-                [contactKeySet addObject:msg.contact_key];
+//                [contactKeySet addObject:msg.contact_key];
                 if (msg.form_key && msg.form_key.length > 0) {
                     [formKeySet addObject:msg.form_key];
                 }
@@ -331,17 +395,30 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
             //                }];
             //            }
         } else {
+            liveChat.messages = [results mutableCopy];
+            
             [contactSvc apiLookupContacts:[DataModel shared].chat.contact_keys callback:^(NSArray *results) {
                 [self loadFormData];
             }];
-            liveChat.messages = [results mutableCopy];
             
         }
         
     }];
 }
 
-
+- (void) compareLocalAndRemoteMessages:(NSMutableArray *)messagesArray {
+    ChatMessageVO *lookup;
+    for (ChatMessageVO *msg in messagesArray) {
+        lookup = [chatSvc loadChatMessageByKey:msg.system_id];
+        if (lookup == nil) {
+            [chatSvc saveChatMessage:msg];
+            
+        } else {
+            // ignore
+        }
+    }
+    
+}
 - (void) loadFormData {
     
     __block int index=0;
@@ -352,20 +429,28 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     } else {
         
         for (NSString *formKey in formKeySet) {
+            index++;
             if (!formKey || formKey.length == 0) {
                 NSLog(@"Skipping empty formKey");
                 continue;
             }
+            
+            if ([formCache objectForKey:formKey] != nil) {
+                NSLog(@"Skipping previous formKey");
+                continue;
+            }
             [formSvc apiLoadForm:formKey fetchAll:YES callback:^(FormVO *form) {
-                NSString *contactKey = nil;
-                if ([form.user_key isEqualToString:[PFUser currentUser].objectId]) {
-                    contactKey = nil;
-                } else {
-                    contactKey = [DataModel shared].user.contact_key;
-                }
                 
+                
+                NSString *contactKey = nil;
                 
                 if (form) {
+                    if ([form.user_key isEqualToString:[PFUser currentUser].objectId]) {
+                        contactKey = nil;
+                    } else {
+                        contactKey = [DataModel shared].user.contact_key;
+                    }
+                    
                     NSLog(@"Getting form responses %@", formKey);
                     [formSvc apiListFormResponses:formKey contactKey:contactKey callback:^(NSArray *results) {
                         if (!results) {
@@ -420,23 +505,24 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
                                 }
                             }
                             // Finish up. List chat messages now that we have the forms, options and responses
+                            
+                            NSLog(@"Add form to cache %@ -- %@", form.name, formKey);
                             [formCache setObject:form forKey:formKey];
                             
                             
-                        }
-                        index++;
+                        } // end if (!results)
                         
                         if (index==total) {
                             [self renderChatMessages:liveChat];
                         }
-                    }];
+                    }];  // apiListFormResponses
                     
                 } // if form
                 else {
                     
                 }
                 
-            }];
+            }];  // apiLoadForm
             
         }
         
@@ -448,13 +534,21 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void) renderChatMessages:(ChatVO *)theChat {
     NSLog(@"%s", __FUNCTION__);
+    self.tableDataSource = [[NSMutableArray alloc] init];
+
     NSBubbleData *bubble;
     int index = 0;
     for (ChatMessageVO* msg in theChat.messages) {
         index++;
-        NSLog(@"%i grouped message %@", index, msg.message);
-        if (msg.form_key == nil) {
-            bubble = [self buildMessageBubble:msg];
+        bubble = nil;
+        NSLog(@"%i render message %@", index, msg.message);
+        if (msg.form_key == nil || msg.form_key.length == 0) {
+            if (msg.message != nil && msg.message.length > 0) {
+                bubble = [self buildMessageBubble:msg];
+                
+            } else if (msg.pfPhoto != nil) {
+                bubble = [self buildMessageBubble:msg];
+            }
             
         } else {
             bubble = [self buildMessageWidget:msg];
@@ -978,7 +1072,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         return nil;
     }
     if (theForm.status.intValue == FormStatus_REMOVED) {
-        NSLog(@"Ignoring removed form >>>>>>>>>>>> %@", msg.form_key);
+        NSLog(@"Ignoring removed form >>>>>>>>>>>> %@ -- %@", theForm.name, msg.form_key);
         return nil;
     }
     NSBubbleType whoType;

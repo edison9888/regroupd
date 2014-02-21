@@ -307,56 +307,103 @@
     }
     
 }
+- (ChatMessageVO *) loadChatMessageByKey:(NSString *)messageKey {
+    
+    NSLog(@"%s", __FUNCTION__);
+    
+    NSString *sql = nil;
+    sql = @"select * from chat_message where system_id=?";
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql, messageKey];
+    
+    NSDictionary *dict;
+    if ([rs next]) {
+        dict = [rs resultDictionary];
+    }
+    
+    if (dict != nil) {
+        ChatMessageVO *result = [ChatMessageVO readFromDictionary:dict];
+        return result;
+    } else {
+        return nil;
+    }
+    
+}
+
+- (NSMutableArray *) listChatMessagesByChatKey:(NSString *)chatKey afterDate:(NSDate *)date {
+    NSLog(@"%s", __FUNCTION__);
+    
+    NSString *sql = nil;
+    NSTimeInterval seconds = 0;
+
+    if (date != nil) {
+        seconds = [date timeIntervalSince1970];
+    }
+    sql = @"select * from chat_message where chat_key=? and timestamp > ? order by timestamp";
+    NSMutableArray *results = [NSMutableArray array];
+    
+    FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql,
+                       chatKey,
+                       [NSNumber numberWithDouble:seconds]];
+    
+    ChatMessageVO *msg;
+    
+    while ([rs next]) {
+        msg = [ChatMessageVO readFromDictionary:[rs resultDictionary]];
+        
+        [results addObject:msg];
+    }
+    return results;
+}
+
 
 /*
  message_id INTEGER PRIMARY KEY,
- chat_id INTEGER,
- contact_id INTEGER,
- form_id INTEGER,
  system_id TEXT,
+ chat_key TEXT,
+ contact_key TEXT,
+ form_key TEXT,
  message TEXT,
- attachment TEXT,
- type int DEFAULT 1,
+ type INT DEFAULT 1,
  status INT DEFAULT 0,
- created TEXT
+ timestamp REAL
  */
 
 - (int) saveChatMessage:(ChatMessageVO *)msg {
     NSString *sql;
     BOOL success;
-    NSDate *now = [NSDate date];
-    NSString *dt = [DateTimeUtils dbDateTimeStampFromDate:now];
-    NSLog(@"dt %@", dt);
+    NSTimeInterval seconds = [msg.createdAt timeIntervalSince1970];
     
+    if (msg.form_key == nil) {
+        msg.form_key = @"";
+    }
+    if (msg.photo_url == nil) {
+        msg.photo_url = @"";
+    }
+    if (msg.message == nil) {
+        msg.message = @"";
+    }
+    msg.type = [NSNumber numberWithInt:0];
+    msg.status = [NSNumber numberWithInt:0];
+
     @try {
-        sql = @"INSERT into chat_message (chat_id, contact_id, form_id, system_id, message, attachment, type, status, created) values (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        sql = @"INSERT into chat_message (system_id, chat_key, contact_key, form_key, photo_url, message, type, status, timestamp) values (?, ?, ?, ?, ?, ?, ?, ?, ?);";
         success = [[SQLiteDB sharedConnection] executeUpdate:sql,
-                   [NSNumber numberWithInt:msg.chat_id],
-                   [NSNumber numberWithInt:msg.contact_id],
-                   [NSNumber numberWithInt:msg.form_id],
                    msg.system_id,
+                   msg.chat_key,
+                   msg.contact_key,
+                   msg.form_key,
+                   msg.photo_url,
                    msg.message,
-                   msg.attachment,
-                   [NSNumber numberWithInt:msg.type],
-                   [NSNumber numberWithInt:msg.status],
-                   dt
+                   msg.type,
+                   msg.status,
+                   [NSNumber numberWithDouble:seconds]
                    ];
         
         if (!success) {
             NSLog(@"####### SQL Insert failed #######");
         } else {
             NSLog(@"====== SQL INSERT SUCCESS ======");
-            
-            sql = @"SELECT last_insert_rowid()";
-            
-            FMResultSet *rs = [[SQLiteDB sharedConnection] executeQuery:sql];
-            
-            if ([rs next]) {
-                int lastId = [rs intForColumnIndex:0];
-                NSLog(@"lastId = %i", lastId);
-                return lastId;
-            }
-            
         }
     }
     @catch (NSException *exception) {
@@ -365,13 +412,12 @@
     return -1;
     
 }
+
+
 - (void) deleteChatMessage:(ChatMessageVO *) msg {
     
 }
 - (void) updateChatMessage:(ChatMessageVO *) msg {
-}
-- (NSMutableArray *) listChatMessages:(int)type {
-    return nil;
 }
 
 #pragma mark - Find By System ID

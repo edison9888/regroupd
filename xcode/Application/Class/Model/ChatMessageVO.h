@@ -21,13 +21,14 @@
 @property (nonatomic, retain) NSString *contact_key;
 @property (nonatomic, retain) NSString *user_key;
 @property (nonatomic, retain) NSString *form_key;
+@property (nonatomic, retain) NSString *photo_url;
 
 @property (nonatomic, retain) NSString *message;
 @property (nonatomic, retain) NSString *attachment;
 @property (nonatomic, retain) NSNumber *timestamp;
 
-@property int type;
-@property int status;
+@property NSNumber *type;
+@property NSNumber *status;
 
 @property (nonatomic, retain) NSString *created;
 
